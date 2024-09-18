@@ -28,8 +28,8 @@ public class LoginController implements ControllerDependencies {
 
     @FXML
     public void initialize() {
-        loginBtn.setOnMouseClicked(e -> handleLoginButton());
-        closeBtn.setOnMouseClicked(e -> handleCloseButton());
+        loginBtn.setOnMouseClicked(_ -> handleLoginButton());
+        closeBtn.setOnMouseClicked(_ -> handleCloseButton());
     }
 
     @FXML

@@ -24,8 +24,8 @@ public class ModalController {
     private Consumer<Boolean> callback;
 
     public void initialize() {
-        yesBtn.setOnAction(e -> handleCallBack(true));
-        noBtn.setOnAction(e -> handleCallBack(false));
+        yesBtn.setOnAction(_ -> handleCallBack(true));
+        noBtn.setOnAction(_ -> handleCallBack(false));
     }
 
     public void setup(String header, String message, Consumer<Boolean> callback) {
