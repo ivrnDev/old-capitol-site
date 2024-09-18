@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp;
 
-import com.econnect.barangaymanagementapp.Utils.SceneManager;
+import com.econnect.barangaymanagementapp.Utils.SceneManager.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
