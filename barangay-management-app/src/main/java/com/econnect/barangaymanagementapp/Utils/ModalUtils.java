@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class ModalUtils {
     private Stage modalStage = null;
-    private Stage parentStage;
+    private final Stage parentStage;
 
     public ModalUtils(Stage parentStage) {
         this.parentStage = parentStage;
