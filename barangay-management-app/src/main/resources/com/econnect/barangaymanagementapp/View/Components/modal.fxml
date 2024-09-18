@@ -9,38 +9,43 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane styleClass="background" stylesheets="@../../Style/modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.ModalController">
-   <children>
-      <VBox prefHeight="183.0" prefWidth="405.0" spacing="20.0">
-          <children>
-              <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Approve Request" wrappingWidth="220.0">
-                  <font>
-                      <Font name="Arial Bold" size="26.0" />
-                  </font>
-              </Text>
-              <Text fx:id="messageText" text="Are you sure you want to continue?" wrappingWidth="300">
-                  <font>
-                      <Font name="Arial" size="18.0" />
-                  </font>
-              </Text>
-              <HBox alignment="CENTER" spacing="20.0">
-                  <children>
-                      <Button fx:id="yesBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" styleClass="yes-btn" text="Yes">
-                          <font>
-                              <Font name="Arial" size="12.0" />
-                          </font>
-                      </Button>
-                      <Button fx:id="noBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" styleClass="no-btn" text="No">
-                          <font>
-                              <Font name="Arial" size="12.0" />
-                          </font>
-                      </Button>
-                  </children>
-              </HBox>
-          </children>
-          <padding>
-              <Insets bottom="20" left="20" right="20" top="20" />
-          </padding>
-      </VBox>
-   </children>
+<AnchorPane styleClass="background" stylesheets="@../../Style/modal.css" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.econnect.barangaymanagementapp.Controller.ModalController">
+    <children>
+        <VBox prefHeight="183.0" prefWidth="405.0" spacing="20.0">
+            <children>
+                <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Approve Request"
+                      wrappingWidth="220.0">
+                    <font>
+                        <Font name="Arial Bold" size="26.0"/>
+                    </font>
+                </Text>
+                <Text fx:id="messageText" text="Are you sure you want to continue?" wrappingWidth="300">
+                    <font>
+                        <Font name="Arial" size="18.0"/>
+                    </font>
+                </Text>
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Button fx:id="yesBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0"
+                                styleClass="yes-btn" text="Yes">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                        </Button>
+                        <Button fx:id="noBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0"
+                                styleClass="no-btn" text="No">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+        </VBox>
+    </children>
 </AnchorPane>
