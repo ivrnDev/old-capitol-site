@@ -15,12 +15,16 @@
 .login-btn {
     -fx-background-color: #17171E;
     -fx-background-radius: 10px;
+    -fx-cursor: hand;
 }
 
-.left-pane {
-    -fx-background-color: green;
+.login-btn:hover {
+    -fx-background-color: #2C2C36;
 }
 
-.right-pane {
-    -fx-background-color: green;
+.exit-btn {
+    -fx-cursor: hand;
 }
+
+
+
