@@ -1,0 +1,27 @@
+.background {
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+}
+
+.yes-btn {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: black;
+    -fx-background-color: transparent;
+}
+
+.no-btn {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: black;
+    -fx-background-color: transparent;
+
+}
+
+.yes-btn:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.no-btn:hover {
+    -fx-background-color: #f0f0f0;
+}
