@@ -21,11 +21,7 @@ public class ModalUtils {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("View/Components/modal.fxml"));
             Parent root = loader.load();
             ModalController controller = loader.getController();
-            controller.setup(header, message, (isConfirmed) -> {
-                if (callback != null) {
-                    callback.onResult(isConfirmed);
-                }
-            });
+            controller.setup(header, message, (isConfirmed) -> callback.onResult(isConfirmed));
 
             modalStage = new Stage();
             Scene scene = new Scene(root);
