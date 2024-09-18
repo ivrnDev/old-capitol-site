@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.Utils.SceneManager;
+package com.econnect.barangaymanagementapp.Utils;
 
 import com.econnect.barangaymanagementapp.MainApplication;
 import javafx.fxml.FXMLLoader;
@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SceneManager {
-    private final Stage primaryStage;
+    private final Stage stage;
+    private final DependencyInjector dependencyInjector;
 
-    public SceneManager(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public SceneManager(Stage stage, DependencyInjector dependencyInjector) {
+        this.stage = stage;
+        this.dependencyInjector = dependencyInjector;
     }
 
     public void switchScene(String fxmlPath) {
@@ -20,14 +22,14 @@ public class SceneManager {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
             Parent root = loader.load();
             Object controller = loader.getController();
-            if (controller instanceof SceneManagerInjection) {
-                ((SceneManagerInjection) controller).setSceneManager(this);
-            }
+            dependencyInjector.injectDependenciesToController(controller);
             Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+
 }
