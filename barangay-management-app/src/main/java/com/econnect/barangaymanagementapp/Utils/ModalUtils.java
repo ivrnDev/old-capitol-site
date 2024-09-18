@@ -5,15 +5,21 @@ import com.econnect.barangaymanagementapp.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
 public class ModalUtils {
-    private static Stage modalStage = null;
+    private Stage modalStage = null;
+    private Stage parentStage;
 
-    public static void showConfirmationModal(String header, String message, ModalCallback callback) {
+    public ModalUtils(Stage parentStage) {
+        this.parentStage = parentStage;
+    }
+
+    public void showConfirmationModal(String header, String message, ModalCallback callback) {
         //Prevent modal duplication
         if (isModalShowing()) return;
 
@@ -27,6 +33,8 @@ public class ModalUtils {
             Scene scene = new Scene(root);
 
             modalStage.initStyle(StageStyle.UNDECORATED);
+            modalStage.initOwner(parentStage);
+            modalStage.initModality(Modality.WINDOW_MODAL);
             modalStage.setScene(scene);
             modalStage.showAndWait();
 
@@ -39,7 +47,7 @@ public class ModalUtils {
         void onResult(boolean isConfirmed);
     }
 
-    private static boolean isModalShowing() {
+    private boolean isModalShowing() {
         return modalStage != null && modalStage.isShowing();
     }
 }
