@@ -36,7 +36,6 @@ public class ModalController {
         }
         messageText.setText(message);
         this.callback = callback;
-
     }
 
     private void handleCallBack(boolean result) {
