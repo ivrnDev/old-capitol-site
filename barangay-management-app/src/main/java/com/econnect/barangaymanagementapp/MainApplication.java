@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp;
 
-import com.econnect.barangaymanagementapp.Utils.SceneManager.SceneManager;
+import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -9,17 +10,14 @@ import java.io.IOException;
 
 public class MainApplication extends Application {
 
-    private SceneManager sceneManager;
+    private DependencyInjector dependencyInjector;
 
     @Override
     public void start(Stage stage) throws IOException {
+        dependencyInjector = new DependencyInjector(stage);
         stage.initStyle(StageStyle.UNDECORATED);
-        sceneManager = new SceneManager(stage);
+        SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchScene("View/login.fxml");
-    }
-
-    public SceneManager getSceneManager() {
-        return sceneManager;
     }
 
     public static void main(String[] args) {
