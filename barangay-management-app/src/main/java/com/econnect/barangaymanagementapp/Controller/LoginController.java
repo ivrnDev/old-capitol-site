@@ -1,14 +1,15 @@
 package com.econnect.barangaymanagementapp.Controller;
 
+import com.econnect.barangaymanagementapp.Interface.ControllerDependencies;
+import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
-import com.econnect.barangaymanagementapp.Utils.SceneManager.SceneManager;
-import com.econnect.barangaymanagementapp.Utils.SceneManager.SceneManagerInjection;
+import com.econnect.barangaymanagementapp.Utils.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class LoginController implements SceneManagerInjection {
+public class LoginController implements ControllerDependencies {
 
     @FXML
     private ImageView closeBtn;
@@ -17,10 +18,12 @@ public class LoginController implements SceneManagerInjection {
     private Button loginBtn;
 
     private SceneManager sceneManager;
+    private ModalUtils modalUtils;
 
     @Override
-    public void setSceneManager(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;
+    public void setDependencies(DependencyInjector dependencyInjector) {
+        this.sceneManager = dependencyInjector.getSceneManager();
+        this.modalUtils = dependencyInjector.getModalUtils();
     }
 
     @FXML
@@ -35,7 +38,7 @@ public class LoginController implements SceneManagerInjection {
     }
 
     private void handleCloseButton() {
-        ModalUtils.showConfirmationModal("Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
+        modalUtils.showConfirmationModal("Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
             if (isConfirmed) closeWindow();
         });
     }
