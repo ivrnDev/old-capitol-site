@@ -1,0 +1,26 @@
+.background {
+    -fx-background-color: linear-gradient(to bottom left, #FFFF98, #CFF6CB, #9EEDFF);
+}
+
+.login-container {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 20px; /* Rounded corners */
+}
+
+.login-input {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 10px;
+}
+
+.login-btn {
+    -fx-background-color: #17171E;
+    -fx-background-radius: 10px;
+}
+
+.left-pane {
+    -fx-background-color: green;
+}
+
+.right-pane {
+    -fx-background-color: green;
+}
