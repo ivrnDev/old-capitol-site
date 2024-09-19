@@ -22,9 +22,6 @@ public class LoginController implements ControllerDependencies {
     private ImageView closeBtn;
 
     @FXML
-    private Button loginBtn;
-
-    @FXML
     private TextField usernameInput;
 
     @FXML
