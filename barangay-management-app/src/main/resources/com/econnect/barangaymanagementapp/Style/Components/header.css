@@ -1,0 +1,14 @@
+.background {
+    -fx-background-color: linear-gradient(to right, #FFFF98, #9EEDFF);
+}
+
+.separator {
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.separator .line {
+    -fx-background-color: black; /* Set the inner line to black */
+}
