@@ -15,7 +15,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         dependencyInjector = new DependencyInjector(stage);
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.UNIFIED); // For testing purposes, convert to UNDECORATED
         SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchScene("View/login.fxml");
     }
