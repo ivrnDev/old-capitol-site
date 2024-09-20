@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.BorderPane?>
 
+<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <fx:include fx:id="headerComponent" source="../Components/header.fxml"/>
+    </top>
+    <left>
+        <fx:include fx:id="sidebarComponent" source="../Components/sidebar.fxml"/>
+    </left>
+    <center>
+        <AnchorPane fx:id="contentPane" prefWidth="855.0" style="-fx-background-color: red;"
+                    BorderPane.alignment="CENTER"/>
+    </center>
 
-<AnchorPane prefHeight="436.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Text layoutX="294.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DASHBIOARD" />
-   </children>
-</AnchorPane>
+</BorderPane>
