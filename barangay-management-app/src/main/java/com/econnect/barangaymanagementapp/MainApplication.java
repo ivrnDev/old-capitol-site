@@ -10,12 +10,10 @@ import java.io.IOException;
 
 public class MainApplication extends Application {
 
-    private DependencyInjector dependencyInjector;
-
     @Override
     public void start(Stage stage) throws IOException {
-        dependencyInjector = new DependencyInjector(stage);
-        stage.initStyle(StageStyle.UNIFIED); // For testing purposes, convert to UNDECORATED
+        DependencyInjector dependencyInjector = new DependencyInjector(stage);
+        stage.initStyle(StageStyle.DECORATED); // For testing purposes, convert to UNDECORATED
         SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchScene("View/login.fxml");
     }
