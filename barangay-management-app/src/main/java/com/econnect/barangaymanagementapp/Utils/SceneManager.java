@@ -21,11 +21,12 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
             Parent root = loader.load();
-            Object controller = loader.getController();
-            dependencyInjector.injectDependenciesToController(controller);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
+            stage.setMaximized(!fxmlPath.contains("login.fxml"));
+            Object controller = loader.getController();
+            dependencyInjector.injectDependenciesToController(controller);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
