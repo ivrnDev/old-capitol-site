@@ -1,0 +1,14 @@
+.background {
+    -fx-background-color: #697565;
+}
+
+.nav-bar {
+    -fx-cursor: hand;
+    -fx-background-radius: 30px;
+}
+
+.nav-bar:hover {
+    -fx-background-color: rgba(217, 217, 217, 0.5);
+    -fx-translate-x: 2px;
+}
+
