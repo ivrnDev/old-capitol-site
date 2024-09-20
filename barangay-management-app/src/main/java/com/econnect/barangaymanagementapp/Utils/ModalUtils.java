@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.Utils;
 
-import com.econnect.barangaymanagementapp.Controller.ModalController;
+import com.econnect.barangaymanagementapp.Controller.Components.ModalController;
 import com.econnect.barangaymanagementapp.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

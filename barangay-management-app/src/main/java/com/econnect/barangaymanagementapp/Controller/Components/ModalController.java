@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.Controller;
+package com.econnect.barangaymanagementapp.Controller.Components;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

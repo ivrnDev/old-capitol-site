@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane styleClass="background" stylesheets="@../../Style/modal.css" xmlns="http://javafx.com/javafx/22"
+<AnchorPane styleClass="background" stylesheets="@../../Style/Components/modal.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.Controller.ModalController">
+            fx:controller="com.econnect.barangaymanagementapp.Controller.Components.ModalController">
     <children>
         <VBox prefHeight="183.0" prefWidth="405.0" spacing="20.0">
             <children>
