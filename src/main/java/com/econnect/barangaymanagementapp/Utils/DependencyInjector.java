@@ -14,7 +14,13 @@ public class DependencyInjector {
     public DependencyInjector(Stage stage) {
         this.sceneManager = new SceneManager(stage, this);
         this.modalUtils = new ModalUtils(stage);
-        this.loginService = new LoginService(new EmployeeService(new EmployeeRepository()), UserSession.getInstance());
+
+        EmployeeRepository employeeRepository = new EmployeeRepository();
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        UserSession userSession = UserSession.getInstance();
+
+        this.loginService = new LoginService(employeeService, userSession);
+
     }
 
     public SceneManager getSceneManager() {
