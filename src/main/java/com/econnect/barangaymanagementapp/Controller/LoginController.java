@@ -1,5 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller;
 
+import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Interface.ControllerDependencies;
 import com.econnect.barangaymanagementapp.Service.LoginService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
@@ -14,6 +16,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class LoginController implements ControllerDependencies {
 
@@ -49,8 +53,9 @@ public class LoginController implements ControllerDependencies {
 
     @FXML
     private void handleLoginButton() {
-        if (isLogged()) {
-            sceneManager.switchScene("View/HR/dashboard.fxml");
+        Optional<Employee> loggedEmployee = loginService.login(usernameInput.getText(), passwordInput.getText());
+        if (loggedEmployee != null && loggedEmployee.isPresent()) {
+            switchSceneBaseOnDepartment(loggedEmployee.get().getDepartment());
             return;
         }
         triggerError(true);
@@ -79,13 +84,18 @@ public class LoginController implements ControllerDependencies {
         passwordInput.setOnKeyPressed(keyPressHandler);
     }
 
-
-    private boolean isLogged() {
-        String username = usernameInput.getText();
-        String password = passwordInput.getText();
-        return loginService.login(username, password);
+    private void switchSceneBaseOnDepartment(Departments department) {
+        switch (department) {
+            case Departments.HUMAN_RESOURCE :
+                sceneManager.switchScene("View/HR/dashboard.fxml");
+                break;
+            case Departments.BARANGAY_OFFICE :
+                sceneManager.switchScene("View/BarangayOffice/dashboard.fxml");
+                break;
+            default:
+                sceneManager.switchScene("View/login.fxml");
+        }
     }
-
 
     private void triggerError(boolean value) {
         errorLabel.setManaged(value);
