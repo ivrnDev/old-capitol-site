@@ -6,4 +6,6 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Components to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.HR to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.Base to javafx.fxml;
 }
