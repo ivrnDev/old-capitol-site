@@ -7,8 +7,12 @@ public class HeaderController {
     @FXML
     private Text headerTitle;
 
+    @FXML
+    private Text greetingText;
+
     public void setHeaderTitle(String title) {
         headerTitle.setText(title);
     }
 
+    public void setGreetingText(String greeting) { greetingText.setText(greeting); }
 }
