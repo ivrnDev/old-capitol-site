@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.Controller;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
+import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Service.LoginService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
@@ -61,7 +62,7 @@ public class LoginController {
 
     @FXML
     private void handleCloseButton() {
-        modalUtils.showConfirmationModal("Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
+        modalUtils.showModal(Modal.CONFIRM, "Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
             if (isConfirmed) {
                 Stage stage = (Stage) closeBtn.getScene().getWindow();
                 stage.close();
