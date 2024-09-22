@@ -1,3 +1,8 @@
+.background {
+    -fx-border-color: black;
+}
+
+/*Confirm Modal*/
 .yes-btn {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
@@ -10,7 +15,6 @@
     -fx-border-radius: 10px;
     -fx-border-color: black;
     -fx-background-color: transparent;
-
 }
 
 .yes-btn:hover {
@@ -20,3 +24,27 @@
 .no-btn:hover {
     -fx-background-color: #f0f0f0;
 }
+
+/* Reject Modal*/
+
+.reject-btn.accept {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: black;
+    -fx-background-color: #a90606;
+}
+
+.reject-btn {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: black;
+    -fx-background-color: transparent;
+}
+
+.reject-btn:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+
+/*Success*/
+
