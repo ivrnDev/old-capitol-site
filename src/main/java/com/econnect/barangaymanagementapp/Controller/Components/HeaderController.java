@@ -1,18 +1,29 @@
 package com.econnect.barangaymanagementapp.Controller.Components;
 
+import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.Departments;
+import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
 public class HeaderController {
+
+    private final UserSession userSession;
+
     @FXML
     private Text headerTitle;
 
     @FXML
     private Text greetingText;
 
-    public void setHeaderTitle(String title) {
-        headerTitle.setText(title);
+    public HeaderController(DependencyInjector dependencyInjector) {
+        this.userSession = dependencyInjector.getUserSession();
     }
 
-    public void setGreetingText(String greeting) { greetingText.setText(greeting); }
+    public void initialize() {
+        Employee currentEmployee = userSession.getCurrentEmployee();
+        headerTitle.setText(currentEmployee.getDepartment().getName());
+        greetingText.setText("Welcome, " + userSession.getCurrentEmployee().getFirstName());
+    }
 }
