@@ -15,7 +15,7 @@ public class MainApplication extends Application {
         DependencyInjector dependencyInjector = new DependencyInjector(stage);
         stage.initStyle(StageStyle.DECORATED); // For testing purposes, convert to UNDECORATED
         SceneManager sceneManager = dependencyInjector.getSceneManager();
-        sceneManager.switchScene("View/login.fxml");
+        sceneManager.switchToDefaultScene();
     }
 
     public static void main(String[] args) {

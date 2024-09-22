@@ -24,10 +24,14 @@ public class SceneManager {
             stage.setScene(scene);
             stage.show();
             stage.setMaximized(!fxmlPath.contains("login.fxml"));
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Failed to switch Scenes: " + e.getMessage());
+            switchToDefaultScene();
         }
+    }
+
+    public void switchToDefaultScene() {
+        switchScene("View/Login.fxml");
     }
 
 
