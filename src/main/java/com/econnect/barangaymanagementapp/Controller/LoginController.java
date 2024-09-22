@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.Controller;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
-import com.econnect.barangaymanagementapp.Interface.ControllerDependencies;
 import com.econnect.barangaymanagementapp.Service.LoginService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class LoginController implements ControllerDependencies {
+public class LoginController {
 
     @FXML
     private ImageView closeBtn;
@@ -33,13 +32,11 @@ public class LoginController implements ControllerDependencies {
     @FXML
     private Text errorLabel;
 
+    private final SceneManager sceneManager;
+    private final ModalUtils modalUtils;
+    private final LoginService loginService;
 
-    private SceneManager sceneManager;
-    private ModalUtils modalUtils;
-    private LoginService loginService;
-
-    @Override
-    public void setDependencies(DependencyInjector dependencyInjector) {
+    public LoginController(DependencyInjector dependencyInjector) {
         this.sceneManager = dependencyInjector.getSceneManager();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.loginService = dependencyInjector.getLoginService();

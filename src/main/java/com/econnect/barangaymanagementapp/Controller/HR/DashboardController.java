@@ -6,12 +6,11 @@ import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.UserSession;
 import javafx.fxml.FXML;
 
-public class DashboardController extends HeaderBaseController implements ControllerDependencies {
+public class DashboardController extends HeaderBaseController  {
 
     private UserSession userSession;
 
-    @Override
-    public void setDependencies(DependencyInjector dependencyInjector) {
+    public DashboardController(DependencyInjector dependencyInjector) {
         this.userSession = dependencyInjector.getLoginService().getUserSession();
     }
 

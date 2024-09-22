@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.Utils;
 
-import com.econnect.barangaymanagementapp.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,14 +18,13 @@ public class SceneManager {
 
     public void switchScene(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
+            FXMLLoader loader = dependencyInjector.getLoader(fxmlPath);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
             stage.setMaximized(!fxmlPath.contains("login.fxml"));
-            Object controller = loader.getController();
-            dependencyInjector.injectDependenciesToController(controller);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
