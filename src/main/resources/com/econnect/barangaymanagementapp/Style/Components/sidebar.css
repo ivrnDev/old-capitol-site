@@ -5,9 +5,30 @@
 .nav-bar {
     -fx-cursor: hand;
     -fx-background-radius: 30px;
+    -fx-alignment: center-left;
+    -fx-spacing: 10.0;
+    -fx-padding: 10 20 10 20;
 }
 
 .nav-bar:hover {
+    -fx-background-color: rgba(217, 217, 217, 0.5);
+    -fx-translate-x: 2px;
+}
+
+.nav-bar ImageView {
+    -fx-fit-height: 40.0;
+    -fx-fit-width: 40.0;
+    -fx-pick-on-bounds: true;
+    -fx-smooth: false;
+}
+
+.nav-bar Text {
+    -fx-fill: white;
+    -fx-font-family: Arial;
+    -fx-font-size: 18.0;
+}
+
+.nav-bar.active {
     -fx-background-color: rgba(217, 217, 217, 0.5);
     -fx-translate-x: 2px;
 }
