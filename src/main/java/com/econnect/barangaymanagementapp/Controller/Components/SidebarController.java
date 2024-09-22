@@ -74,7 +74,7 @@ public class SidebarController {
         try {
             return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icons/" + item.getLowerCaseName() + ".png")));
         } catch (NullPointerException e) {
-            return new Image(MainApplication.class.getResourceAsStream("Icons/default-icon.png"));
+            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icons/default-icon.png")));
         }
     }
 

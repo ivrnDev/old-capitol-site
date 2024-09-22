@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.Controller.Components;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
-import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.UserSession;
 import javafx.fxml.FXML;
