@@ -1,11 +1,11 @@
-package com.econnect.barangaymanagementapp.Controller.HR;
+package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
 import com.econnect.barangaymanagementapp.Controller.Base.HeaderBaseController;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.UserSession;
 import javafx.fxml.FXML;
 
-public class DashboardController extends HeaderBaseController  {
+public class DashboardController extends HeaderBaseController {
 
     private final UserSession userSession;
 
