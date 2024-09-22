@@ -1,12 +1,10 @@
-package com.econnect.barangaymanagementapp.Controller.Components;
+package com.econnect.barangaymanagementapp.Controller.Component;
 
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
+import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.NavigationItems;
 import com.econnect.barangaymanagementapp.MainApplication;
-import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
-import com.econnect.barangaymanagementapp.Utils.NavigationState;
-import com.econnect.barangaymanagementapp.Utils.SceneManager;
-import com.econnect.barangaymanagementapp.Utils.UserSession;
+import com.econnect.barangaymanagementapp.Utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +20,7 @@ public class SidebarController {
     private final SceneManager sceneManager;
     private final NavigationState navigationState;
     private Departments currentDepartment;
+    private ModalUtils modalUtils;
 
     @FXML
     private VBox navigationBar;
@@ -30,6 +29,7 @@ public class SidebarController {
         this.userSession = dependencyInjector.getUserSession();
         this.sceneManager = dependencyInjector.getSceneManager();
         this.navigationState = dependencyInjector.getNavigationState();
+        this.modalUtils = dependencyInjector.getModalUtils();
     }
 
     public void initialize() {
@@ -80,7 +80,11 @@ public class SidebarController {
 
     @FXML
     public void logout() {
-        userSession.clearSession();
-        sceneManager.switchToDefaultScene();
+        modalUtils.showModal(Modal.REJECT, "Confirm Logout", "Are you sure you want to logout?", isConfirmed -> {
+            if (isConfirmed) {
+                userSession.clearSession();
+                sceneManager.switchToDefaultScene();
+            }
+        });
     }
 }
