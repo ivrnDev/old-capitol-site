@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Enumeration.NavigationItems;
 import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.NavigationState;
 import com.econnect.barangaymanagementapp.Utils.SceneManager;
 import com.econnect.barangaymanagementapp.Utils.UserSession;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ public class SidebarController {
 
     private final UserSession userSession;
     private final SceneManager sceneManager;
+    private final NavigationState navigationState;
     private Departments currentDepartment;
 
     @FXML
@@ -27,14 +29,14 @@ public class SidebarController {
     public SidebarController(DependencyInjector dependencyInjector) {
         this.userSession = dependencyInjector.getUserSession();
         this.sceneManager = dependencyInjector.getSceneManager();
+        this.navigationState = dependencyInjector.getNavigationState();
     }
 
     public void initialize() {
-        if (userSession != null || userSession.getCurrentEmployee() != null) {
+        if (userSession != null && userSession.getCurrentEmployee() != null) {
             currentDepartment = userSession.getCurrentEmployee().getDepartment();
-            if (currentDepartment.getCurrentActiveItem() == null && !currentDepartment.getNavigationItems().isEmpty()) {
-                NavigationItems firstItem = currentDepartment.getNavigationItems().getFirst();
-                currentDepartment.setCurrentActiveItem(firstItem);
+            if (navigationState.getActiveItem() == null && !currentDepartment.getNavigationItems().isEmpty()) {
+                navigationState.setActiveItem(currentDepartment.getNavigationItems().getFirst());
             }
             loadNavigationBar();
         }
@@ -48,13 +50,13 @@ public class SidebarController {
         navIcon.setImage(loadIcon(item));
         navButton.getStyleClass().add("nav-bar");
 
-        if (item == currentDepartment.getCurrentActiveItem()) {
+        if (item == navigationState.getActiveItem()) {
             navButton.getStyleClass().add("active");
         }
 
         navButton.getChildren().addAll(navIcon, navText);
         navButton.setOnMouseClicked(_ -> {
-            currentDepartment.setCurrentActiveItem(item);
+            navigationState.setActiveItem(item);
             sceneManager.switchScene("View/" + currentDepartment.getDirectoryName() + "/" + item.getLowerCaseName() + ".fxml");
             loadNavigationBar();
         });

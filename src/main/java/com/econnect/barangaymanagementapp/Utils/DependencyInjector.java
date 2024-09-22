@@ -15,6 +15,7 @@ public class DependencyInjector {
     private final ModalUtils modalUtils;
     private final LoginService loginService;
     private final UserSession userSession;
+    private final NavigationState navigationState;
 
     public DependencyInjector(Stage stage) {
         this.sceneManager = new SceneManager(stage, this);
@@ -23,6 +24,7 @@ public class DependencyInjector {
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         this.userSession = UserSession.getInstance();
         this.loginService = new LoginService(employeeService, userSession);
+        this.navigationState = new NavigationState();
 
     }
 
@@ -42,10 +44,14 @@ public class DependencyInjector {
         return userSession;
     }
 
+    public NavigationState getNavigationState() {
+        return navigationState;
+    }
+
     public FXMLLoader getLoader(String fxmlPath) {
-       FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
-       loader.setControllerFactory(controllerClass -> injectDependenciesToController(controllerClass));
-       return loader;
+        FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
+        loader.setControllerFactory(controllerClass -> injectDependenciesToController(controllerClass));
+        return loader;
     }
 
     private Object injectDependenciesToController(Class<?> controllerClass) {
@@ -58,7 +64,8 @@ public class DependencyInjector {
                 }
             }
             return controllerClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException("Failed to instantiate controller: " + controllerClass.getName(), e);
         }
     }
