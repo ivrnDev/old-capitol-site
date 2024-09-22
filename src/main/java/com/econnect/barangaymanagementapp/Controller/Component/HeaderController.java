@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.Controller.Components;
+package com.econnect.barangaymanagementapp.Controller.Component;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
