@@ -82,14 +82,14 @@
             </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="nav-bar">
+      <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="nav-bar" onMouseClicked="#logout">
          <children>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false">
                <image>
                   <Image url="@../../Images/dashboard.png" />
                </image>
             </ImageView>
-            <Text fill="WHITE" onMouseClicked="#logout" strokeType="OUTSIDE" strokeWidth="0.0" text="Logout">
+            <Text fill="WHITE"  strokeType="OUTSIDE" strokeWidth="0.0" text="Logout">
                <font>
                   <Font name="Arial" size="18.0" />
                </font>
