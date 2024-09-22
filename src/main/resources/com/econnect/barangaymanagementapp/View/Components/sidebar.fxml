@@ -82,7 +82,7 @@
             </HBox>
          </children>
       </VBox>
-      <HBox fx:id="logoutBtn" alignment="CENTER_LEFT" spacing="10.0" styleClass="nav-bar">
+      <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="nav-bar">
          <children>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false">
                <image>
