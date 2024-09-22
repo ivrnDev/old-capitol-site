@@ -8,16 +8,14 @@ import javafx.fxml.FXML;
 
 public class DashboardController extends HeaderBaseController  {
 
-    private UserSession userSession;
-    private SceneManager sceneManager;
+    private final UserSession userSession;
 
     public DashboardController(DependencyInjector dependencyInjector) {
-        this.userSession = dependencyInjector.getLoginService().getUserSession();
-        this.sceneManager = dependencyInjector.getSceneManager();
+        this.userSession = dependencyInjector.getUserSession();
     }
     @FXML
     public void initialize() {
-        setHeader("Barangay Office", "Welcome, " + userSession.getInstance().getCurrentEmployee().getFirstName());
+        setHeader("Barangay Office", "Welcome, " + userSession.getCurrentEmployee().getFirstName());
     }
 
 

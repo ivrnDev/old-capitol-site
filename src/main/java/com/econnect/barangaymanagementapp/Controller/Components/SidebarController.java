@@ -7,12 +7,12 @@ import javafx.fxml.FXML;
 
 public class SidebarController {
 
-    private UserSession userSession;
-    private SceneManager sceneManager;
+    private final UserSession userSession;
+    private final SceneManager sceneManager;
 
 
     public SidebarController(DependencyInjector dependencyInjector) {
-        this.userSession = dependencyInjector.getLoginService().getUserSession();
+        this.userSession = dependencyInjector.getUserSession();
         this.sceneManager = dependencyInjector.getSceneManager();
     }
 
@@ -21,7 +21,7 @@ public class SidebarController {
 
     @FXML
     public void logout() {
-        userSession.getInstance().clearSession();
+        userSession.clearSession();
         sceneManager.switchScene("View/login.fxml");
     }
 }

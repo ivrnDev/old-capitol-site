@@ -21,7 +21,6 @@ public class DependencyInjector {
         this.modalUtils = new ModalUtils(stage);
         EmployeeRepository employeeRepository = new EmployeeRepository();
         EmployeeService employeeService = new EmployeeService(employeeRepository);
-        UserSession userSession = UserSession.getInstance();
         this.userSession = UserSession.getInstance();
         this.loginService = new LoginService(employeeService, userSession);
 

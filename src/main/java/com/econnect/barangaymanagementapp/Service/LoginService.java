@@ -14,10 +14,6 @@ public class LoginService {
         this.userSession = userSession;
     }
 
-    public UserSession getUserSession() {
-        return userSession;
-    }
-
     public Optional<Employee> login(String username, String password) {
             Optional<Employee> employee = employeeService.findEmployeeByCredentials(username, password);
             if(employee != null && employee.isPresent()) {
