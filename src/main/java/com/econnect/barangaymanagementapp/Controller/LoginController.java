@@ -52,7 +52,8 @@ public class LoginController {
     private void handleLoginButton() {
         Optional<Employee> loggedEmployee = loginService.login(usernameInput.getText(), passwordInput.getText());
         if (loggedEmployee != null && loggedEmployee.isPresent()) {
-            switchSceneBaseOnDepartment(loggedEmployee.get().getDepartment());
+            Departments loggedEmployeeDepartment = loggedEmployee.get().getDepartment();
+            sceneManager.switchScene(loggedEmployeeDepartment.getLink());
             return;
         }
         triggerError(true);
@@ -79,19 +80,6 @@ public class LoginController {
 
         usernameInput.setOnKeyPressed(keyPressHandler);
         passwordInput.setOnKeyPressed(keyPressHandler);
-    }
-
-    private void switchSceneBaseOnDepartment(Departments department) {
-        switch (department) {
-            case Departments.HUMAN_RESOURCE :
-                sceneManager.switchScene("View/HR/dashboard.fxml");
-                break;
-            case Departments.BARANGAY_OFFICE :
-                sceneManager.switchScene("View/BarangayOffice/dashboard.fxml");
-                break;
-            default:
-                sceneManager.switchScene("View/login.fxml");
-        }
     }
 
     private void triggerError(boolean value) {
