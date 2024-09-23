@@ -11,21 +11,29 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class DependencyInjector {
+    private final Stage stage;
     private final SceneManager sceneManager;
     private final ModalUtils modalUtils;
     private final LoginService loginService;
     private final UserSession userSession;
     private final NavigationState navigationState;
+    private final SoundUtils soundUtils;
 
     public DependencyInjector(Stage stage) {
-        this.sceneManager = new SceneManager(stage, this);
-        this.modalUtils = new ModalUtils(stage);
+        this.stage = stage;
+        this.soundUtils = new SoundUtils();
+        this.navigationState = new NavigationState();
+        this.sceneManager = new SceneManager(this);
+        this.modalUtils = new ModalUtils(this);
         EmployeeRepository employeeRepository = new EmployeeRepository();
         EmployeeService employeeService = new EmployeeService(employeeRepository);
         this.userSession = UserSession.getInstance();
         this.loginService = new LoginService(employeeService, userSession);
-        this.navigationState = new NavigationState();
 
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public SceneManager getSceneManager() {
@@ -46,6 +54,10 @@ public class DependencyInjector {
 
     public NavigationState getNavigationState() {
         return navigationState;
+    }
+
+    public SoundUtils getSoundUtils() {
+        return soundUtils;
     }
 
     public FXMLLoader getLoader(String fxmlPath) {
