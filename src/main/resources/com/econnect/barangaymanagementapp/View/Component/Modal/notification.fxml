@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="97.0" prefWidth="453.0" spacing="15.0" stylesheets="@../../../Style/Components/modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.Component.Modal.ModalController">
+<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="86.0" prefWidth="470.0" stylesheets="@../../../Style/Components/modal.css"
+      xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.econnect.barangaymanagementapp.Controller.Component.Modal.ModalController">
     <children>
-        <VBox spacing="15.0">
+        <AnchorPane prefHeight="83.0" prefWidth="453.0">
             <children>
-                <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Header" wrappingWidth="220.0">
-                    <font>
-                        <Font name="Arial Bold" size="20.0" />
-                    </font>
-                </Text>
-                <Text fx:id="messageText" text="The notification message." wrappingWidth="300">
-                    <font>
-                        <Font name="Arial" size="16.0" />
-                    </font>
-                </Text>
+                <ImageView fx:id="icon" fitHeight="44.0" fitWidth="46.0" layoutX="20.0" layoutY="23.0"
+                           pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../Icon/success.png"/>
+                    </image>
+                </ImageView>
+                <VBox layoutX="77.0" layoutY="17.0" prefHeight="56.0" spacing="10.0">
+                    <children>
+                        <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Header"
+                              wrappingWidth="220.0">
+                            <font>
+                                <Font name="Arial Bold" size="20.0"/>
+                            </font>
+                        </Text>
+                        <Text fx:id="messageText" text="The notification message." wrappingWidth="300">
+                            <font>
+                                <Font name="Arial" size="16.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </VBox>
+                <ImageView fitHeight="22.0" fitWidth="24.0" layoutX="434.0" layoutY="34.0" pickOnBounds="true"
+                           preserveRatio="true" AnchorPane.rightAnchor="0.0">
+                    <image>
+                        <Image url="@../../../Icon/close.png"/>
+                    </image>
+                </ImageView>
             </children>
-        </VBox>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+        </AnchorPane>
     </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
 </VBox>
