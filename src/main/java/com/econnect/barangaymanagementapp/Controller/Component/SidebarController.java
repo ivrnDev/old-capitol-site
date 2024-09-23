@@ -72,9 +72,10 @@ public class SidebarController {
 
     private Image loadIcon(NavigationItems item) {
         try {
-            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icons/" + item.getLowerCaseName() + ".png")));
+            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icon/" + item.getLowerCaseName() + ".png")));
         } catch (NullPointerException e) {
-            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icons/default-icon.png")));
+            System.err.println("Icon resource not found: " + item.getLowerCaseName());
+            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icon/default-icon.png")));
         }
     }
 
