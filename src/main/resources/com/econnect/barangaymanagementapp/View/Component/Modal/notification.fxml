@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="86.0" prefWidth="470.0" stylesheets="@../../../Style/Components/modal.css"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
@@ -35,8 +36,9 @@
                         </Text>
                     </children>
                 </VBox>
-                <ImageView fitHeight="22.0" fitWidth="24.0" layoutX="434.0" layoutY="34.0" pickOnBounds="true"
-                           preserveRatio="true" AnchorPane.rightAnchor="0.0">
+                <ImageView fx:id="closeButton" fitHeight="22.0" fitWidth="24.0" layoutX="434.0" layoutY="34.0"
+                           pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0"
+                           onMouseClicked="#closeWindow">
                     <image>
                         <Image url="@../../../Icon/close.png"/>
                     </image>

@@ -116,8 +116,9 @@ public class ModalController {
         fadeTransition.play();
     }
 
+    @FXML
     private void closeWindow() {
-        Stage stage = (Stage) acceptBtn.getScene().getWindow();
+        Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
 }
