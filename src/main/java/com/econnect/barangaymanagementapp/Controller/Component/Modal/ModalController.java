@@ -64,8 +64,8 @@ public class ModalController {
 
     private void initializeModalActions() {
         if (modal.getModalType() == ModalType.MODAL) {
-            acceptBtn.setOnAction(event -> handleCallBack(true));
-            rejectBtn.setOnAction(event -> handleCallBack(false));
+            acceptBtn.setOnAction(_ -> handleCallBack(true));
+            rejectBtn.setOnAction(_ -> handleCallBack(false));
             return;
         }
         Platform.runLater(this::fadeOutAndClose);
