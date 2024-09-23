@@ -11,8 +11,8 @@ public class SceneManager {
     private final Stage stage;
     private final DependencyInjector dependencyInjector;
 
-    public SceneManager(Stage stage, DependencyInjector dependencyInjector) {
-        this.stage = stage;
+    public SceneManager(DependencyInjector dependencyInjector) {
+        this.stage = dependencyInjector.getStage();
         this.dependencyInjector = dependencyInjector;
     }
 
