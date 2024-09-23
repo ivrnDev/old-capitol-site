@@ -18,7 +18,7 @@
             <children>
                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false">
                     <image>
-                        <Image url="@../../Icons/logout.png"/>
+                        <Image url="@../../Icon/logout.png"/>
                     </image>
                 </ImageView>
                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Logout">
