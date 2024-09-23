@@ -7,9 +7,10 @@ public enum Modal {
     DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "default-button"),
     DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "approve-button"),
     DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "reject-button"),
-    SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION, "success-style", null, "#026917"),
-    WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION, "warning-style", null, "#9e9600"),
-    ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION, "error-style", null, "#b30707");
+    SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION, "success-style", null, "#026917", "Icon/success.png"),
+    WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION, "warning-style", null, "#9e9600", "Icon/warning.png"),
+    ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION, "error-style", null, "#b30707", "Icon/error.png"),
+    ;
 
     private final String fxmlPath;
     private final Sound sound;
@@ -17,20 +18,23 @@ public enum Modal {
     private final String rootStyle;
     private final String buttonStyle;
     private final String textColor;
+    private final String iconPath;
 
     // Main constructor with all parameters
-    Modal(String fxmlPath, Sound sound, ModalType modalType, String rootStyle, String buttonStyle, String textColor) {
+    Modal(String fxmlPath, Sound sound, ModalType modalType, String rootStyle, String buttonStyle, String textColor, String iconPath) {
         this.fxmlPath = fxmlPath;
         this.sound = sound;
         this.modalType = modalType;
         this.rootStyle = rootStyle;
         this.buttonStyle = buttonStyle;
         this.textColor = textColor;
+        this.iconPath = iconPath;
+
     }
 
     // Overloaded constructor for modals without text color customization (defaults to black)
     Modal(String fxmlPath, Sound sound, ModalType modalType, String rootStyle, String buttonStyle) {
-        this(fxmlPath, sound, modalType, rootStyle, buttonStyle, "#000000");  // Default text color is black
+        this(fxmlPath, sound, modalType, rootStyle, buttonStyle, "#000000", null);
     }
 
     public String getFxmlPath() {
@@ -55,6 +59,10 @@ public enum Modal {
 
     public String getTextColor() {
         return textColor;
+    }
+
+    public String getIcon() {
+        return iconPath;
     }
 }
 

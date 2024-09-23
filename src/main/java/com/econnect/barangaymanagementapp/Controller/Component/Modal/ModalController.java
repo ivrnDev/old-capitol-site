@@ -2,15 +2,19 @@ package com.econnect.barangaymanagementapp.Controller.Component.Modal;
 
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.ModalType;
+import com.econnect.barangaymanagementapp.MainApplication;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 public class ModalController {
@@ -19,16 +23,19 @@ public class ModalController {
     private VBox rootPane;
 
     @FXML
+    private Text headerText;
+
+    @FXML
+    private Text messageText;
+
+    @FXML
     private Button acceptBtn;
 
     @FXML
     private Button rejectBtn;
 
     @FXML
-    private Text messageText;
-
-    @FXML
-    private Text headerText;
+    private ImageView icon;
 
     private final Modal modal;
     private final String header;
@@ -51,9 +58,30 @@ public class ModalController {
         headerText.setText(header);
         messageText.setText(message);
         rootPane.getStyleClass().add(modal.getRootStyle());
+
+        loadIcon();
+        setTextColor();
+        setButtonStyle();
+    }
+
+    private void loadIcon() {
+        if (modal.getIcon() != null) {
+            InputStream iconStream = MainApplication.class.getResourceAsStream(modal.getIcon());
+            if (iconStream != null) {
+                icon.setImage(new Image(iconStream));
+            } else {
+                System.err.println("Icon resource not found: " + modal.getIcon());
+            }
+        }
+    }
+
+    private void setTextColor() {
         if (modal.getTextColor() != null) {
             headerText.setFill(javafx.scene.paint.Color.web(modal.getTextColor()));
         }
+    }
+
+    private void setButtonStyle() {
         if (modal.getButtonStyle() != null) {
             acceptBtn.getStyleClass().add(modal.getButtonStyle());
             if ("default-button".equals(modal.getButtonStyle())) {
