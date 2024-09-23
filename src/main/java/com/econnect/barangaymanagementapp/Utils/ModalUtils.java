@@ -33,7 +33,7 @@ public class ModalUtils {
     public void showModal(Modal modal, String header, String message, Consumer<Boolean> callback) {
         if (!isModalShowing()) {
             try {
-                FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(modal.getFXMLPath(), modal, header, message, callback);
+                FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(modal.getFxmlPath(), modal, header, message, callback);
                 soundUtils.playSound(modal.getSound());
                 Parent root = loader.load();
                 modalStage = new Stage();

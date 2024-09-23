@@ -3,29 +3,38 @@ package com.econnect.barangaymanagementapp.Enumeration;
 import static com.econnect.barangaymanagementapp.Enumeration.ModalType.*;
 
 public enum Modal {
-    CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, MODAL),
-    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
-    DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
-    DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
-    SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION),
-    WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION),
-    ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION),
-    ;
+    CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, MODAL, "default-style", null),
+    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "default-button"),
+    DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "approve-button"),
+    DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "reject-button"),
+    SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION, "success-style", null, "#026917"),
+    WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION, "warning-style", null, "#9e9600"),
+    ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION, "error-style", null, "#b30707");
 
-    private final String link;
+    private final String fxmlPath;
     private final Sound sound;
     private final ModalType modalType;
+    private final String rootStyle;
+    private final String buttonStyle;
+    private final String textColor;
 
-
-    Modal(String link, Sound sound, ModalType type) {
-        this.link = link;
+    // Main constructor with all parameters
+    Modal(String fxmlPath, Sound sound, ModalType modalType, String rootStyle, String buttonStyle, String textColor) {
+        this.fxmlPath = fxmlPath;
         this.sound = sound;
-        this.modalType = type;
-
+        this.modalType = modalType;
+        this.rootStyle = rootStyle;
+        this.buttonStyle = buttonStyle;
+        this.textColor = textColor;
     }
 
-    public String getFXMLPath() {
-        return link;
+    // Overloaded constructor for modals without text color customization (defaults to black)
+    Modal(String fxmlPath, Sound sound, ModalType modalType, String rootStyle, String buttonStyle) {
+        this(fxmlPath, sound, modalType, rootStyle, buttonStyle, "#000000");  // Default text color is black
+    }
+
+    public String getFxmlPath() {
+        return fxmlPath;
     }
 
     public Sound getSound() {
@@ -36,5 +45,16 @@ public enum Modal {
         return modalType;
     }
 
+    public String getRootStyle() {
+        return rootStyle;
+    }
+
+    public String getButtonStyle() {
+        return buttonStyle;
+    }
+
+    public String getTextColor() {
+        return textColor;
+    }
 }
 

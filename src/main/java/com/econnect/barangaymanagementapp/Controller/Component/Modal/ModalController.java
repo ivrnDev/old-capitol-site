@@ -50,65 +50,17 @@ public class ModalController {
     private void initializeModal() {
         headerText.setText(header);
         messageText.setText(message);
-        if (modal.getModalType() == ModalType.NOTIFICATION) {
-            switchNotificationDesign();
-
+        rootPane.getStyleClass().add(modal.getRootStyle());
+        if (modal.getTextColor() != null) {
+            headerText.setFill(javafx.scene.paint.Color.web(modal.getTextColor()));
         }
-        switchModalDesign();
-    }
-
-    private void switchNotificationDesign() {
-        switch (modal.name()) {
-            case "SUCCESS":
-                setModalDesign("success-style", "#026917");
-                break;
-            case "WARNING":
-                setModalDesign("warning-style", "#9e9600");
-                break;
-            case "ERROR":
-                setModalDesign("error-style", "#b30707");
-                break;
-            default:
-                break;
+        if (modal.getButtonStyle() != null) {
+            acceptBtn.getStyleClass().add(modal.getButtonStyle());
+            if ("default-button".equals(modal.getButtonStyle())) {
+                acceptBtn.setTextFill(javafx.scene.paint.Color.web("#000000"));
+            }
         }
     }
-
-    private void switchModalDesign() {
-        switch (modal.name()) {
-            case "CLASSIC":
-                setModalDesign("default-style", "#000000");
-                break;
-            case "DEFAULT":
-                setModalDesign("default-style", "#000000", "default-button");
-                break;
-            case "DEFAULT_APPROVE":
-                setModalDesign("default-style", "#000000", "approve-button");
-                break;
-            case "DEFAULT_REJECT":
-                setModalDesign("default-style", "#000000", "reject-button");
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    private void setModalDesign(String rootStyle, String textColor) {
-        rootPane.getStyleClass().add(rootStyle);
-        headerText.setFill(javafx.scene.paint.Color.web(textColor));
-    }
-
-    private void setModalDesign(String rootStyle, String textColor, String buttonStyle) {
-        rootPane.getStyleClass().add(rootStyle);
-        headerText.setFill(javafx.scene.paint.Color.web(textColor));
-
-        if (modal.name().equals("DEFAULT")) {
-            acceptBtn.setTextFill(javafx.scene.paint.Color.web(textColor));
-        }
-        acceptBtn.getStyleClass().add(buttonStyle);
-
-    }
-
 
     private void initializeModalActions() {
         if (modal.getModalType() == ModalType.MODAL) {
@@ -128,8 +80,9 @@ public class ModalController {
 
     private void fadeOutAndClose() {
         Stage stage = (Stage) rootPane.getScene().getWindow();
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(5), rootPane);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), rootPane);
         fadeTransition.setByValue(1.0);
+        fadeTransition.setDelay(Duration.seconds(1.5));
         fadeTransition.setToValue(0.0);
         fadeTransition.setOnFinished(_ -> stage.close());
         fadeTransition.play();
