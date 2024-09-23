@@ -45,6 +45,14 @@
     -fx-background-color: #f0f0f0;
 }
 
-
+/*--------------------------------------------------------------*/
 /*Success*/
+
+.background-success {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #00ff00;
+}
+
+
 
