@@ -1,6 +1,7 @@
 module com.econnect.barangaymanagementapp {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
     exports com.econnect.barangaymanagementapp;
     opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
