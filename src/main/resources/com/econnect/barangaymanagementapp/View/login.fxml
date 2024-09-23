@@ -64,7 +64,7 @@
                    onMouseClicked="#handleCloseButton" pickOnBounds="true" preserveRatio="true" styleClass="exit-btn"
                    AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <image>
-                <Image url="@../Icons/close.png"/>
+                <Image url="@../Icon/exit.png"/>
             </image>
         </ImageView>
     </children>
