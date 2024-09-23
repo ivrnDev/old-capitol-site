@@ -19,8 +19,8 @@ public class SidebarController {
     private final UserSession userSession;
     private final SceneManager sceneManager;
     private final NavigationState navigationState;
+    private final ModalUtils modalUtils;
     private Departments currentDepartment;
-    private ModalUtils modalUtils;
 
     @FXML
     private VBox navigationBar;
