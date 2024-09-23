@@ -9,16 +9,16 @@ import java.io.IOException;
 
 public class SceneManager {
     private final Stage stage;
-    private final DependencyInjector dependencyInjector;
+    private final FXMLLoaderFactory fxmlLoaderFactory;
 
     public SceneManager(DependencyInjector dependencyInjector) {
         this.stage = dependencyInjector.getStage();
-        this.dependencyInjector = dependencyInjector;
+        this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
     public void switchScene(String fxmlPath) {
         try {
-            FXMLLoader loader = dependencyInjector.getLoader(fxmlPath);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
