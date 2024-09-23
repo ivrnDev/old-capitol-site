@@ -1,58 +1,65 @@
-.background {
-    -fx-border-color: black;
+.default-style {
+    -fx-border-color: #000000;
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
 
-/*Confirm Modal*/
-.yes-btn {
+.success-style {
+    -fx-border-color: rgb(0, 110, 0);
+    -fx-background-color: rgba(0, 255, 0, 0.25);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.error-style {
+    -fx-border-color: #5e0000;
+    -fx-background-color: rgba(255, 0, 0, 0.25);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.warning-style {
+    -fx-border-color: #838300;
+    -fx-background-color: rgba(255, 255, 0, 0.45);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.default-button {
+    -fx-border-color: black;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
-    -fx-border-color: black;
     -fx-background-color: transparent;
 }
 
-.no-btn {
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-border-color: black;
-    -fx-background-color: transparent;
-}
-
-.yes-btn:hover {
+.default-button:hover {
     -fx-background-color: #f0f0f0;
 }
 
-.no-btn:hover {
-    -fx-background-color: #f0f0f0;
-}
-
-/* Reject Modal*/
-
-.reject-btn.accept {
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
+.approve-button {
     -fx-border-color: black;
-    -fx-background-color: #a90606;
-}
-
-.reject-btn {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
+    -fx-background-color: #008100;
+}
+
+.reject-button {
     -fx-border-color: black;
-    -fx-background-color: transparent;
-}
-
-.reject-btn:hover {
-    -fx-background-color: #f0f0f0;
-}
-
-/*--------------------------------------------------------------*/
-/*Success*/
-
-.background-success {
-    -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-border-color: #00ff00;
+    -fx-border-radius: 10px;
+    -fx-background-color: #810000;
 }
+
+.approve-button:hover {
+    -fx-background-color: #005500;
+}
+
+.reject-button:hover {
+    -fx-background-color: #660000;
+}
+
+
 
 
 

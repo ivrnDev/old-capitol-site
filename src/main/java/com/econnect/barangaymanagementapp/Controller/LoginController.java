@@ -62,7 +62,7 @@ public class LoginController {
 
     @FXML
     private void handleCloseButton() {
-        modalUtils.showModal(Modal.CONFIRM, "Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
+        modalUtils.showModal(Modal.CLASSIC, "Confirm Exit?", "Are you sure you want to exit?", isConfirmed -> {
             if (isConfirmed) {
                 Stage stage = (Stage) closeBtn.getScene().getWindow();
                 stage.close();

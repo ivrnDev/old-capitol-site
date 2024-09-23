@@ -37,8 +37,8 @@ public class ModalUtils {
                 FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(modal.getFXMLPath()));
                 loader.setControllerFactory(controllerClass -> {
                     try {
-                        Constructor<?> constructor = controllerClass.getConstructor(String.class, String.class, Consumer.class);
-                        return constructor.newInstance(header, message, callback);
+                        Constructor<?> constructor = controllerClass.getConstructor(Modal.class, String.class, String.class, Consumer.class);
+                        return constructor.newInstance(modal, header, message, callback);
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                              InvocationTargetException e) {
                         throw new RuntimeException("Failed to instantiate controller: " + controllerClass.getName(), e);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="97.0" prefWidth="453.0" spacing="15.0" stylesheets="@../../../Style/Components/modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.Component.Modal.ModalController">
+    <children>
+        <VBox spacing="15.0">
+            <children>
+                <Text fx:id="headerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Header" wrappingWidth="220.0">
+                    <font>
+                        <Font name="Arial Bold" size="20.0" />
+                    </font>
+                </Text>
+                <Text fx:id="messageText" text="The notification message." wrappingWidth="300">
+                    <font>
+                        <Font name="Arial" size="16.0" />
+                    </font>
+                </Text>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

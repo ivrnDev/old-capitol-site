@@ -80,7 +80,7 @@ public class SidebarController {
 
     @FXML
     public void logout() {
-        modalUtils.showModal(Modal.REJECT, "Confirm Logout", "Are you sure you want to logout?", isConfirmed -> {
+        modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Logout", "Are you sure you want to logout?", isConfirmed -> {
             if (isConfirmed) {
                 userSession.clearSession();
                 sceneManager.switchToDefaultScene();

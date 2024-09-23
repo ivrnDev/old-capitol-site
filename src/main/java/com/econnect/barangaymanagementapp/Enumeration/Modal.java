@@ -1,19 +1,27 @@
 package com.econnect.barangaymanagementapp.Enumeration;
 
+import static com.econnect.barangaymanagementapp.Enumeration.ModalType.*;
+
 public enum Modal {
-    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT),
-    CONFIRM("View/Component/Modal/confirm.fxml", Sound.DEFAULT),
-    APPROVE("View/Component/Modal/approve.fxml", Sound.DEFAULT),
-    REJECT("View/Component/Modal/reject.fxml", Sound.DEFAULT),
-    ERROR("View/Component/Modal/error.fxml", Sound.ERROR),
-    SUCCESS("View/Component/Modal/success.fxml", Sound.SUCCESS);
+    CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, MODAL),
+    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
+    DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
+    DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL),
+    SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION),
+    WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION),
+    ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION),
+    ;
 
     private final String link;
     private final Sound sound;
+    private final ModalType modalType;
 
-    Modal(String link, Sound sound) {
+
+    Modal(String link, Sound sound, ModalType type) {
         this.link = link;
         this.sound = sound;
+        this.modalType = type;
+
     }
 
     public String getFXMLPath() {
@@ -23,4 +31,10 @@ public enum Modal {
     public Sound getSound() {
         return sound;
     }
+
+    public ModalType getModalType() {
+        return modalType;
+    }
+
 }
+
