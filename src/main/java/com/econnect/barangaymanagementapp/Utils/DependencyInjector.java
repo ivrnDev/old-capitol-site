@@ -9,23 +9,28 @@ public class DependencyInjector {
     private final Stage stage;
     private final SceneManager sceneManager;
     private final ModalUtils modalUtils;
-    private final LoginService loginService;
     private final UserSession userSession;
     private final NavigationState navigationState;
     private final SoundUtils soundUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
+
+    private final EmployeeRepository employeeRepository;
+
+    private final LoginService loginService;
+    private final EmployeeService employeeService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
         this.soundUtils = new SoundUtils();
         this.navigationState = new NavigationState();
         this.fxmlLoaderFactory = new FXMLLoaderFactory(this);
+        this.userSession = UserSession.getInstance();
         this.sceneManager = new SceneManager(this);
         this.modalUtils = new ModalUtils(this);
-        EmployeeRepository employeeRepository = new EmployeeRepository();
-        EmployeeService employeeService = new EmployeeService(employeeRepository);
-        this.userSession = UserSession.getInstance();
-        this.loginService = new LoginService(employeeService, userSession);
+
+        this.employeeRepository = new EmployeeRepository();
+        this.employeeService = new EmployeeService(this);
+        this.loginService = new LoginService(this);
     }
 
     public Stage getStage() {
@@ -54,6 +59,14 @@ public class DependencyInjector {
 
     public SoundUtils getSoundUtils() {
         return soundUtils;
+    }
+
+    public EmployeeService getEmployeeService() {
+        return employeeService;
+    }
+
+    public EmployeeRepository getEmployeeRepository() {
+        return employeeRepository;
     }
 
     public FXMLLoaderFactory getFxmlLoaderFactory() {
