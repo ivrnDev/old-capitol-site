@@ -20,10 +20,17 @@ public class SceneManager {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath);
             Parent root = loader.load();
-            Scene scene = new Scene(root);
+            Scene scene = stage.getScene();
+            if (scene == null) {
+                scene = new Scene(root);
+            } else {
+                scene.setRoot(root);
+            }
             stage.setScene(scene);
+            stage.setFullScreen(true);
+            stage.setFullScreenExitHint("");
             stage.show();
-            stage.setMaximized(!fxmlPath.contains("login.fxml"));
+
         } catch (IOException e) {
             System.err.println("Failed to switch Scenes: " + e.getMessage());
             switchToDefaultScene();
