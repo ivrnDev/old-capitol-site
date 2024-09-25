@@ -6,14 +6,12 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-
 public class MainApplication extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         DependencyInjector dependencyInjector = new DependencyInjector(stage);
-        stage.initStyle(StageStyle.DECORATED); // For testing purposes, convert to UNDECORATED
+        stage.initStyle(StageStyle.UNDECORATED);
         SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchToDefaultScene();
     }
