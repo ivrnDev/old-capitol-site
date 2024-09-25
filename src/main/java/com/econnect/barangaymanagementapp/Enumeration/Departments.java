@@ -5,9 +5,9 @@ import java.util.List;
 import static com.econnect.barangaymanagementapp.Enumeration.NavigationItems.*;
 
 public enum Departments {
-    HUMAN_RESOURCES("Human Resources", "View/HumanResources/Dashboard.fxml", List.of(DASHBOARD, ANALYTICS, EMPLOYEES)),
-    BARANGAY_OFFICE("Barangay Office", "View/BarangayOffice/Dashboard.fxml", List.of(DASHBOARD, ANALYTICS, RESIDENTS, HISTORY)),
-    HEALTH_OFFICE("Health Office", "View/HealthOffice/Dashboard.fxml", List.of(DASHBOARD, ANALYTICS)),
+    HUMAN_RESOURCES("Human Resources", "View/HumanResources/dashboard.fxml", List.of(DASHBOARD, ANALYTICS, EMPLOYEES)),
+    BARANGAY_OFFICE("Barangay Office", "View/BarangayOffice/dashboard.fxml", List.of(DASHBOARD, ANALYTICS, RESIDENTS, HISTORY)),
+    HEALTH_OFFICE("Health Office", "View/HealthOffice/dashboard.fxml", List.of(DASHBOARD, ANALYTICS)),
     ;
 
     private final String name;
