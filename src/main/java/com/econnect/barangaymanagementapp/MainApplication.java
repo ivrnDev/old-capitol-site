@@ -11,7 +11,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) {
         DependencyInjector dependencyInjector = new DependencyInjector(stage);
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.DECORATED);
         SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchToDefaultScene();
     }
