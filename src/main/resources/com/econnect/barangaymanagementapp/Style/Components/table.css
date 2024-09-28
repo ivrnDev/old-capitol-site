@@ -1,0 +1,8 @@
+.table-header {
+    -fx-background-color: #9AEDF2;
+    -fx-border-width: none;
+}
+
+.table-row {
+    -fx-background-color: #D9F2F2;
+}
