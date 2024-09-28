@@ -8,11 +8,12 @@ import javafx.stage.Stage;
 public class DependencyInjector {
     private final Stage stage;
     private final SceneManager sceneManager;
-    private final ModalUtils modalUtils;
     private final UserSession userSession;
     private final NavigationState navigationState;
     private final SoundUtils soundUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
+    private final ModalUtils modalUtils;
+    private final ButtonUtils buttonUtils;
 
     private final EmployeeRepository employeeRepository;
 
@@ -27,6 +28,7 @@ public class DependencyInjector {
         this.userSession = UserSession.getInstance();
         this.sceneManager = new SceneManager(this);
         this.modalUtils = new ModalUtils(this);
+        this.buttonUtils = new ButtonUtils();
 
         this.employeeRepository = new EmployeeRepository();
         this.employeeService = new EmployeeService(this);
@@ -73,4 +75,7 @@ public class DependencyInjector {
         return fxmlLoaderFactory;
     }
 
+    public ButtonUtils getButtonUtils() {
+        return buttonUtils;
+    }
 }
