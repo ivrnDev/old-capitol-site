@@ -88,7 +88,7 @@ public class ModalUtils {
     }
 
     private void centerModal(Stage modalStage) {
-        modalStage.setOnShown(event -> {
+        modalStage.setOnShown(_ -> {
             double centerX = parentStage.getX() + parentStage.getWidth() / 2 - modalStage.getWidth() / 2;
             double centerY = parentStage.getY() + parentStage.getHeight() / 2 - modalStage.getHeight() / 2;
             modalStage.setX(centerX);
