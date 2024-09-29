@@ -16,7 +16,7 @@
                         <Font name="Arial Bold" size="20.0" />
                     </font>
                 </Text>
-                <Text fx:id="messageText" text="Are you sure you want to logout?" wrappingWidth="300">
+                <Text fx:id="messageText" text="Are you sure you want to logout?" wrappingWidth="411.0">
                     <font>
                         <Font name="Arial" size="16.0" />
                     </font>
