@@ -2,40 +2,51 @@ package com.econnect.barangaymanagementapp.Domain;
 
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Enumeration.Gender;
+import com.econnect.barangaymanagementapp.Enumeration.Roles;
 
 import java.time.LocalDateTime;
+
+import static com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStatus;
 
 public class Employee {
     private String id;
     private String firstName;
     private String lastName;
     private String position;
-    private String status;
     private String email;
     private String contactNumber;
     private String address;
     private Gender gender;
+    private Roles role;
     private String username;
-    private String password;
-    private String role;
+    private String access;
+    private EmployeeStatus status;
     private Departments department;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime lastLogin;
 
-    public Employee(String id, String firstName, String lastName, String position, String status, String email, String contactNumber, String address, Gender gender, String username, String password, String role, Departments department, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLogin) {
+    public Employee() {
+
+    }
+
+    public Employee(String id, String firstName, String lastName, String position, String email, String contactNumber, String address, Gender gender, Roles role, String username, String access, EmployeeStatus status, Departments department, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLogin) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
-        this.status = status;
         this.email = email;
         this.contactNumber = contactNumber;
         this.address = address;
         this.gender = gender;
+        if (department.getRoles().contains(role)) {
+            this.role = role;
+        } else {
+            throw new IllegalArgumentException("The role " + role + " is not valid for department " + department.getName());
+        }
         this.username = username;
-        this.password = password;
-        this.role = role;
+        this.access = access;
+        this.status = status;
         this.department = department;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -74,14 +85,6 @@ public class Employee {
         this.position = position;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -114,6 +117,14 @@ public class Employee {
         this.gender = gender;
     }
 
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -122,20 +133,20 @@ public class Employee {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAccess() {
+        return access;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccess(String access) {
+        this.access = access;
     }
 
-    public String getRole() {
-        return role;
+    public EmployeeStatus getStatus() {
+        return status;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setStatus(EmployeeStatus status) {
+        this.status = status;
     }
 
     public Departments getDepartment() {
@@ -168,5 +179,27 @@ public class Employee {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", position='" + position + '\'' +
+                ", email='" + email + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", gender=" + gender +
+                ", role='" + role + '\'' +
+                ", username='" + username + '\'' +
+                ", access='" + access + '\'' +
+                ", status=" + status +
+                ", department=" + department +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", lastLogin=" + lastLogin +
+                '}';
     }
 }
