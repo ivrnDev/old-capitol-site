@@ -3,10 +3,10 @@ package com.econnect.barangaymanagementapp.Enumeration;
 import static com.econnect.barangaymanagementapp.Enumeration.ModalType.*;
 
 public enum Modal {
-    CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, MODAL, "default-style", null),
-    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "default-button"),
-    DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "approve-button"),
-    DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, MODAL, "default-style", "reject-button"),
+    CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, CONFIRMATION, "default-style", null),
+    DEFAULT("View/Component/Modal/default.fxml", Sound.DEFAULT, CONFIRMATION, "default-style", "default-button"),
+    DEFAULT_APPROVE("View/Component/Modal/default.fxml", Sound.DEFAULT, CONFIRMATION, "default-style", "approve-button"),
+    DEFAULT_REJECT("View/Component/Modal/default.fxml", Sound.DEFAULT, CONFIRMATION, "default-style", "reject-button"),
     SUCCESS("View/Component/Modal/notification.fxml", Sound.SUCCESS, NOTIFICATION, "success-style", null, "#026917", "Icon/success.png"),
     WARNING("View/Component/Modal/notification.fxml", Sound.WARNING, NOTIFICATION, "warning-style", null, "#9e9600", "Icon/warning.png"),
     ERROR("View/Component/Modal/notification.fxml", Sound.ERROR, NOTIFICATION, "error-style", null, "#b30707", "Icon/error.png"),

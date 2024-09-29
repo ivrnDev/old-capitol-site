@@ -91,7 +91,7 @@ public class ModalController {
     }
 
     private void initializeModalActions() {
-        if (modal.getModalType() == ModalType.MODAL) {
+        if (modal.getModalType() == ModalType.CONFIRMATION) {
             acceptBtn.setOnAction(_ -> handleCallBack(true));
             rejectBtn.setOnAction(_ -> handleCallBack(false));
             return;
