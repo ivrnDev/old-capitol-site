@@ -1,8 +1,10 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
+import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.ButtonUtils;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,45 +23,20 @@ public class EmployeeController implements Initializable {
 
     private final ButtonUtils buttonUtils;
     private final EmployeeService employeeService;
+    private final ModalUtils modalUtils;
 
 
     public EmployeeController(DependencyInjector dependencyInjector) {
         this.buttonUtils = dependencyInjector.getButtonUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
-
+        this.modalUtils = dependencyInjector.getModalUtils();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         addEmployeeBtn.setOnAction(e -> {
-//            Employee newEmployee = new Employee(
-//                    "12345",                           // id
-//                    "Ivan Ren",                            // firstName
-//                    "Villamora",                             // lastName
-//                    "Secretary",               // position
-//                    "johndoe@example.com",             // email
-//                    "123-456-7890",                    // contactNumber
-//                    "123 Main St, Anytown, USA",       // address
-//                    Gender.MALE,                       // gender
-//                    Roles.HR_MANAGER,                       // role
-//                    "ivanren",                         // username
-//                    "ivanren",                     // access
-//                    Status.EmployeeStatus.ACTIVE,             // status
-//                    Departments.HUMAN_RESOURCES,                    // department
-//                    LocalDateTime.now(),               // createdAt
-//                    LocalDateTime.now(),               // updatedAt
-//                    LocalDateTime.now().minusDays(1)   // lastLogin
-//            );
-//
-//            Response created = employeeService.createEmployee(newEmployee);
-//
-//            System.out.println("Employee created: " + created);
-
-//            for (EmployeeDTO employee : employees) {
-//                System.out.println(employee);
-//            }
+            modalUtils.customizeModal(CustomizeModal.ADD_EMPLOYEE);
         });
-
 
     }
 }
