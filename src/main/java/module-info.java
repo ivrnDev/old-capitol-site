@@ -14,6 +14,7 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Modal to javafx.fxml;
     exports com.econnect.barangaymanagementapp.Config;
     exports com.econnect.barangaymanagementapp.Utils;
     exports com.econnect.barangaymanagementapp.DTO;
