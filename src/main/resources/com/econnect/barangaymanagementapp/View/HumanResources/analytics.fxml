@@ -18,7 +18,7 @@
         <fx:include fx:id="sidebar" source="../Component/sidebar.fxml"/>
     </left>
     <center>
-        <GridPane alignment="CENTER" stylesheets="@../../Style/HR/hr-style.css">
+        <GridPane alignment="CENTER" stylesheets="@../../Style/HumanResources/hr-style.css">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0"/>
