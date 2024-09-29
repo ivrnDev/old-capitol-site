@@ -91,7 +91,7 @@ public class ModalController {
     }
 
     private void initializeModalActions() {
-        if (modal.getModalType() == ModalType.CONFIRMATION) {
+        if (modal.getModalType() == ModalType.MODAL) {
             acceptBtn.setOnAction(_ -> handleCallBack(true));
             rejectBtn.setOnAction(_ -> handleCallBack(false));
             return;
@@ -100,10 +100,10 @@ public class ModalController {
     }
 
     private void handleCallBack(boolean result) {
+        closeWindow();
         if (callback != null) {
             callback.accept(result);
         }
-        closeWindow();
     }
 
     private void fadeOutAndClose() {
