@@ -3,6 +3,8 @@ package com.econnect.barangaymanagementapp.Database;
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Enumeration.Gender;
+import com.econnect.barangaymanagementapp.Enumeration.Roles;
+import com.econnect.barangaymanagementapp.Enumeration.Status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,22 +15,22 @@ public class InMemoryDatabase {
 
     static {
         list.add(new Employee(
-                "E001",
-                "John",
-                "Doe",
-                "Software Engineer",
-                "Active",
-                "john.doe@example.com",
-                "123-456-7890",
-                "123 Main St, New York, NY",
-                Gender.MALE,
-                "ivanren",
-                "ivanren",
-                "Employee",
-                Departments.HUMAN_RESOURCES,
-                LocalDateTime.of(2022, 1, 15, 9, 0),
-                LocalDateTime.of(2023, 1, 25, 10, 30),
-                LocalDateTime.of(2023, 9, 15, 8, 45)
+                "12345",                           // id
+                "John",                            // firstName
+                "Doe",                             // lastName
+                "Software Engineer",               // position
+                "johndoe@example.com",             // email
+                "123-456-7890",                    // contactNumber
+                "123 Main St, Anytown, USA",       // address
+                Gender.MALE,                       // gender
+                Roles.HR_MANAGER,                       // role
+                "ivanren",                         // username
+                "ivanren",                     // access
+                Status.EmployeeStatus.ACTIVE,             // status
+                Departments.HUMAN_RESOURCES,                    // department
+                LocalDateTime.now(),               // createdAt
+                LocalDateTime.now(),               // updatedAt
+                LocalDateTime.now().minusDays(1)   // lastLogin
         ));
     }
 
