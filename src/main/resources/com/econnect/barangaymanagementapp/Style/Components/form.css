@@ -1,0 +1,85 @@
+.panel {
+    -fx-border-color: #000000;
+    -fx-background-color: #C8F2FC;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Input Container*/
+.input-container {
+    -fx-border-color: #787878;
+}
+
+.input-container-first {
+    -fx-border-radius: 10px 10px 0 0;
+}
+
+.input-container-default {
+    -fx-border-radius: 10px;
+}
+
+.input-container-last {
+    -fx-border-radius: 0 0 10px 10px;
+}
+
+/* Label */
+.input-label {
+    -fx-background-color: #B6F1F4;
+}
+
+.input-label-first {
+    -fx-background-radius: 10px 0 0 0;
+}
+
+.input-label-default {
+    -fx-background-radius: 10px 0 0 10px;
+}
+
+.input-label-last {
+    -fx-background-radius: 0 0 0 10px;
+}
+
+/* Text field*/
+.text-input {
+    -fx-border-color: none;
+    -fx-background-color: #ffffff;
+}
+
+.text-input-first {
+    -fx-background-radius: 0 10px 0 0;
+}
+
+.text-input-default {
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.text-input-last {
+    -fx-background-radius: 0 0 10px 0;
+}
+
+/* File Chooser*/
+
+.file-chooser {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #787878;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Button */
+.button {
+    -fx-border-color: #787878;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 10px;
+}
+
+.button-confirm {
+    -fx-background-color: #99FFF9;
+}
+
+.button-cancel {
+    -fx-background-color: #FFD9D9;
+}
+
+
+
