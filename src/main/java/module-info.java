@@ -2,6 +2,10 @@ module com.econnect.barangaymanagementapp {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires okhttp3;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires java.mail;
 
     exports com.econnect.barangaymanagementapp;
     opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
@@ -10,4 +14,10 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
+    exports com.econnect.barangaymanagementapp.Config;
+    exports com.econnect.barangaymanagementapp.Utils;
+    exports com.econnect.barangaymanagementapp.DTO;
+    exports com.econnect.barangaymanagementapp.Mapper;
+    exports com.econnect.barangaymanagementapp.Enumeration;
+    exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
 }
