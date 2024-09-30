@@ -18,9 +18,6 @@ public class EmployeeController implements Initializable {
     @FXML
     private VBox content;
 
-    @FXML
-    private Button addEmployeeBtn;
-
     private final ButtonUtils buttonUtils;
     private final EmployeeService employeeService;
     private final ModalUtils modalUtils;
@@ -35,7 +32,7 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
-    
+
     @FXML
     private void addEmployee() {
         modalUtils.customizeModal(CustomizeModal.ADD_EMPLOYEE);
