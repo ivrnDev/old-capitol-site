@@ -34,9 +34,11 @@ public class EmployeeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        addEmployeeBtn.setOnAction(_ -> {
-            modalUtils.customizeModal(CustomizeModal.ADD_EMPLOYEE);
-        });
-
     }
+    
+    @FXML
+    private void addEmployee() {
+        modalUtils.customizeModal(CustomizeModal.ADD_EMPLOYEE);
+    }
+
 }
