@@ -1,29 +1,32 @@
 .table-header {
     -fx-background-color: #9AEDF2;
-    -fx-border-width: none;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 8);
+    -fx-border-color: #787878;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
 }
 
-.scroll-pane:focused {
+.scroll-pane {
     -fx-border-color: transparent; /* Remove border */
     -fx-background-color: transparent; /* Remove background */
 }
 
 .table-row {
-    -fx-background-color: #D9F2F2;
-}
-
-.table-row {
-    -fx-background-color: transparent; /* Default background */
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #787878;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 8);
 }
 
 .table-row.selected {
-    -fx-border-color: blue; /* Outline color */
-    -fx-border-width: 1px; /* Width of the outline */
-    -fx-background-color: rgba(173, 216, 230, 0.5); /* Optional: background color on select */
+    -fx-border-color: blue;
+    -fx-border-width: 1px;
+    -fx-background-color: rgba(173, 216, 230, 0.5);
 }
 
 .table-row:hover {
-    -fx-background-color: rgba(173, 216, 230, 0.5); /* Optional: background color on hover */
+    -fx-background-color: rgba(173, 216, 230, 0.5);
 }
 
 .no-data-row {

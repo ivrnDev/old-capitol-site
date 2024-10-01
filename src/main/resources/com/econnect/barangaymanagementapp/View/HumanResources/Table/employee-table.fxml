@@ -7,85 +7,108 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="table" stylesheets="@../../../Style/Components/table.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeTableController">
+<VBox fx:id="table" stylesheets="@../../../Style/Components/table.css" xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeTableController">
     <children>
-        <HBox fx:id="tableHeader" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0" prefWidth="927.0" styleClass="table-header">
+        <HBox fx:id="tableHeader" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0"
+              prefWidth="927.0" styleClass="table-header">
             <children>
-                <HBox alignment="CENTER_LEFT" minWidth="90.0" />
+                <HBox alignment="CENTER_LEFT" minWidth="90.0"/>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Employee ID" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                               text="Employee ID" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Last Name" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                               text="Last Name" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="First Name" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                               text="First Name" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Position" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                               text="Position" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="345.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="345.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Department" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                               text="Department" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="573.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="573.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
+                      HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Status" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Status"
+                               textAlignment="CENTER" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="450.0" layoutY="10.0" minWidth="90.0" prefHeight="73.0" prefWidth="250.0">
+                <HBox alignment="CENTER" layoutX="450.0" layoutY="10.0" minWidth="90.0" prefHeight="73.0"
+                      prefWidth="250.0">
                     <children>
                         <Label>
                             <font>
-                                <Font name="Arial Bold" size="14.0" />
+                                <Font name="Arial Bold" size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
             </children>
             <padding>
-                <Insets left="20.0" right="20.0" />
+                <Insets left="20.0" right="20.0"/>
             </padding>
+            <VBox.margin>
+                <Insets bottom="40.0"/>
+            </VBox.margin>
         </HBox>
         <ScrollPane fitToWidth="true" minHeight="-Infinity">
             <content>
-                <VBox fx:id="tableContent">
+                <VBox fx:id="tableContent" spacing="20.0">
 
+                    <padding>
+                        <Insets bottom="10.0"/>
+                    </padding>
                 </VBox>
             </content>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
         </ScrollPane>
     </children>
 </VBox>
