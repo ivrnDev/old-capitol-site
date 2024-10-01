@@ -3,8 +3,27 @@
     -fx-border-width: none;
 }
 
+.scroll-pane:focused {
+    -fx-border-color: transparent; /* Remove border */
+    -fx-background-color: transparent; /* Remove background */
+}
+
 .table-row {
     -fx-background-color: #D9F2F2;
+}
+
+.table-row {
+    -fx-background-color: transparent; /* Default background */
+}
+
+.table-row.selected {
+    -fx-border-color: blue; /* Outline color */
+    -fx-border-width: 1px; /* Width of the outline */
+    -fx-background-color: rgba(173, 216, 230, 0.5); /* Optional: background color on select */
+}
+
+.table-row:hover {
+    -fx-background-color: rgba(173, 216, 230, 0.5); /* Optional: background color on hover */
 }
 
 .no-data-row {
@@ -14,4 +33,6 @@
     -fx-border-color: #f5c6cb;
     -fx-border-width: 1;
 }
+
+
 
