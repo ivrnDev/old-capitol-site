@@ -66,7 +66,6 @@ public class EmployeeRepository implements IEmployeeRepository {
 
     @Override
     public List<Employee> findAllEmployees() {
-        System.out.println("API Key: " + apiKey + ".json");
         Request request = new Request.Builder()
                 .url(apiKey + ".json")
                 .get()
