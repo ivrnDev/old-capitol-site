@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 import static com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStatus;
 
-public class Employee {
-    private String id;
+public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
     private String position;
@@ -27,11 +26,10 @@ public class Employee {
     private LocalDateTime lastLogin;
 
     public Employee() {
-
     }
 
     public Employee(String id, String firstName, String lastName, String position, String email, String contactNumber, String address, Gender gender, Roles role, String username, String access, EmployeeStatus status, Departments department, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLogin) {
-        this.id = id;
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
@@ -51,14 +49,6 @@ public class Employee {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.lastLogin = lastLogin;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -184,7 +174,7 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "id='" + id + '\'' +
+                "id='" + super.getId() + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", position='" + position + '\'' +
