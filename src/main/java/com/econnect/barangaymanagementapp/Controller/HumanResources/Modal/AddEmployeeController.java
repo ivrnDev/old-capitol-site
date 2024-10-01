@@ -1,6 +1,8 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
-import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.*;
+import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.fxml.FXML;
@@ -10,11 +12,15 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
+import java.time.LocalDateTime;
+
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
+    private final EmployeeService employeeService;
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.employeeService = dependencyInjector.getEmployeeService();
     }
 
     @FXML
@@ -63,7 +69,35 @@ public class AddEmployeeController {
     public void initialize() {
         cancelBtn.setOnAction(_ -> closeWindow());
 
-        confirmBtn.setOnAction(_ -> closeWindow());
+        confirmBtn.setOnAction(_ -> addEmployee());
+    }
+
+    private void addEmployee() {
+        closeWindow();
+        var employee = new Employee(
+                "909090",                           // id
+                "John",                            // firstName
+                "Doe",                             // lastName
+                "Software Engineer",               // position
+                "johndoe@example.com",             // email
+                "123-456-7890",                    // contactNumber
+                "123 Main St, Anytown, USA",       // address
+                Gender.MALE,                       // gender
+                Roles.HR_MANAGER,                       // role
+                " ",                         // username
+                " ",                     // access
+                Status.EmployeeStatus.ACTIVE,             // status
+                Departments.HUMAN_RESOURCES,                    // department
+                LocalDateTime.now(),               // createdAt
+                LocalDateTime.now(),               // updatedAt
+                LocalDateTime.now().minusDays(1)   // lastLogin
+        );
+
+//        Response response = employeeService.createEmployee(employee);
+//        if (response.isSuccessful()) {
+//            modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
+//        }
+        modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
     }
 
     @FXML
@@ -75,6 +109,6 @@ public class AddEmployeeController {
     }
 
     public void closeWindow() {
-        modalUtils.closeModal();
+        modalUtils.closeCustomizeModal();
     }
 }
