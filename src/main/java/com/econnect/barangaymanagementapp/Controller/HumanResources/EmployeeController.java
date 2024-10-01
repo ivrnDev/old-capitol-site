@@ -1,11 +1,14 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
 import com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeTableController;
+import com.econnect.barangaymanagementapp.DTO.EmployeeDTO;
 import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class EmployeeController implements Initializable {
@@ -51,9 +55,32 @@ public class EmployeeController implements Initializable {
     }
 
     private void populateEmployeeRows() {
-        employeeService.getAllEmployees().forEach(employee -> {
-            employeeTableController.addEmployeeRow(employee.getId(), employee.getLastName(), employee.getFirstName(), employee.getRole(), employee.getDepartment(), employee.getStatus(), "");
-        });
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                List<EmployeeDTO> employees = employeeService.getAllEmployees();
+                if (employees.isEmpty()) {
+                    Platform.runLater(() -> employeeTableController.showNoData());
+                } else {
+                    employees.forEach(employee -> {
+                        Platform.runLater(() -> {
+                            employeeTableController.addEmployeeRow(
+                                    employee.getId(),
+                                    employee.getLastName(),
+                                    employee.getFirstName(),
+                                    employee.getRole(),
+                                    employee.getDepartment(),
+                                    employee.getStatus(),
+                                    ""
+                            );
+                        });
+                    });
+                }
+                return null;
+            }
+        };
+
+        new Thread(task).start();
     }
 
     @FXML

@@ -8,6 +8,7 @@ import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,10 @@ public class EmployeeTableController {
     public EmployeeTableController(DependencyInjector dependencyInjector) {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
+
+//    public void initialize() {
+//        showNoData();
+//    }
 
     public void addEmployeeRow(String employeeId, String lastName, String firstName, Roles role, Departments department, Status.EmployeeStatus status, String imageUrl) {
         try {
@@ -44,6 +49,16 @@ public class EmployeeTableController {
             e.printStackTrace(); // Print the exception for debugging
             throw new RuntimeException("Error adding employee row: " + e.getMessage(), e);
 
+        }
+    }
+
+    public void showNoData() {
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader("View/Component/no-data-row.fxml");
+            Parent noDataRow = loader.load();
+            tableContent.getChildren().add(noDataRow);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

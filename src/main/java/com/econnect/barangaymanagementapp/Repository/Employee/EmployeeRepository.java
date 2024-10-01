@@ -14,10 +14,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class EmployeeRepository implements IEmployeeRepository {
     private final String apiKey = Config.getFirebaseUrl() + ApiPath.EMPLOYEES.getPath();
@@ -76,17 +73,23 @@ public class EmployeeRepository implements IEmployeeRepository {
                 throw new IOException("HTTP error, code: " + response.code() + " - " + response.message());
             }
 
-            Map<String, Employee> employeesMap = jsonConverter.convertJsonToObject(response.body().string(), new TypeReference<>() {
+            String responseBody = response.body().string();
+
+            if (responseBody.equals("\"\"") || responseBody.isEmpty() || responseBody.equals("null")) {
+                return Collections.emptyList();
+            }
+
+            Map<String, Employee> employeesMap = jsonConverter.convertJsonToObject(responseBody, new TypeReference<>() {
             });
 
             employeesMap.forEach((id, employee) -> {
-                employee.setId(id);  // Set the top-level key as the employee ID
+                employee.setId(id);
             });
 
             return new ArrayList<>(employeesMap.values());
         } catch (IOException e) {
             System.err.println("Unexpected Error: " + e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 

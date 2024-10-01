@@ -6,3 +6,12 @@
 .table-row {
     -fx-background-color: #D9F2F2;
 }
+
+.no-data-row {
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-background-color: #f8d7da;
+    -fx-border-color: #f5c6cb;
+    -fx-border-width: 1;
+}
+
