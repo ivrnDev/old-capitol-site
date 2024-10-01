@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.Service;
 import com.econnect.barangaymanagementapp.DTO.EmployeeDTO;
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Mapper.EmployeeMapper;
-import com.econnect.barangaymanagementapp.Repository.Employee.EmployeeRepository;
+import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.PasswordUtils;
 import okhttp3.Response;
