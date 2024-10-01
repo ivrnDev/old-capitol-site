@@ -34,7 +34,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeDTO> getAllEmployees() {
-        var employees = employeeRepository.findAllEmployees();
+        List<Employee> employees = employeeRepository.findAllEmployees();
         return employees.stream()
                 .map(employee -> employeeMapper.toDto(employee))
                 .collect(Collectors.toList());
