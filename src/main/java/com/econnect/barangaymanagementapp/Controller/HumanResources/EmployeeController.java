@@ -1,36 +1,59 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
+import com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeTableController;
 import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
-import com.econnect.barangaymanagementapp.Utils.ButtonUtils;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class EmployeeController implements Initializable {
 
     @FXML
-    private VBox content;
+    private VBox content; // This is the content of the employee.fxml file
 
-    private final ButtonUtils buttonUtils;
     private final EmployeeService employeeService;
     private final ModalUtils modalUtils;
-
+    private final FXMLLoaderFactory fxmlLoaderFactory;
+    private EmployeeTableController employeeTableController;
 
     public EmployeeController(DependencyInjector dependencyInjector) {
-        this.buttonUtils = dependencyInjector.getButtonUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        loadEmployeeTable();
+        populateEmployeeRows();
+    }
+
+    private void loadEmployeeTable() {
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader("View/HumanResources/Table/employee-table.fxml");
+            Parent employeeTable = loader.load();
+            employeeTableController = loader.getController();
+            content.getChildren().add(employeeTable);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading employee table: " + e.getMessage());
+        }
+    }
+
+    private void populateEmployeeRows() {
+        employeeService.getAllEmployees().forEach(employee -> {
+            employeeTableController.addEmployeeRow(employee.getId(), employee.getLastName(), employee.getFirstName(), employee.getRole(), employee.getDepartment(), employee.getStatus(), "");
+        });
     }
 
     @FXML

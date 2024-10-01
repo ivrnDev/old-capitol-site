@@ -1,9 +1,9 @@
 package com.econnect.barangaymanagementapp.Repository.Employee;
 
 import com.econnect.barangaymanagementapp.Config.Config;
-import com.econnect.barangaymanagementapp.DTO.EmployeeDTO;
 import com.econnect.barangaymanagementapp.Database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.ApiPath;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.HTTPClient;
 import com.econnect.barangaymanagementapp.Utils.JsonConverter;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class EmployeeRepository implements IEmployeeRepository {
-    private final String apiKey = Config.getFirebaseUrl() + "/3Employees";
+    private final String apiKey = Config.getFirebaseUrl() + ApiPath.EMPLOYEES.getPath();
     private final HTTPClient client;
     private final JsonConverter jsonConverter;
 
@@ -66,6 +66,7 @@ public class EmployeeRepository implements IEmployeeRepository {
 
     @Override
     public List<Employee> findAllEmployees() {
+        System.out.println("API Key: " + apiKey + ".json");
         Request request = new Request.Builder()
                 .url(apiKey + ".json")
                 .get()
@@ -79,7 +80,9 @@ public class EmployeeRepository implements IEmployeeRepository {
             Map<String, Employee> employeesMap = jsonConverter.convertJsonToObject(response.body().string(), new TypeReference<>() {
             });
 
-//            System.out.print(employeesMap);
+            employeesMap.forEach((id, employee) -> {
+                employee.setId(id);  // Set the top-level key as the employee ID
+            });
 
             return new ArrayList<>(employeesMap.values());
         } catch (IOException e) {
