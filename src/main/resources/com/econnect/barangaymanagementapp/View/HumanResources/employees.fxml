@@ -25,7 +25,7 @@
             <children>
                 <AnchorPane>
                     <children>
-                        <Button fx:id="addEmployeeBtn" mnemonicParsing="false" onMouseClicked="#addEmployee"
+                        <Button fx:id="addEmployeeBtn" mnemonicParsing="false" onMouseClicked="#showAddEmployee"
                                 styleClass="add" text="Add Employee" AnchorPane.leftAnchor="0.0">
                             <font>
                                 <Font name="Arial" size="12.0"/>
