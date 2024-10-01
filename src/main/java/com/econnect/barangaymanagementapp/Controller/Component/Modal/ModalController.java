@@ -3,8 +3,10 @@ package com.econnect.barangaymanagementapp.Controller.Component.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.ModalType;
 import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -41,12 +43,14 @@ public class ModalController {
     private final String header;
     private final String message;
     private final Consumer<Boolean> callback;
+    private final ModalUtils modalUtils;
 
-    public ModalController(Modal modal, String header, String message, Consumer<Boolean> callback) {
+    public ModalController(Modal modal, String header, String message, Consumer<Boolean> callback, ModalUtils modalUtils) {
         this.modal = modal;
         this.header = header;
         this.message = message;
         this.callback = callback;
+        this.modalUtils = modalUtils;
     }
 
     public void initialize() {
@@ -94,9 +98,9 @@ public class ModalController {
         if (modal.getModalType() == ModalType.MODAL) {
             acceptBtn.setOnAction(_ -> handleCallBack(true));
             rejectBtn.setOnAction(_ -> handleCallBack(false));
-            return;
+        } else {
+            fadeOutAndClose();
         }
-        Platform.runLater(this::fadeOutAndClose);
     }
 
     private void handleCallBack(boolean result) {
@@ -107,18 +111,17 @@ public class ModalController {
     }
 
     private void fadeOutAndClose() {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), rootPane);
-        fadeTransition.setByValue(1.0);
-        fadeTransition.setDelay(Duration.seconds(1.5));
-        fadeTransition.setToValue(0.0);
-        fadeTransition.setOnFinished(_ -> stage.close());
-        fadeTransition.play();
+        Platform.runLater(() -> {
+            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), rootPane);
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.0);
+            fadeTransition.setOnFinished(_ -> closeWindow());
+            fadeTransition.play();
+        });
     }
 
     @FXML
     private void closeWindow() {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
+        modalUtils.closeModal();
     }
 }
