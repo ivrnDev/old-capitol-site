@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class JsonConverter {
     private ObjectMapper objectMapper;
