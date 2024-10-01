@@ -39,7 +39,7 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadEmployeeTable();
-        populateEmployeeRows();
+//        populateEmployeeRows();
     }
 
     private void loadEmployeeTable() {
@@ -49,7 +49,6 @@ public class EmployeeController implements Initializable {
             employeeTableController = loader.getController();
             content.getChildren().add(employeeTable);
         } catch (IOException e) {
-            e.printStackTrace();
             System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
@@ -57,7 +56,7 @@ public class EmployeeController implements Initializable {
     private void populateEmployeeRows() {
         Task<Void> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 List<EmployeeDTO> employees = employeeService.getAllEmployees();
                 if (employees.isEmpty()) {
                     Platform.runLater(() -> employeeTableController.showNoData());
@@ -84,7 +83,7 @@ public class EmployeeController implements Initializable {
     }
 
     @FXML
-    private void addEmployee() {
+    private void showAddEmployee() {
         modalUtils.customizeModal(CustomizeModal.ADD_EMPLOYEE);
     }
 
