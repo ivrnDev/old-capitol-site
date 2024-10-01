@@ -8,17 +8,19 @@ module com.econnect.barangaymanagementapp {
     requires java.mail;
 
     exports com.econnect.barangaymanagementapp;
-    opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.Component to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Modal to javafx.fxml;
     exports com.econnect.barangaymanagementapp.Config;
     exports com.econnect.barangaymanagementapp.Utils;
     exports com.econnect.barangaymanagementapp.DTO;
     exports com.econnect.barangaymanagementapp.Mapper;
     exports com.econnect.barangaymanagementapp.Enumeration;
     exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
+
+    opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.Component to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
 }
