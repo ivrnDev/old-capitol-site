@@ -24,8 +24,8 @@ public class InMemoryDatabase {
                 "123 Main St, Anytown, USA",       // address
                 Gender.MALE,                       // gender
                 Roles.HR_MANAGER,                       // role
-                "ivanren",                         // username
-                "ivanren",                     // access
+                " ",                         // username
+                " ",                     // access
                 Status.EmployeeStatus.ACTIVE,             // status
                 Departments.HUMAN_RESOURCES,                    // department
                 LocalDateTime.now(),               // createdAt
