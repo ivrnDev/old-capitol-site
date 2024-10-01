@@ -27,34 +27,31 @@
     -fx-background-radius: 10px;
 }
 
-/* Variants */
-.add {
-    -fx-background-color: #A7D5FF;
+/* Highlighted Variant */
+
+.h-accept {
+    -fx-background-color: #098B2D;
 }
 
-.add:hover {
-    -fx-background-color: #8FC5FF;
+.h-reject {
+    -fx-background-color: #8B0909;
 }
 
-.accept {
-    -fx-background-color: #A7FFA7;
+.h-view {
+    -fx-background-color: #2F00ED;
 }
 
-.accept:hover {
-    -fx-background-color: #8FFF8F;
+.h-accept:hover {
+    -fx-background-color: #0A5A1C;
 }
 
-.reject {
-    -fx-background-color: #FFA7A7;
+.h-reject:hover {
+    -fx-background-color: #5A0A0A;
 }
 
-.reject:hover {
-    -fx-background-color: #FF8F8F;
+.h-view:hover {
+    -fx-background-color: #1A00A1;
 }
-
-
-
-
 
 
 
