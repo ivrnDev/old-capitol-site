@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.Utils;
 
 import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.Enumeration.ModalType;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +22,9 @@ public class ModalUtils {
     private final Stage parentStage;
     private final SoundUtils soundUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
-    private Stage currentStage = null;
+
+    private Stage customizeStage = null;
+    private Stage modalStage = null;
 
     public ModalUtils(DependencyInjector dependencyInjector) {
         this.parentStage = dependencyInjector.getStage();
@@ -34,22 +37,32 @@ public class ModalUtils {
     }
 
     public void showModal(Modal modal, String header, String message, Consumer<Boolean> callback) {
+        if (modalStage != null) {
+            return;
+        }
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(modal.getFxmlPath(), modal, header, message, callback);
-            soundUtils.playSound(modal.getSound());
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(modal.getFxmlPath(), modal, header, message, callback, this);
             Parent root = loader.load();
-            Stage modalStage = new Stage();
+            modalStage = new Stage();
             Scene scene = new Scene(root);
+
+            soundUtils.playSound(modal.getSound());
             scene.setFill(Color.TRANSPARENT);
 
-            modalStage.initModality(callback == null ? Modality.NONE : Modality.APPLICATION_MODAL);
             modalStage.initStyle(StageStyle.TRANSPARENT);
-            modalStage.initOwner(currentStage != null ? currentStage : parentStage);
             modalStage.setScene(scene);
 
-            setupFadeTransition(root);
-            centerModal(modalStage);
+            if (modal.getModalType().equals(ModalType.NOTIFICATION)) {
+                centerTop(modalStage);
+                modalStage.initOwner(parentStage);
+            }
 
+            if (modal.getModalType().equals(ModalType.MODAL)) {
+                setupFadeTransition(root);
+                centerModal(modalStage);
+                modalStage.initOwner(customizeStage != null ? customizeStage : parentStage);
+            }
+            modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.showAndWait();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             throw new RuntimeException(e);
@@ -57,34 +70,40 @@ public class ModalUtils {
     }
 
     public void customizeModal(CustomizeModal customizeModal) {
+        if (customizeStage != null) {
+            return;
+        }
+
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(customizeModal.getFxmlPath());
             Parent root = loader.load();
-            Stage modalStage = new Stage();
+            customizeStage = new Stage();
             Scene scene = new Scene(root);
-            currentStage = modalStage;
             scene.setFill(Color.TRANSPARENT);
+            customizeStage.initOwner(parentStage);
+            customizeStage.setScene(scene);
 
-            modalStage.initOwner(parentStage);
-            modalStage.initStyle(StageStyle.TRANSPARENT);
-            modalStage.initModality(Modality.WINDOW_MODAL);
-            modalStage.setScene(scene);
+            customizeStage.initStyle(StageStyle.TRANSPARENT);
+            customizeStage.initModality(Modality.WINDOW_MODAL);
 
             setupFadeTransition(root);
-            centerModal(modalStage);
+            centerModal(customizeStage);
 
-            modalStage.show();
+            customizeStage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     private void setupFadeTransition(Parent root) {
-        root.setOpacity(0);
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(200), root);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        fadeIn.play();
+        if (modalStage != null) {
+            root.setOpacity(0);
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), root);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.play();
+        }
     }
 
     private void centerModal(Stage modalStage) {
@@ -96,11 +115,26 @@ public class ModalUtils {
         });
     }
 
+    private void centerTop(Stage modalStage) {
+        modalStage.setOnShown(_ -> {
+            double centerX = parentStage.getX() + parentStage.getWidth() / 2 - modalStage.getWidth() / 2;
+            double topY = parentStage.getY() + 100; // Set to the top of the parent stage
+            modalStage.setX(centerX);
+            modalStage.setY(topY);
+        });
+    }
 
     public void closeModal() {
-        if (currentStage != null) {
-            currentStage.close();
-            currentStage = null;
+        if (modalStage != null) {
+            modalStage.close();
+            modalStage = null;
+        }
+    }
+
+    public void closeCustomizeModal() {
+        if (customizeStage != null) {
+            customizeStage.close();
+            customizeStage = null;
         }
     }
 
