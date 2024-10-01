@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Utils;
 
 import com.econnect.barangaymanagementapp.Mapper.EmployeeMapper;
-import com.econnect.barangaymanagementapp.Repository.Employee.EmployeeRepository;
+import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.LoginService;
 import javafx.stage.Stage;
