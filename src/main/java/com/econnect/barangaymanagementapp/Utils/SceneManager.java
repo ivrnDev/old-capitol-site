@@ -32,7 +32,8 @@ public class SceneManager {
             stage.show();
 
         } catch (IOException e) {
-            System.err.println("Failed to switch Scenes: " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("Failed to swith Scenes: " + e.getMessage());
             switchToDefaultScene();
         }
     }
