@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
-import com.econnect.barangaymanagementapp.Domain.Employee;
-import com.econnect.barangaymanagementapp.Enumeration.*;
+import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
@@ -11,8 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-
-import java.time.LocalDateTime;
 
 public class AddEmployeeController {
     private final ModalUtils modalUtils;

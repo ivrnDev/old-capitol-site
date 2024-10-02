@@ -6,14 +6,12 @@ import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.InputStream;
