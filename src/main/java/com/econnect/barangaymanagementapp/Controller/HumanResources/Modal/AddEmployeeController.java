@@ -74,24 +74,24 @@ public class AddEmployeeController {
 
     private void addEmployee() {
         closeWindow();
-        var employee = new Employee(
-                "909090",                           // id
-                "John",                            // firstName
-                "Doe",                             // lastName
-                "Software Engineer",               // position
-                "johndoe@example.com",             // email
-                "123-456-7890",                    // contactNumber
-                "123 Main St, Anytown, USA",       // address
-                Gender.MALE,                       // gender
-                Roles.HR_MANAGER,                       // role
-                " ",                         // username
-                " ",                     // access
-                Status.EmployeeStatus.ACTIVE,             // status
-                Departments.HUMAN_RESOURCES,                    // department
-                LocalDateTime.now(),               // createdAt
-                LocalDateTime.now(),               // updatedAt
-                LocalDateTime.now().minusDays(1)   // lastLogin
-        );
+//        var employee = new Employee(
+//                "909090",                           // id
+//                "John",                            // firstName
+//                "Doe",                             // lastName
+//                "Software Engineer",               // position
+//                "johndoe@example.com",             // email
+//                "123-456-7890",                    // contactNumber
+//                "123 Main St, Anytown, USA",       // address
+//                Gender.MALE,                       // gender
+//                Roles.HR_MANAGER,                       // role
+//                " ",                         // username
+//                " ",                     // access
+//                Status.EmployeeStatus.ACTIVE,             // status
+//                Departments.HUMAN_RESOURCES,                    // department
+//                LocalDateTime.now(),               // createdAt
+//                LocalDateTime.now(),               // updatedAt
+//                LocalDateTime.now().minusDays(1)   // lastLogin
+//        );
 
 //        Response response = employeeService.createEmployee(employee);
 //        if (response.isSuccessful()) {

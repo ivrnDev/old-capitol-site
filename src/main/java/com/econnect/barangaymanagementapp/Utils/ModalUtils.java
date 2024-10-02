@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.ModalType;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -43,6 +44,7 @@ public class ModalUtils {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(modal.getFxmlPath(), modal, header, message, callback, this);
             Parent root = loader.load();
+            root.setOpacity(0);
             modalStage = new Stage();
             Scene scene = new Scene(root);
 
@@ -50,6 +52,8 @@ public class ModalUtils {
             scene.setFill(Color.TRANSPARENT);
 
             modalStage.initStyle(StageStyle.TRANSPARENT);
+            modalStage.setX(-1000);
+            modalStage.setY(-1000);
             modalStage.setScene(scene);
 
             if (modal.getModalType().equals(ModalType.NOTIFICATION)) {
@@ -77,10 +81,13 @@ public class ModalUtils {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(customizeModal.getFxmlPath());
             Parent root = loader.load();
+            root.setOpacity(0);
             customizeStage = new Stage();
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
             customizeStage.initOwner(parentStage);
+            customizeStage.setX(-1000);
+            customizeStage.setY(-1000);
             customizeStage.setScene(scene);
 
             customizeStage.initStyle(StageStyle.TRANSPARENT);
@@ -97,13 +104,12 @@ public class ModalUtils {
     }
 
     private void setupFadeTransition(Parent root) {
-        if (modalStage != null) {
-            root.setOpacity(0);
+        Platform.runLater(() -> {
             FadeTransition fadeIn = new FadeTransition(Duration.millis(200), root);
             fadeIn.setFromValue(0);
             fadeIn.setToValue(1);
             fadeIn.play();
-        }
+        });
     }
 
     private void centerModal(Stage modalStage) {
@@ -118,7 +124,7 @@ public class ModalUtils {
     private void centerTop(Stage modalStage) {
         modalStage.setOnShown(_ -> {
             double centerX = parentStage.getX() + parentStage.getWidth() / 2 - modalStage.getWidth() / 2;
-            double topY = parentStage.getY() + 100; // Set to the top of the parent stage
+            double topY = parentStage.getY() + 100;
             modalStage.setX(centerX);
             modalStage.setY(topY);
         });

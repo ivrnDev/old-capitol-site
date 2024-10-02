@@ -44,6 +44,7 @@ public class ModalController {
     private final String message;
     private final Consumer<Boolean> callback;
     private final ModalUtils modalUtils;
+    private FadeTransition fadeTransition;
 
     public ModalController(Modal modal, String header, String message, Consumer<Boolean> callback, ModalUtils modalUtils) {
         this.modal = modal;
@@ -112,7 +113,7 @@ public class ModalController {
 
     private void fadeOutAndClose() {
         Platform.runLater(() -> {
-            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), rootPane);
+            fadeTransition = new FadeTransition(Duration.seconds(3), rootPane);
             fadeTransition.setFromValue(1.0);
             fadeTransition.setToValue(0.0);
             fadeTransition.setOnFinished(_ -> closeWindow());
@@ -122,6 +123,9 @@ public class ModalController {
 
     @FXML
     private void closeWindow() {
+        if (fadeTransition != null) {
+            fadeTransition.stop();
+        }
         modalUtils.closeModal();
     }
 }
