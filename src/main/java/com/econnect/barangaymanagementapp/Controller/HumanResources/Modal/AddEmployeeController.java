@@ -1,16 +1,20 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
+import com.econnect.barangaymanagementapp.Enumeration.EmployeeType;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.ImageService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -18,11 +22,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import static com.econnect.barangaymanagementapp.Enumeration.EmployeeType.*;
+
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
     private final ImageService imageService;
     private Stage currentStage;
+    private Image resumeImage;
 
     @FXML
     private ImageView closeBtn;
@@ -52,7 +59,7 @@ public class AddEmployeeController {
     private RadioButton femaleBtn;
 
     @FXML
-    private ComboBox<String> volunteeComboBox;
+    private ComboBox<String> volunteerComboBox;
 
     @FXML
     private TextField emailInput;
@@ -64,7 +71,8 @@ public class AddEmployeeController {
     private ImageView profilePreview;
 
     @FXML
-    private HBox viewResume;
+    private HBox viewResumeBtn;
+
     @FXML
     private ImageView resumePreview;
 
@@ -76,6 +84,8 @@ public class AddEmployeeController {
 
     @FXML
     private Button confirmBtn;
+
+    private ProgressIndicator loadingIndicator;
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -89,8 +99,8 @@ public class AddEmployeeController {
     }
 
     public void initialize() {
-        cancelBtn.setOnAction(_ -> closeWindowConfirmation());
-        confirmBtn.setOnAction(_ -> addEmployee());
+        setupActionButtons();
+        loadProfileImageAsync("1x1Images", "132891");
     }
 
     private void addEmployee() {
@@ -140,16 +150,53 @@ public class AddEmployeeController {
             if (file != null) {
                 resumePreview.setImage(new Image(new FileInputStream(file)));
                 resumeLabel.setText(file.getName());
-                viewResume.setVisible(true);
+                viewResumeBtn.setVisible(true);
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @FXML
-    private void showResume() {
-        modalUtils.showImageView(resumePreview.getImage(), currentStage);
+    private void loadProfileImageAsync(String directory, String filename) {
+        Task<Image> imageTask = new Task<Image>() {
+            @Override
+            protected Image call() throws Exception {
+                return imageService.getImage(directory, filename);
+            }
+
+            @Override
+            protected void succeeded() {
+                Image image = getValue();
+                if (image != null) {
+                    profilePreview.setImage(image);
+                } else {
+                    profilePreview.setImage(new Image(MainApplication.class.getResourceAsStream("/images/default-profile.png")));
+                }
+            }
+
+            @Override
+            protected void failed() {
+                Throwable exception = getException();
+                exception.printStackTrace();
+                System.out.println("Image loading failed: " + exception.getMessage());
+            }
+        };
+
+        // Start the task in a new thread
+        new Thread(imageTask).start();
+    }
+
+    private void showImageView(Image image) {
+        modalUtils.showImageView(image, currentStage);
+    }
+
+    private void setupActionButtons() {
+        closeBtn.setOnMouseClicked(event -> closeWindowConfirmation());
+        cancelBtn.setOnAction(event -> closeWindowConfirmation());
+        confirmBtn.setOnAction(event -> addEmployee());
+        viewResumeBtn.setOnMouseClicked(event -> showImageView(resumePreview.getImage()));
+        profilePreview.setOnMouseClicked(event -> showImageView(profilePreview.getImage()));
+        volunteerComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName(), PART_TIME.getName());
     }
 
     @FXML

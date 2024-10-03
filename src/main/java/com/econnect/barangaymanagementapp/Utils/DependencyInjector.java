@@ -3,6 +3,7 @@ package com.econnect.barangaymanagementapp.Utils;
 import com.econnect.barangaymanagementapp.Mapper.EmployeeMapper;
 import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
+import com.econnect.barangaymanagementapp.Service.ImageService;
 import com.econnect.barangaymanagementapp.Service.LoginService;
 import javafx.stage.Stage;
 
@@ -18,6 +19,7 @@ public class DependencyInjector {
     private final JsonConverter jsonConverter;
     private final HTTPClient httpClient;
     private final PasswordUtils passwordUtils;
+    private final ImageService imageService;
 
     private final EmployeeMapper employeeMapper;
 
@@ -38,6 +40,7 @@ public class DependencyInjector {
         this.jsonConverter = new JsonConverter();
         this.httpClient = new HTTPClient();
         this.passwordUtils = new PasswordUtils();
+        this.imageService = new ImageService(this);
 
         this.employeeMapper = new EmployeeMapper();
 
@@ -104,5 +107,9 @@ public class DependencyInjector {
 
     public EmployeeMapper getEmployeeMapper() {
         return employeeMapper;
+    }
+
+    public ImageService getImageService() {
+        return imageService;
     }
 }
