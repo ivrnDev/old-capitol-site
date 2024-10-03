@@ -13,6 +13,7 @@ module com.econnect.barangaymanagementapp {
     exports com.econnect.barangaymanagementapp.DTO;
     exports com.econnect.barangaymanagementapp.Mapper;
     exports com.econnect.barangaymanagementapp.Enumeration;
+    exports com.econnect.barangaymanagementapp.Controller;
     exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
 
     opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
