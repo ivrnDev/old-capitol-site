@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.Service;
 
+import com.econnect.barangaymanagementapp.Enumeration.Paths.ImageDirectory;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.HTTPClient;
 import javafx.scene.image.Image;
@@ -16,7 +17,7 @@ import java.net.URLConnection;
 public class ImageService {
 
     private final HTTPClient client;
-    private static final String FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/sia101-d60a1.appspot.com/o/";
+    private static final String FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/sia101-d60a1.appspot.com/o";
 
     public ImageService(DependencyInjector dependencyInjector) {
         this.client = dependencyInjector.getHttpClient();
@@ -26,6 +27,7 @@ public class ImageService {
         if (!isInternetAvailable()) {
             System.out.println("No internet connection.");
             return null;
+
         }
 
         Request request = new Request.Builder()
@@ -42,7 +44,7 @@ public class ImageService {
         }
     }
 
-    public void uploadImage(String filePath) {
+    public void uploadImage(String filePath, ImageDirectory directory) {
         if (!isInternetAvailable()) {
             System.out.println("No internet connection.");
             return; // Or handle accordingly
@@ -61,7 +63,7 @@ public class ImageService {
         RequestBody requestBody = RequestBody.create(mediaType, file);
 
         Request request = new Request.Builder()
-                .url(FIREBASE_STORAGE_URL + fileName + "?uploadType=media")
+                .url(FIREBASE_STORAGE_URL + directory + "%2F" + fileName + "?uploadType=media")
                 .post(requestBody)
                 .addHeader("Content-Type", mimeType)
                 .build();
@@ -77,26 +79,25 @@ public class ImageService {
         }
     }
 
-    public void uploadImage(File file) {
+    public void uploadImage(File file, ImageDirectory directory) {
         if (!isInternetAvailable()) {
             System.out.println("No internet connection.");
-            return; // Or handle accordingly
+            return;
         }
 
         String fileName = file.getName();
 
         String mimeType = URLConnection.guessContentTypeFromName(fileName);
 
-        // Handle the case where the MIME type cannot be determined
         if (mimeType == null) {
-            mimeType = "application/octet-stream"; // Default to binary if the type cannot be determined
+            mimeType = "application/octet-stream";
         }
 
         MediaType mediaType = MediaType.parse(mimeType);
         RequestBody requestBody = RequestBody.create(mediaType, file);
 
         Request request = new Request.Builder()
-                .url(FIREBASE_STORAGE_URL + fileName + "?uploadType=media")
+                .url(FIREBASE_STORAGE_URL + directory.getPath() + "%2F" + fileName + "?uploadType=media")
                 .post(requestBody)
                 .addHeader("Content-Type", mimeType)
                 .build();
@@ -114,11 +115,10 @@ public class ImageService {
 
     private boolean isInternetAvailable() {
         try {
-            // Ping a reliable website (Google)
             InetAddress address = InetAddress.getByName("www.google.com");
             return !address.equals("");
         } catch (Exception e) {
-            return false; // No internet connection
+            return false;
         }
     }
 }

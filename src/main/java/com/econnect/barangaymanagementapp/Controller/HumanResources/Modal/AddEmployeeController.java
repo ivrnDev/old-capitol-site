@@ -84,6 +84,7 @@ public class AddEmployeeController {
     private Button confirmBtn;
 
     private ProgressIndicator loadingIndicator;
+    private File file;
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -98,7 +99,8 @@ public class AddEmployeeController {
 
     public void initialize() {
         setupActionButtons();
-        loadProfileImageAsync("1x1Images", "132891");
+        loadProfileImageAsync("/1x1Images", "132891");
+
     }
 
     private void addEmployee() {
@@ -127,7 +129,7 @@ public class AddEmployeeController {
 //            modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
 //        }
 //        else {
-
+//        imageService.uploadImage(file, ImageDirectory.SAMPLE);
         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
     }
 
@@ -142,7 +144,7 @@ public class AddEmployeeController {
             fileChooser.setInitialDirectory(picturesDirectory);
         }
 
-        File file = fileChooser.showOpenDialog(currentStage);
+        file = fileChooser.showOpenDialog(currentStage);
 
         try {
             if (file != null) {
