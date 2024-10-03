@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
-import com.econnect.barangaymanagementapp.Enumeration.EmployeeType;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
@@ -14,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
