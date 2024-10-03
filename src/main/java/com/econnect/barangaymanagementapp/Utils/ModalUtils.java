@@ -8,8 +8,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -73,6 +77,10 @@ public class ModalUtils {
         }
     }
 
+    public void previewModal(Stage stage) {
+
+    }
+
     public void customizeModal(CustomizeModal customizeModal) {
         if (customizeStage != null) {
             return;
@@ -101,6 +109,38 @@ public class ModalUtils {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void showImageView(Image image, Stage parent) {
+        Stage resumeStage = new Stage();
+        resumeStage.initModality(Modality.APPLICATION_MODAL);
+        resumeStage.initOwner(parent);
+        resumeStage.initStyle(StageStyle.TRANSPARENT);
+
+        StackPane stackPane = new StackPane();
+
+        double screenWidth = Screen.getPrimary().getBounds().getWidth();
+        double screenHeight = Screen.getPrimary().getBounds().getHeight();
+
+        stackPane.setPrefWidth(screenWidth);
+        stackPane.setPrefHeight(screenHeight);
+
+        stackPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
+
+        ImageView imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(screenWidth * 0.6);
+        imageView.setFitHeight(screenHeight * 0.8);
+
+        stackPane.getChildren().add(imageView);
+
+        Scene scene = new Scene(stackPane);
+        scene.setFill(Color.TRANSPARENT);
+        resumeStage.setScene(scene);
+
+        stackPane.setOnMouseClicked(event -> resumeStage.close());
+
+        resumeStage.show();
     }
 
     private void setupFadeTransition(Parent root) {
