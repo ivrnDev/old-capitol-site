@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.Enumeration;
+package com.econnect.barangaymanagementapp.Enumeration.Paths;
 
 public enum ApiPath {
     EMPLOYEES("/3Employees"),
