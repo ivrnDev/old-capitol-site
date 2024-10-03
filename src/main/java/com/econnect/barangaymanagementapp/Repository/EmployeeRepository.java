@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.Repository;
 import com.econnect.barangaymanagementapp.Config.Config;
 import com.econnect.barangaymanagementapp.Database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.Domain.Employee;
-import com.econnect.barangaymanagementapp.Enumeration.ApiPath;
+import com.econnect.barangaymanagementapp.Enumeration.Paths.ApiPath;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
