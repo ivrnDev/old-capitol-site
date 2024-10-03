@@ -24,4 +24,5 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
+    exports com.econnect.barangaymanagementapp.Enumeration.Paths;
 }
