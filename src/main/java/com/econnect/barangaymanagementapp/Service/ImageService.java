@@ -24,14 +24,14 @@ public class ImageService {
         this.client = dependencyInjector.getHttpClient();
     }
 
-    public Image getImage(String directory, String filename) {
+    public Image getImage(String directory, String link) {
         if (!isInternetAvailable()) {
             System.out.println("No internet connection.");
             return null;
         }
 
         Request request = new Request.Builder()
-                .url(FIREBASE_STORAGE_URL + directory + "%2F" + filename + "?alt=media")
+                .url(link)
                 .build();
         try (Response response = client.getClient().newCall(request).execute()) {
             if (!response.isSuccessful()) {
