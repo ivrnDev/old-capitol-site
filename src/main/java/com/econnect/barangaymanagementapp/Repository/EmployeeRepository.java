@@ -23,16 +23,18 @@ public class EmployeeRepository extends BaseRepository<Employee> {
         return create(apiKey + "/" + employee.getId(), employee);
     }
 
-    public Response updateEmployee(Object object) {
-        return null;
+    public Response updateEmployee(Employee employee) {
+        return create(apiKey + "/" + employee.getId(), employee);
+
     }
 
     public Boolean deleteEmployeeById(String id) {
-        return null;
+        return deleteById(apiKey, id);
     }
 
-    public Optional<Employee> findEmployeeById(String id) {
-        return Optional.empty();
+    public Optional<Employee> findEmployeeById(String employeeId) {
+        return findById(apiKey, employeeId, new TypeReference<>() {
+        });
     }
 
     public List<Employee> findAllEmployees() {
