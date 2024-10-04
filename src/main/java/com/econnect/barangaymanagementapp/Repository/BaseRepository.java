@@ -13,10 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class BaseRepository<T> {
     protected final HTTPClient client;
@@ -78,6 +75,70 @@ public abstract class BaseRepository<T> {
         } catch (IOException e) {
             System.err.println("Unexpected Error: " + e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    protected Optional<T> findById(String apiUrl, String id, TypeReference<T> typeReference) {
+        Request request = new Request.Builder()
+                .url(apiUrl + "/" + id + ".json")
+                .get()
+                .build();
+
+        try (Response response = client.getClient().newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("HTTP error, code: " + response.code() + " - " + response.message());
+            }
+            String responseBody = response.body().string();
+
+            if (responseBody.equals("\"\"") || responseBody.isEmpty() || responseBody.equals("null")) {
+                return Optional.empty();
+            }
+
+            T object = jsonConverter.convertJsonToObject(responseBody, typeReference);
+
+            if (object != null) {
+                ((BaseEntity) object).setId(id);
+            }
+
+            return Optional.ofNullable(object);
+        } catch (IOException e) {
+            System.err.println("Unexpected Error: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    protected Boolean deleteById(String apiUrl, String id) {
+        Request request = new Request.Builder()
+                .url(apiUrl + "/" + id + ".json")
+                .delete()
+                .build();
+
+        try (Response response = client.getClient().newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+//                throw new IOException("HTTP error, code: " + response.code() + " - " + response.message());
+                return false;
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("Unexpected Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    protected void update(String apiUrl, T object) {
+        try {
+            Request request = new Request.Builder()
+                    .url(apiUrl + ".json")
+                    .put(RequestBody.create(
+                            jsonConverter.convertObjectToJson(object), MediaType.parse("application/json")
+                    ))
+                    .build();
+            Response response = client.getClient().newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException("HTTP error, code: " + response.code() + " - " + response.message());
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Unexpected Error: " + e.getMessage());
         }
     }
 }
