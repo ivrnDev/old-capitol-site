@@ -1,13 +1,12 @@
 package com.econnect.barangaymanagementapp.Config;
 
 public class Config {
+
     public static String getFirebaseUrl() {
-        String firebaseUrl = System.getenv("FIREBASE_URL");
+        return "https://sia101-d60a1-default-rtdb.firebaseio.com/";
+    }
 
-        if (firebaseUrl == null || firebaseUrl.isEmpty()) {
-            throw new IllegalArgumentException("FIREBASE_URL is not set");
-        }
-
-        return firebaseUrl;
+    public static String getStorageUrl() {
+        return "https://firebasestorage.googleapis.com/v0/b/sia101-d60a1.appspot.com/o";
     }
 }
