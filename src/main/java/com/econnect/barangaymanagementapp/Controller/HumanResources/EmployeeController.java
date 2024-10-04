@@ -39,7 +39,7 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadEmployeeTable();
-        populateEmployeeRows();
+//        populateEmployeeRows();
     }
 
     private void loadEmployeeTable() {
