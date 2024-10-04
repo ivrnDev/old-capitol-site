@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.Service;
 
+import com.econnect.barangaymanagementapp.Config.Config;
 import com.econnect.barangaymanagementapp.Enumeration.Paths.ImageDirectory;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.HTTPClient;
@@ -17,7 +18,7 @@ import java.net.URLConnection;
 public class ImageService {
 
     private final HTTPClient client;
-    private static final String FIREBASE_STORAGE_URL = "https://firebasestorage.googleapis.com/v0/b/sia101-d60a1.appspot.com/o";
+    private static final String FIREBASE_STORAGE_URL = Config.getStorageUrl();
 
     public ImageService(DependencyInjector dependencyInjector) {
         this.client = dependencyInjector.getHttpClient();
@@ -27,7 +28,6 @@ public class ImageService {
         if (!isInternetAvailable()) {
             System.out.println("No internet connection.");
             return null;
-
         }
 
         Request request = new Request.Builder()
