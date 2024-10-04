@@ -12,11 +12,9 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final PasswordUtils passwordUtils;
 
     public EmployeeService(DependencyInjector dependencyInjector) {
         this.employeeRepository = dependencyInjector.getEmployeeRepository();
-        this.passwordUtils = dependencyInjector.getPasswordEncryption();
     }
 
     public Optional<Employee> findEmployeeByCredentials(String username, String password) {
@@ -24,7 +22,6 @@ public class EmployeeService {
     }
 
     public Response createEmployee(Employee employee) {
-        employee.setAccess(passwordUtils.encryptPassword(employee.getAccess())); // Encrypt password
         return employeeRepository.createEmployee(employee);
     }
 
