@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Domain;
 
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
-import com.econnect.barangaymanagementapp.Enumeration.Gender;
+import com.econnect.barangaymanagementapp.Enumeration.EmploymentType;
 import com.econnect.barangaymanagementapp.Enumeration.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,14 +19,15 @@ import static com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStat
 public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
+    private String middleName;
     private String position;
     private String email;
     private String contactNumber;
     private String address;
-    private Gender gender;
     private Roles role;
     private EmployeeStatus status;
     private Departments department;
+    private EmploymentType employment;
     private String username;
     private String access;
     private String profilePictureUrl;
