@@ -2,7 +2,7 @@ package com.econnect.barangaymanagementapp.Enumeration.Paths;
 
 public enum ApiPath {
     EMPLOYEES("/3-Employees"),
-    RESIDENTS("/3-Residents"),
+    RESIDENTS("Accounts"),
     VISITORS("/3-Visitors"),
     ANNOUNCEMENTS("/3-Announcements"),
     EVENTS("/3-Events"),
