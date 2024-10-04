@@ -1,11 +1,17 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
+import com.econnect.barangaymanagementapp.Domain.Resident;
+import com.econnect.barangaymanagementapp.Enumeration.Gender;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
-import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.Enumeration.Paths.ImageDirectory;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.ImageService;
+import com.econnect.barangaymanagementapp.Service.ResidentService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
+import com.econnect.barangaymanagementapp.Utils.ImageUtils;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -13,18 +19,22 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.Enumeration.EmployeeType.*;
 
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
+    private final ResidentService residentService;
     private final ImageService imageService;
     private Stage currentStage;
     private Image resumeImage;
@@ -66,6 +76,9 @@ public class AddEmployeeController {
     private TextField phoneInput;
 
     @FXML
+    private StackPane profileContainer;
+
+    @FXML
     private ImageView profilePreview;
 
     @FXML
@@ -83,24 +96,89 @@ public class AddEmployeeController {
     @FXML
     private Button confirmBtn;
 
-    private ProgressIndicator loadingIndicator;
     private File file;
+    private Timeline debounceTimeline;
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
+        this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
-        Platform.runLater(() -> {
-            if (confirmBtn != null) {
-                this.currentStage = (Stage) confirmBtn.getScene().getWindow();
-            }
-        });
+        Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
     public void initialize() {
-        setupActionButtons();
-        loadProfileImageAsync("/1x1Images", "132891");
+        ImageUtils.setRoundedClip(profilePreview, 20, 20);
+        ImageUtils.setRoundedClip(resumePreview, 10, 10);
 
+        residentIdInput.setOnKeyPressed(_ -> setupResidentIdInput());
+        setupActionButtons();
+    }
+
+    private void setupResidentIdInput() {
+        residentIdInput.textProperty().addListener((_, _, newValue) -> {
+            if (debounceTimeline != null) {
+                debounceTimeline.stop();
+            }
+
+            debounceTimeline = new Timeline(new KeyFrame(Duration.millis(300), event -> setupInputFields(newValue)));
+            debounceTimeline.play();
+        });
+    }
+
+    private void setupInputFields(String residentId) {
+        if (residentId.isEmpty()) {
+            clearInputFields();
+            return;
+        }
+
+        Task<Optional<Resident>> residentTask = new Task<>() {
+            @Override
+            protected Optional<Resident> call() throws Exception {
+                return residentService.findResidentById(residentId);
+            }
+
+            @Override
+            protected void succeeded() {
+                Optional<Resident> resident = getValue();
+                if (resident.isPresent()) {
+                    Resident residentInfo = resident.get();
+                    firstNameInput.setText(residentInfo.getFirstName());
+                    lastNameInput.setText(residentInfo.getLastName());
+                    middleNameInput.setText(residentInfo.getMiddleName());
+                    addressInput.setText(residentInfo.getAddress());
+                    birthdateInput.setText(residentInfo.getBirthdate());
+                    emailInput.setText(residentInfo.getEmail());
+                    phoneInput.setText(residentInfo.getContact());
+                    if (residentInfo.getGender().equals(Gender.MALE)) {
+                        maleBtn.setSelected(true);
+                    } else {
+                        femaleBtn.setSelected(true);
+                    }
+                    loadProfileImageAsync(ImageDirectory.PROFILE_PICTURE.getPath(), residentInfo.getImage1x1URL());
+                } else {
+                    clearInputFields();
+                }
+            }
+
+            @Override
+            protected void failed() {
+                System.out.println("Failed to fetch data: " + getException().getMessage());
+            }
+        };
+        new Thread(residentTask).start();
+    }
+
+    private void clearInputFields() {
+        profilePreview.setVisible(false);
+        profilePreview.setImage(null);
+        firstNameInput.clear();
+        lastNameInput.clear();
+        middleNameInput.clear();
+        addressInput.clear();
+        birthdateInput.clear();
+        emailInput.clear();
+        phoneInput.clear();
     }
 
     private void addEmployee() {
@@ -129,7 +207,6 @@ public class AddEmployeeController {
 //            modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
 //        }
 //        else {
-//        imageService.uploadImage(file, ImageDirectory.SAMPLE);
         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully");
     }
 
@@ -157,32 +234,33 @@ public class AddEmployeeController {
         }
     }
 
-    private void loadProfileImageAsync(String directory, String filename) {
-        Task<Image> imageTask = new Task<Image>() {
+    private void loadProfileImageAsync(String directory, String link) {
+        ProgressIndicator loadingIndicator = new ProgressIndicator();
+        loadingIndicator.setVisible(true);
+        profileContainer.getChildren().add(loadingIndicator);
+
+        Task<Image> imageTask = new Task<>() {
             @Override
-            protected Image call() throws Exception {
-                return imageService.getImage(directory, filename);
+            protected Image call() {
+                return imageService.getImage(directory, link);
             }
 
             @Override
             protected void succeeded() {
                 Image image = getValue();
-                if (image != null) {
-                    profilePreview.setImage(image);
-                } else {
-                    profilePreview.setImage(new Image(MainApplication.class.getResourceAsStream("/images/default-profile.png")));
-                }
+                loadingIndicator.setVisible(false);
+                profilePreview.setVisible(true);
+                profilePreview.setImage(image != null ? image : null);
             }
 
             @Override
             protected void failed() {
-                Throwable exception = getException();
-                exception.printStackTrace();
-                System.out.println("Image loading failed: " + exception.getMessage());
+                loadingIndicator.setVisible(false);
+                profilePreview.setVisible(false);
+                System.out.println("Image loading failed: " + getException().getMessage());
             }
         };
 
-        // Start the task in a new thread
         new Thread(imageTask).start();
     }
 
@@ -194,8 +272,8 @@ public class AddEmployeeController {
         closeBtn.setOnMouseClicked(event -> closeWindowConfirmation());
         cancelBtn.setOnAction(event -> closeWindowConfirmation());
         confirmBtn.setOnAction(event -> addEmployee());
-        viewResumeBtn.setOnMouseClicked(event -> showImageView(resumePreview.getImage()));
-        profilePreview.setOnMouseClicked(event -> showImageView(profilePreview.getImage()));
+        viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
+        profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
         volunteerComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName(), PART_TIME.getName());
     }
 
