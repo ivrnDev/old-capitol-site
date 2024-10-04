@@ -6,6 +6,7 @@ module com.econnect.barangaymanagementapp {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires java.mail;
+    requires static lombok;
 
     exports com.econnect.barangaymanagementapp;
     exports com.econnect.barangaymanagementapp.Config;

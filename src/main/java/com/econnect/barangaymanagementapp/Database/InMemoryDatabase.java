@@ -14,24 +14,25 @@ public class InMemoryDatabase {
     private static InMemoryDatabase instance;
 
     static {
-        list.add(new Employee(
-                "12345",                           // id
-                "John",                            // firstName
-                "Doe",                             // lastName
-                "Software Engineer",               // position
-                "johndoe@example.com",             // email
-                "123-456-7890",                    // contactNumber
-                "123 Main St, Anytown, USA",       // address
-                Gender.MALE,                       // gender
-                Roles.HR_MANAGER,                       // role
-                " ",                         // username
-                " ",                     // access
-                Status.EmployeeStatus.ACTIVE,             // status
-                Departments.HUMAN_RESOURCES,                    // department
-                LocalDateTime.now(),               // createdAt
-                LocalDateTime.now(),               // updatedAt
-                LocalDateTime.now().minusDays(1)   // lastLogin
-        ));
+        list.add(Employee.builder()
+                .id("1")
+                .firstName("John")
+                .lastName("Doe")
+                .position("Manager")
+                .email("john.doe@example.com")
+                .contactNumber("123-456-7890")
+                .address("123 Street, City")
+                .gender(Gender.MALE)
+                .role(Roles.HR_MANAGER)
+                .department(Departments.HUMAN_RESOURCES)
+                .status(Status.EmployeeStatus.ACTIVE)
+                .username(" ")
+                .access(" ")
+                .profilePictureUrl("http://example.com/photo.jpg")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .lastLogin(LocalDateTime.now())
+                .build());
     }
 
     private InMemoryDatabase() {
