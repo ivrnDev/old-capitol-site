@@ -77,9 +77,6 @@ public class ModalUtils {
         }
     }
 
-    public void previewModal(Stage stage) {
-
-    }
 
     public void customizeModal(CustomizeModal customizeModal) {
         if (customizeStage != null) {
