@@ -1,9 +1,11 @@
 package com.econnect.barangaymanagementapp.Utils;
 
 import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
+import com.econnect.barangaymanagementapp.Repository.ResidentRepository;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.ImageService;
 import com.econnect.barangaymanagementapp.Service.LoginService;
+import com.econnect.barangaymanagementapp.Service.ResidentService;
 import javafx.stage.Stage;
 
 public class DependencyInjector {
@@ -22,9 +24,11 @@ public class DependencyInjector {
 
 
     private final EmployeeRepository employeeRepository;
+    private final ResidentRepository residentRepository;
 
     private final LoginService loginService;
     private final EmployeeService employeeService;
+    private final ResidentService residentService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -41,7 +45,10 @@ public class DependencyInjector {
         this.imageService = new ImageService(this);
 
         this.employeeRepository = new EmployeeRepository(this);
+        this.residentRepository = new ResidentRepository(this);
+
         this.employeeService = new EmployeeService(this);
+        this.residentService = new ResidentService(this);
         this.loginService = new LoginService(this);
     }
 
@@ -79,6 +86,14 @@ public class DependencyInjector {
 
     public EmployeeRepository getEmployeeRepository() {
         return employeeRepository;
+    }
+
+    public ResidentRepository getResidentRepository() {
+        return residentRepository;
+    }
+
+    public ResidentService getResidentService() {
+        return residentService;
     }
 
     public FXMLLoaderFactory getFxmlLoaderFactory() {
