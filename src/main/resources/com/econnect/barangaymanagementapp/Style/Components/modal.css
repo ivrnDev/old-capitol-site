@@ -59,6 +59,13 @@
     -fx-background-color: #660000;
 }
 
+/* Resource Error */
+
+.resource-error {
+    -fx-border-color: #5e0000;
+    -fx-background-color: rgba(255, 0, 0, 0.25);
+}
+
 
 
 
