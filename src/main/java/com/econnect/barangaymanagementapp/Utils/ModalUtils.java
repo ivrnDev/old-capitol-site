@@ -135,7 +135,7 @@ public class ModalUtils {
         scene.setFill(Color.TRANSPARENT);
         resumeStage.setScene(scene);
 
-        stackPane.setOnMouseClicked(event -> resumeStage.close());
+        stackPane.setOnMouseClicked(_ -> resumeStage.close());
 
         resumeStage.show();
     }
