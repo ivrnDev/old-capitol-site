@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
 import com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeTableController;
-import com.econnect.barangaymanagementapp.DTO.EmployeeDTO;
+import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
@@ -39,7 +39,7 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadEmployeeTable();
-//        populateEmployeeRows();
+        populateEmployeeRows();
     }
 
     private void loadEmployeeTable() {
@@ -57,7 +57,7 @@ public class EmployeeController implements Initializable {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
-                List<EmployeeDTO> employees = employeeService.getAllEmployees();
+                List<Employee> employees = employeeService.getAllEmployees();
                 if (employees.isEmpty()) {
                     Platform.runLater(() -> employeeTableController.showNoData());
                 } else {

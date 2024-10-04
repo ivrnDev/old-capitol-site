@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.Utils;
 
-import com.econnect.barangaymanagementapp.Mapper.EmployeeMapper;
 import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.ImageService;
@@ -21,7 +20,6 @@ public class DependencyInjector {
     private final PasswordUtils passwordUtils;
     private final ImageService imageService;
 
-    private final EmployeeMapper employeeMapper;
 
     private final EmployeeRepository employeeRepository;
 
@@ -41,8 +39,6 @@ public class DependencyInjector {
         this.httpClient = new HTTPClient();
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
-
-        this.employeeMapper = new EmployeeMapper();
 
         this.employeeRepository = new EmployeeRepository(this);
         this.employeeService = new EmployeeService(this);
@@ -103,10 +99,6 @@ public class DependencyInjector {
 
     public PasswordUtils getPasswordEncryption() {
         return passwordUtils;
-    }
-
-    public EmployeeMapper getEmployeeMapper() {
-        return employeeMapper;
     }
 
     public ImageService getImageService() {

@@ -10,8 +10,6 @@ module com.econnect.barangaymanagementapp {
     exports com.econnect.barangaymanagementapp;
     exports com.econnect.barangaymanagementapp.Config;
     exports com.econnect.barangaymanagementapp.Utils;
-    exports com.econnect.barangaymanagementapp.DTO;
-    exports com.econnect.barangaymanagementapp.Mapper;
     exports com.econnect.barangaymanagementapp.Enumeration;
     exports com.econnect.barangaymanagementapp.Controller;
     exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
