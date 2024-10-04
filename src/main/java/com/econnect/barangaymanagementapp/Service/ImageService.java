@@ -25,11 +25,6 @@ public class ImageService {
     }
 
     public Image getImage(String directory, String link) {
-        if (!isInternetAvailable()) {
-            System.out.println("No internet connection.");
-            return null;
-        }
-
         Request request = new Request.Builder()
                 .url(link)
                 .build();
@@ -45,11 +40,6 @@ public class ImageService {
     }
 
     public void uploadImage(String filePath, ImageDirectory directory) {
-        if (!isInternetAvailable()) {
-            System.out.println("No internet connection.");
-            return; // Or handle accordingly
-        }
-
         File file = new File(filePath);
         String fileName = file.getName();
 
@@ -79,12 +69,7 @@ public class ImageService {
         }
     }
 
-    public void uploadImage(File file, ImageDirectory directory) {
-        if (!isInternetAvailable()) {
-            System.out.println("No internet connection.");
-            return;
-        }
-
+    public void uploadImage(ImageDirectory directory, File file, String id) {
         String fileName = file.getName();
 
         String mimeType = URLConnection.guessContentTypeFromName(fileName);
@@ -97,7 +82,7 @@ public class ImageService {
         RequestBody requestBody = RequestBody.create(mediaType, file);
 
         Request request = new Request.Builder()
-                .url(FIREBASE_STORAGE_URL + directory.getPath() + "%2F" + fileName + "?uploadType=media")
+                .url(FIREBASE_STORAGE_URL + directory.getPath() + "%2F" + id + "?uploadType=media")
                 .post(requestBody)
                 .addHeader("Content-Type", mimeType)
                 .build();
@@ -113,12 +98,4 @@ public class ImageService {
         }
     }
 
-    private boolean isInternetAvailable() {
-        try {
-            InetAddress address = InetAddress.getByName("www.google.com");
-            return !address.equals("");
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
