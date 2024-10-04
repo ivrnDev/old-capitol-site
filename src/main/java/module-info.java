@@ -14,6 +14,8 @@ module com.econnect.barangaymanagementapp {
     exports com.econnect.barangaymanagementapp.Enumeration;
     exports com.econnect.barangaymanagementapp.Controller;
     exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.Enumeration.Paths;
+    exports com.econnect.barangaymanagementapp.Config.Deserializer to com.fasterxml.jackson.databind;
 
     opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component to javafx.fxml;
@@ -23,5 +25,6 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
-    exports com.econnect.barangaymanagementapp.Enumeration.Paths;
+    opens com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
+
 }
