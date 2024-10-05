@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller.Component;
 
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
-import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.Enumeration.Modal.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.NavigationItems;
 import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Utils.*;
@@ -42,6 +42,13 @@ public class SidebarController {
         }
     }
 
+    private void loadNavigationBar() {
+        navigationBar.getChildren().clear();
+        currentDepartment.getNavigationItems().forEach(item -> {
+            navigationBar.getChildren().add(createNavButton(item));
+        });
+    }
+
     private HBox createNavButton(NavigationItems item) {
         HBox navButton = new HBox();
         ImageView navIcon = new ImageView();
@@ -58,16 +65,8 @@ public class SidebarController {
         navButton.setOnMouseClicked(_ -> {
             navigationState.setActiveItem(item);
             sceneManager.switchScene("View/" + currentDepartment.getDirectoryName() + "/" + item.getLowerCaseName() + ".fxml");
-            loadNavigationBar();
         });
         return navButton;
-    }
-
-    private void loadNavigationBar() {
-        navigationBar.getChildren().clear();
-        currentDepartment.getNavigationItems().forEach(item -> {
-            navigationBar.getChildren().add(createNavButton(item));
-        });
     }
 
     private Image loadIcon(NavigationItems item) {
@@ -83,6 +82,7 @@ public class SidebarController {
     public void logout() {
         modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Logout", "Are you sure you want to logout?", isConfirmed -> {
             if (isConfirmed) {
+                navigationState.setActiveItem(null);
                 userSession.clearSession();
                 sceneManager.switchToDefaultScene();
             }
