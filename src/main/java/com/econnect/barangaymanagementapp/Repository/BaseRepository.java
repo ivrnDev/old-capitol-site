@@ -26,7 +26,8 @@ public abstract class BaseRepository<T> {
         this.modalUtils = dependencyInjector.getModalUtils();
     }
 
-    protected Response create(String apiUrl, T object) {
+    protected <T extends BaseEntity> Response create(String apiUrl, T object) {
+        object.setId(null);
         try {
             Request request = new Request.Builder()
                     .url(apiUrl + ".json")
