@@ -6,6 +6,7 @@ import static com.econnect.barangaymanagementapp.Enumeration.NavigationItems.*;
 import static com.econnect.barangaymanagementapp.Enumeration.Roles.*;
 
 public enum Departments {
+    NONE("None", "", List.of(), List.of()),
     HUMAN_RESOURCES(
             "Human Resources",
             "View/HumanResources/dashboard.fxml",
@@ -16,6 +17,7 @@ public enum Departments {
             "View/BarangayOffice/dashboard.fxml",
             List.of(DASHBOARD, ANALYTICS, RESIDENTS, HISTORY),
             List.of(ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK));
+
 
     private final String name;
     private final String link;
