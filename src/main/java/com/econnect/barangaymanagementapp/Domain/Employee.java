@@ -1,11 +1,14 @@
 package com.econnect.barangaymanagementapp.Domain;
 
+import com.econnect.barangaymanagementapp.Config.Deserializer.GenericSerializer;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Enumeration.EmploymentType;
 import com.econnect.barangaymanagementapp.Enumeration.Roles;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,8 @@ import static com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStat
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
+@JsonSerialize(using = GenericSerializer.class)
 public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
