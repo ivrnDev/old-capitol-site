@@ -233,6 +233,7 @@ public class AddEmployeeController {
                 .status(EmployeeStatus.PENDING)
                 .department(Departments.NONE)
                 .role(Roles.NONE)
+                .applicationType("WALK_IN")
                 .employment(volunteerComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
                 .build();
     }
