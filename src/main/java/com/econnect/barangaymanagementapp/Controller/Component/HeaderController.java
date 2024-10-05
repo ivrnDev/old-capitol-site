@@ -22,7 +22,13 @@ public class HeaderController {
 
     public void initialize() {
         Employee currentEmployee = userSession.getCurrentEmployee();
-        headerTitle.setText(currentEmployee.getDepartment().getName());
-        greetingText.setText("Welcome, " + userSession.getCurrentEmployee().getFirstName());
+
+        if (currentEmployee != null) {
+            headerTitle.setText(currentEmployee.getDepartment().getName());
+            greetingText.setText("Welcome, " + currentEmployee.getFirstName());
+        } else {
+            headerTitle.setText("No Department");
+            greetingText.setText("No user logged in.");
+        }
     }
 }
