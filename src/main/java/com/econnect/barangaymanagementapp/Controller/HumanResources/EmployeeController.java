@@ -6,24 +6,23 @@ import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.Utils.LoadingIndicator;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class EmployeeController implements Initializable {
+public class EmployeeController {
 
     @FXML
-    private VBox content; // This is the content of the employee.fxml file
+    private VBox content;
 
     private final EmployeeService employeeService;
     private final ModalUtils modalUtils;
@@ -36,10 +35,9 @@ public class EmployeeController implements Initializable {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
         loadEmployeeTable();
-//        populateEmployeeRows();
+        populateEmployeeRows();
     }
 
     private void loadEmployeeTable() {
@@ -54,31 +52,49 @@ public class EmployeeController implements Initializable {
     }
 
     private void populateEmployeeRows() {
-        Task<Void> task = new Task<>() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(content.getWidth(), content.getHeight());
+        VBox.setVgrow(loadingIndicator, Priority.ALWAYS);
+        content.getChildren().add(loadingIndicator);
+
+        Task<List<Employee>> task = new Task<>() {
             @Override
-            protected Void call() {
-                List<Employee> employees = employeeService.getAllEmployees();
+            protected List<Employee> call() {
+                return employeeService.getAllEmployees();
+            }
+
+            @Override
+            protected void succeeded() {
+                loadingIndicator.setVisible(false);
+                content.getChildren().remove(loadingIndicator);
+                List<Employee> employees = getValue();
                 if (employees.isEmpty()) {
-                    Platform.runLater(() -> employeeTableController.showNoData());
+                    employeeTableController.showNoData();
                 } else {
                     employees.forEach(employee -> {
-                        Platform.runLater(() -> {
-                            employeeTableController.addEmployeeRow(
-                                    employee.getId(),
-                                    employee.getLastName(),
-                                    employee.getFirstName(),
-                                    employee.getRole(),
-                                    employee.getDepartment(),
-                                    employee.getStatus(),
-                                    ""
-                            );
-                        });
+                        employeeTableController.addEmployeeRow(
+                                employee.getId(),
+                                employee.getLastName(),
+                                employee.getFirstName(),
+                                employee.getRole(),
+                                employee.getDepartment(),
+                                employee.getStatus(),
+                                employee.getProfileUrl()
+                        );
                     });
                 }
-                return null;
+            }
+
+            @Override
+            protected void failed() {
+                loadingIndicator.setVisible(false);
+                content.getChildren().remove(loadingIndicator);
+                Throwable exception = getException();
+                System.err.println("Failed to fetch employees: " + exception.getMessage());
+//                Platform.runLater(() -> employeeTableController.showNoData());
             }
         };
 
+        // Start the task in a new thread
         new Thread(task).start();
     }
 
