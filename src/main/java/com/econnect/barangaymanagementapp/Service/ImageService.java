@@ -69,11 +69,10 @@ public class ImageService {
         }
     }
 
-    public void uploadImage(ImageDirectory directory, File file, String id) {
+    public String uploadImage(ImageDirectory directory, File file, String id) {
         String fileName = file.getName();
-
         String mimeType = URLConnection.guessContentTypeFromName(fileName);
-
+        String url = FIREBASE_STORAGE_URL + directory.getPath() + "%2F" + id;
         if (mimeType == null) {
             mimeType = "application/octet-stream";
         }
@@ -82,7 +81,7 @@ public class ImageService {
         RequestBody requestBody = RequestBody.create(mediaType, file);
 
         Request request = new Request.Builder()
-                .url(FIREBASE_STORAGE_URL + directory.getPath() + "%2F" + id + "?uploadType=media")
+                .url(url + "?uploadType=media")
                 .post(requestBody)
                 .addHeader("Content-Type", mimeType)
                 .build();
@@ -91,10 +90,10 @@ public class ImageService {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
-
-            System.out.println("Image uploaded successfully: " + response.body().string());
+            return url + "?alt=media";
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
