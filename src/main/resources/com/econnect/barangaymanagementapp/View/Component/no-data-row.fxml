@@ -5,15 +5,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="no-data-row" stylesheets="@../../Style/Components/table.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.HumanResources.Table.EmployeeRowController">
+<HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="no-data-row"
+      stylesheets="@../../Style/Components/table.css" xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1">
     <padding>
-        <Insets left="20.0" right="20.0" />
+        <Insets left="20.0" right="20.0"/>
     </padding>
-   <children>
-      <Label fx:id="No" text="No Available Data" textFill="#721c24">
-         <font>
-            <Font name="Arial Bold" size="15.0" />
-         </font>
-      </Label>
-   </children>
+    <children>
+        <Label fx:id="No" text="No Available Data" textFill="#721c24">
+            <font>
+                <Font name="Arial Bold" size="15.0"/>
+            </font>
+        </Label>
+    </children>
 </HBox>
