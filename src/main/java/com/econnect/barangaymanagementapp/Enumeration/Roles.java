@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.Enumeration;
 
 public enum Roles {
+    NONE("None"),
     //Human Resource Department
     HR_MANAGER("HR Manager"), //Managing the HR Department
     HR_RECRUITER("HR Recruiter"), //Interviewing
