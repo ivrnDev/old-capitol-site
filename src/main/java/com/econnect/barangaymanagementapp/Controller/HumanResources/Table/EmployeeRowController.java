@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 public class EmployeeRowController {
     private final ModalUtils modalUtils;
-    private Stage parentStage;
+    private final Stage parentStage;
 
     @FXML
     private Label employeeIdLabel;
