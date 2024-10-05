@@ -1,9 +1,11 @@
 package com.econnect.barangaymanagementapp.Enumeration;
 
 public enum ButtonStyle {
-    ACCEPT("accept"),
-    REJECT("reject"),
-    ADD("add");
+    ACCEPT("h-accept"),
+    REJECT("h-reject"),
+    VIEW("h-view"),
+    UPDATE("h-update");
+
     private final String rootStyle;
 
     ButtonStyle(String rootStyle) {

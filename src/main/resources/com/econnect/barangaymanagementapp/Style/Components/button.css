@@ -21,7 +21,6 @@
     -fx-background-color: #8FC5FF;
 }
 
-
 .button {
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
@@ -31,14 +30,22 @@
 
 .h-accept {
     -fx-background-color: #098B2D;
+    -fx-text-fill: white;
 }
 
 .h-reject {
     -fx-background-color: #8B0909;
+    -fx-text-fill: white;
 }
 
 .h-view {
     -fx-background-color: #2F00ED;
+    -fx-text-fill: white;
+}
+
+.h-update {
+    -fx-background-color: #A4C2E4;
+    -fx-text-fill: white;
 }
 
 .h-accept:hover {
@@ -53,5 +60,8 @@
     -fx-background-color: #1A00A1;
 }
 
+.h-update:hover {
+    -fx-background-color: #6A82C4;
+}
 
 
