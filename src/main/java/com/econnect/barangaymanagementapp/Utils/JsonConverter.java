@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JsonConverter {
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public JsonConverter() {
         this.objectMapper = new ObjectMapper()
@@ -17,8 +17,7 @@ public class JsonConverter {
 
     public String convertObjectToJson(Object object) {
         try {
-            String json = objectMapper.writeValueAsString(object);
-            return json;
+            return objectMapper.writeValueAsString(object);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
