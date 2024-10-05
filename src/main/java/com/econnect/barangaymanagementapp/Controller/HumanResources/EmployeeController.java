@@ -8,6 +8,7 @@ import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.Utils.LoadingIndicator;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -90,7 +91,7 @@ public class EmployeeController {
                 content.getChildren().remove(loadingIndicator);
                 Throwable exception = getException();
                 System.err.println("Failed to fetch employees: " + exception.getMessage());
-//                Platform.runLater(() -> employeeTableController.showNoData());
+                Platform.runLater(() -> employeeTableController.showNoData());
             }
         };
 
