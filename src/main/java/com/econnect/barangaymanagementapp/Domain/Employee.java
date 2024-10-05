@@ -25,7 +25,6 @@ public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;
     private String middleName;
-    private String position;
     private String email;
     private String contactNumber;
     private String address;
@@ -35,7 +34,9 @@ public class Employee extends BaseEntity {
     private EmploymentType employment;
     private String username;
     private String access;
-    private String profilePictureUrl;
+    private String profileUrl;
+    private String resumeUrl;
+    private String applicationType;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime lastLogin;
