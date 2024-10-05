@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.Database;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
-import com.econnect.barangaymanagementapp.Enumeration.Gender;
 import com.econnect.barangaymanagementapp.Enumeration.Roles;
 import com.econnect.barangaymanagementapp.Enumeration.Status;
 
