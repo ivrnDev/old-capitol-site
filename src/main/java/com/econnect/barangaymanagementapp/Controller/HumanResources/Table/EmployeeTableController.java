@@ -21,18 +21,17 @@ public class EmployeeTableController {
     private VBox tableContent;
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
+    private final DependencyInjector dependencyInjector;
 
     public EmployeeTableController(DependencyInjector dependencyInjector) {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
+        this.dependencyInjector = dependencyInjector;
     }
-
-//    public void initialize() {
-//        showNoData();
-//    }
 
     public void addEmployeeRow(String employeeId, String lastName, String firstName, Roles role, Departments department, Status.EmployeeStatus status, String imageUrl) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader("View/HumanResources/Table/employee-row.fxml");
+            loader.setController(new EmployeeRowController(dependencyInjector));
             HBox employeeRow = loader.load();
             EmployeeRowController rowController = loader.getController();
             rowController.setEmployeeData(
@@ -46,7 +45,7 @@ public class EmployeeTableController {
             );
             tableContent.getChildren().add(employeeRow);
         } catch (RuntimeException | IOException e) {
-            e.printStackTrace(); // Print the exception for debugging
+            e.printStackTrace();
             throw new RuntimeException("Error adding employee row: " + e.getMessage(), e);
 
         }
