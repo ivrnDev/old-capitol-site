@@ -18,8 +18,4 @@ public class LoadingIndicator {
 
         return stackPane;
     }
-
-    public static void hideLoadingIndicator(StackPane loadingIndicatorContainer) {
-        loadingIndicatorContainer.setVisible(false);
-    }
 }
