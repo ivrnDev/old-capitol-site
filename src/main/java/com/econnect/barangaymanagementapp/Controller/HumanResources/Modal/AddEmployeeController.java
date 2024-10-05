@@ -2,8 +2,11 @@ package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Domain.Resident;
+import com.econnect.barangaymanagementapp.Enumeration.Departments;
 import com.econnect.barangaymanagementapp.Enumeration.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.Paths.ImageDirectory;
+import com.econnect.barangaymanagementapp.Enumeration.Roles;
+import com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStatus;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Service.ImageService;
 import com.econnect.barangaymanagementapp.Service.ResidentService;
@@ -33,7 +36,8 @@ import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.econnect.barangaymanagementapp.Enumeration.EmploymentType.*;
+import static com.econnect.barangaymanagementapp.Enumeration.EmploymentType.FULL_TIME;
+import static com.econnect.barangaymanagementapp.Enumeration.EmploymentType.VOLUNTEER;
 
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
@@ -99,6 +103,7 @@ public class AddEmployeeController {
     private File file;
     private Timeline debounceTimeline;
     private Boolean residentExists = false;
+    private String profileLink;
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -122,12 +127,13 @@ public class AddEmployeeController {
                 debounceTimeline.stop();
             }
 
-            debounceTimeline = new Timeline(new KeyFrame(Duration.millis(300), event -> populateInputFields(newValue)));
+            debounceTimeline = new Timeline(new KeyFrame(Duration.millis(300), _ -> populateInputFields(newValue)));
             debounceTimeline.play();
         });
     }
 
     private void populateInputFields(String residentId) {
+        residentExists = false;
         if (residentId.isEmpty()) {
             clearInputFields();
             return;
@@ -135,7 +141,7 @@ public class AddEmployeeController {
 
         Task<Optional<Resident>> residentTask = new Task<>() {
             @Override
-            protected Optional<Resident> call() throws Exception {
+            protected Optional<Resident> call() {
                 return residentService.findResidentById(residentId);
             }
 
@@ -145,6 +151,7 @@ public class AddEmployeeController {
                 if (resident.isPresent()) {
                     residentExists = true;
                     Resident residentInfo = resident.get();
+                    profileLink = residentInfo.getImage1x1URL();
                     firstNameInput.setText(residentInfo.getFirstName());
                     lastNameInput.setText(residentInfo.getLastName());
                     middleNameInput.setText(residentInfo.getMiddleName());
@@ -222,17 +229,27 @@ public class AddEmployeeController {
                 .email(emailInput.getText())
                 .contactNumber(phoneInput.getText())
                 .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .status(EmployeeStatus.PENDING)
+                .department(Departments.NONE)
+                .role(Roles.NONE)
+                .employment(volunteerComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
                 .build();
     }
 
     private Void processEmployeeCreation(Employee employee) {
-        Response response = employeeService.createEmployee(employee);
-        imageService.uploadImage(ImageDirectory.RESUME, file, employee.getId());
+        String resumeUrl = imageService.uploadImage(ImageDirectory.RESUME, file, employee.getId());
+        employee.setResumeUrl(resumeUrl);
+        employee.setProfileUrl(profileLink);
 
-        if (response.isSuccessful()) {
-            Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
-        } else {
-            Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
+        try (Response response = employeeService.createEmployee(employee)) {
+            if (response.isSuccessful()) {
+                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
+            } else {
+                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -243,15 +260,17 @@ public class AddEmployeeController {
             return false;
         }
 
+        if (file == null) {
+            modalUtils.showModal(Modal.ERROR, "Failed", "Please upload a resume");
+            return false;
+        }
+
         if (volunteerComboBox.getValue() == null) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Please select employment type");
             return false;
         }
 
-        if (file == null) {
-            modalUtils.showModal(Modal.ERROR, "Failed", "Please upload a resume");
-            return false;
-        }
+
         return true;
     }
 
@@ -299,7 +318,7 @@ public class AddEmployeeController {
                 Image image = getValue();
                 loadingIndicator.setVisible(false);
                 profilePreview.setVisible(true);
-                profilePreview.setImage(image != null ? image : null);
+                profilePreview.setImage(image);
             }
 
             @Override
@@ -318,9 +337,9 @@ public class AddEmployeeController {
     }
 
     private void setupActionButtons() {
-        closeBtn.setOnMouseClicked(event -> closeWindowConfirmation());
-        cancelBtn.setOnAction(event -> closeWindowConfirmation());
-        confirmBtn.setOnAction(event -> addEmployee());
+        closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
+        cancelBtn.setOnAction(_ -> closeWindowConfirmation());
+        confirmBtn.setOnAction(_ -> addEmployee());
         viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
         profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
         volunteerComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
