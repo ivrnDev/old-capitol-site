@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Repository;
 
 import com.econnect.barangaymanagementapp.Domain.BaseEntity;
-import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.Enumeration.Modal.Modal;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.HTTPClient;
 import com.econnect.barangaymanagementapp.Utils.JsonConverter;

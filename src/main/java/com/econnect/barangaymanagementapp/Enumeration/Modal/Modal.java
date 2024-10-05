@@ -1,6 +1,8 @@
-package com.econnect.barangaymanagementapp.Enumeration;
+package com.econnect.barangaymanagementapp.Enumeration.Modal;
 
-import static com.econnect.barangaymanagementapp.Enumeration.ModalType.*;
+import com.econnect.barangaymanagementapp.Enumeration.Sound;
+
+import static com.econnect.barangaymanagementapp.Enumeration.Modal.ModalType.*;
 
 public enum Modal {
     CLASSIC("View/Component/Modal/classic.fxml", Sound.DEFAULT, MODAL, "default-style", null),

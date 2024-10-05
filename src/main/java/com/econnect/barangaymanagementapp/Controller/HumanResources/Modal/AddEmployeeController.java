@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.Controller.HumanResources.Modal;
 import com.econnect.barangaymanagementapp.Domain.Employee;
 import com.econnect.barangaymanagementapp.Domain.Resident;
 import com.econnect.barangaymanagementapp.Enumeration.Departments;
-import com.econnect.barangaymanagementapp.Enumeration.Modal;
+import com.econnect.barangaymanagementapp.Enumeration.Modal.Modal;
 import com.econnect.barangaymanagementapp.Enumeration.Paths.ImageDirectory;
 import com.econnect.barangaymanagementapp.Enumeration.Roles;
 import com.econnect.barangaymanagementapp.Enumeration.Status.EmployeeStatus;

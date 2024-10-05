@@ -26,5 +26,6 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.Enumeration.Modal;
 
 }

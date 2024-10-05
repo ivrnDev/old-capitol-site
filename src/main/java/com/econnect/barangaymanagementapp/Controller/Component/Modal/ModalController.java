@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller.Component.Modal;
 
-import com.econnect.barangaymanagementapp.Enumeration.Modal;
-import com.econnect.barangaymanagementapp.Enumeration.ModalType;
+import com.econnect.barangaymanagementapp.Enumeration.Modal.Modal;
+import com.econnect.barangaymanagementapp.Enumeration.Modal.ModalType;
 import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.animation.FadeTransition;
