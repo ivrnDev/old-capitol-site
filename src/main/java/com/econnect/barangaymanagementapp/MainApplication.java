@@ -31,9 +31,16 @@ public class MainApplication extends Application {
         stage.initStyle(StageStyle.DECORATED);
         SceneManager sceneManager = dependencyInjector.getSceneManager();
         sceneManager.switchToDefaultScene();
+//        test(dependencyInjector);
 //        checkResourcesInBackground(stage);
     }
 
+    private void test(DependencyInjector dependencyInjector) {
+        var repo = dependencyInjector.getResidentRepository();
+        var emp = repo.findAllResidents();
+        System.out.println(emp);
+
+    }
 
     private void checkResourcesInBackground(Stage stage) {
         scheduler = Executors.newScheduledThreadPool(1);
