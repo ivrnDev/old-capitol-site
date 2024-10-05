@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.Enumeration;
 public class Status {
 
     public enum EmployeeStatus {
-        PENDING_APPROVAL("Pending"), //Encoding  of new employee
+        PENDING("Pending"), //Encoding  of new employee
         EVALUATION("Evaluation"), //
         ACTIVE("Active"),
         INACTIVE("Inactive"),
