@@ -15,7 +15,6 @@ import com.econnect.barangaymanagementapp.Utils.ImageUtils;
 import com.econnect.barangaymanagementapp.Utils.LoadingIndicator;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
