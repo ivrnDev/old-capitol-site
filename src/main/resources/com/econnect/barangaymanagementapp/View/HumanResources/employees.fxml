@@ -28,9 +28,9 @@
                             <font>
                                 <Font name="Arial" size="14.0" />
                             </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
                         </Button>
                         <HBox alignment="CENTER_LEFT" layoutX="856.0" layoutY="-2.0" styleClass="search-box" stylesheets="@../../Style/Components/search.css" AnchorPane.rightAnchor="0.0">
                             <children>
@@ -39,7 +39,7 @@
                                         <Image url="@../../Icon/search.png" />
                                     </image>
                                 </ImageView>
-                                <TextField promptText="Search" HBox.hgrow="ALWAYS">
+                                <TextField fx:id="searchField" promptText="Search" HBox.hgrow="ALWAYS">
                                     <font>
                                         <Font name="Arial" size="12.0" />
                                     </font>
@@ -55,7 +55,7 @@
                     </children>
                 </AnchorPane>
                 <!--Insert the table once-->
-                <!--<fx:include fx:id="table" source="Table/employee-table.fxml"/>-->
+                <!--<fx:include fx:id="table" source="Table/application-table.fxml"/>-->
             </children>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
