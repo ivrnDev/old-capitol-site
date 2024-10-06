@@ -3,8 +3,7 @@ package com.econnect.barangaymanagementapp.Enumeration;
 
 public enum EmploymentType {
     VOLUNTEER("Volunteer"),
-    FULL_TIME("Full Time"),
-    PART_TIME("Part Time");
+    FULL_TIME("Full Time");
 
     private final String type;
 
