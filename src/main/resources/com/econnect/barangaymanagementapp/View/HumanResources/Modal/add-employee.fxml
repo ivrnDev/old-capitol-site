@@ -17,9 +17,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" stylesheets="@../../../Style/Components/form.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.HumanResources.Modal.AddEmployeeController">
+<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" stylesheets="@../../../Style/Components/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.Controller.HumanResources.Modal.AddEmployeeController">
     <children>
-        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="1067.0" layoutY="14.0" onMouseClicked="#closeWindowConfirmation" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="14.0">
+        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="1082.0" layoutY="9.0" onMouseClicked="#closeWindowConfirmation" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="9.0">
             <image>
                 <Image url="@../../../Icon/close.png" />
             </image>
@@ -27,7 +27,7 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </ImageView>
-        <VBox layoutX="6.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0" prefWidth="1061.0" spacing="20.0" stylesheets="@../../../Style/Components/form.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="38.0">
+        <VBox layoutX="6.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0" prefWidth="1061.0" spacing="20.0" stylesheets="@../../../Style/Components/customize-modal.css" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="49.0" AnchorPane.topAnchor="38.0">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ADD EMPLOYEE">
                     <font>
@@ -70,9 +70,9 @@
                                                 <String fx:value="text-input" />
                                                 <String fx:value="text-input-default" />
                                             </styleClass>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                     <VBox.margin>
@@ -108,9 +108,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                     <styleClass>
@@ -139,9 +139,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                 </HBox>
@@ -166,9 +166,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                 </HBox>
@@ -193,9 +193,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                 </HBox>
@@ -224,15 +224,15 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
-                           <styleClass>
-                              <String fx:value="input-container-last" />
-                              <String fx:value="input-container" />
-                           </styleClass>
+                                    <styleClass>
+                                        <String fx:value="input-container-last" />
+                                        <String fx:value="input-container" />
+                                    </styleClass>
                                 </HBox>
                             </children>
                         </VBox>
@@ -263,9 +263,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                     <styleClass>
@@ -294,9 +294,9 @@
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
                                         </TextField>
                                     </children>
                                 </HBox>
@@ -326,9 +326,9 @@
                                                 <String fx:value="text-input-last" />
                                                 <String fx:value="text-input" />
                                             </styleClass>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
                                         </ComboBox>
                                     </children>
                                     <styleClass>
@@ -336,21 +336,21 @@
                                         <String fx:value="input-container-last" />
                                     </styleClass>
                                 </HBox>
-                        <StackPane fx:id="profileContainer" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="profilePreview" fitHeight="175.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="image-preview" visible="false">
-                                 <viewport>
-                                    <Rectangle2D />
-                                 </viewport>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="15.0" />
-                           </VBox.margin>
-                        </StackPane>
+                                <StackPane fx:id="profileContainer" prefHeight="150.0" prefWidth="200.0">
+                                    <children>
+                                        <ImageView fx:id="profilePreview" fitHeight="175.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="image-preview" visible="false">
+                                            <viewport>
+                                                <Rectangle2D />
+                                            </viewport>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </ImageView>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets top="15.0" />
+                                    </VBox.margin>
+                                </StackPane>
                             </children>
                         </VBox>
                     </children>
