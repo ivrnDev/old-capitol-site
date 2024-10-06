@@ -30,12 +30,16 @@ public class EmployeeService {
         return employeeRepository.findAllEmployees();
     }
 
-    public List<Employee> findAllEmployeeByStatus(Status.EmployeeStatus status) {
+    public List<Employee> findAllEmployeesByStatus(Status.EmployeeStatus status) {
         return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(status));
     }
 
-    public List<Employee> findAllEmployeeByEmployment(EmploymentType type) {
-        return employeeRepository.findEmployeeByFilter(employee -> employee.getEmployment().equals(type));
+    public List<Employee> findAllEmployeesStatusExcept(Status.EmployeeStatus status) {
+        return employeeRepository.findEmployeeByFilter(employee -> !employee.getStatus().equals(status));
+    }
+
+    public List<Employee> findAllEmployeesByEmployment(EmploymentType type) {
+        return employeeRepository.findEmployeeByFilter(employee -> !employee.getEmployment().equals(type));
     }
 
 }
