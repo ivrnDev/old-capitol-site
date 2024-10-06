@@ -14,6 +14,8 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class BaseRepository<T> {
     protected final HTTPClient client;
@@ -136,5 +138,13 @@ public abstract class BaseRepository<T> {
         } catch (IOException | IllegalArgumentException e) {
             System.err.println("Unexpected Error: " + e.getMessage());
         }
+    }
+
+    public List<T> findAllByFilter(String apiUrl, TypeReference<Map<String, T>> typeReference, Predicate<T> filter) {
+        List<T> allEntities = findAll(apiUrl, typeReference);
+    
+        return allEntities.stream()
+                .filter(filter)
+                .collect(Collectors.toList());
     }
 }
