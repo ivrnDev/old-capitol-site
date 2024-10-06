@@ -10,7 +10,7 @@ public enum Departments {
     HUMAN_RESOURCES(
             "Human Resources",
             "View/HumanResources/dashboard.fxml",
-            List.of(DASHBOARD, ANALYTICS, EMPLOYEES),
+            List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES),
             List.of(HR_MANAGER, HR_RECRUITER, HR_FRONT_DESK)),
     BARANGAY_OFFICE(
             "Barangay Office",
