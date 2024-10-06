@@ -1,6 +1,8 @@
 package com.econnect.barangaymanagementapp.Service;
 
 import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.EmploymentType;
+import com.econnect.barangaymanagementapp.Enumeration.Status;
 import com.econnect.barangaymanagementapp.Repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import okhttp3.Response;
@@ -24,8 +26,16 @@ public class EmployeeService {
         return employeeRepository.createEmployee(employee);
     }
 
-    public List<Employee> getAllEmployees() {
+    public List<Employee> findAllEmployees() {
         return employeeRepository.findAllEmployees();
+    }
+
+    public List<Employee> findAllEmployeeByStatus(Status.EmployeeStatus status) {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(status));
+    }
+
+    public List<Employee> findAllEmployeeByEmployment(EmploymentType type) {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getEmployment().equals(type));
     }
 
 }
