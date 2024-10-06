@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Employee;
 
 import com.econnect.barangaymanagementapp.Enumeration.ButtonStyle;
+import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Utils.ButtonUtils;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ImageUtils;
@@ -98,7 +99,7 @@ public class EmployeeRowController {
             System.out.println("Clicked update");
         });
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            System.out.println("Clicked view");
+            modalUtils.customizeModal(CustomizeModal.VIEW_EMPLOYEE);
         });
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
             System.out.println("Clicked delete");
@@ -106,4 +107,6 @@ public class EmployeeRowController {
 
         buttonContainer.getChildren().addAll(updateBtn, viewBtn, deleteBtn);
     }
+
+
 }
