@@ -21,11 +21,12 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.Controller.Component to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.HumanResources to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.HumanResources.Modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
     opens com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
     exports com.econnect.barangaymanagementapp.Enumeration.Modal;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Employee to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Application to javafx.fxml;
 
 }
