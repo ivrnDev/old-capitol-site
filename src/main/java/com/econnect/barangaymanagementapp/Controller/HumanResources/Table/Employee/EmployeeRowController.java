@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.Controller.HumanResources.Table;
+package com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Employee;
 
 import com.econnect.barangaymanagementapp.Enumeration.ButtonStyle;
 import com.econnect.barangaymanagementapp.Utils.ButtonUtils;
@@ -67,6 +67,10 @@ public class EmployeeRowController {
         positionLabel.setText(position);
         departmentLabel.setText(department);
         statusLabel.setText(status);
+        profilePicture.setImage(profileImage);
+    }
+
+    public void setProfileImage(Image profileImage) {
         profilePicture.setImage(profileImage);
     }
 
