@@ -5,7 +5,8 @@ public enum NavigationItems {
     ANALYTICS("Analytics"),
     EMPLOYEES("Employees"),
     RESIDENTS("Residents"),
-    HISTORY("History");
+    HISTORY("History"),
+    APPLICATIONS("Applications");
 
     private final String displayName;
 
@@ -17,7 +18,7 @@ public enum NavigationItems {
         return displayName;
     }
 
-    public String getLowerCaseName () {
+    public String getLowerCaseName() {
         return displayName.toLowerCase();
     }
 }
