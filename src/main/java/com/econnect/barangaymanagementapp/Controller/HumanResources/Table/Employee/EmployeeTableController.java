@@ -15,6 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class EmployeeTableController {
@@ -23,6 +25,8 @@ public class EmployeeTableController {
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
+
+    private final Map<String, Image> imageCache = new HashMap<>();
 
     public EmployeeTableController(DependencyInjector dependencyInjector) {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
@@ -35,8 +39,8 @@ public class EmployeeTableController {
             loader.setController(new EmployeeRowController(dependencyInjector));
             HBox employeeRow = loader.load();
             EmployeeRowController employeeRowController = loader.getController();
-            employeeRowController.setEmployeeData(employeeId, lastName, firstName, role.getName(), department.getName(), status.getName(), new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png"))));
-            loadEmployeeImage(imageUrl, employeeRowController);
+            employeeRowController.setEmployeeData(employeeId, lastName, firstName, role.getName(), department.getName(), status.getName(), getImageOrDefault(employeeId));
+            loadEmployeeImage(employeeId, imageUrl, employeeRowController);
             tableContent.getChildren().add(employeeRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -45,32 +49,43 @@ public class EmployeeTableController {
         }
     }
 
-    private void loadEmployeeImage(String imageUrl, EmployeeRowController employeeRowController) {
-        Task<Image> loadImageTask = new Task<>() {
-            @Override
-            protected Image call() {
-                if (imageUrl.isEmpty()) {
-                    return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png")));
-                } else {
-                    return new Image(imageUrl);
+    private Image getImageOrDefault(String employeeId) {
+        return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png"))));
+    }
+
+    private void loadEmployeeImage(String employeeId, String imageUrl, EmployeeRowController employeeRowController) {
+        if (imageCache.containsKey(employeeId)) {
+            employeeRowController.setProfileImage(imageCache.get(employeeId));
+        } else {
+            Task<Image> loadImageTask = new Task<>() {
+                @Override
+                protected Image call() {
+                    if (imageUrl.isEmpty()) {
+                        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png")));
+                    } else {
+                        return new Image(imageUrl);
+                    }
                 }
-            }
 
-            @Override
-            protected void succeeded() {
-                Image image = getValue();
-                employeeRowController.setProfileImage(image);
-            }
+                @Override
+                protected void succeeded() {
+                    Image image = getValue();
+                    imageCache.put(employeeId, image);
+                    employeeRowController.setProfileImage(image);
+                }
 
-            @Override
-            protected void failed() {
-                Throwable exception = getException();
-                System.err.println("Error loading image: " + exception.getMessage());
-                employeeRowController.setProfileImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png"))));
-            }
-        };
+                @Override
+                protected void failed() {
+                    Throwable exception = getException();
+                    System.err.println("Error loading image: " + exception.getMessage());
+                    Image defaultImage = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png")));
+                    imageCache.put(employeeId, defaultImage);  // Cache the default image
+                    employeeRowController.setProfileImage(defaultImage);
+                }
+            };
 
-        new Thread(loadImageTask).start();
+            new Thread(loadImageTask).start();
+        }
     }
 
     public void showNoData() {
