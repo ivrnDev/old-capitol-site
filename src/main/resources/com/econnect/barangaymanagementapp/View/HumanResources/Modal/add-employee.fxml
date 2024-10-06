@@ -326,6 +326,9 @@
                                                 <String fx:value="text-input-last" />
                                                 <String fx:value="text-input" />
                                             </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                                         </ComboBox>
                                     </children>
                                     <styleClass>

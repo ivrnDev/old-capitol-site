@@ -14,7 +14,7 @@ import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ImageUtils;
 import com.econnect.barangaymanagementapp.Utils.LoadingIndicator;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
-import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -101,9 +101,10 @@ public class AddEmployeeController {
     private Button confirmBtn;
 
     private File file;
-    private Timeline debounceTimeline;
     private Boolean residentExists = false;
     private String profileLink;
+
+    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public AddEmployeeController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -123,12 +124,8 @@ public class AddEmployeeController {
 
     private void configureResidentIdInput() {
         residentIdInput.textProperty().addListener((_, _, newValue) -> {
-            if (debounceTimeline != null) {
-                debounceTimeline.stop();
-            }
-
-            debounceTimeline = new Timeline(new KeyFrame(Duration.millis(300), _ -> populateInputFields(newValue)));
-            debounceTimeline.play();
+            searchDelay.setOnFinished(event -> populateInputFields(newValue));
+            searchDelay.playFromStart();
         });
     }
 
