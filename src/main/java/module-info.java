@@ -9,24 +9,32 @@ module com.econnect.barangaymanagementapp {
     requires static lombok;
 
     exports com.econnect.barangaymanagementapp;
-    exports com.econnect.barangaymanagementapp.Config;
-    exports com.econnect.barangaymanagementapp.Utils;
-    exports com.econnect.barangaymanagementapp.Enumeration;
-    exports com.econnect.barangaymanagementapp.Controller;
-    exports com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
-    exports com.econnect.barangaymanagementapp.Enumeration.Paths;
-    exports com.econnect.barangaymanagementapp.Config.Deserializer to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.config;
+    exports com.econnect.barangaymanagementapp.util;
+    exports com.econnect.barangaymanagementapp.controller;
+    exports com.econnect.barangaymanagementapp.enumeration.path;
+    exports com.econnect.barangaymanagementapp.util.ui;
+    exports com.econnect.barangaymanagementapp.util.resource;
+    exports com.econnect.barangaymanagementapp.util.state;
+    exports com.econnect.barangaymanagementapp.util.data;
+    exports com.econnect.barangaymanagementapp.enumeration.ui;
+    exports com.econnect.barangaymanagementapp.enumeration.type;
+    exports com.econnect.barangaymanagementapp.config.deserializer to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
 
-    opens com.econnect.barangaymanagementapp.Controller to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.Component to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.BarangayOffice to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.Component.Modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Interface to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Domain to com.fasterxml.jackson.databind;
-    exports com.econnect.barangaymanagementapp.Enumeration.Modal;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Employee to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Application to javafx.fxml;
+
+    opens com.econnect.barangaymanagementapp.controller to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.component to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.humanresources to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.humanresources.modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.barangayoffice to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.component.modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.interfaces to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.enumeration.modal;
+    opens com.econnect.barangaymanagementapp.controller.humanresources.table.Employee to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.humanresources.table.Application to javafx.fxml;
+    exports com.econnect.barangaymanagementapp.enumeration.database;
+
 
 }

@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp;
 
-import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
-import com.econnect.barangaymanagementapp.Utils.SceneManager;
+import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
