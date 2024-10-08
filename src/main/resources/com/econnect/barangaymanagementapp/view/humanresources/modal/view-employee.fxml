@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
@@ -13,25 +14,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" styleClass="panel"
-            stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewController">
+<AnchorPane prefHeight="600.0" prefWidth="991.0" styleClass="panel" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewController">
     <children>
-        <Text layoutX="30.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INFORMATION">
+        <Text fill="#414141" layoutX="30.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INFORMATION">
             <font>
-                <Font name="Arial" size="24.0"/>
+                <Font name="Arial" size="24.0" />
             </font>
         </Text>
-        <ImageView fx:id="resumeImage" fitHeight="482.0" fitWidth="378.0" layoutX="20.0" layoutY="93.0"
-                   pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0">
-            <image>
-                <Image url="@../../../images/resume-sample.jpg"/>
-            </image>
-            <cursor>
-                <Cursor fx:constant="HAND"/>
-            </cursor>
-        </ImageView>
         <VBox layoutX="425.0" layoutY="65.0" prefHeight="498.0" prefWidth="488.0" AnchorPane.rightAnchor="29.0">
             <children>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="269.0">
@@ -40,119 +29,112 @@
                             <children>
                                 <Label text="Last Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                             <styleClass>
-                                <String fx:value="input-label-first"/>
-                                <String fx:value="input-label"/>
+                                <String fx:value="input-label-first" />
+                                <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <TextField fx:id="lastNameInput" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="lastNameInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                     <styleClass>
-                        <String fx:value="input-container"/>
-                        <String fx:value="input-container-first"/>
+                        <String fx:value="input-container" />
+                        <String fx:value="input-container-first" />
                     </styleClass>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="85.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="First Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="firstNameInput" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="firstNameInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="120.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="Middle Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="middleNameInput" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="middleNameInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="190.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="Address" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="addressInput" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="addressInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
@@ -163,34 +145,33 @@
                             <children>
                                 <Label text="Date of Birth" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                             <styleClass>
-                                <String fx:value="input-label-last"/>
-                                <String fx:value="input-label"/>
+                                <String fx:value="input-label-last" />
+                                <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <TextField fx:id="birthdateInput" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="birthdateInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                     <styleClass>
-                        <String fx:value="input-container-last"/>
-                        <String fx:value="input-container"/>
+                        <String fx:value="input-container-last" />
+                        <String fx:value="input-container" />
                     </styleClass>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="269.0">
@@ -199,93 +180,88 @@
                             <children>
                                 <Label text="Last Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                             <styleClass>
-                                <String fx:value="input-label-first"/>
-                                <String fx:value="input-label"/>
+                                <String fx:value="input-label-first" />
+                                <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <TextField fx:id="lastNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="lastNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                     <styleClass>
-                        <String fx:value="input-container"/>
-                        <String fx:value="input-container-first"/>
+                        <String fx:value="input-container" />
+                        <String fx:value="input-container-first" />
                     </styleClass>
                     <VBox.margin>
-                        <Insets top="30.0"/>
+                        <Insets top="30.0" />
                     </VBox.margin>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="First Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="firstNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="firstNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="84.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="Middle Name" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="middleNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="middleNameInput1" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
@@ -296,75 +272,90 @@
                             <children>
                                 <Label text="Date of Birth" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                             <styleClass>
-                                <String fx:value="input-label-last"/>
-                                <String fx:value="input-label"/>
+                                <String fx:value="input-label-last" />
+                                <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <TextField fx:id="birthdateInput1" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="birthdateInput1" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                     <styleClass>
-                        <String fx:value="input-container-last"/>
-                        <String fx:value="input-container"/>
+                        <String fx:value="input-container-last" />
+                        <String fx:value="input-container" />
                     </styleClass>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="121.0" prefWidth="269.0" styleClass="input-container">
                     <children>
-                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
-                              HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label text="Address" textOverrun="CLIP">
                                     <font>
-                                        <Font name="Arial" size="15.0"/>
+                                        <Font name="Arial" size="15.0" />
                                     </font>
                                 </Label>
                             </children>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <padding>
-                                <Insets left="20.0"/>
+                                <Insets left="20.0" />
                             </padding>
                         </HBox>
-                        <TextField fx:id="addressInput1" editable="false" prefHeight="35.0" prefWidth="176.0"
-                                   HBox.hgrow="ALWAYS">
+                        <TextField fx:id="addressInput1" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                             <font>
-                                <Font name="Arial" size="12.0"/>
+                                <Font name="Arial" size="12.0" />
                             </font>
                             <cursor>
-                                <Cursor fx:constant="DEFAULT"/>
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                     </children>
                 </HBox>
             </children>
         </VBox>
-        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="863.0" layoutY="7.0" onMouseClicked="#closeView"
-                   pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="953.0" layoutY="7.0" onMouseClicked="#closeView" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../icon/close.png"/>
+                <Image url="@../../../icon/close.png" />
             </image>
             <cursor>
-                <Cursor fx:constant="HAND"/>
+                <Cursor fx:constant="HAND" />
             </cursor>
         </ImageView>
+      <VBox alignment="TOP_CENTER" layoutX="36.0" layoutY="85.0" prefHeight="448.0" prefWidth="368.0" spacing="20.0" styleClass="profile-container">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/default-profile.png" />
+               </image>
+            </ImageView>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
     </children>
+   <stylesheets>
+      <URL value="@../../../style/component/customize-modal.css" />
+      <URL value="@../../../style/humanresources/view-employee-modal.css" />
+   </stylesheets>
 </AnchorPane>
