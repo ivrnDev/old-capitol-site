@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Application;
 
 import com.econnect.barangaymanagementapp.Enumeration.ButtonStyle;
+import com.econnect.barangaymanagementapp.Enumeration.CustomizeModal;
 import com.econnect.barangaymanagementapp.Utils.ButtonUtils;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.ImageUtils;
@@ -63,14 +64,17 @@ public class ApplicationRowController {
         profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), parentStage));
     }
 
-    public void setApplicationData(String residentId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
-        residentIdLabel.setText(residentId);
+    public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String date, String time, Image profileImage) {
+        residentIdLabel.setText(employeeId);
         lastNameLabel.setText(lastName);
         firstNameLabel.setText(firstName);
         statusLabel.setText(status);
-        typeLabel.setText(type);
         dateLabel.setText(date);
         timeLabel.setText(time);
+        profilePicture.setImage(profileImage);
+    }
+
+    public void setProfileImage(Image profileImage) {
         profilePicture.setImage(profileImage);
     }
 
@@ -94,16 +98,18 @@ public class ApplicationRowController {
     }
 
     private void setupButtonContainer() {
-        Button updateBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            System.out.println("Clicked update");
+        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+            modalUtils.customizeModal(CustomizeModal.VIEW_EMPLOYEE);
+
         });
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            System.out.println("Clicked view");
+            System.out.println("Clicked accept");
+
         });
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             System.out.println("Clicked delete");
         });
 
-        buttonContainer.getChildren().addAll(updateBtn, acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
     }
 }

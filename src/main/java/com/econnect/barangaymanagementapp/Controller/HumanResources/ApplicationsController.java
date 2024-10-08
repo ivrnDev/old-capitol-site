@@ -2,31 +2,44 @@ package com.econnect.barangaymanagementapp.Controller.HumanResources;
 
 import com.econnect.barangaymanagementapp.Controller.HumanResources.Table.Application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.Domain.Employee;
+import com.econnect.barangaymanagementapp.Enumeration.Status;
 import com.econnect.barangaymanagementapp.Service.EmployeeService;
 import com.econnect.barangaymanagementapp.Utils.DependencyInjector;
 import com.econnect.barangaymanagementapp.Utils.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.Utils.LoadingIndicator;
 import com.econnect.barangaymanagementapp.Utils.ModalUtils;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ApplicationsController {
     @FXML
     private VBox content;
 
+    @FXML
+    private TextField searchField;
+
     private final EmployeeService employeeService;
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private ApplicationTableController applicationTableController;
+
+    private List<Employee> allPendingEmployees;
+    private Task<List<Employee>> searchTask;
+
+    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public ApplicationsController(DependencyInjector dependencyInjector) {
         this.employeeService = dependencyInjector.getEmployeeService();
@@ -35,13 +48,18 @@ public class ApplicationsController {
     }
 
     public void initialize() {
-//        loadEmployeeTable();
-//        populateEmployeeRows();
+        loadEmployeeTable();
+        populateEmployeeRows();
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(_ -> performSearch());
+            searchDelay.playFromStart();
+        });
     }
 
     private void loadEmployeeTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader("View/HumanResources/Table/application-table.fxml");
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader("View/HumanResources/Table/Application/application-table.fxml");
             Parent employeeTable = loader.load();
             applicationTableController = loader.getController();
             content.getChildren().add(employeeTable);
@@ -50,52 +68,87 @@ public class ApplicationsController {
         }
     }
 
-    private void populateEmployeeRows() {
+    public void populateEmployeeRows() {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(content.getWidth(), content.getHeight());
-        VBox.setVgrow(loadingIndicator, Priority.ALWAYS);
-        content.getChildren().add(loadingIndicator);
+        Platform.runLater(() -> content.getChildren().add(loadingIndicator));
 
-        Task<List<Employee>> task = new Task<>() {
+        Runnable call = () -> {
+            allPendingEmployees = employeeService.findAllEmployeesByStatus(Status.EmployeeStatus.PENDING);
+
+            Platform.runLater(() -> {
+                content.getChildren().remove(loadingIndicator);
+                if (allPendingEmployees.isEmpty()) {
+                    applicationTableController.showNoData();
+                } else {
+                    updateEmployeeTable(allPendingEmployees);
+                }
+            });
+        };
+
+        Runnable onFailed = () -> {
+            Platform.runLater(() -> content.getChildren().remove(loadingIndicator));
+            System.err.println("Error loading employees");
+        };
+
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+    }
+
+    private void performSearch() {
+        if (searchTask != null && searchTask.isRunning()) {
+            searchTask.cancel();
+        }
+
+        searchTask = new Task<>() {
             @Override
             protected List<Employee> call() {
-                return employeeService.findAllEmployees();
+                String searchText = searchField.getText().trim().toLowerCase();
+                return allPendingEmployees.stream()
+                        .filter(handleFilter(searchText))
+                        .collect(Collectors.toList());
             }
 
             @Override
             protected void succeeded() {
-                loadingIndicator.setVisible(false);
-                content.getChildren().remove(loadingIndicator);
-                List<Employee> employees = getValue();
-                if (employees.isEmpty()) {
-                    applicationTableController.showNoData();
-                } else {
-                    employees.forEach(employee -> {
-                        applicationTableController.addApplicationRow(
-                                employee.getId(),
-                                employee.getLastName(),
-                                employee.getFirstName(),
-                                employee.getStatus(),
-                                employee.getApplicationType(),
-                                employee.getCreatedAt(),
-                                employee.getProfileUrl()
-                        );
-                    });
-                }
+                List<Employee> filteredEmployees = getValue();
+                updateEmployeeTable(filteredEmployees);
             }
-
 
             @Override
             protected void failed() {
-                loadingIndicator.setVisible(false);
-                content.getChildren().remove(loadingIndicator);
                 Throwable exception = getException();
-                System.err.println("Failed to fetch employees: " + exception.getMessage());
-                Platform.runLater(() -> applicationTableController.showNoData());
+                System.err.println("Error filtering employees: " + exception.getMessage());
             }
         };
 
-        new Thread(task).start();
+        new Thread(searchTask).start();
     }
 
+    private Predicate<Employee> handleFilter(String searchText) {
+        return employee -> employee.getId().toLowerCase().contains(searchText)
+                || employee.getFirstName().toLowerCase().contains(searchText)
+                || employee.getLastName().toLowerCase().contains(searchText)
+                || employee.getRole().getName().toLowerCase().contains(searchText)
+                || employee.getStatus().getName().toLowerCase().contains(searchText)
+                || employee.getDepartment().getName().toLowerCase().contains(searchText);
+    }
 
+    private void updateEmployeeTable(List<Employee> employees) {
+        applicationTableController.clearTable();
+
+        if (employees.isEmpty()) {
+            applicationTableController.showNoData();
+        } else {
+            employees.forEach(employee -> {
+                applicationTableController.addEmployeeRow(
+                        employee.getId(),
+                        employee.getLastName(),
+                        employee.getFirstName(),
+                        employee.getStatus().getName(),
+                        employee.getCreatedAt().toLocalDate().toString(),
+                        employee.getCreatedAt().toLocalTime().toString(),
+                        employee.getProfileUrl()
+                );
+            });
+        }
+    }
 }

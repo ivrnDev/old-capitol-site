@@ -21,7 +21,6 @@ public class ViewController {
 
     public void initialize() {
         resumeImage.setOnMouseClicked(_ -> handleClickResume());
-
     }
 
     @FXML
