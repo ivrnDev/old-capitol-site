@@ -16,9 +16,9 @@
         </VBox>
         <HBox alignment="CENTER_LEFT" onMouseClicked="#logout" spacing="10.0" styleClass="nav-bar">
             <children>
-                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" smooth="false">
+                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" smooth="false">
                     <image>
-                        <Image url="@../../Icon/logout.png"/>
+                        <Image url="@../../Icon/Sidebar/logout.png"/>
                     </image>
                 </ImageView>
                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Logout">

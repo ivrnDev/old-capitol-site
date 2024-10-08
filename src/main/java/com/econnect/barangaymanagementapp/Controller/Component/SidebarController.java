@@ -53,12 +53,15 @@ public class SidebarController {
         HBox navButton = new HBox();
         ImageView navIcon = new ImageView();
         Text navText = new Text(item.getName());
-
-        navIcon.setImage(loadIcon(item));
         navButton.getStyleClass().add("nav-bar");
+        navIcon.setFitWidth(50);
+        navIcon.setFitHeight(50);
 
         if (item == navigationState.getActiveItem()) {
             navButton.getStyleClass().add("active");
+            navIcon.setImage(loadIcon(item.getIconPathSelected()));
+        } else {
+            navIcon.setImage(loadIcon(item.getIconPath()));
         }
 
         navButton.getChildren().addAll(navIcon, navText);
@@ -69,11 +72,11 @@ public class SidebarController {
         return navButton;
     }
 
-    private Image loadIcon(NavigationItems item) {
+    private Image loadIcon(String iconPath) {
         try {
-            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icon/" + item.getLowerCaseName() + ".png")));
+            return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(iconPath)));
         } catch (NullPointerException e) {
-            System.err.println("Icon resource not found: " + item.getLowerCaseName());
+            System.err.println("Icon resource not found: " + iconPath);
             return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Icon/default-icon.png")));
         }
     }
