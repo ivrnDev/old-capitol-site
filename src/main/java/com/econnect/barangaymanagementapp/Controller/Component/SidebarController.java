@@ -33,16 +33,17 @@ public class SidebarController {
     }
 
     public void initialize() {
-        if (userSession != null && userSession.getCurrentEmployee() != null) {
-            currentDepartment = userSession.getCurrentEmployee().getDepartment();
-            if (navigationState.getActiveItem() == null && !currentDepartment.getNavigationItems().isEmpty()) {
-                navigationState.setActiveItem(currentDepartment.getNavigationItems().getFirst());
-            }
+        if (userSession.hasSession()) {
+            currentDepartment = userSession.getEmployeeDepartment();
             loadNavigationBar();
         }
     }
 
     private void loadNavigationBar() {
+        if (navigationState.getActiveItem() == null && !currentDepartment.getNavigationItems().isEmpty()) {
+            navigationState.setActiveItem(currentDepartment.getNavigationItems().getFirst());
+        }
+
         navigationBar.getChildren().clear();
         currentDepartment.getNavigationItems().forEach(item -> {
             navigationBar.getChildren().add(createNavButton(item));
