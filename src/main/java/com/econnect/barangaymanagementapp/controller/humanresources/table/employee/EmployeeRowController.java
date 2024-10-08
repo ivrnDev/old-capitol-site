@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.table.Employee;
+package com.econnect.barangaymanagementapp.controller.humanresources.table.employee;
 
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;

@@ -1,6 +1,5 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.table.Employee;
+package com.econnect.barangaymanagementapp.controller.humanresources.table.employee;
 
-import com.econnect.barangaymanagementapp.enumeration.path.fxmlPath;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;

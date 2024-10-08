@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.humanresources;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.table.Employee.EmployeeTableController;
+import com.econnect.barangaymanagementapp.controller.humanresources.table.employee.EmployeeTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;

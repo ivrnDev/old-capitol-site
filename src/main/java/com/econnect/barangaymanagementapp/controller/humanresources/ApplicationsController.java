@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.humanresources;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.table.Application.ApplicationTableController;
+import com.econnect.barangaymanagementapp.controller.humanresources.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -21,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

@@ -32,8 +32,8 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.interfaces to javafx.fxml;
     opens com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
     exports com.econnect.barangaymanagementapp.enumeration.modal;
-    opens com.econnect.barangaymanagementapp.controller.humanresources.table.Employee to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.humanresources.table.Application to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.humanresources.table.employee to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.humanresources.table.application to javafx.fxml;
     exports com.econnect.barangaymanagementapp.enumeration.database;
 
 

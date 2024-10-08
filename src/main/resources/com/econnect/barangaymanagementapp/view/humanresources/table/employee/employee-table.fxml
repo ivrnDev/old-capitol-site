@@ -9,7 +9,7 @@
 
 <VBox fx:id="table" stylesheets="@../../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.table.Employee.EmployeeTableController">
+      fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.table.employee.EmployeeTableController">
     <children>
         <HBox fx:id="tableHeader" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0"
               prefWidth="927.0" styleClass="table-header">
