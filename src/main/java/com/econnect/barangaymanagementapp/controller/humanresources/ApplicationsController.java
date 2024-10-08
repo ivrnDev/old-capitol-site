@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.controller.humanresources.table.Applic
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -20,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -129,9 +131,11 @@ public class ApplicationsController {
         return employee -> employee.getId().toLowerCase().contains(searchText)
                 || employee.getFirstName().toLowerCase().contains(searchText)
                 || employee.getLastName().toLowerCase().contains(searchText)
-                || employee.getRole().getName().toLowerCase().contains(searchText)
                 || employee.getStatus().getName().toLowerCase().contains(searchText)
-                || employee.getDepartment().getName().toLowerCase().contains(searchText);
+                || employee.getApplicationType().getName().toLowerCase().contains(searchText)
+                || employee.getCreatedAt().toString().contains(searchText)
+                || DateFormatter.extractDateAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText)
+                || DateFormatter.extractTimeAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText);
     }
 
     private void updateEmployeeTable(List<Employee> employees) {
@@ -145,9 +149,9 @@ public class ApplicationsController {
                         employee.getId(),
                         employee.getLastName(),
                         employee.getFirstName(),
-                        employee.getStatus().getName(),
-                        employee.getCreatedAt().toLocalDate().toString(),
-                        employee.getCreatedAt().toLocalTime().toString(),
+                        employee.getStatus(),
+                        employee.getApplicationType(),
+                        employee.getCreatedAt(),
                         employee.getProfileUrl()
                 );
             });

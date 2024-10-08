@@ -2,14 +2,16 @@ package com.econnect.barangaymanagementapp.controller.humanresources.modal;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
-import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
-import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
+import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
+import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -32,7 +34,7 @@ import okhttp3.Response;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
@@ -224,12 +226,12 @@ public class AddEmployeeController {
                 .address(addressInput.getText())
                 .email(emailInput.getText())
                 .contactNumber(phoneInput.getText())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .createdAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
+                .updatedAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
                 .status(EmployeeStatus.PENDING)
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
-                .applicationType("WALK_IN")
+                .applicationType(ApplicationType.WALK_IN)
                 .employment(volunteerComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
                 .build();
     }

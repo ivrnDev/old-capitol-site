@@ -6,6 +6,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 public class InMemoryDatabase {
@@ -25,9 +26,9 @@ public class InMemoryDatabase {
                 .status(StatusType.EmployeeStatus.ACTIVE)
                 .username(" ")
                 .access(" ")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .lastLogin(LocalDateTime.now())
+                .createdAt(ZonedDateTime.now())
+                .updatedAt(ZonedDateTime.now())
+                .lastLogin(ZonedDateTime.now())
                 .build());
     }
 

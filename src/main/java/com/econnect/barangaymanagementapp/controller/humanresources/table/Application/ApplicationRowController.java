@@ -64,11 +64,12 @@ public class ApplicationRowController {
         profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), parentStage));
     }
 
-    public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String date, String time, Image profileImage) {
+    public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
         residentIdLabel.setText(employeeId);
         lastNameLabel.setText(lastName);
         firstNameLabel.setText(firstName);
         statusLabel.setText(status);
+        typeLabel.setText(type);
         dateLabel.setText(date);
         timeLabel.setText(time);
         profilePicture.setImage(profileImage);
