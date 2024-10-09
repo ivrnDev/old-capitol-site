@@ -1,6 +1,6 @@
 .panel {
     -fx-border-color: #000000;
-    -fx-background-color: #C8F2FC;
+    -fx-background-color: #EEFCFF;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
@@ -80,6 +80,28 @@
 .button-cancel {
     -fx-background-color: #FFD9D9;
 }
+
+/*  Profile Container*/
+.profile-container {
+    -fx-background-color: transparent;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #787878;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
+    -fx-border-width: 2px;
+}
+
+.view-id {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-background-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-color: black;
+}
+
+
+
+
 
 
 
