@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.config.Config;
 import com.econnect.barangaymanagementapp.database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.database.Firebase;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
@@ -57,5 +58,10 @@ public class EmployeeRepository extends BaseRepository<Employee> {
     public List<Employee> findEmployeeByFilter(Predicate<Employee> predicate) {
         return findAllByFilter(apiKey, new TypeReference<>() {
         }, predicate);
+    }
+
+    public Response updateEmployeeByStatus(String employeeId, StatusType.EmployeeStatus status) {
+        return updateBy(apiKey, employeeId, new TypeReference<>() {
+        }, employee -> employee.setStatus(status));
     }
 }

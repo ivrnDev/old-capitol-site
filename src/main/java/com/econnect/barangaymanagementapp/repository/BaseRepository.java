@@ -14,6 +14,7 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -124,10 +125,10 @@ public abstract class BaseRepository<T> {
         }
     }
 
-    protected void update(String apiUrl, T object) {
+    protected Response update(String apiUrl, String id, T object) {
         Request request = new Request.Builder()
-                .url(apiUrl + ".json")
-                .put(RequestBody.create(
+                .url(apiUrl + "/" + id + ".json")
+                .patch(RequestBody.create(
                         jsonConverter.convertObjectToJson(object), MediaType.parse("application/json")
                 ))
                 .build();
@@ -135,9 +136,20 @@ public abstract class BaseRepository<T> {
             if (!response.isSuccessful()) {
                 throw new IOException("HTTP error, code: " + response.code() + " - " + response.message());
             }
+            return response;
         } catch (IOException | IllegalArgumentException e) {
             System.err.println("Unexpected Error: " + e.getMessage());
+            return null;
         }
+    }
+
+    public Response updateBy(String apiUrl, String id, TypeReference<T> typeReference, Consumer<T> statusUpdater) {
+        Optional<T> entity = findById(apiUrl, id, typeReference);
+        if (entity.isPresent()) {
+            statusUpdater.accept(entity.get());
+            return update(apiUrl, id, entity.get());
+        }
+        return null;
     }
 
     public List<T> findAllByFilter(String apiUrl, TypeReference<Map<String, T>> typeReference, Predicate<T> filter) {

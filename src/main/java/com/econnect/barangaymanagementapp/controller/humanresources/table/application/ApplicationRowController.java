@@ -1,8 +1,11 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
+import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
@@ -14,10 +17,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import okhttp3.Response;
 
 public class ApplicationRowController {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
+    private final EmployeeService employeeService;
 
     @FXML
     private HBox tableRow;
@@ -52,6 +57,7 @@ public class ApplicationRowController {
     public ApplicationRowController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
+        this.employeeService = dependencyInjector.getEmployeeService();
     }
 
     public void initialize() {
@@ -107,14 +113,34 @@ public class ApplicationRowController {
                     controller -> controller.setId(residentIdLabel.getText())
             );
         });
-        Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            System.out.println("Clicked accept");
 
+        Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
+            Response response = handleClickButton(StatusType.EmployeeStatus.ACTIVE);
+            if (response.isSuccessful()) {
+                modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
+            } else {
+                modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
+            }
         });
+
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            System.out.println("Clicked delete");
+            Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
+            if (response.isSuccessful()) {
+                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been accepted for evaluation");
+            } else {
+                modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
+            }
         });
 
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+    }
+
+    private Response handleClickButton(StatusType.EmployeeStatus status) {
+        try {
+            return employeeService.updateEmployeeByStatus(residentIdLabel.getText(), status);
+        } catch (Exception e) {
+            System.err.println("Error updating employee status: " + e.getMessage());
+            return null;
+        }
     }
 }

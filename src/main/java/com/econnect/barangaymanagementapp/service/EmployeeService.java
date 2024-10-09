@@ -42,4 +42,8 @@ public class EmployeeService {
         return employeeRepository.findEmployeeByFilter(employee -> !employee.getEmployment().equals(type));
     }
 
+    public Response updateEmployeeByStatus(String employeeId, StatusType.EmployeeStatus status) {
+        return employeeRepository.updateEmployeeByStatus(employeeId, status);
+    }
+
 }
