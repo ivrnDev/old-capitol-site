@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="600.0" prefWidth="991.0" styleClass="panel"
+            stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController">
+    <children>
+        <Text fill="#414141" layoutX="26.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INFORMATION">
+            <font>
+                <Font name="Arial" size="24.0"/>
+            </font>
+        </Text>
+        <VBox layoutX="425.0" layoutY="65.0" prefHeight="498.0" prefWidth="488.0" AnchorPane.leftAnchor="473.0"
+              AnchorPane.rightAnchor="29.0">
+            <children>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="269.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Last Name" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                            <styleClass>
+                                <String fx:value="input-label-first"/>
+                                <String fx:value="input-label"/>
+                            </styleClass>
+                        </HBox>
+                        <TextField fx:id="lastName" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                    <styleClass>
+                        <String fx:value="input-container"/>
+                        <String fx:value="input-container-first"/>
+                    </styleClass>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="85.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="First Name" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="firstName" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="120.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Middle Name" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="middleName" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="195.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Date of Birth" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="dateOfBirthInput" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="190.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Sex" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="sex" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="121.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Phone" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="phone" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="158.0" prefWidth="269.0" styleClass="input-container">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Email" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                        </HBox>
+                        <TextField fx:id="email" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefWidth="269.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Address" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                            <styleClass>
+                                <String fx:value="input-label-last"/>
+                                <String fx:value="input-label"/>
+                            </styleClass>
+                        </HBox>
+                        <TextField fx:id="address" editable="false" prefHeight="35.0" prefWidth="176.0"
+                                   styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                            <font>
+                                <Font name="Arial" size="12.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT"/>
+                            </cursor>
+                        </TextField>
+                    </children>
+                    <styleClass>
+                        <String fx:value="input-container-last"/>
+                        <String fx:value="input-container"/>
+                    </styleClass>
+                </HBox>
+            </children>
+        </VBox>
+        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="953.0" layoutY="7.0" onMouseClicked="#closeView"
+                   pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="7.0">
+            <image>
+                <Image url="@../../../icon/close.png"/>
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </ImageView>
+        <VBox alignment="TOP_CENTER" layoutX="36.0" layoutY="85.0" prefHeight="448.0" prefWidth="368.0" spacing="40.0"
+              styleClass="profile-container" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="65.0">
+            <children>
+                <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                           preserveRatio="true" VBox.vgrow="ALWAYS">
+                    <image>
+                        <Image url="@../../../images/default-profile.png"/>
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" prefHeight="189.0" prefWidth="334.0" spacing="20.0">
+                    <children>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <HBox fx:id="viewResume" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="194.0"
+                                      spacing="20.0" styleClass="view-id">
+                                    <children>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../icon/document-icon.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Resume">
+                                            <font>
+                                                <Font name="Arial" size="15.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <padding>
+                                        <Insets left="20.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <HBox fx:id="viewGovernmentID" alignment="CENTER_LEFT" prefHeight="42.0"
+                                      prefWidth="194.0" spacing="20.0" styleClass="view-id">
+                                    <children>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../icon/document-icon.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Government ID">
+                                            <font>
+                                                <Font name="Arial" size="15.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <HBox.margin>
+                                        <Insets/>
+                                    </HBox.margin>
+                                    <padding>
+                                        <Insets left="20.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="53.0">
+                            <children>
+                                <HBox fx:id="viewResume1" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="194.0"
+                                      spacing="20.0" styleClass="view-id">
+                                    <children>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../icon/document-icon.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Text fx:id="viewNBI" strokeType="OUTSIDE" strokeWidth="0.0"
+                                              text="NBI Clearance">
+                                            <font>
+                                                <Font name="Arial" size="15.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <padding>
+                                        <Insets left="20.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+            </padding>
+        </VBox>
+    </children>
+</AnchorPane>

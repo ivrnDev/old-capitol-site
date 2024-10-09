@@ -99,7 +99,7 @@ public class EmployeeRowController {
             System.out.println("Clicked update");
         });
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModal(CustomizeModal.VIEW_EMPLOYEE);
+            modalUtils.customizeModal(CustomizeModal.VIEW_APPLICATION_EMPLOYEE);
         });
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
             System.out.println("Clicked delete");

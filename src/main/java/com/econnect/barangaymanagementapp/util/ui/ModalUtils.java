@@ -1,5 +1,7 @@
 package com.econnect.barangaymanagementapp.util.ui;
 
+import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
+import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.modal.ModalType;
@@ -108,8 +110,39 @@ public class ModalUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    public <T> void customizeModalWithCallback(CustomizeModal customizeModal, Class<T> controllerClass, Consumer<T> controllerInitializer) {
+        if (customizeStage != null) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(customizeModal.getFxmlPath());
+            Parent root = loader.load();
+            T controller = loader.getController();
+            controllerInitializer.accept(controller);
+            root.setOpacity(0);
+            customizeStage = new Stage();
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            customizeStage.initOwner(parentStage);
+            customizeStage.setX(-1000);
+            customizeStage.setY(-1000);
+            customizeStage.setScene(scene);
+
+            customizeStage.initStyle(StageStyle.TRANSPARENT);
+            customizeStage.initModality(Modality.WINDOW_MODAL);
+
+            setupFadeTransition(root);
+            centerModal(customizeStage);
+
+            customizeStage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void showImageView(Image image, Stage parent) {
         Stage resumeStage = new Stage();

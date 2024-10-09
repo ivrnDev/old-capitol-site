@@ -1,10 +1,11 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
+import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
-import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
+import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -100,8 +101,11 @@ public class ApplicationRowController {
 
     private void setupButtonContainer() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModal(CustomizeModal.VIEW_EMPLOYEE);
-
+            modalUtils.customizeModalWithCallback(
+                    CustomizeModal.VIEW_APPLICATION_EMPLOYEE,
+                    ViewEmployeeApplicationController.class,
+                    controller -> controller.setId(residentIdLabel.getText())
+            );
         });
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
             System.out.println("Clicked accept");
