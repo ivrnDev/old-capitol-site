@@ -1,10 +1,8 @@
 package com.econnect.barangaymanagementapp.util.ui;
 
-import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
-import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
-import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.modal.ModalType;
+import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.resource.SoundUtils;
