@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
-import com.econnect.barangaymanagementapp.enumeration.type.EmploymentType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -10,8 +9,6 @@ import okhttp3.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 

@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.controller.humanresources;
 
 import com.econnect.barangaymanagementapp.controller.humanresources.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
