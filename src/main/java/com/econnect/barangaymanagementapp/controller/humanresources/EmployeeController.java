@@ -24,8 +24,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.EMPLOYEE_TABLE;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.PENDING;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.TERMINATED;
 import static com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal.ADD_EMPLOYEE;
 
 public class EmployeeController {
@@ -40,6 +38,7 @@ public class EmployeeController {
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private EmployeeTableController employeeTableController;
+    private final DependencyInjector dependencyInjector;
 
     private List<Employee> allEmployees;
     private Task<List<Employee>> searchTask;
@@ -47,6 +46,7 @@ public class EmployeeController {
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public EmployeeController(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
         this.employeeService = dependencyInjector.getEmployeeService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
@@ -64,7 +64,7 @@ public class EmployeeController {
 
     private void loadEmployeeTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_TABLE.getFxmlPath());
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
             employeeTableController = loader.getController();
             content.getChildren().add(employeeTable);
@@ -82,6 +82,7 @@ public class EmployeeController {
             Platform.runLater(() -> {
                 content.getChildren().remove(loadingIndicator);
                 if (allEmployees.isEmpty()) {
+                    employeeTableController.clearTable();
                     employeeTableController.showNoData();
                 } else {
                     updateEmployeeTable(allEmployees);

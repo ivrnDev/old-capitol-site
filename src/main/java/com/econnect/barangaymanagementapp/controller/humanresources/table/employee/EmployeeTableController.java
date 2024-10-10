@@ -1,9 +1,10 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.employee;
 
+import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.controller.humanresources.EmployeeController;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
-import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.concurrent.Task;
@@ -27,10 +28,12 @@ public class EmployeeTableController {
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
+    private final EmployeeController employeeController;
 
     private final Map<String, Image> imageCache = new HashMap<>();
 
-    public EmployeeTableController(DependencyInjector dependencyInjector) {
+    public EmployeeTableController(DependencyInjector dependencyInjector, EmployeeController employeeController) {
+        this.employeeController = employeeController;
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;
     }
@@ -38,7 +41,7 @@ public class EmployeeTableController {
     public void addEmployeeRow(String employeeId, String lastName, String firstName, RoleType role, DepartmentType department, StatusType.EmployeeStatus status, String imageUrl) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_ROW.getFxmlPath());
-            loader.setController(new EmployeeRowController(dependencyInjector));
+            loader.setController(new EmployeeRowController(dependencyInjector, employeeController));
             HBox employeeRow = loader.load();
             EmployeeRowController employeeRowController = loader.getController();
             employeeRowController.setEmployeeData(employeeId, lastName, firstName, role.getName(), department.getName(), status.getName(), getImageOrDefault(employeeId));
