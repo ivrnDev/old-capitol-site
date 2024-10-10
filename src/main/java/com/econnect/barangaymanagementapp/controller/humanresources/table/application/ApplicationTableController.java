@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.EMPLOYEE_APPLICATION_ROW;
-import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.TABLE_NO_DATA;
+import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.*;
 
 public class ApplicationTableController {
     @FXML
@@ -53,7 +52,7 @@ public class ApplicationTableController {
     }
 
     private Image getImageOrDefault(String employeeId) {
-        return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png"))));
+        return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
     }
 
     private void loadEmployeeImage(String employeeId, String imageUrl, ApplicationRowController employeeRowController) {
@@ -64,7 +63,7 @@ public class ApplicationTableController {
                 @Override
                 protected Image call() {
                     if (imageUrl.isEmpty()) {
-                        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png")));
+                        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
                     } else {
                         return new Image(imageUrl);
                     }
@@ -81,7 +80,7 @@ public class ApplicationTableController {
                 protected void failed() {
                     Throwable exception = getException();
                     System.err.println("Error loading image: " + exception.getMessage());
-                    Image defaultImage = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("Images/default-profile.png")));
+                    Image defaultImage = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
                     imageCache.put(employeeId, defaultImage);
                     employeeRowController.setProfileImage(defaultImage);
                 }

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.EMPLOYEE_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.TERMINATED;
 import static com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal.ADD_EMPLOYEE;
 
 public class EmployeeController {
@@ -77,7 +78,7 @@ public class EmployeeController {
         Platform.runLater(() -> content.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
-            allEmployees = employeeService.findAllEmployeesStatusExcept(PENDING);
+            allEmployees = employeeService.findAllActiveEmployees();
             Platform.runLater(() -> {
                 content.getChildren().remove(loadingIndicator);
                 if (allEmployees.isEmpty()) {

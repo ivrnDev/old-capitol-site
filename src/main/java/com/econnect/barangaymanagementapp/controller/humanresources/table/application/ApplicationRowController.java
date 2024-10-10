@@ -115,7 +115,7 @@ public class ApplicationRowController {
         });
 
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            Response response = handleClickButton(StatusType.EmployeeStatus.ACTIVE);
+            Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
             if (response.isSuccessful()) {
                 modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
             } else {
@@ -126,7 +126,7 @@ public class ApplicationRowController {
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
             if (response.isSuccessful()) {
-                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been accepted for evaluation");
+                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
             } else {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
             }
