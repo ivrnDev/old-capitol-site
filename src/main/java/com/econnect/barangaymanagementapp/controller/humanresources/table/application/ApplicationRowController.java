@@ -118,25 +118,30 @@ public class ApplicationRowController {
         });
 
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
-            if (response.isSuccessful()) {
-                reloadTable();
-                modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
-            } else {
+            try {
+                Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
+                if (response.isSuccessful()) {
+                    reloadTable();
+                    modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
+                }
+            } catch (Exception e) {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
+                throw new RuntimeException(e);
             }
         });
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
-            if (response.isSuccessful()) {
-                reloadTable();
-                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
-            } else {
+            try {
+                Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
+                if (response.isSuccessful()) {
+                    reloadTable();
+                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
+                }
+            } catch (Exception e) {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
+                throw new RuntimeException(e);
             }
         });
-
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
     }
 

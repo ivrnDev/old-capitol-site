@@ -113,12 +113,15 @@ public class EmployeeRowController {
         });
 
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
-            Response response = employeeService.updateEmployeeByStatus(employeeIdLabel.getText(), StatusType.EmployeeStatus.TERMINATED);
-            if (response.isSuccessful()) {
-                reloadTable();
-                modalUtils.showModal(Modal.SUCCESS, "Terminated", "Employee " + employeeIdLabel.getText() + " has been terminated");
-            } else {
+            try {
+                Response response = employeeService.updateEmployeeByStatus(employeeIdLabel.getText(), StatusType.EmployeeStatus.TERMINATED);
+                if (response.isSuccessful()) {
+                    reloadTable();
+                    modalUtils.showModal(Modal.SUCCESS, "Terminated", "Employee " + employeeIdLabel.getText() + " has been terminated");
+                }
+            } catch (Exception e) {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to terminate employee");
+                throw new RuntimeException(e);
             }
         });
         buttonContainer.getChildren().addAll(updateBtn, viewBtn, deleteBtn);
