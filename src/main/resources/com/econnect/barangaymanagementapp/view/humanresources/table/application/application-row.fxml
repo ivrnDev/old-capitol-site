@@ -10,6 +10,7 @@
 
 <HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row"
       stylesheets="@../../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
+      fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.table.application.ApplicationRowController"
       xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox alignment="CENTER" minWidth="90.0">
