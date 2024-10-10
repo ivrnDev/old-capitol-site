@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
 import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -28,18 +29,20 @@ public class ApplicationTableController {
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
+    private final ApplicationsController applicationsController;
 
     private final Map<String, Image> imageCache = new HashMap<>();
 
-    public ApplicationTableController(DependencyInjector dependencyInjector) {
+    public ApplicationTableController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;
+        this.applicationsController = applicationsController;
     }
 
     public void addEmployeeRow(String employeeId, String lastName, String firstName, EmployeeStatus status, ApplicationType type, ZonedDateTime zonedDate, String imageUrl) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_APPLICATION_ROW.getFxmlPath());
-            loader.setController(new ApplicationRowController(dependencyInjector));
+            loader.setController(new ApplicationRowController(dependencyInjector, applicationsController));
             HBox applicationRow = loader.load();
             ApplicationRowController applicationRowController = loader.getController();
             applicationRowController.setEmployeeData(employeeId, lastName, firstName, status.getName(), type.getName(), DateFormatter.extractDateAndFormat(zonedDate), DateFormatter.extractTimeAndFormat(zonedDate), getImageOrDefault(employeeId));

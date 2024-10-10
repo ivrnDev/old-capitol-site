@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
+import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
@@ -23,6 +24,7 @@ public class ApplicationRowController {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
+    private final ApplicationsController applicationsController;
 
     @FXML
     private HBox tableRow;
@@ -54,10 +56,11 @@ public class ApplicationRowController {
     @FXML
     private HBox buttonContainer;
 
-    public ApplicationRowController(DependencyInjector dependencyInjector) {
+    public ApplicationRowController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
+        this.applicationsController = applicationsController;
     }
 
     public void initialize() {
@@ -117,6 +120,7 @@ public class ApplicationRowController {
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
             Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
             if (response.isSuccessful()) {
+                reloadTable();
                 modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
             } else {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
@@ -126,6 +130,7 @@ public class ApplicationRowController {
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
             if (response.isSuccessful()) {
+                reloadTable();
                 modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
             } else {
                 modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
@@ -142,5 +147,9 @@ public class ApplicationRowController {
             System.err.println("Error updating employee status: " + e.getMessage());
             return null;
         }
+    }
+
+    private void reloadTable() {
+        applicationsController.populateEmployeeRows();
     }
 }

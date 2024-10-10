@@ -38,6 +38,7 @@ public class ApplicationsController {
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private ApplicationTableController applicationTableController;
+    private final DependencyInjector dependencyInjector;
 
     private List<Employee> allPendingEmployees;
     private Task<List<Employee>> searchTask;
@@ -45,6 +46,7 @@ public class ApplicationsController {
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public ApplicationsController(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
         this.employeeService = dependencyInjector.getEmployeeService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
@@ -62,7 +64,7 @@ public class ApplicationsController {
 
     private void loadApplicationTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_APPLICATION_TABLE.getFxmlPath());
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_APPLICATION_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
             applicationTableController = loader.getController();
             content.getChildren().add(employeeTable);
@@ -81,6 +83,7 @@ public class ApplicationsController {
             Platform.runLater(() -> {
                 content.getChildren().remove(loadingIndicator);
                 if (allPendingEmployees.isEmpty()) {
+                    applicationTableController.clearTable();
                     applicationTableController.showNoData();
                 } else {
                     updateEmployeeTable(allPendingEmployees);
