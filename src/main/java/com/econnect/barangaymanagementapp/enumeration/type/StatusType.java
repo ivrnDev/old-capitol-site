@@ -11,6 +11,7 @@ public class StatusType {
         RETIRED("Retired"),
         REJECTED("Rejected"),
         WITHDRAWN("Withdrawn"),
+        TERMINATED("Terminated"),
         ;
 
         private String status;
