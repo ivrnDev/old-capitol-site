@@ -6,6 +6,7 @@ import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
+import com.econnect.barangaymanagementapp.enumeration.type.FileType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -39,6 +40,7 @@ import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
+import static com.econnect.barangaymanagementapp.enumeration.type.FileType.*;
 
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
@@ -87,6 +89,9 @@ public class AddEmployeeController {
     private ImageView profilePreview;
 
     @FXML
+    private HBox uploadResume;
+
+    @FXML
     private HBox viewResumeBtn;
 
     @FXML
@@ -96,12 +101,28 @@ public class AddEmployeeController {
     private Label resumeLabel;
 
     @FXML
+    private HBox uploadClearance;
+
+    @FXML
+    private Label clearanceLabel;
+
+    @FXML
+    private HBox viewClearanceBtn;
+
+    @FXML
+    private ImageView clearancePreview;
+
+    @FXML
+    private DatePicker nbiExpirationInput;
+
+    @FXML
     private Button cancelBtn;
 
     @FXML
     private Button confirmBtn;
 
-    private File file;
+    private File resumeFile;
+    private File clearanceFile;
     private Boolean residentExists = false;
     private String profileLink;
 
@@ -184,7 +205,7 @@ public class AddEmployeeController {
     }
 
     private void addEmployee() {
-        if (!validateEmployeeFields()) {
+        if (!validateFields()) {
             return;
         }
 
@@ -233,13 +254,17 @@ public class AddEmployeeController {
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)
                 .employment(volunteerComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
+                .nbiClearanceExpiration(String.valueOf(nbiExpirationInput.getValue()))
                 .build();
     }
 
     private Void processEmployeeCreation(Employee employee) {
-        String resumeUrl = imageService.uploadImage(Firestore.RESUME, file, employee.getId());
+        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeFile, employee.getId());
+        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceFile, employee.getId());
         employee.setResumeUrl(resumeUrl);
         employee.setProfileUrl(profileLink);
+        employee.setNbiClearanceUrl(nbiClearanceUrl);
+
 
         try (Response response = employeeService.createEmployee(employee)) {
             if (response.isSuccessful()) {
@@ -253,14 +278,24 @@ public class AddEmployeeController {
         return null;
     }
 
-    private boolean validateEmployeeFields() {
+    private boolean validateFields() {
         if (!residentExists) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Resident does not exist");
             return false;
         }
 
-        if (file == null) {
+        if (resumeFile == null) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Please upload a resume");
+            return false;
+        }
+
+        if (clearanceFile == null) {
+            modalUtils.showModal(Modal.ERROR, "Failed", "Please upload an NBI Clearance");
+            return false;
+        }
+
+        if (nbiExpirationInput.getValue() == null) {
+            modalUtils.showModal(Modal.ERROR, "Failed", "Please set NBI Clearance expiration date");
             return false;
         }
 
@@ -273,19 +308,29 @@ public class AddEmployeeController {
         return true;
     }
 
-    @FXML
-    private void uploadImage() {
+    private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
         FileChooser fileChooser = createFileChooser();
-        file = fileChooser.showOpenDialog(currentStage);
 
-        try {
-            if (file != null) {
-                resumePreview.setImage(new Image(new FileInputStream(file)));
-                resumeLabel.setText(file.getName());
-                viewResumeBtn.setVisible(true);
+        File file = fileChooser.showOpenDialog(currentStage);
+
+        if (file != null) {
+            try {
+                if (fileType.equals(RESUME)) {
+                    resumeFile = file;
+                } else if (fileType.equals(NBI_CLEARANCE)) {
+                    clearanceFile = file;
+                }
+
+                preview.setImage(new Image(new FileInputStream(file)));
+                label.setText(file.getName());
+                viewBtn.setVisible(true);
+
+            } catch (FileNotFoundException e) {
+                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "File not found: " + file.getName()));
+                e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        } else {
+            Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "No File Selected", "Please select a valid file."));
         }
     }
 
@@ -339,9 +384,18 @@ public class AddEmployeeController {
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> addEmployee());
-        viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
-        profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
         volunteerComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
+
+        profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
+        viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
+        viewClearanceBtn.setOnMouseClicked(_ -> showImageView(clearancePreview.getImage()));
+
+        uploadResume.setOnMouseClicked(_ -> uploadImage(viewResumeBtn, resumePreview, resumeLabel, RESUME));
+        uploadClearance.setOnMouseClicked(_ -> uploadImage(viewClearanceBtn, clearancePreview, clearanceLabel, NBI_CLEARANCE));
+    }
+
+    public void closeWindow() {
+        modalUtils.closeCustomizeModal();
     }
 
     @FXML
@@ -351,7 +405,5 @@ public class AddEmployeeController {
         });
     }
 
-    public void closeWindow() {
-        modalUtils.closeCustomizeModal();
-    }
+
 }

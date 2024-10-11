@@ -17,60 +17,6 @@ import java.time.ZonedDateTime;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -93,6 +39,8 @@ public class Employee extends BaseEntity {
     private String access;
     private String profileUrl;
     private String resumeUrl;
+    private String nbiClearanceUrl;
+    private String nbiClearanceExpiration;
     private ApplicationType applicationType;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

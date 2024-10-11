@@ -5,6 +5,7 @@ public enum Firestore {
     VALID_ID("/ValidIDs", "ValidIDs"),
     ANNOUNCEMENT("/announcement_images", "announcement_images"),
     RESUME("/3-Resume", "Resume"),
+    NBI_CLEARANCE("/3-NBIClearance", "NBIClearance"),
     SAMPLE("/sample", "sample");
     public final String path;
     public final String name;
