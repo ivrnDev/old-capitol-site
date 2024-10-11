@@ -118,29 +118,35 @@ public class ApplicationRowController {
         });
 
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            try {
-                Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
-                if (response.isSuccessful()) {
-                    reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted for evaluation");
-                }
-            } catch (Exception e) {
-                modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
-                throw new RuntimeException(e);
-            }
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "Are you sure you want to evaluate this employee application?", isConfirmed -> {
+                if (isConfirmed)
+                    try {
+                        Response response = handleClickButton(StatusType.EmployeeStatus.EVALUATION);
+                        if (response.isSuccessful()) {
+                            reloadTable();
+                            modalUtils.showModal(Modal.SUCCESS, "Accepted", "Employee application has been accepted");
+                        }
+                    } catch (Exception e) {
+                        modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
+                        throw new RuntimeException(e);
+                    }
+            });
         });
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            try {
-                Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
-                if (response.isSuccessful()) {
-                    reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
-                }
-            } catch (Exception e) {
-                modalUtils.showModal(Modal.ERROR, "Error", "Failed to accept employee application");
-                throw new RuntimeException(e);
-            }
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee application?", isConfirmed -> {
+                if (isConfirmed)
+                    try {
+                        Response response = handleClickButton(StatusType.EmployeeStatus.REJECTED);
+                        if (response.isSuccessful()) {
+                            reloadTable();
+                            modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected");
+                        }
+                    } catch (Exception e) {
+                        modalUtils.showModal(Modal.ERROR, "Error", "Failed to reject employee application");
+                        throw new RuntimeException(e);
+                    }
+            });
         });
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
     }
