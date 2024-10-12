@@ -4,8 +4,6 @@ import com.econnect.barangaymanagementapp.controller.humanresources.Applications
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -134,13 +132,13 @@ public class ApplicationRowController {
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee application?", isConfirmed -> {
-                if (isConfirmed) handleClickButton(StatusType.EmployeeStatus.REJECTED);
+                if (isConfirmed) handleClickButton();
             });
         });
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
     }
 
-    private void handleClickButton(StatusType.EmployeeStatus status) {
+    private void handleClickButton() {
 
         Task<Response> task = new Task<>() {
             @Override

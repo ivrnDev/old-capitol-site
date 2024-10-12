@@ -2,20 +2,26 @@ package com.econnect.barangaymanagementapp.controller.humanresources.modal;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import okhttp3.Response;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SetupAccountController implements BaseViewController {
@@ -24,6 +30,9 @@ public class SetupAccountController implements BaseViewController {
     private ApplicationsController applicationsController;
     private DepartmentType selectedDepartment;
     private String employeeId;
+
+    @FXML
+    private AnchorPane rootContainer;
 
     @FXML
     private Button confirmBtn, cancelBtn;
@@ -60,27 +69,36 @@ public class SetupAccountController implements BaseViewController {
     }
 
     private void updateAccount() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootContainer.getWidth(), rootContainer.getHeight());
+        Platform.runLater(() -> rootContainer.getChildren().add(loadingIndicator));
 
-        Task<Response> task = new Task<>() {
-            @Override
-            protected Response call() {
-                return employeeService.activateEmployee(employeeId, selectedDepartment, RoleType.fromName(roleComboBox.getValue()));
-            }
-
-            @Override
-            protected void succeeded() {
-                Response response = getValue();
-                if (response.isSuccessful()) {
-                    applicationsController.populateEmployeeRows();
-                    closeWindow();
-                    modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
-                } else {
-                    closeWindow();
-                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
-                }
+        Runnable call = () -> {
+            try {
+                Response response = employeeService.activateEmployee(employeeId, selectedDepartment, RoleType.fromName(roleComboBox.getValue()));
+                Platform.runLater(() -> {
+                    rootContainer.getChildren().remove(loadingIndicator);
+                    if (response.isSuccessful()) {
+                        applicationsController.populateEmployeeRows();
+                        closeWindow();
+                        modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
+                    } else {
+                        closeWindow();
+                        modalUtils.showModal(Modal.ERROR, "Failed", "An error occurred while activating employee application.");
+                    }
+                });
+            } catch (Exception e) {
+                modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred while activating employee application.");
+                e.printStackTrace();
+                Platform.runLater(() -> rootContainer.getChildren().remove(loadingIndicator));
             }
         };
-        new Thread(task).start();
+
+        Runnable onFailed = () -> {
+            Platform.runLater(() -> rootContainer.getChildren().remove(loadingIndicator));
+            System.err.println("Faled to activate employee");
+        };
+
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
     private void populateDepartmentComboBox() {
