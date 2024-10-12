@@ -1,15 +1,14 @@
 package com.econnect.barangaymanagementapp.controller;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
-import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.service.LoginService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.SceneManager;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
-import com.econnect.barangaymanagementapp.util.SceneManager;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -87,7 +86,7 @@ public class LoginController {
 
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(loginContainer.getWidth(), loginContainer.getHeight());
         Platform.runLater(() -> loginContainer.getChildren().add(loadingIndicator));
-        
+
         Runnable call = () -> {
             Optional<Employee> loggedEmployee = loginService.login(usernameInput.getText(), passwordInput.getText());
 

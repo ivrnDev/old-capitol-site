@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.controller.humanresources.table.emplo
 
 import com.econnect.barangaymanagementapp.controller.humanresources.EmployeeController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;

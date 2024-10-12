@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.repository;
 
 import com.econnect.barangaymanagementapp.config.Config;
-import com.econnect.barangaymanagementapp.database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.database.Firebase;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
@@ -9,7 +8,6 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
