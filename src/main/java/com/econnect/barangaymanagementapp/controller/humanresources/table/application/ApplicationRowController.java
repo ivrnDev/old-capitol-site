@@ -9,6 +9,7 @@ import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.concurrent.Task;
@@ -21,47 +22,23 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ApplicationRowController {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
     private final ApplicationsController applicationsController;
     private final DependencyInjector dependencyInjector;
+    private final UserSession userSession;
 
     @FXML
-    private HBox tableRow;
+    private HBox tableRow, buttonContainer;
+
+
+    @FXML
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
 
     @FXML
     private ImageView profilePicture;
-
-    @FXML
-    private Label residentIdLabel;
-
-    @FXML
-    private Label lastNameLabel;
-
-    @FXML
-    private Label firstNameLabel;
-
-    @FXML
-    private Label statusLabel;
-
-    @FXML
-    private Label typeLabel;
-
-    @FXML
-    private Label dateLabel;
-
-    @FXML
-    private Label timeLabel;
-
-    @FXML
-    private HBox buttonContainer;
-
-    private Map<String, String> modalMessage = new HashMap<>();
 
     public ApplicationRowController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
         this.dependencyInjector = dependencyInjector;
@@ -69,17 +46,13 @@ public class ApplicationRowController {
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.applicationsController = applicationsController;
+        this.userSession = UserSession.getInstance();
     }
 
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
         setupButtonContainer();
-    }
-
-    private void setupProfileImageClick() {
-        ImageUtils.setCircleClip(profilePicture);
-        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), parentStage));
     }
 
     public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
@@ -97,23 +70,27 @@ public class ApplicationRowController {
         profilePicture.setImage(profileImage);
     }
 
+    private void setupProfileImageClick() {
+        ImageUtils.setCircleClip(profilePicture);
+        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), parentStage));
+    }
+
     private void setupRowClickEvents() {
-        tableRow.setOnMouseClicked(_ -> toggleRowSelection());
-        tableRow.setOnMouseExited(_ -> resetRowStyleIfNotSelected());
-    }
+        // Add Selection Style
+        tableRow.setOnMouseClicked(_ -> {
+            if (tableRow.getStyleClass().contains("selected")) {
+                tableRow.getStyleClass().remove("selected");
+            } else {
+                tableRow.getStyleClass().add("selected");
+            }
+        });
 
-    private void toggleRowSelection() {
-        if (tableRow.getStyleClass().contains("selected")) {
-            tableRow.getStyleClass().remove("selected");
-        } else {
-            tableRow.getStyleClass().add("selected");
-        }
-    }
-
-    private void resetRowStyleIfNotSelected() {
-        if (!tableRow.getStyleClass().contains("selected")) {
-            tableRow.setStyle("");
-        }
+        // Remove selection style
+        tableRow.setOnMouseExited(_ -> {
+            if (!tableRow.getStyleClass().contains("selected")) {
+                tableRow.setStyle("");
+            }
+        });
     }
 
     private void setupButtonContainer() {
@@ -132,14 +109,13 @@ public class ApplicationRowController {
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee application?", isConfirmed -> {
-                if (isConfirmed) handleClickButton();
+                if (isConfirmed) rejectEmployeeApplication();
             });
         });
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
     }
 
-    private void handleClickButton() {
-
+    private void rejectEmployeeApplication() {
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {

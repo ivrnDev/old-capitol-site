@@ -3,8 +3,8 @@ package com.econnect.barangaymanagementapp.enumeration.type;
 public enum RoleType {
     NONE("None"),
     //Human Resource Department
-    HR_MANAGER("HR Manager"), //Managing the HR Department
-    HR_RECRUITER("HR Recruiter"), //Interviewing
+//    HR_MANAGER("HR Manager"), //Managing the HR Department
+//    HR_RECRUITER("HR Recruiter"), //Interviewing
     HR_FRONT_DESK("HR Front Desk"), //Receptionist
 
     //Barangay Office Department

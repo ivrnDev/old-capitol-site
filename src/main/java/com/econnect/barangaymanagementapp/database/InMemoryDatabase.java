@@ -21,7 +21,7 @@ public class InMemoryDatabase {
                 .email("john.doe@example.com")
                 .contactNumber("123-456-7890")
                 .address("123 Street, City")
-                .role(RoleType.HR_MANAGER)
+                .role(RoleType.ADMINISTRATIVE_CLERK)
                 .department(DepartmentType.HUMAN_RESOURCES)
                 .status(StatusType.EmployeeStatus.ACTIVE)
                 .username(" ")
