@@ -77,7 +77,7 @@ public class ApplicationsController {
         Platform.runLater(() -> content.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
-            allPendingEmployees = employeeService.findAllApplicants();
+            allPendingEmployees = employeeService.findAllOnlineApplicants();
 
             Platform.runLater(() -> {
                 content.getChildren().remove(loadingIndicator);

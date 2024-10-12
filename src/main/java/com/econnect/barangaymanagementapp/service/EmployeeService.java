@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
@@ -65,8 +66,9 @@ public class EmployeeService {
         return findAllActiveEmployees().size();
     }
 
-    public List<Employee> findAllApplicants() {
-        return employeeRepository.findEmployeeByFilter(employee -> APPLICANTS_STATUSES.contains(employee.getStatus()));
+    public List<Employee> findAllOnlineApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee ->
+                APPLICANTS_STATUSES.contains(employee.getStatus()) && employee.getApplicationType().equals(ApplicationType.ONLINE));
     }
 
     public Response activateEmployee(String employeeId, DepartmentType departmentType, RoleType role) {
