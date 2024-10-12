@@ -2,7 +2,8 @@ package com.econnect.barangaymanagementapp.enumeration.ui;
 
 public enum CustomizeModal {
     ADD_EMPLOYEE("view/humanresources/modal/add-employee.fxml"),
-    VIEW_APPLICATION_EMPLOYEE("view/humanresources/modal/view-application-employee.fxml");
+    VIEW_APPLICATION_EMPLOYEE("view/humanresources/modal/view-application-employee.fxml"),
+    SETUP_ACCOUNT("view/humanresources/modal/setup-account.fxml");
 
     private final String fxmlPath;
 

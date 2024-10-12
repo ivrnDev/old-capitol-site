@@ -33,4 +33,13 @@ public enum RoleType {
     public String getName() {
         return name;
     }
+
+    public static RoleType fromName(String name) {
+        for (RoleType role : RoleType.values()) {
+            if (role.getName().equalsIgnoreCase(name)) {
+                return role;
+            }
+        }
+        return RoleType.NONE;
+    }
 }

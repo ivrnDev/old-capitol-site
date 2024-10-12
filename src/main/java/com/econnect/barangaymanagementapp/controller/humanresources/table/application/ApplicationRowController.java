@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
 import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.humanresources.modal.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
@@ -30,6 +31,7 @@ public class ApplicationRowController {
     private final Stage parentStage;
     private final EmployeeService employeeService;
     private final ApplicationsController applicationsController;
+    private final DependencyInjector dependencyInjector;
 
     @FXML
     private HBox tableRow;
@@ -64,6 +66,7 @@ public class ApplicationRowController {
     private Map<String, String> modalMessage = new HashMap<>();
 
     public ApplicationRowController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+        this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
@@ -125,9 +128,8 @@ public class ApplicationRowController {
         });
 
         Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "Are you sure you want to evaluate this employee application?", isConfirmed -> {
-                if (isConfirmed) handleClickButton(StatusType.EmployeeStatus.ACTIVE);
-            });
+            modalUtils.customizeModalWithCallback(CustomizeModal.SETUP_ACCOUNT, SetupAccountController.class,
+                    controller -> controller.setId(residentIdLabel.getText()), dependencyInjector, applicationsController);
         });
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
@@ -143,9 +145,6 @@ public class ApplicationRowController {
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
-                if (status.equals(StatusType.EmployeeStatus.ACTIVE)) {
-                    return employeeService.activateEmployee(residentIdLabel.getText(), DepartmentType.HUMAN_RESOURCES);
-                }
                 return employeeService.rejectEmployee(residentIdLabel.getText());
             }
 
@@ -154,7 +153,7 @@ public class ApplicationRowController {
                 Response response = getValue();
                 if (response.isSuccessful()) {
                     reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Success", "Employee application has been evaluated.");
+                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
                 }

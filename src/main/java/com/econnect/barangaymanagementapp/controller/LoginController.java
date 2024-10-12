@@ -58,32 +58,6 @@ public class LoginController {
 
     @FXML
     private void handleLoginButton() {
-//        Task<Optional<Employee>> loginTask = new Task<Optional<Employee>>() {
-//            @Override
-//            protected Optional<Employee> call() {
-//                return loginService.login(usernameInput.getText(), passwordInput.getText());
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                Optional<Employee> loggedEmployee = loginService.login(usernameInput.getText(), passwordInput.getText());
-//                if (loggedEmployee != null && loggedEmployee.isPresent()) {
-//                    DepartmentType loggedEmployeeDepartment = loggedEmployee.get().getDepartment();
-//                    sceneManager.switchScene(loggedEmployeeDepartment.getLink());
-//                } else {
-//                    triggerError(true);
-//                }
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while logging in.");
-//            }
-//
-//        };
-//
-//        new Thread(loginTask).start();
-
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(loginContainer.getWidth(), loginContainer.getHeight());
         Platform.runLater(() -> loginContainer.getChildren().add(loadingIndicator));
 

@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
+import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -68,8 +69,8 @@ public class EmployeeService {
         return employeeRepository.findEmployeeByFilter(employee -> APPLICANTS_STATUSES.contains(employee.getStatus()));
     }
 
-    public Response activateEmployee(String employeeId, DepartmentType departmentType) {
-        return updateEmployeeByStatusAndDepartment(employeeId, ACTIVE, departmentType);
+    public Response activateEmployee(String employeeId, DepartmentType departmentType, RoleType role) {
+        return updateEmployeeByStatusDepartmentRole(employeeId, ACTIVE, departmentType, role);
     }
 
     public Response deactivateEmployee(String employeeId) {
@@ -88,13 +89,14 @@ public class EmployeeService {
         return updateEmployeeByStatus(employeeId, EVALUATION);
     }
 
-    private Response updateEmployeeByStatusAndDepartment(String employeeId, StatusType.EmployeeStatus status, DepartmentType department) {
+    private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
         Optional<Employee> employee = employeeRepository.findEmployeeById(employeeId);
 
         if (employee.isPresent()) {
             Employee updatedEmployee = generateEmployeeUsernameAndPassword(employee.get());
             updatedEmployee.setStatus(status);
             updatedEmployee.setDepartment(department);
+            updatedEmployee.setRole(role);
             return employeeRepository.updateEmployee(updatedEmployee);
         }
         return employeeRepository.updateEmployeeByStatus(employeeId, status);

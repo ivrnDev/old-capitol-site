@@ -18,7 +18,6 @@ public enum DepartmentType {
             List.of(DASHBOARD, ANALYTICS, RESIDENTS, HISTORY),
             List.of(ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK));
 
-
     private final String name;
     private final String link;
     private final List<NavigationType> navigationItemsList;

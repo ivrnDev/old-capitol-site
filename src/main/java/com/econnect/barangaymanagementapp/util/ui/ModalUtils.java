@@ -110,13 +110,13 @@ public class ModalUtils {
         }
     }
 
-    public <T> void customizeModalWithCallback(CustomizeModal customizeModal, Class<T> controllerClass, Consumer<T> controllerInitializer) {
+    public <T> void customizeModalWithCallback(CustomizeModal customizeModal, Class<T> controllerClass, Consumer<T> controllerInitializer, Object... args) {
         if (customizeStage != null) {
             return;
         }
 
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(customizeModal.getFxmlPath());
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(customizeModal.getFxmlPath(), args);
             Parent root = loader.load();
             T controller = loader.getController();
             controllerInitializer.accept(controller);
