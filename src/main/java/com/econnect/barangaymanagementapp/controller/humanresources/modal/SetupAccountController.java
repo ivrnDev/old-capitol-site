@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.controller.humanresources.modal;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
-import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
@@ -12,7 +11,6 @@ import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -21,7 +19,6 @@ import javafx.scene.layout.StackPane;
 import okhttp3.Response;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SetupAccountController implements BaseViewController {
