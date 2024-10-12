@@ -119,7 +119,7 @@ public class DependencyInjector {
         return httpClient;
     }
 
-    public PasswordUtils getPasswordEncryption() {
+    public PasswordUtils getPasswordUtils() {
         return passwordUtils;
     }
 

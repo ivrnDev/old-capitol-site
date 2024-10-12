@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.util.data;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class PasswordUtils {
     public String encryptPassword(String password) {
@@ -27,6 +28,4 @@ public class PasswordUtils {
         String hashedInput = encryptPassword(password);
         return hashedInput.equals(encryptedPassword);
     }
-
-
 }

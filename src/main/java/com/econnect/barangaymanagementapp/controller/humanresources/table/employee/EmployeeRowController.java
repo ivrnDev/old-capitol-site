@@ -114,7 +114,7 @@ public class EmployeeRowController {
 
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
             try {
-                Response response = employeeService.updateEmployeeByStatus(employeeIdLabel.getText(), StatusType.EmployeeStatus.TERMINATED);
+                Response response = employeeService.terminateEmployee(employeeIdLabel.getText());
                 if (response.isSuccessful()) {
                     reloadTable();
                     modalUtils.showModal(Modal.SUCCESS, "Terminated", "Employee " + employeeIdLabel.getText() + " has been terminated");
