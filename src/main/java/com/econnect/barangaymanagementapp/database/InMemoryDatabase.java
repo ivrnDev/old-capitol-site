@@ -22,7 +22,7 @@ public class InMemoryDatabase {
                 .contactNumber("123-456-7890")
                 .address("123 Street, City")
                 .role(RoleType.ADMINISTRATIVE_CLERK)
-                .department(DepartmentType.HUMAN_RESOURCES)
+                .department(DepartmentType.BARANGAY_OFFICE)
                 .status(StatusType.EmployeeStatus.ACTIVE)
                 .username(" ")
                 .access(" ")

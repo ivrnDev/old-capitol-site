@@ -12,6 +12,7 @@ import com.econnect.barangaymanagementapp.util.resource.SoundUtils;
 import com.econnect.barangaymanagementapp.util.state.NavigationState;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
+import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.stage.Stage;
 
@@ -28,6 +29,8 @@ public class DependencyInjector {
     private final HTTPClient httpClient;
     private final PasswordUtils passwordUtils;
     private final ImageService imageService;
+    private final FileChooserUtils fileChooserUtils;
+    ;
 
 
     private final EmployeeRepository employeeRepository;
@@ -50,6 +53,7 @@ public class DependencyInjector {
         this.httpClient = new HTTPClient();
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
+        this.fileChooserUtils = new FileChooserUtils();
 
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
@@ -125,5 +129,9 @@ public class DependencyInjector {
 
     public ImageService getImageService() {
         return imageService;
+    }
+
+    public FileChooserUtils getFileChooser() {
+        return fileChooserUtils;
     }
 }

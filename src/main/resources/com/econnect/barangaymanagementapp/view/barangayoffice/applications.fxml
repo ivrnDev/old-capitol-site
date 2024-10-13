@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane focusTraversable="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController">
+    <top>
+        <fx:include fx:id="header" source="../component/header.fxml" />
+    </top>
+    <left>
+        <fx:include fx:id="sidebar" source="../component/sidebar.fxml" />
+    </left>
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" pannable="true" prefHeight="600.0" prefWidth="1080.0" styleClass="root-pane" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+            <content>
+                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                    <children>
+                        <AnchorPane prefWidth="938.0">
+                            <children>
+                                <Text fill="#58595a" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="APPLICATIONS">
+                                    <font>
+                                        <Font name="Arial Bold" size="25.0" />
+                                    </font>
+                                </Text>
+                                <HBox alignment="CENTER_LEFT" layoutX="844.0" layoutY="2.0" styleClass="search-box" stylesheets="@../../style/component/search.css" AnchorPane.rightAnchor="0.0">
+                                    <children>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../icon/search.png" />
+                                            </image>
+                                        </ImageView>
+                                        <TextField fx:id="searchField" promptText="Search" HBox.hgrow="ALWAYS">
+                                            <font>
+                                                <Font name="Arial" size="12.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                    <padding>
+                                        <Insets bottom="2.0" left="10.0" right="2.0" top="2.0" />
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

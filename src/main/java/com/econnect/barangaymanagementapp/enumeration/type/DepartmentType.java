@@ -15,7 +15,7 @@ public enum DepartmentType {
     BARANGAY_OFFICE(
             "Barangay Office",
             "view/barangayoffice/dashboard.fxml",
-            List.of(DASHBOARD, ANALYTICS, RESIDENTS, HISTORY),
+            List.of(DASHBOARD, ANALYTICS, APPLICATIONS, RESIDENTS, HISTORY),
             List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK));
 
     private final String name;

@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.modal;
+package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
@@ -40,7 +40,8 @@ import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.FileType.NBI_CLEARANCE;
+import static com.econnect.barangaymanagementapp.enumeration.type.FileType.RESUME;
 
 public class AddEmployeeController {
     private final ModalUtils modalUtils;
@@ -249,7 +250,7 @@ public class AddEmployeeController {
                 .contactNumber(phoneInput.getText())
                 .createdAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
                 .updatedAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
-                .status(EmployeeStatus.UNDER_REVIEW)
+                .status(EmployeeStatus.PENDING)
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)

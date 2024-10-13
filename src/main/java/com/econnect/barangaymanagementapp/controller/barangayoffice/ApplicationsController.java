@@ -1,6 +1,6 @@
-package com.econnect.barangaymanagementapp.controller.humanresources;
+package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.table.application.ApplicationTableController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -24,20 +24,20 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.HR_EMPLOYEE_APPLICATION_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.OFFICE_APPLICATION_TABLE;
 
 public class ApplicationsController {
     @FXML
-    private VBox content;
+    private TextField searchField;
 
     @FXML
-    private TextField searchField;
+    private VBox contentPane;
 
     private final EmployeeService employeeService;
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
-    private ApplicationTableController applicationTableController;
     private final DependencyInjector dependencyInjector;
+    private ApplicationTableController applicationTableController;
 
     private List<Employee> allPendingEmployees;
     private Task<List<Employee>> searchTask;
@@ -53,7 +53,7 @@ public class ApplicationsController {
 
     public void initialize() {
         loadApplicationTable();
-        populateEmployeeRows();
+        populateApplicationRows();
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
@@ -62,25 +62,27 @@ public class ApplicationsController {
     }
 
     private void loadApplicationTable() {
+
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_APPLICATION_TABLE.getFxmlPath(), dependencyInjector, this);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(OFFICE_APPLICATION_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
             applicationTableController = loader.getController();
-            content.getChildren().add(employeeTable);
+            contentPane.getChildren().add(employeeTable);
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
 
-    public void populateEmployeeRows() {
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(content.getWidth(), content.getHeight());
-        Platform.runLater(() -> content.getChildren().add(loadingIndicator));
+    public void populateApplicationRows() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
-            allPendingEmployees = employeeService.findAllOnlineApplicants();
+            allPendingEmployees = employeeService.findAllApplicants();
 
             Platform.runLater(() -> {
-                content.getChildren().remove(loadingIndicator);
+                contentPane.getChildren().remove(loadingIndicator);
                 if (allPendingEmployees.isEmpty()) {
                     applicationTableController.clearTable();
                     applicationTableController.showNoData();
@@ -91,7 +93,7 @@ public class ApplicationsController {
         };
 
         Runnable onFailed = () -> {
-            Platform.runLater(() -> content.getChildren().remove(loadingIndicator));
+            Platform.runLater(() -> contentPane.getChildren().remove(loadingIndicator));
             System.err.println("Error loading employees");
         };
 

@@ -1,7 +1,7 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
+package com.econnect.barangaymanagementapp.controller.barangayoffice.table.application;
 
 import com.econnect.barangaymanagementapp.MainApplication;
-import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -41,7 +41,7 @@ public class ApplicationTableController {
 
     public void addEmployeeRow(String employeeId, String lastName, String firstName, EmployeeStatus status, ApplicationType type, ZonedDateTime zonedDate, String imageUrl) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationsController);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(OFFICE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationsController);
             HBox applicationRow = loader.load();
             ApplicationRowController applicationRowController = loader.getController();
             applicationRowController.setEmployeeData(employeeId, lastName, firstName, status.getName(), type.getName(), DateFormatter.extractDateAndFormat(zonedDate), DateFormatter.extractTimeAndFormat(zonedDate), getImageOrDefault(employeeId));

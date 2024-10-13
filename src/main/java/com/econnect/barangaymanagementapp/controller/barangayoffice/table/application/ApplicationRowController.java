@@ -1,9 +1,11 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
+package com.econnect.barangaymanagementapp.controller.barangayoffice.table.application;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
-import com.econnect.barangaymanagementapp.controller.humanresources.modal.SetupAccountController;
-import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupAccountController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupRequirementsController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -12,6 +14,7 @@ import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,6 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
+
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
 public class ApplicationRowController {
     private final ModalUtils modalUtils;
@@ -52,10 +57,12 @@ public class ApplicationRowController {
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
-        setupButtonContainer();
+        Platform.runLater(() -> setupButtonContainer());
+        ;
     }
 
     public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
+        System.out.println("Receive stastus" + status);
         residentIdLabel.setText(employeeId);
         lastNameLabel.setText(lastName);
         firstNameLabel.setText(firstName);
@@ -84,7 +91,6 @@ public class ApplicationRowController {
                 tableRow.getStyleClass().add("selected");
             }
         });
-
         // Remove selection style
         tableRow.setOnMouseExited(_ -> {
             if (!tableRow.getStyleClass().contains("selected")) {
@@ -94,21 +100,72 @@ public class ApplicationRowController {
     }
 
     private void setupButtonContainer() {
+        String currentStatus = statusLabel.getText();
+        switch (fromName(currentStatus)) {
+            case PENDING:
+                setupPendingButtons();
+                break;
+            case UNDER_REVIEW:
+                setupUnderReviewButtons();
+                break;
+            case EVALUATION:
+//                setupEvaluationButtons();
+                break;
+            default:
+                buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+                    modalUtils.customizeModalWithCallback(
+                            CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                            ViewEmployeeApplicationController.class,
+                            controller -> controller.setId(residentIdLabel.getText())
+                    );
+                }));
+        }
+    }
+
+    private void setupPendingButtons() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.HR_VIEW_APPLICATION_EMPLOYEE,
+                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
                     ViewEmployeeApplicationController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
         });
 
-        Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(CustomizeModal.SETUP_ACCOUNT, SetupAccountController.class,
-                    controller -> controller.setId(residentIdLabel.getText()), dependencyInjector, applicationsController);
+        Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Are you sure you want to email this employee?", isConfirmed -> {
+//                if (isConfirmed) notifyEmployeeApplication();
+            });
         });
 
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee application?", isConfirmed -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
+                if (isConfirmed) rejectEmployeeApplication();
+            });
+        });
+        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+    }
+
+    private void setupUnderReviewButtons() {
+        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+            modalUtils.customizeModalWithCallback(
+                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                    ViewEmployeeApplicationController.class,
+                    controller -> controller.setId(residentIdLabel.getText())
+            );
+        });
+
+        Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
+            modalUtils.customizeModalWithCallback(
+                    CustomizeModal.SETUP_REQUIREMENTS,
+                    SetupRequirementsController.class,
+                    controller -> controller.setId(residentIdLabel.getText()),
+                    dependencyInjector,
+                    applicationsController
+            );
+        });
+
+        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
                 if (isConfirmed) rejectEmployeeApplication();
             });
         });
@@ -137,6 +194,6 @@ public class ApplicationRowController {
     }
 
     private void reloadTable() {
-        applicationsController.populateEmployeeRows();
+        applicationsController.populateApplicationRows();
     }
 }

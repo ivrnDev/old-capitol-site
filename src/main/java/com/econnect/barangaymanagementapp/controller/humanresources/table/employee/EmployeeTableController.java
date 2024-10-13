@@ -40,7 +40,7 @@ public class EmployeeTableController {
 
     public void addEmployeeRow(String employeeId, String lastName, String firstName, RoleType role, DepartmentType department, StatusType.EmployeeStatus status, String imageUrl) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_ROW.getFxmlPath());
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_ROW.getFxmlPath());
             loader.setController(new EmployeeRowController(dependencyInjector, employeeController));
             HBox employeeRow = loader.load();
             EmployeeRowController employeeRowController = loader.getController();

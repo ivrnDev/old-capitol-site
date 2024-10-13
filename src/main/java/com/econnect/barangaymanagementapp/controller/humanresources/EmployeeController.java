@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.EMPLOYEE_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.HR_EMPLOYEE_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal.ADD_EMPLOYEE;
 
 public class EmployeeController {
@@ -64,7 +64,7 @@ public class EmployeeController {
 
     private void loadEmployeeTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_TABLE.getFxmlPath(), dependencyInjector, this);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
             employeeTableController = loader.getController();
             content.getChildren().add(employeeTable);

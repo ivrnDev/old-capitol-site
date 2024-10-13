@@ -21,20 +21,26 @@ module com.econnect.barangaymanagementapp {
     exports com.econnect.barangaymanagementapp.enumeration.type;
     exports com.econnect.barangaymanagementapp.config.deserializer to com.fasterxml.jackson.databind;
     exports com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
+    exports com.econnect.barangaymanagementapp.enumeration.modal;
+    exports com.econnect.barangaymanagementapp.enumeration.database;
 
+    opens com.econnect.barangaymanagementapp.interfaces to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
 
     opens com.econnect.barangaymanagementapp.controller to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.component to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.component.modal to javafx.fxml;
+
+    //Barangay Office
+    opens com.econnect.barangaymanagementapp.controller.barangayoffice to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.application to javafx.fxml;
+
+    //Human Resources
     opens com.econnect.barangaymanagementapp.controller.humanresources to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.humanresources.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.component.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.interfaces to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.domain to com.fasterxml.jackson.databind;
-    exports com.econnect.barangaymanagementapp.enumeration.modal;
     opens com.econnect.barangaymanagementapp.controller.humanresources.table.employee to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.humanresources.table.application to javafx.fxml;
-    exports com.econnect.barangaymanagementapp.enumeration.database;
 
 
 }

@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.service;
 
+import com.econnect.barangaymanagementapp.database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
@@ -21,12 +22,11 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordUtils passwordUtils;
     private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, INACTIVE, RESIGNED, RETIRED, REJECTED, PENDING, EVALUATION);
-    private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, EVALUATION);
+    private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
 
     public EmployeeService(DependencyInjector dependencyInjector) {
         this.employeeRepository = dependencyInjector.getEmployeeRepository();
         this.passwordUtils = dependencyInjector.getPasswordUtils();
-
     }
 
     public Response createEmployee(Employee employee) {
@@ -38,18 +38,22 @@ public class EmployeeService {
     }
 
     public Optional<Employee> findEmployeeByCredentials(String username, String password) {
-        if (countAllActiveEmployees() == 0 && username.equals("admin") && password.equals("admin")) {
-            return Optional.ofNullable(Employee.builder()
-                    .firstName("Admin")
-                    .lastName("Admin")
-                    .department(DepartmentType.HUMAN_RESOURCES)
-                    .access(passwordUtils.encryptPassword("admin"))
-                    .status(ACTIVE)
-                    .username("admin")
-                    .build());
-        }
-        return employeeRepository.findEmployeeByFilter(user -> user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
-                .stream()
+//        if (countAllActiveEmployees() == 0 && username.equals("admin") && password.equals("admin")) {
+//            return Optional.ofNullable(Employee.builder()
+//                    .firstName("Admin")
+//                    .lastName("Admin")
+//                    .department(DepartmentType.HUMAN_RESOURCES)
+//                    .access(passwordUtils.encryptPassword("admin"))
+//                    .status(ACTIVE)
+//                    .username("admin")
+//                    .build());
+//        }
+//        return employeeRepository.findEmployeeByFilter(user -> user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
+//                .stream()
+//                .findFirst();
+        var employee = InMemoryDatabase.getInstance().getList();
+        return employee.stream()
+                .filter(user -> user.getUsername().equals(username) && user.getAccess().equals(password))
                 .findFirst();
     }
 
@@ -62,13 +66,18 @@ public class EmployeeService {
                 !INACTIVE_STATUSES.contains(employee.getStatus()));
     }
 
-    public int countAllActiveEmployees() {
-        return findAllActiveEmployees().size();
-    }
-
     public List<Employee> findAllOnlineApplicants() {
         return employeeRepository.findEmployeeByFilter(employee ->
                 APPLICANTS_STATUSES.contains(employee.getStatus()) && employee.getApplicationType().equals(ApplicationType.ONLINE));
+    }
+
+    public List<Employee> findAllApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee ->
+                APPLICANTS_STATUSES.contains(employee.getStatus()));
+    }
+
+    public int countAllActiveEmployees() {
+        return findAllActiveEmployees().size();
     }
 
     public Response activateEmployee(String employeeId, DepartmentType departmentType, RoleType role) {
@@ -87,8 +96,17 @@ public class EmployeeService {
         return updateEmployeeByStatus(employeeId, REJECTED);
     }
 
-    public Response evaluateEmployee(String employeeId) {
-        return updateEmployeeByStatus(employeeId, EVALUATION);
+    public Response updateEmployeeToEvaluation(String employeeId, String clearanceLink, String expirationDate) {
+        Optional<Employee> employee = employeeRepository.findEmployeeById(employeeId);
+
+        if (employee.isPresent()) {
+            Employee updatedEmployee = employee.get();
+            updatedEmployee.setNbiClearanceUrl(clearanceLink);
+            updatedEmployee.setNbiClearanceExpiration(expirationDate);
+            updatedEmployee.setStatus(EVALUATION);
+            return employeeRepository.updateEmployee(updatedEmployee);
+        }
+        return null;
     }
 
     private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
