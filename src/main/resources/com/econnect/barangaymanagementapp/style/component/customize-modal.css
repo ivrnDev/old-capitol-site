@@ -85,6 +85,10 @@
     -fx-background-radius: 10px;
 }
 
+.date-picker .text-field:empty:focused {
+    -fx-cursor: default;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
 
 /* Button */
 .button {

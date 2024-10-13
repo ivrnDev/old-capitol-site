@@ -13,6 +13,7 @@ import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -23,6 +24,9 @@ import javafx.stage.Stage;
 import okhttp3.Response;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class SetupRequirementsController implements BaseViewController {
     private final ModalUtils modalUtils;
@@ -76,7 +80,7 @@ public class SetupRequirementsController implements BaseViewController {
                     if (response.isSuccessful()) {
                         applicationsController.populateApplicationRows();
                         closeWindow();
-                        modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
+                        modalUtils.showModal(Modal.SUCCESS, "Success", "Employee " + employeeId + " has been successfully evaluated.");
                     } else {
                         closeWindow();
                         modalUtils.showModal(Modal.ERROR, "Failed", "An error occurred while activating employee application.");
@@ -116,11 +120,42 @@ public class SetupRequirementsController implements BaseViewController {
             return;
         }
 
-        if (nbiExpirationInput.getValue() == null) {
+        LocalDate selectedDate = nbiExpirationInput.getValue();
+
+        if (selectedDate == null) {
             modalUtils.showModal(Modal.ERROR, "No Expiration Date", "Please select an expiration date for the NBI Clearance.");
             return;
         }
 
+        try {
+            selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            modalUtils.showModal(Modal.ERROR, "Invalid Date", "Please enter a valid date format.");
+            return;
+        }
+
+        if (selectedDate.isBefore(LocalDate.now())) {
+            modalUtils.showModal(Modal.ERROR, "Invalid Expiration Date", "The expiration date cannot be before today.");
+            return;
+        }
+
+        if (selectedDate.isAfter(LocalDate.now().plusYears(1))) {
+            modalUtils.showModal(Modal.ERROR, "Invalid Expiration Date", "The expiration date cannot be more than a year from today.");
+            return;
+        }
+
+        nbiExpirationInput.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                LocalDate date = null;
+                try {
+                    date = nbiExpirationInput.getConverter().fromString(nbiExpirationInput.getEditor().getText());
+                } catch (Exception e) {
+                    nbiExpirationInput.getEditor().setText("");
+                    nbiExpirationInput.setValue(null);
+                }
+                nbiExpirationInput.setValue(date);
+            }
+        });
         modalUtils.showModal(Modal.DEFAULT_APPROVE, "Confirm Evaluation", "Are you sure you want to evaluate this employee?", result -> {
             if (result) updateAccount();
         });
@@ -130,6 +165,17 @@ public class SetupRequirementsController implements BaseViewController {
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> validateForm());
         uploadClearance.setOnMouseClicked(_ -> triggerFileChooser());
+
+        nbiExpirationInput.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now()) || date.isAfter(LocalDate.now().plusYears(1))) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ece0e1;");
+                }
+            }
+        });
     }
 
     public void closeWindow() {
