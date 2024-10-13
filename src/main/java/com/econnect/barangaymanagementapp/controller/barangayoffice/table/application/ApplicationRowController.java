@@ -130,7 +130,7 @@ public class ApplicationRowController {
         });
 
         Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Are you sure you want to email this employee?", isConfirmed -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
 //                if (isConfirmed) notifyEmployeeApplication();
             });
         });
