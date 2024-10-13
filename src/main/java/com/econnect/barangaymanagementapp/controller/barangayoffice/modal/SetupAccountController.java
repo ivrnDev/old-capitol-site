@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
-import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
@@ -75,7 +75,7 @@ public class SetupAccountController implements BaseViewController {
                 Platform.runLater(() -> {
                     rootContainer.getChildren().remove(loadingIndicator);
                     if (response.isSuccessful()) {
-                        applicationsController.populateEmployeeRows();
+                        applicationsController.populateApplicationRows();
                         closeWindow();
                         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
                     } else {

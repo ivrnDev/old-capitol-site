@@ -5,7 +5,6 @@ import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupA
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupRequirementsController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -62,7 +61,6 @@ public class ApplicationRowController {
     }
 
     public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
-        System.out.println("Receive stastus" + status);
         residentIdLabel.setText(employeeId);
         lastNameLabel.setText(lastName);
         firstNameLabel.setText(firstName);
@@ -109,7 +107,7 @@ public class ApplicationRowController {
                 setupUnderReviewButtons();
                 break;
             case EVALUATION:
-//                setupEvaluationButtons();
+                setupEvaluationButtons();
                 break;
             default:
                 buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
@@ -158,6 +156,33 @@ public class ApplicationRowController {
             modalUtils.customizeModalWithCallback(
                     CustomizeModal.SETUP_REQUIREMENTS,
                     SetupRequirementsController.class,
+                    controller -> controller.setId(residentIdLabel.getText()),
+                    dependencyInjector,
+                    applicationsController
+            );
+        });
+
+        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
+                if (isConfirmed) rejectEmployeeApplication();
+            });
+        });
+        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+    }
+
+    private void setupEvaluationButtons() {
+        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+            modalUtils.customizeModalWithCallback(
+                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                    ViewEmployeeApplicationController.class,
+                    controller -> controller.setId(residentIdLabel.getText())
+            );
+        });
+
+        Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
+            modalUtils.customizeModalWithCallback(
+                    CustomizeModal.SETUP_ACCOUNT,
+                    SetupAccountController.class,
                     controller -> controller.setId(residentIdLabel.getText()),
                     dependencyInjector,
                     applicationsController

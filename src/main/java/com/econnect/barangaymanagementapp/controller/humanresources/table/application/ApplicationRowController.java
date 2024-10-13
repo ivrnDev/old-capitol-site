@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.application;
 
 import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
-import com.econnect.barangaymanagementapp.controller.humanresources.modal.SetupAccountController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.humanresources.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;

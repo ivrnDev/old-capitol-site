@@ -121,7 +121,9 @@ public class SetupRequirementsController implements BaseViewController {
             return;
         }
 
-        updateAccount();
+        modalUtils.showModal(Modal.DEFAULT_APPROVE, "Confirm Evaluation", "Are you sure you want to evaluate this employee?", result -> {
+            if (result) updateAccount();
+        });
     }
 
     private void setupActionButtons() {

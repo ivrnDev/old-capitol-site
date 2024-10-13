@@ -17,7 +17,7 @@
 <AnchorPane fx:id="rootContainer" prefHeight="334.0" prefWidth="501.0" styleClass="panel"
             stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.modal.SetupAccountController">
+            fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupAccountController">
     <children>
         <Text fill="#414141" layoutX="20.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Setup Account">
             <font>
