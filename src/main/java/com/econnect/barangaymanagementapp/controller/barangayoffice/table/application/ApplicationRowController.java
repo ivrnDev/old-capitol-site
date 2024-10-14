@@ -24,7 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
 
 public class ApplicationRowController {
     private final ModalUtils modalUtils;
@@ -131,7 +131,7 @@ public class ApplicationRowController {
 
         Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-//                if (isConfirmed) notifyEmployeeApplication();
+                if (isConfirmed) employeeService.updateEmployeeToUnderReview(residentIdLabel.getText());
             });
         });
 

@@ -10,7 +10,7 @@ public class EmailService {
     final String fromEmail = "your_email@gmail.com";
     final String password = "your_email_password";
 
-    public static void sendEmail(String toEmail, String subject, String messageText) {
+    public boolean sendEmail(String toEmail, String subject, String messageText) {
         final String fromEmail = "villamoraivanren@gmail.com";
         final String password = "rsjzwofbmdzmmhrt";
 
@@ -35,10 +35,11 @@ public class EmailService {
             message.setText(messageText);
 
             Transport.send(message);
-            System.out.println("Email sent successfully to " + toEmail);
+            return true;
 
         } catch (MessagingException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

@@ -2,10 +2,7 @@ package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.repository.ResidentRepository;
-import com.econnect.barangaymanagementapp.service.EmployeeService;
-import com.econnect.barangaymanagementapp.service.ImageService;
-import com.econnect.barangaymanagementapp.service.LoginService;
-import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
 import com.econnect.barangaymanagementapp.util.data.PasswordUtils;
 import com.econnect.barangaymanagementapp.util.resource.SoundUtils;
@@ -15,7 +12,10 @@ import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.stage.Stage;
+import lombok.Getter;
 
+
+@Getter
 public class DependencyInjector {
     private final Stage stage;
     private final SceneManager sceneManager;
@@ -36,6 +36,7 @@ public class DependencyInjector {
     private final EmployeeRepository employeeRepository;
     private final ResidentRepository residentRepository;
 
+    private final EmailService emailService;
     private final LoginService loginService;
     private final EmployeeService employeeService;
     private final ResidentService residentService;
@@ -54,6 +55,8 @@ public class DependencyInjector {
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
         this.fileChooserUtils = new FileChooserUtils();
+        this.emailService = new EmailService();
+
 
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
@@ -61,77 +64,5 @@ public class DependencyInjector {
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
         this.loginService = new LoginService(this);
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public SceneManager getSceneManager() {
-        return sceneManager;
-    }
-
-    public ModalUtils getModalUtils() {
-        return modalUtils;
-    }
-
-    public LoginService getLoginService() {
-        return loginService;
-    }
-
-    public UserSession getUserSession() {
-        return userSession;
-    }
-
-    public NavigationState getNavigationState() {
-        return navigationState;
-    }
-
-    public SoundUtils getSoundUtils() {
-        return soundUtils;
-    }
-
-    public EmployeeService getEmployeeService() {
-        return employeeService;
-    }
-
-    public EmployeeRepository getEmployeeRepository() {
-        return employeeRepository;
-    }
-
-    public ResidentRepository getResidentRepository() {
-        return residentRepository;
-    }
-
-    public ResidentService getResidentService() {
-        return residentService;
-    }
-
-    public FXMLLoaderFactory getFxmlLoaderFactory() {
-        return fxmlLoaderFactory;
-    }
-
-    public ButtonUtils getButtonUtils() {
-        return buttonUtils;
-    }
-
-    public JsonConverter getJsonConverter() {
-        return jsonConverter;
-    }
-
-    public HTTPClient getHttpClient() {
-        return httpClient;
-    }
-
-    public PasswordUtils getPasswordUtils() {
-        return passwordUtils;
-    }
-
-    public ImageService getImageService() {
-        return imageService;
-    }
-
-    public FileChooserUtils getFileChooser() {
-        return fileChooserUtils;
     }
 }

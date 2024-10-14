@@ -35,6 +35,7 @@ public class EmployeeRepository extends BaseRepository<Employee> {
     public Optional<Employee> findEmployeeById(String employeeId) {
         return findById(apiKey, employeeId, new TypeReference<>() {
         });
+
     }
 
     public List<Employee> findAllEmployees() {

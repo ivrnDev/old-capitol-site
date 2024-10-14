@@ -57,7 +57,7 @@ public class SetupRequirementsController implements BaseViewController {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.imageService = dependencyInjector.getImageService();
-        this.fileChooserUtils = dependencyInjector.getFileChooser();
+        this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.applicationsController = applicationsController;
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
