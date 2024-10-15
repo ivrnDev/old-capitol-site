@@ -57,7 +57,7 @@ public class ApplicationRowController {
         setupProfileImageClick();
         setupRowClickEvents();
         Platform.runLater(() -> setupButtonContainer());
-        ;
+
     }
 
     public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
@@ -131,7 +131,7 @@ public class ApplicationRowController {
 
         Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-                if (isConfirmed) employeeService.updateEmployeeToUnderReview(residentIdLabel.getText());
+                if (isConfirmed) updateEmployeeToUnderReview();
             });
         });
 
@@ -195,6 +195,34 @@ public class ApplicationRowController {
             });
         });
         buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+    }
+
+    private void updateEmployeeToUnderReview() {
+        Task<Response> task = new Task<>() {
+            @Override
+            protected Response call() {
+                return employeeService.updateEmployeeToUnderReview(residentIdLabel.getText());
+            }
+
+            @Override
+            protected void succeeded() {
+                Response response = getValue();
+                if (response.isSuccessful()) {
+                    reloadTable();
+                    modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentIdLabel.getText() + " has been emailed successfully.");
+                } else {
+                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while notifying employee.");
+                }
+            }
+
+            @Override
+            protected void failed() {
+                Throwable exception = getException();
+                exception.printStackTrace();
+                modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred: " + exception.getMessage());
+            }
+        };
+        new Thread(task).start();
     }
 
     private void rejectEmployeeApplication() {
