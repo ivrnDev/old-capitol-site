@@ -5,13 +5,14 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 public class EmailService {
-    public boolean sendEmail(String toEmail, String subject, String messageText) {
-        //Sample email credentials
-        final String fromEmail = "brgy.oldcapitolsite.gov@gmail.com";
-        final String password = "nmjoskntnlgooxqq";
+    //Sample email credentials
+    private final String fromEmail = "brgy.oldcapitolsite.gov@gmail.com";
+    private final String password = "nmjoskntnlgooxqq";
 
+    public boolean sendEmail(String toEmail, String subject, String messageText) {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
@@ -39,5 +40,16 @@ public class EmailService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public CompletableFuture<Boolean> sendEmailAsync(String toEmail, String subject, String messageText) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sendEmail(toEmail, subject, messageText);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
     }
 }

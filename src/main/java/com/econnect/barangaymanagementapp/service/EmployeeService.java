@@ -111,7 +111,7 @@ public class EmployeeService {
                 employee.setStatus(ACTIVE);
                 employee.setDepartment(department);
                 employee.setRole(role);
-                emailService.sendEmail(employee.getEmail(), "Congratulations! You Have Been Hired", String.format("""
+                emailService.sendEmailAsync(employee.getEmail(), "Congratulations! You Have Been Hired", String.format("""
                                 Dear %s,
 
                                 We are thrilled to inform you that you have successfully completed our hiring process and have been officially hired to join our team.
@@ -152,7 +152,7 @@ public class EmployeeService {
         Employee employee = response.get();
         if (response.isPresent()) {
             try {
-                emailService.sendEmail(employee.getEmail(), "Congratulations! Your Application is Under Review", String.format("""
+                emailService.sendEmailAsync(employee.getEmail(), "Congratulations! Your Application is Under Review", String.format("""
                                 Dear %s,
 
                                     We are writing to inform you that your application has been carefully reviewed and we are pleased to announce that it has been accepted for further consideration.
@@ -184,21 +184,17 @@ public class EmployeeService {
         Employee employee = findEmployee.get();
         Response response = updateEmployeeByStatus(employeeId, REJECTED);
         if (response.isSuccessful()) {
-            try {
-                emailService.sendEmail(employee.getEmail(), "We're sorry, Your Application is rejected", String.format("""
-                                Dear %s,
-                                    We regret to inform you that your application will not be moving forward at this time.
-                                                                             
-                                We appreciate your interest in joining our team and encourage you to reapply for future opportunities that align with your skills and experiences.
-                                                                             
-                                Best regards,
-                                Old Capitol Site
-                                         """,
-                        employee.getFirstName()
-                ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            emailService.sendEmailAsync(employee.getEmail(), "We're sorry, Your Application is rejected", String.format("""
+                            Dear %s,
+                                We regret to inform you that your application will not be moving forward at this time.
+                                                                         
+                            We appreciate your interest in joining our team and encourage you to reapply for future opportunities that align with your skills and experiences.
+                                                                         
+                            Best regards,
+                            Old Capitol Site
+                                     """,
+                    employee.getFirstName()
+            ));
         }
         return response;
     }
