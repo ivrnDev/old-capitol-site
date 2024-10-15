@@ -1,16 +1,16 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.application;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.controller.shared.BaseApplicationRowController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
-import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
@@ -26,13 +26,13 @@ import okhttp3.Response;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
 
-public class ApplicationRowController {
+
+public class ApplicationRowController extends BaseApplicationRowController {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
     private final ApplicationsController applicationsController;
     private final DependencyInjector dependencyInjector;
-    private final UserSession userSession;
 
     @FXML
     private HBox tableRow, buttonContainer;
@@ -44,12 +44,12 @@ public class ApplicationRowController {
     private ImageView profilePicture;
 
     public ApplicationRowController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+        super(dependencyInjector);
         this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.applicationsController = applicationsController;
-        this.userSession = UserSession.getInstance();
     }
 
     public void initialize() {
@@ -59,6 +59,7 @@ public class ApplicationRowController {
 
     }
 
+    @Override
     public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
         residentIdLabel.setText(employeeId);
         lastNameLabel.setText(lastName);
@@ -70,7 +71,7 @@ public class ApplicationRowController {
         profilePicture.setImage(profileImage);
     }
 
-    public void setProfileImage(Image profileImage) {
+    public void setImage(Image profileImage) {
         profilePicture.setImage(profileImage);
     }
 
@@ -96,7 +97,8 @@ public class ApplicationRowController {
         });
     }
 
-    private void setupButtonContainer() {
+    protected void setupButtonContainer() {
+        setupViewButton();
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
             case PENDING:
@@ -111,7 +113,7 @@ public class ApplicationRowController {
             default:
                 buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
                     modalUtils.customizeModalWithCallback(
-                            FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                            FXMLPath.VIEW_APPLICATION_EMPLOYEE,
                             ViewEmployeeApplicationController.class,
                             controller -> controller.setId(residentIdLabel.getText())
                     );
@@ -120,14 +122,6 @@ public class ApplicationRowController {
     }
 
     private void setupPendingButtons() {
-        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
-                    ViewEmployeeApplicationController.class,
-                    controller -> controller.setId(residentIdLabel.getText())
-            );
-        });
-
         Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
                 if (isConfirmed) updateEmployeeToUnderReview();
@@ -139,18 +133,10 @@ public class ApplicationRowController {
                 if (isConfirmed) rejectEmployeeApplication();
             });
         });
-        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
     }
 
     private void setupUnderReviewButtons() {
-        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
-                    ViewEmployeeApplicationController.class,
-                    controller -> controller.setId(residentIdLabel.getText())
-            );
-        });
-
         Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.SETUP_REQUIREMENTS,
@@ -166,18 +152,10 @@ public class ApplicationRowController {
                 if (isConfirmed) rejectEmployeeApplication();
             });
         });
-        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
     }
 
     private void setupEvaluationButtons() {
-        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
-                    ViewEmployeeApplicationController.class,
-                    controller -> controller.setId(residentIdLabel.getText())
-            );
-        });
-
         Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.SETUP_ACCOUNT,
@@ -193,7 +171,18 @@ public class ApplicationRowController {
                 if (isConfirmed) rejectEmployeeApplication();
             });
         });
-        buttonContainer.getChildren().addAll(viewBtn, acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+    }
+
+    private void setupViewButton() {
+        Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.VIEW_APPLICATION_EMPLOYEE,
+                    ViewEmployeeApplicationController.class,
+                    controller -> controller.setId(residentIdLabel.getText())
+            );
+        });
+        buttonContainer.getChildren().add(viewBtn);
     }
 
     private void updateEmployeeToUnderReview() {
@@ -249,7 +238,7 @@ public class ApplicationRowController {
         new Thread(task).start();
     }
 
-    private void reloadTable() {
-        applicationsController.populateApplicationRows();
+    protected void reloadTable() {
+        applicationsController.reloadTable();
     }
 }

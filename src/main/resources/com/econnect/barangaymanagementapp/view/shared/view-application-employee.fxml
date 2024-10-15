@@ -14,9 +14,9 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="600.0" prefWidth="991.0" styleClass="panel"
-            stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
+            stylesheets="@../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.ViewEmployeeApplicationController">
+            fx:controller="com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController">
     <children>
         <Text fill="#414141" layoutX="26.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INFORMATION">
             <font>
@@ -276,7 +276,7 @@
         <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="953.0" layoutY="7.0" onMouseClicked="#closeView"
                    pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="7.0">
             <image>
-                <Image url="@../../../icon/close.png"/>
+                <Image url="@../../icon/close.png"/>
             </image>
             <cursor>
                 <Cursor fx:constant="HAND"/>
@@ -288,7 +288,7 @@
                 <ImageView fx:id="profilePicture" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
                            preserveRatio="true" VBox.vgrow="ALWAYS">
                     <image>
-                        <Image url="@../../../images/default-profile.png"/>
+                        <Image url="@../../images/default-profile.png"/>
                     </image>
                 </ImageView>
                 <VBox alignment="CENTER" prefHeight="189.0" prefWidth="334.0" spacing="20.0">
@@ -301,7 +301,7 @@
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                                    preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../icon/document-icon.png"/>
+                                                <Image url="@../../icon/document-icon.png"/>
                                             </image>
                                         </ImageView>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Resume">
@@ -324,7 +324,7 @@
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                                    preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../icon/document-icon.png"/>
+                                                <Image url="@../../icon/document-icon.png"/>
                                             </image>
                                         </ImageView>
                                         <Text fx:id="view" strokeType="OUTSIDE" strokeWidth="0.0" text="Government ID">
@@ -350,7 +350,7 @@
                                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
                                                    preserveRatio="true">
                                             <image>
-                                                <Image url="@../../../icon/document-icon.png"/>
+                                                <Image url="@../../icon/document-icon.png"/>
                                             </image>
                                         </ImageView>
                                         <Text fx:id="viewNbiClearance" strokeType="OUTSIDE" strokeWidth="0.0"

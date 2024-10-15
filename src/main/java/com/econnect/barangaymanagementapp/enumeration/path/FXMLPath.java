@@ -16,8 +16,7 @@ public enum FXMLPath {
 
     //Modal
     ADD_EMPLOYEE("view/humanresources/modal/add-employee.fxml"),
-    HR_VIEW_APPLICATION_EMPLOYEE("view/humanresources/modal/view-application-employee.fxml"),
-    OFFICE_VIEW_APPLICATION_EMPLOYEE("view/barangayoffice/modal/view-application-employee.fxml"),
+    VIEW_APPLICATION_EMPLOYEE("view/shared/view-application-employee.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml");
 

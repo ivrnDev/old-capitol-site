@@ -108,7 +108,7 @@ public class EmployeeRowController {
         });
 
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModal(FXMLPath.HR_VIEW_APPLICATION_EMPLOYEE);
+            modalUtils.customizeModal(FXMLPath.VIEW_APPLICATION_EMPLOYEE);
         });
 
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {

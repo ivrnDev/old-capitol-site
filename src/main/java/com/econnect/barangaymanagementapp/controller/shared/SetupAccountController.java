@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
@@ -21,10 +20,10 @@ import okhttp3.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetupAccountController implements BaseViewController {
+public class SetupAccountController<T extends BaseApplicationController> implements BaseViewController {
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
-    private ApplicationsController applicationsController;
+    private T applicationsController;
     private DepartmentType selectedDepartment;
     private String employeeId;
 
@@ -37,7 +36,7 @@ public class SetupAccountController implements BaseViewController {
     @FXML
     private ComboBox<String> departmentComboBox, roleComboBox;
 
-    public SetupAccountController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+    public SetupAccountController(DependencyInjector dependencyInjector, T applicationsController) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.applicationsController = applicationsController;
@@ -144,7 +143,7 @@ public class SetupAccountController implements BaseViewController {
     }
 
     private void reloadTable() {
-        applicationsController.populateApplicationRows();
+        applicationsController.reloadTable();
     }
 
     @FXML

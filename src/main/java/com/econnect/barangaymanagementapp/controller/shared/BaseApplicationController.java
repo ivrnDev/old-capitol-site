@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class BaseApplicationController {
+public abstract class BaseApplicationController<T extends BaseTableController> {
     @FXML
     private TextField searchField;
 
@@ -34,25 +33,24 @@ public abstract class BaseApplicationController {
     private final EmployeeService employeeService;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
-    private ApplicationTableController applicationTableController;
+    private T tableController;
+    private final FXMLPath fxmlPath;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private List<Employee> allPendingEmployees;
     private Task<List<Employee>> searchTask;
     private StackPane loadingIndicator;
 
-    protected abstract FXMLPath applicationTableFXMLPath();
 
-    protected abstract Object currentControllerInstance();
-
-    public BaseApplicationController(DependencyInjector dependencyInjector) {
+    public BaseApplicationController(DependencyInjector dependencyInjector, FXMLPath fxmlPath) {
         this.dependencyInjector = dependencyInjector;
         this.employeeService = dependencyInjector.getEmployeeService();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
+        this.fxmlPath = fxmlPath;
     }
 
     public void initialize() {
-        loadApplicationTable(applicationTableFXMLPath(), currentControllerInstance());
+        loadApplicationTable();
         populateApplicationRows();
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
@@ -60,11 +58,11 @@ public abstract class BaseApplicationController {
         });
     }
 
-    private void loadApplicationTable(FXMLPath fxmlPath, Object controllerClass) {
+    private void loadApplicationTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath.getFxmlPath(), dependencyInjector, controllerClass);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
-            applicationTableController = loader.getController();
+            tableController = loader.getController();
             contentPane.getChildren().add(employeeTable);
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,7 +70,7 @@ public abstract class BaseApplicationController {
         }
     }
 
-    public void populateApplicationRows() {
+    private void populateApplicationRows() {
         addLoadingIndicator();
         Runnable call = () -> {
             allPendingEmployees = employeeService.findAllApplicants();
@@ -80,8 +78,8 @@ public abstract class BaseApplicationController {
             Platform.runLater(() -> {
                 removeLoadingIndicator();
                 if (allPendingEmployees.isEmpty()) {
-                    applicationTableController.clearTable();
-                    applicationTableController.showNoData();
+                    tableController.clearRow();
+                    tableController.showNoData();
                 } else {
                     updateEmployeeTable(allPendingEmployees);
                 }
@@ -105,6 +103,9 @@ public abstract class BaseApplicationController {
         contentPane.getChildren().remove(loadingIndicator);
     }
 
+    public void reloadTable() {
+        populateApplicationRows();
+    }
 
     private void performSearch() {
         if (searchTask != null && searchTask.isRunning()) {
@@ -148,13 +149,13 @@ public abstract class BaseApplicationController {
     }
 
     private void updateEmployeeTable(List<Employee> employees) {
-        applicationTableController.clearTable();
+        tableController.clearRow();
 
         if (employees.isEmpty()) {
-            applicationTableController.showNoData();
+            tableController.showNoData();
         } else {
             employees.forEach(employee -> {
-                applicationTableController.addEmployeeRow(
+                tableController.addEmployeeApplicationRow(
                         employee.getId(),
                         employee.getLastName(),
                         employee.getFirstName(),

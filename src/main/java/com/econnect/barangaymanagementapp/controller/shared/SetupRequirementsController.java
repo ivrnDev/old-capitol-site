@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -28,11 +27,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class SetupRequirementsController implements BaseViewController {
+public class SetupRequirementsController<T extends BaseApplicationController> implements BaseViewController {
     private final ModalUtils modalUtils;
     private final ImageService imageService;
     private final EmployeeService employeeService;
-    private final ApplicationsController applicationsController;
+    private final T applicationsController;
     private final FileChooserUtils fileChooserUtils;
     private Stage currentStage;
     private String employeeId;
@@ -53,7 +52,7 @@ public class SetupRequirementsController implements BaseViewController {
     @FXML
     private Button confirmBtn, cancelBtn;
 
-    public SetupRequirementsController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+    public SetupRequirementsController(DependencyInjector dependencyInjector, T applicationsController) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.imageService = dependencyInjector.getImageService();
@@ -78,7 +77,7 @@ public class SetupRequirementsController implements BaseViewController {
                 Platform.runLater(() -> {
                     rootContainer.getChildren().remove(loadingIndicator);
                     if (response.isSuccessful()) {
-                        applicationsController.populateApplicationRows();
+                        reloadTable();
                         closeWindow();
                         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee " + employeeId + " has been successfully evaluated.");
                     } else {
@@ -182,6 +181,10 @@ public class SetupRequirementsController implements BaseViewController {
         modalUtils.closeCustomizeModal();
     }
 
+    private void reloadTable() {
+        applicationsController.reloadTable();
+    }
+    
     @FXML
     private void closeWindowConfirmation() {
         modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Exit", "Are you sure you want to exit this window? Any unsaved changes will be lost.", result -> {

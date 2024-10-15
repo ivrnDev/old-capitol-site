@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.modal;
+package com.econnect.barangaymanagementapp.controller.shared;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -16,6 +16,7 @@ public class ViewEmployeeApplicationController implements BaseViewController {
     private Stage currentStage;
     private String employeeId;
     private final ResidentService residentService;
+
     @FXML
     private HBox viewResume;
 
