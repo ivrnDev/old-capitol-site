@@ -82,7 +82,7 @@ public class EmployeeService {
                 APPLICANTS_STATUSES.contains(employee.getStatus()));
     }
 
-    public String findEmployeByEmail(String employeeId) {
+    public String findEmployeEmailById(String employeeId) {
         return findEmployeeById(employeeId).map(employee -> employee.getEmail()).orElse(null);
     }
 
@@ -155,12 +155,14 @@ public class EmployeeService {
                 emailService.sendEmail(employee.getEmail(), "Congratulations! Your Application is Under Review", String.format("""
                                 Dear %s,
 
-                                We are writing to inform you that your application has been carefully reviewed and we are pleased to announce that it has been accepted for further consideration.
+                                    We are writing to inform you that your application has been carefully reviewed and we are pleased to announce that it has been accepted for further consideration.
                                                                 
                                 To proceed with the next steps in our hiring process, we kindly request that you visit our office located at Old Capitol Site. During this visit, you will be required to submit the necessary documents and complete any remaining application requirements.
                                                                 
                                 We look forward to meeting you and learning more about your qualifications.
-                                                                
+                                                
+                                Best regards,
+                                Old Capitol Site                
                                 """,
                         employee.getFirstName()
                 ));
@@ -177,7 +179,28 @@ public class EmployeeService {
     }
 
     public Response rejectEmployee(String employeeId) {
-        return updateEmployeeByStatus(employeeId, REJECTED);
+        Optional<Employee> findEmployee = findEmployeeById(employeeId);
+        if (!findEmployee.isPresent()) return null;
+        Employee employee = findEmployee.get();
+        Response response = updateEmployeeByStatus(employeeId, REJECTED);
+        if (response.isSuccessful()) {
+            try {
+                emailService.sendEmail(employee.getEmail(), "We're sorry, Your Application is rejected", String.format("""
+                                Dear %s,
+                                    We regret to inform you that your application will not be moving forward at this time.
+                                                                             
+                                We appreciate your interest in joining our team and encourage you to reapply for future opportunities that align with your skills and experiences.
+                                                                             
+                                Best regards,
+                                Old Capitol Site
+                                         """,
+                        employee.getFirstName()
+                ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return response;
     }
 
     private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
