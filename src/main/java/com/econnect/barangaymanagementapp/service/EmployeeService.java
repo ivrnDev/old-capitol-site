@@ -14,6 +14,7 @@ import okhttp3.Response;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
@@ -24,6 +25,7 @@ public class EmployeeService {
     private final EmailService emailService;
     private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, INACTIVE, RESIGNED, RETIRED, REJECTED, PENDING, EVALUATION);
     private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
+    private String password;
 
     public EmployeeService(DependencyInjector dependencyInjector) {
         this.employeeRepository = dependencyInjector.getEmployeeRepository();
@@ -45,23 +47,23 @@ public class EmployeeService {
     }
 
     public Optional<Employee> findEmployeeByCredentials(String username, String password) {
-//        if (countAllActiveEmployees() == 0 && username.equals("admin") && password.equals("admin")) {
-//            return Optional.ofNullable(Employee.builder()
-//                    .firstName("Admin")
-//                    .lastName("Admin")
-//                    .department(DepartmentType.HUMAN_RESOURCES)
-//                    .access(passwordUtils.encryptPassword("admin"))
-//                    .status(ACTIVE)
-//                    .username("admin")
-//                    .build());
-//        }
-//        return employeeRepository.findEmployeeByFilter(user -> user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
-//                .stream()
-//                .findFirst();
-        var employee = InMemoryDatabase.getInstance().getList();
+        if (findAllActiveEmployees().isEmpty() && username.equals("admin") && password.equals("admin")) {
+            return Optional.ofNullable(Employee.builder()
+                    .firstName("Admin")
+                    .lastName("Admin")
+                    .department(DepartmentType.HUMAN_RESOURCES)
+                    .access(passwordUtils.encryptPassword("admin"))
+                    .status(ACTIVE)
+                    .username("admin")
+                    .build());
+        }
+        return employeeRepository.findEmployeeByFilter(user -> user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
+                .stream()
+                .findFirst();
+       /* var employee = InMemoryDatabase.getInstance().getList();
         return employee.stream()
                 .filter(user -> user.getUsername().equals(username) && user.getAccess().equals(password))
-                .findFirst();
+                .findFirst();*/
     }
 
     public List<Employee> findAllEmployeesByStatus(StatusType.EmployeeStatus status) {
@@ -105,6 +107,38 @@ public class EmployeeService {
     }
 
     public Response activateEmployee(String employeeId, DepartmentType departmentType, RoleType role) {
+        Optional<Employee> response = findEmployeeById(employeeId);
+        if (response.isPresent()) {
+            try {
+                Employee employee = generateEmployeeUsernameAndPassword(response.get());
+                emailService.sendEmail(employee.getEmail(), "Congratulations! You Have Been Hired", String.format("""
+                                Dear %s,
+
+                                We are thrilled to inform you that you have successfully completed our hiring process and have been officially hired to join our team.
+                                                            
+                                Your assigned role will be as %s in the %s department. We believe your skills and experiences will be a valuable asset to the team.
+                                                            
+                                Please report to our office at Old Capitol Site on [Insert Date] to finalize the onboarding process. If you have any questions, feel free to reach out to our HR team.
+                                                            
+                                Welcome aboard! We are excited to have you as part of our growing team.
+                                                                
+                                Please do not share this username and password to anyone.
+                                Username: %s
+                                Password: %s
+                                                            
+                                Best regards,
+                                Old Capitol Site
+                                """,
+                        employee.getFirstName(),
+                        role.getName(),
+                        departmentType.getName(),
+                        employee.getUsername(),
+                        password
+                ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return updateEmployeeByStatusDepartmentRole(employeeId, ACTIVE, departmentType, role);
     }
 
@@ -146,14 +180,14 @@ public class EmployeeService {
     }
 
     private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
-        Optional<Employee> employee = this.findEmployeeById(employeeId);
+        Optional<Employee> response = findEmployeeById(employeeId);
 
-        if (employee.isPresent()) {
-            Employee updatedEmployee = generateEmployeeUsernameAndPassword(employee.get());
-            updatedEmployee.setStatus(status);
-            updatedEmployee.setDepartment(department);
-            updatedEmployee.setRole(role);
-            return employeeRepository.updateEmployee(updatedEmployee);
+        if (response.isPresent()) {
+            Employee employee = response.get();
+            employee.setStatus(status);
+            employee.setDepartment(department);
+            employee.setRole(role);
+            return employeeRepository.updateEmployee(employee);
         }
         return employeeRepository.updateEmployeeByStatus(employeeId, status);
     }
@@ -169,7 +203,7 @@ public class EmployeeService {
         int employeeCount = countAllActiveEmployees() + 1;
         String formattedId = String.format("%03d", employeeCount);
         String username = employee.getLastName().toLowerCase() + formattedId;
-        String password = employee.getLastName().toLowerCase() + formattedId;
+        password = employee.getLastName().toLowerCase() + UUID.randomUUID();
         String hashedPassword = passwordUtils.encryptPassword(password);
         employee.setUsername(username);
         employee.setAccess(hashedPassword);
