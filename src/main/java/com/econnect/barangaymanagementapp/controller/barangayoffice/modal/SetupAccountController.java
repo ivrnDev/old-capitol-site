@@ -94,7 +94,7 @@ public class SetupAccountController implements BaseViewController {
 
         Runnable onFailed = () -> {
             Platform.runLater(() -> rootContainer.getChildren().remove(loadingIndicator));
-            System.err.println("Faled to activate employee");
+            System.err.println("Failed to activate employee");
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
