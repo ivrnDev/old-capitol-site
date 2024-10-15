@@ -77,7 +77,7 @@ public class SetupAccountController implements BaseViewController {
                 Platform.runLater(() -> {
                     rootContainer.getChildren().remove(loadingIndicator);
                     if (response.isSuccessful()) {
-                        applicationsController.populateApplicationRows();
+                        reloadTable();
                         closeWindow();
                         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
                     } else {
@@ -141,6 +141,10 @@ public class SetupAccountController implements BaseViewController {
 
     public void closeWindow() {
         modalUtils.closeCustomizeModal();
+    }
+
+    private void reloadTable() {
+        applicationsController.populateApplicationRows();
     }
 
     @FXML
