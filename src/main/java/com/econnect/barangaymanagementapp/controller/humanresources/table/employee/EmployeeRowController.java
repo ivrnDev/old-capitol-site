@@ -2,8 +2,8 @@ package com.econnect.barangaymanagementapp.controller.humanresources.table.emplo
 
 import com.econnect.barangaymanagementapp.controller.humanresources.EmployeeController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
@@ -108,7 +108,7 @@ public class EmployeeRowController {
         });
 
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModal(CustomizeModal.HR_VIEW_APPLICATION_EMPLOYEE);
+            modalUtils.customizeModal(FXMLPath.HR_VIEW_APPLICATION_EMPLOYEE);
         });
 
         Button deleteBtn = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.fxmlPath.*;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.*;
 
 public class ApplicationTableController {
     @FXML

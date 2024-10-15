@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
+package com.econnect.barangaymanagementapp.controller.shared;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;

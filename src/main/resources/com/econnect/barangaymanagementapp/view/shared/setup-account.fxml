@@ -15,9 +15,9 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootContainer" prefHeight="334.0" prefWidth="501.0" styleClass="panel"
-            stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
+            stylesheets="@../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupAccountController">
+            fx:controller="com.econnect.barangaymanagementapp.controller.shared.SetupAccountController">
     <children>
         <Text fill="#414141" layoutX="20.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Setup Account">
             <font>
@@ -136,7 +136,7 @@
         <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="463.0" layoutY="8.0"
                    onMouseClicked="#closeWindowConfirmation" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../../icon/close.png"/>
+                <Image url="@../../icon/close.png"/>
             </image>
             <cursor>
                 <Cursor fx:constant="HAND"/>

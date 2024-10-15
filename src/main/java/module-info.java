@@ -41,6 +41,7 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.controller.humanresources.modal to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.humanresources.table.employee to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.humanresources.table.application to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.shared to javafx.fxml;
 
 
 }

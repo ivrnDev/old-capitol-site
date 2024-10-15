@@ -2,7 +2,7 @@ package com.econnect.barangaymanagementapp.util.ui;
 
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.modal.ModalType;
-import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
+import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.resource.SoundUtils;
@@ -81,7 +81,7 @@ public class ModalUtils {
     }
 
 
-    public void customizeModal(CustomizeModal customizeModal) {
+    public void customizeModal(FXMLPath customizeModal) {
         if (customizeStage != null) {
             return;
         }
@@ -110,7 +110,7 @@ public class ModalUtils {
         }
     }
 
-    public <T> void customizeModalWithCallback(CustomizeModal customizeModal, Class<T> controllerClass, Consumer<T> controllerInitializer, Object... args) {
+    public <T> void customizeModalWithCallback(FXMLPath customizeModal, Class<T> controllerClass, Consumer<T> controllerInitializer, Object... args) {
         if (customizeStage != null) {
             return;
         }

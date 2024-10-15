@@ -1,12 +1,12 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.application;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupAccountController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.SetupRequirementsController;
+import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
+import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.enumeration.ui.CustomizeModal;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
@@ -36,7 +36,6 @@ public class ApplicationRowController {
 
     @FXML
     private HBox tableRow, buttonContainer;
-
 
     @FXML
     private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
@@ -112,7 +111,7 @@ public class ApplicationRowController {
             default:
                 buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
                     modalUtils.customizeModalWithCallback(
-                            CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                            FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
                             ViewEmployeeApplicationController.class,
                             controller -> controller.setId(residentIdLabel.getText())
                     );
@@ -123,7 +122,7 @@ public class ApplicationRowController {
     private void setupPendingButtons() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
                     ViewEmployeeApplicationController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
@@ -146,7 +145,7 @@ public class ApplicationRowController {
     private void setupUnderReviewButtons() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
                     ViewEmployeeApplicationController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
@@ -154,7 +153,7 @@ public class ApplicationRowController {
 
         Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.SETUP_REQUIREMENTS,
+                    FXMLPath.SETUP_REQUIREMENTS,
                     SetupRequirementsController.class,
                     controller -> controller.setId(residentIdLabel.getText()),
                     dependencyInjector,
@@ -173,7 +172,7 @@ public class ApplicationRowController {
     private void setupEvaluationButtons() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.OFFICE_VIEW_APPLICATION_EMPLOYEE,
+                    FXMLPath.OFFICE_VIEW_APPLICATION_EMPLOYEE,
                     ViewEmployeeApplicationController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
@@ -181,7 +180,7 @@ public class ApplicationRowController {
 
         Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
-                    CustomizeModal.SETUP_ACCOUNT,
+                    FXMLPath.SETUP_ACCOUNT,
                     SetupAccountController.class,
                     controller -> controller.setId(residentIdLabel.getText()),
                     dependencyInjector,
