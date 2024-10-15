@@ -61,7 +61,9 @@ public class SetupAccountController implements BaseViewController {
         if (role == null || role.isEmpty() || department == null || department.isEmpty()) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Please select values for both fields.");
         } else {
-            updateAccount();
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Confirm", "Are you sure you want to hire this employee? An email notification will be sent.", result -> {
+                if (result) updateAccount();
+            });
         }
     }
 
