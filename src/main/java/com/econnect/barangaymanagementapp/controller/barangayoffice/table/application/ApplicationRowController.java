@@ -198,6 +198,7 @@ public class ApplicationRowController {
     }
 
     private void updateEmployeeToUnderReview() {
+        applicationsController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -208,6 +209,7 @@ public class ApplicationRowController {
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
+                    applicationsController.removeLoadingIndicator();
                     reloadTable();
                     modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentIdLabel.getText() + " has been emailed successfully.");
                 } else {
@@ -226,6 +228,7 @@ public class ApplicationRowController {
     }
 
     private void rejectEmployeeApplication() {
+        applicationsController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -236,6 +239,7 @@ public class ApplicationRowController {
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
+                    applicationsController.removeLoadingIndicator();
                     reloadTable();
                     modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
                 } else {

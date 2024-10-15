@@ -41,6 +41,7 @@ public class ApplicationsController {
 
     private List<Employee> allPendingEmployees;
     private Task<List<Employee>> searchTask;
+    private StackPane loadingIndicator;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
@@ -75,14 +76,12 @@ public class ApplicationsController {
     }
 
     public void populateApplicationRows() {
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
-        Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
-
+        addLoadingIndicator();
         Runnable call = () -> {
             allPendingEmployees = employeeService.findAllApplicants();
 
             Platform.runLater(() -> {
-                contentPane.getChildren().remove(loadingIndicator);
+                removeLoadingIndicator();
                 if (allPendingEmployees.isEmpty()) {
                     applicationTableController.clearTable();
                     applicationTableController.showNoData();
@@ -159,5 +158,14 @@ public class ApplicationsController {
                 );
             });
         }
+    }
+
+    public void addLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        contentPane.getChildren().add(loadingIndicator);
+    }
+
+    public void removeLoadingIndicator() {
+        contentPane.getChildren().remove(loadingIndicator);
     }
 }
