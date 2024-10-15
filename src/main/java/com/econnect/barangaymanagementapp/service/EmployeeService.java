@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.service;
 
-import com.econnect.barangaymanagementapp.database.InMemoryDatabase;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
@@ -13,8 +12,8 @@ import okhttp3.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
@@ -31,7 +30,6 @@ public class EmployeeService {
         this.employeeRepository = dependencyInjector.getEmployeeRepository();
         this.passwordUtils = dependencyInjector.getPasswordUtils();
         this.emailService = dependencyInjector.getEmailService();
-
     }
 
     public Response createEmployee(Employee employee) {
@@ -51,7 +49,7 @@ public class EmployeeService {
             return Optional.ofNullable(Employee.builder()
                     .firstName("Admin")
                     .lastName("Admin")
-                    .department(DepartmentType.HUMAN_RESOURCES)
+                    .department(DepartmentType.BARANGAY_OFFICE)
                     .access(passwordUtils.encryptPassword("admin"))
                     .status(ACTIVE)
                     .username("admin")
@@ -71,8 +69,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findAllActiveEmployees() {
-        return employeeRepository.findEmployeeByFilter(employee ->
-                !INACTIVE_STATUSES.contains(employee.getStatus()));
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(ACTIVE));
     }
 
     public List<Employee> findAllOnlineApplicants() {
@@ -106,11 +103,14 @@ public class EmployeeService {
         return null;
     }
 
-    public Response activateEmployee(String employeeId, DepartmentType departmentType, RoleType role) {
+    public Response activateEmployee(String employeeId, DepartmentType department, RoleType role) {
         Optional<Employee> response = findEmployeeById(employeeId);
         if (response.isPresent()) {
             try {
                 Employee employee = generateEmployeeUsernameAndPassword(response.get());
+                employee.setStatus(ACTIVE);
+                employee.setDepartment(department);
+                employee.setRole(role);
                 emailService.sendEmail(employee.getEmail(), "Congratulations! You Have Been Hired", String.format("""
                                 Dear %s,
 
@@ -131,15 +131,16 @@ public class EmployeeService {
                                 """,
                         employee.getFirstName(),
                         role.getName(),
-                        departmentType.getName(),
+                        department.getName(),
                         employee.getUsername(),
                         password
                 ));
+                return employeeRepository.updateEmployee(employee);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return updateEmployeeByStatusDepartmentRole(employeeId, ACTIVE, departmentType, role);
+        return null;
     }
 
     public Response deactivateEmployee(String employeeId) {
@@ -203,10 +204,16 @@ public class EmployeeService {
         int employeeCount = countAllActiveEmployees() + 1;
         String formattedId = String.format("%03d", employeeCount);
         String username = employee.getLastName().toLowerCase() + formattedId;
-        password = employee.getLastName().toLowerCase() + UUID.randomUUID();
+        password = employee.getLastName().toLowerCase() + generate6DigitPin();
         String hashedPassword = passwordUtils.encryptPassword(password);
         employee.setUsername(username);
         employee.setAccess(hashedPassword);
         return employee;
     }
+
+    private int generate6DigitPin() {
+        Random random = new Random();
+        return 100000 + random.nextInt(900000);
+    }
+
 }

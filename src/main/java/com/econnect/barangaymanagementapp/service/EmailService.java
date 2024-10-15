@@ -7,12 +7,10 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailService {
-    final String fromEmail = "your_email@gmail.com";
-    final String password = "your_email_password";
-
     public boolean sendEmail(String toEmail, String subject, String messageText) {
-        final String fromEmail = "villamoraivanren@gmail.com";
-        final String password = "rsjzwofbmdzmmhrt";
+        //Sample email credentials
+        final String fromEmail = "brgy.oldcapitolsite.gov@gmail.com";
+        final String password = "nmjoskntnlgooxqq";
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
