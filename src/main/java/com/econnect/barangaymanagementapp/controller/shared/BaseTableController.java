@@ -1,9 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
 import com.econnect.barangaymanagementapp.MainApplication;
-import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
-import com.econnect.barangaymanagementapp.interfaces.TableRowInterface;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.concurrent.Task;
@@ -14,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,26 +18,35 @@ import java.util.Objects;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.TABLE_NO_DATA;
 
-public abstract class BaseTableController {
+public abstract class BaseTableController<T> {
 
     @FXML
     private VBox tableContent;
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
-
     private final Map<String, Image> imageCache = new HashMap<>();
 
     public BaseTableController(DependencyInjector dependencyInjector) {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
-    protected abstract void addEmployeeApplicationRow(String employeeId, String lastName, String firstName, StatusType.EmployeeStatus status, ApplicationType type, ZonedDateTime zonedDate, String imageUrl);
+    protected abstract void addRow(T data);
+
+    public void showNoData() {
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(TABLE_NO_DATA.getFxmlPath());
+            Parent noDataRow = loader.load();
+            tableContent.getChildren().add(noDataRow);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected Image getImageOrDefault(String employeeId) {
         return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
     }
 
-    protected <T extends TableRowInterface> void loadImage(String id, String imageUrl, T rowController) {
+    protected <C extends BaseRowController<T>> void loadImage(String id, String imageUrl, C rowController) {
         if (imageCache.containsKey(id)) {
             rowController.setImage(imageCache.get(id));
         } else {
@@ -73,16 +78,6 @@ public abstract class BaseTableController {
             };
 
             new Thread(loadImageTask).start();
-        }
-    }
-
-    public void showNoData() {
-        try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(TABLE_NO_DATA.getFxmlPath());
-            Parent noDataRow = loader.load();
-            tableContent.getChildren().add(noDataRow);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

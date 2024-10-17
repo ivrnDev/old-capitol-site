@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
-import com.econnect.barangaymanagementapp.interfaces.TableRowInterface;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -11,9 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public abstract class BaseApplicationRowController implements TableRowInterface {
+public abstract class BaseRowController<T> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
+
 
     @FXML
     private HBox tableRow, buttonContainer;
@@ -21,7 +21,7 @@ public abstract class BaseApplicationRowController implements TableRowInterface 
     @FXML
     private ImageView image;
 
-    public BaseApplicationRowController(DependencyInjector dependencyInjector) {
+    public BaseRowController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
     }
@@ -32,7 +32,9 @@ public abstract class BaseApplicationRowController implements TableRowInterface 
         Platform.runLater(() -> setupButtonContainer());
     }
 
-    protected abstract void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage);
+    protected abstract void setData(T data);
+
+    protected abstract void setImage(Image image);
 
     private void setupImageClick() {
         ImageUtils.setCircleClip(image);

@@ -2,22 +2,20 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.appli
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.controller.shared.BaseTableController;
-import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
-import com.econnect.barangaymanagementapp.util.DateFormatter;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.OFFICE_APPLICATION_ROW;
 
-public class ApplicationTableController extends BaseTableController {
+public class ApplicationTableController extends BaseTableController<Employee> {
     @FXML
     private VBox tableContent;
 
@@ -33,13 +31,15 @@ public class ApplicationTableController extends BaseTableController {
     }
 
     @Override
-    protected void addEmployeeApplicationRow(String employeeId, String lastName, String firstName, EmployeeStatus status, ApplicationType type, ZonedDateTime zonedDate, String imageUrl) {
+    protected void addRow(Employee employeeData) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(OFFICE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationsController);
             HBox applicationRow = loader.load();
             ApplicationRowController applicationRowController = loader.getController();
-            applicationRowController.setEmployeeData(employeeId, lastName, firstName, status.getName(), type.getName(), DateFormatter.extractDateAndFormat(zonedDate), DateFormatter.extractTimeAndFormat(zonedDate), getImageOrDefault(employeeId));
-            super.loadImage(employeeId, imageUrl, applicationRowController);
+            Image defaultImage = super.getImageOrDefault(employeeData.getId());
+            applicationRowController.setImage(defaultImage);
+            applicationRowController.setData(employeeData);
+            super.loadImage(employeeData.getId(), employeeData.getProfileUrl(), applicationRowController);
             tableContent.getChildren().add(applicationRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();

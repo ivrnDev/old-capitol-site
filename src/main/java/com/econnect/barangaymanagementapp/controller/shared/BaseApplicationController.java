@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class BaseApplicationController<T extends BaseTableController> {
+public abstract class BaseApplicationController<T extends BaseTableController<Employee>> {
     @FXML
     private TextField searchField;
 
@@ -155,15 +155,16 @@ public abstract class BaseApplicationController<T extends BaseTableController> {
             tableController.showNoData();
         } else {
             employees.forEach(employee -> {
-                tableController.addEmployeeApplicationRow(
-                        employee.getId(),
-                        employee.getLastName(),
-                        employee.getFirstName(),
-                        employee.getStatus(),
-                        employee.getApplicationType(),
-                        employee.getCreatedAt(),
-                        employee.getProfileUrl()
-                );
+                Employee currentEmployee = Employee.builder().
+                        id(employee.getId()).
+                        lastName(employee.getLastName()).
+                        firstName(employee.getFirstName()).
+                        status(employee.getStatus()).
+                        applicationType(employee.getApplicationType()).
+                        createdAt(employee.getCreatedAt()).
+                        profileUrl(employee.getProfileUrl()).
+                        build();
+                tableController.addRow(currentEmployee);
             });
         }
     }

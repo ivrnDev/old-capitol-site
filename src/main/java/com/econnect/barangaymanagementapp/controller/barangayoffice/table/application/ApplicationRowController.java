@@ -2,13 +2,15 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.appli
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
 import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
-import com.econnect.barangaymanagementapp.controller.shared.BaseApplicationRowController;
+import com.econnect.barangaymanagementapp.controller.shared.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
@@ -27,7 +29,7 @@ import okhttp3.Response;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
 
 
-public class ApplicationRowController extends BaseApplicationRowController {
+public class ApplicationRowController extends BaseRowController<Employee> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
@@ -60,15 +62,14 @@ public class ApplicationRowController extends BaseApplicationRowController {
     }
 
     @Override
-    public void setEmployeeData(String employeeId, String lastName, String firstName, String status, String type, String date, String time, Image profileImage) {
-        residentIdLabel.setText(employeeId);
-        lastNameLabel.setText(lastName);
-        firstNameLabel.setText(firstName);
-        statusLabel.setText(status);
-        typeLabel.setText(type);
-        dateLabel.setText(date);
-        timeLabel.setText(time);
-        profilePicture.setImage(profileImage);
+    public void setData(Employee employeeData) {
+        residentIdLabel.setText(employeeData.getId());
+        lastNameLabel.setText(employeeData.getLastName());
+        firstNameLabel.setText(employeeData.getFirstName());
+        statusLabel.setText(employeeData.getStatus().toString());
+        typeLabel.setText(employeeData.getApplicationType().toString());
+        dateLabel.setText(DateFormatter.extractDateAndFormat(employeeData.getCreatedAt()));
+        timeLabel.setText(DateFormatter.extractTimeAndFormat(employeeData.getCreatedAt()));
     }
 
     public void setImage(Image profileImage) {
