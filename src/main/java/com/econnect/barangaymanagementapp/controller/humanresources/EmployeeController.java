@@ -82,7 +82,7 @@ public class EmployeeController {
             Platform.runLater(() -> {
                 content.getChildren().remove(loadingIndicator);
                 if (allEmployees.isEmpty()) {
-                    employeeTableController.clearTable();
+                    employeeTableController.clearRow();
                     employeeTableController.showNoData();
                 } else {
                     updateEmployeeTable(allEmployees);
@@ -139,13 +139,13 @@ public class EmployeeController {
     }
 
     private void updateEmployeeTable(List<Employee> employees) {
-        employeeTableController.clearTable();
+        employeeTableController.clearRow();
 
         if (employees.isEmpty()) {
             employeeTableController.showNoData();
         } else {
             employees.forEach(employee -> {
-                employeeTableController.addEmployeeRow(
+                employeeTableController.addRow(
                         employee.getId(),
                         employee.getLastName(),
                         employee.getFirstName(),
