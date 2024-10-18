@@ -29,7 +29,7 @@ import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.HR_EM
 public class EmployeeController {
 
     @FXML
-    private VBox content;
+    private VBox contentPane;
 
     @FXML
     private TextField searchField;
@@ -42,6 +42,7 @@ public class EmployeeController {
 
     private List<Employee> allEmployees;
     private Task<List<Employee>> searchTask;
+    private StackPane loadingIndicator;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
@@ -67,20 +68,20 @@ public class EmployeeController {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
             employeeTableController = loader.getController();
-            content.getChildren().add(employeeTable);
+            contentPane.getChildren().add(employeeTable);
         } catch (IOException e) {
             System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
 
     public void populateEmployeeRows() {
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(content.getWidth(), content.getHeight());
-        Platform.runLater(() -> content.getChildren().add(loadingIndicator));
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
             allEmployees = employeeService.findAllActiveEmployees();
             Platform.runLater(() -> {
-                content.getChildren().remove(loadingIndicator);
+                contentPane.getChildren().remove(loadingIndicator);
                 if (allEmployees.isEmpty()) {
                     employeeTableController.clearRow();
                     employeeTableController.showNoData();
@@ -91,13 +92,25 @@ public class EmployeeController {
         };
 
         Runnable onFailed = () -> {
-            Platform.runLater(() -> content.getChildren().remove(loadingIndicator));
+            Platform.runLater(() -> contentPane.getChildren().remove(loadingIndicator));
             System.err.println("Error loading employees");
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
+    public void addLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        contentPane.getChildren().add(loadingIndicator);
+    }
+
+    public void removeLoadingIndicator() {
+        contentPane.getChildren().remove(loadingIndicator);
+    }
+
+    public void reloadTable() {
+        populateEmployeeRows();
+    }
 
     private void performSearch() {
         if (searchTask != null && searchTask.isRunning()) {
@@ -145,15 +158,17 @@ public class EmployeeController {
             employeeTableController.showNoData();
         } else {
             employees.forEach(employee -> {
-                employeeTableController.addRow(
-                        employee.getId(),
-                        employee.getLastName(),
-                        employee.getFirstName(),
-                        employee.getRole(),
-                        employee.getDepartment(),
-                        employee.getStatus(),
-                        employee.getProfileUrl()
-                );
+                Employee currentEmployee = Employee.builder()
+                        .id(employee.getId())
+                        .lastName(employee.getLastName())
+                        .firstName(employee.getFirstName())
+                        .role(employee.getRole())
+                        .department(employee.getDepartment())
+                        .status(employee.getStatus())
+                        .profileUrl(employee.getProfileUrl())
+                        .build();
+                employeeTableController.addRow(currentEmployee);
+
             });
         }
     }

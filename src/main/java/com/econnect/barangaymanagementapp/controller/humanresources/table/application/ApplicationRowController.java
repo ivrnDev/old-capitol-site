@@ -68,8 +68,8 @@ public class ApplicationRowController extends BaseRowController<Employee> {
         residentIdLabel.setText(employeeData.getId());
         lastNameLabel.setText(employeeData.getLastName());
         firstNameLabel.setText(employeeData.getFirstName());
-        statusLabel.setText(employeeData.getStatus().toString());
-        typeLabel.setText(employeeData.getApplicationType().toString());
+        statusLabel.setText(employeeData.getStatus().getName());
+        typeLabel.setText(employeeData.getApplicationType().getName());
         dateLabel.setText(DateFormatter.extractDateAndFormat(employeeData.getCreatedAt()));
         timeLabel.setText(DateFormatter.extractTimeAndFormat(employeeData.getCreatedAt()));
     }

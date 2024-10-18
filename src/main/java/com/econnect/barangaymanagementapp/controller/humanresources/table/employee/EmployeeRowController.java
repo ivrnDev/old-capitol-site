@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.humanresources.table.employee;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController;
+import com.econnect.barangaymanagementapp.controller.humanresources.EmployeeController;
 import com.econnect.barangaymanagementapp.controller.shared.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
@@ -10,7 +10,6 @@ import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
-import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
@@ -33,7 +32,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
-    private final ApplicationsController applicationsController;
+    private final EmployeeController employeeController;
     private final DependencyInjector dependencyInjector;
     private final UserSession userSession;
 
@@ -46,13 +45,13 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     @FXML
     private ImageView profilePicture;
 
-    public EmployeeRowController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+    public EmployeeRowController(DependencyInjector dependencyInjector, EmployeeController employeeController) {
         super(dependencyInjector);
         this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
-        this.applicationsController = applicationsController;
+        this.employeeController = employeeController;
         this.userSession = UserSession.getInstance();
     }
 
@@ -146,7 +145,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
                     SetupRequirementsController.class,
                     controller -> controller.setId(employeeIdLabel.getText()),
                     dependencyInjector,
-                    applicationsController
+                    employeeController
             );
         });
 
@@ -165,7 +164,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
                     SetupAccountController.class,
                     controller -> controller.setId(employeeIdLabel.getText()),
                     dependencyInjector,
-                    applicationsController
+                    employeeController
             );
         });
 
@@ -189,7 +188,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     }
 
     private void updateEmployeeToUnderReview() {
-        applicationsController.addLoadingIndicator();
+        employeeController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -200,7 +199,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    applicationsController.removeLoadingIndicator();
+                    employeeController.removeLoadingIndicator();
                     reloadTable();
                     modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + employeeIdLabel.getText() + " has been emailed successfully.");
                 } else {
@@ -219,7 +218,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     }
 
     private void rejectEmployeeApplication() {
-        applicationsController.addLoadingIndicator();
+        employeeController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -230,7 +229,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    applicationsController.removeLoadingIndicator();
+                    employeeController.removeLoadingIndicator();
                     reloadTable();
                     modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
                 } else {
@@ -242,6 +241,6 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     }
 
     protected void reloadTable() {
-        applicationsController.reloadTable();
+        employeeController.reloadTable();
     }
 }

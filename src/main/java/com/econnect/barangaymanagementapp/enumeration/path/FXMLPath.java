@@ -3,8 +3,8 @@ package com.econnect.barangaymanagementapp.enumeration.path;
 public enum FXMLPath {
     TABLE_NO_DATA("view/component/no-data-row.fxml"),
 
-    HR_EMPLOYEE_TABLE("view/humanResources/table/employee/employee-table.fxml"),
-    HR_EMPLOYEE_ROW("view/humanResources/table/employee/employee-row.fxml"),
+    HR_EMPLOYEE_TABLE("view/humanresources/table/employee/employee-table.fxml"),
+    HR_EMPLOYEE_ROW("view/humanresources/table/employee/employee-row.fxml"),
     HR_EMPLOYEE_APPLICATION_TABLE("view/humanresources/table/application/application-table.fxml"),
     HR_EMPLOYEE_APPLICATION_ROW("view/humanResources/table/application/application-row.fxml"),
 
