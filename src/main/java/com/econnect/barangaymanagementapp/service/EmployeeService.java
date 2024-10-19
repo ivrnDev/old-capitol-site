@@ -55,7 +55,7 @@ public class EmployeeService {
                     .username("admin")
                     .build());
         }
-        return employeeRepository.findEmployeeByFilter(user -> user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
+        return employeeRepository.findEmployeeByFilter(user -> user.getStatus().equals(ACTIVE) && user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
                 .stream()
                 .findFirst();
        /* var employee = InMemoryDatabase.getInstance().getList();
