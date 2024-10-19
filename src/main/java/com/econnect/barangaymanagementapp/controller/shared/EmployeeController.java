@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.controller.shared.table.employee.Emplo
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
+import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -21,8 +22,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_TABLE;
 
@@ -38,6 +37,7 @@ public class EmployeeController {
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private EmployeeTableController employeeTableController;
+    private final SearchService<Employee> searchService;
     private final DependencyInjector dependencyInjector;
 
     private List<Employee> allEmployees;
@@ -51,6 +51,7 @@ public class EmployeeController {
         this.employeeService = dependencyInjector.getEmployeeService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
+        this.searchService = dependencyInjector.getEmployeeSearchService();
     }
 
     public void initialize() {
@@ -99,6 +100,15 @@ public class EmployeeController {
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
+    private void performSearch() {
+        String searchText = searchField.getText().trim().toLowerCase();
+        searchService.performSearch(
+                searchText,
+                allEmployees,
+                searchService.createEmployeeFilter(searchText),
+                (filteredEmployees) -> updateEmployeeTable(filteredEmployees));
+    }
+
     public void addLoadingIndicator() {
         loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
         contentPane.getChildren().add(loadingIndicator);
@@ -110,45 +120,6 @@ public class EmployeeController {
 
     public void reloadTable() {
         populateEmployeeRows();
-    }
-
-    private void performSearch() {
-        if (searchTask != null && searchTask.isRunning()) {
-            searchTask.cancel();
-        }
-
-        searchTask = new Task<>() {
-            @Override
-            protected List<Employee> call() {
-                String searchText = searchField.getText().trim().toLowerCase();
-                return allEmployees.stream()
-                        .filter(handleFilter(searchText))
-                        .collect(Collectors.toList());
-            }
-
-            @Override
-            protected void succeeded() {
-                List<Employee> filteredEmployees = getValue();
-                updateEmployeeTable(filteredEmployees);
-            }
-
-            @Override
-            protected void failed() {
-                Throwable exception = getException();
-                System.err.println("Error filtering employees: " + exception.getMessage());
-            }
-        };
-
-        new Thread(searchTask).start();
-    }
-
-    private Predicate<Employee> handleFilter(String searchText) {
-        return employee -> employee.getId().toLowerCase().contains(searchText)
-                || employee.getFirstName().toLowerCase().contains(searchText)
-                || employee.getLastName().toLowerCase().contains(searchText)
-                || employee.getRole().getName().toLowerCase().contains(searchText)
-                || employee.getStatus().getName().toLowerCase().contains(searchText)
-                || employee.getDepartment().getName().toLowerCase().contains(searchText);
     }
 
     private void updateEmployeeTable(List<Employee> employees) {

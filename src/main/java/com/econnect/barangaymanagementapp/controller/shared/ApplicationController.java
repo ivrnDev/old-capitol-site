@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.controller.shared;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
-import com.econnect.barangaymanagementapp.util.DateFormatter;
+import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -20,8 +20,6 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
 
@@ -33,20 +31,21 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
     private VBox contentPane;
 
     private final EmployeeService employeeService;
+    private final SearchService<Employee> searchService;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
     private T tableController;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
-    private List<Employee> allPendingEmployees;
+    private List<Employee> allApplications;
     private Task<List<Employee>> searchTask;
     private StackPane loadingIndicator;
-
 
     public ApplicationController(DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
         this.employeeService = dependencyInjector.getEmployeeService();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
+        this.searchService = dependencyInjector.getEmployeeSearchService();
     }
 
     public void initialize() {
@@ -73,15 +72,15 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
     private void populateApplicationRows() {
         addLoadingIndicator();
         Runnable call = () -> {
-            allPendingEmployees = employeeService.findAllApplicants();
+            allApplications = employeeService.findAllApplicants();
 
             Platform.runLater(() -> {
                 removeLoadingIndicator();
-                if (allPendingEmployees.isEmpty()) {
+                if (allApplications.isEmpty()) {
                     tableController.clearRow();
                     tableController.showNoData();
                 } else {
-                    updateEmployeeTable(allPendingEmployees);
+                    updateEmployeeTable(allApplications);
                 }
             });
         };
@@ -92,6 +91,15 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+    }
+
+    private void performSearch() {
+        String searchText = searchField.getText().trim().toLowerCase();
+        searchService.performSearch(
+                searchText,
+                allApplications,
+                searchService.createEmployeeApplicationFilter(searchText),
+                (filteredApplications) -> updateEmployeeTable(filteredApplications));
     }
 
     public void addLoadingIndicator() {
@@ -105,47 +113,6 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
 
     public void reloadTable() {
         populateApplicationRows();
-    }
-
-    private void performSearch() {
-        if (searchTask != null && searchTask.isRunning()) {
-            searchTask.cancel();
-        }
-
-        searchTask = new Task<>() {
-            @Override
-            protected List<Employee> call() {
-                String searchText = searchField.getText().trim().toLowerCase();
-                return allPendingEmployees.stream()
-                        .filter(handleFilter(searchText))
-                        .collect(Collectors.toList());
-            }
-
-            @Override
-            protected void succeeded() {
-                List<Employee> filteredEmployees = getValue();
-                updateEmployeeTable(filteredEmployees);
-            }
-
-            @Override
-            protected void failed() {
-                Throwable exception = getException();
-                System.err.println("Error filtering employees: " + exception.getMessage());
-            }
-        };
-
-        new Thread(searchTask).start();
-    }
-
-    private Predicate<Employee> handleFilter(String searchText) {
-        return employee -> employee.getId().toLowerCase().contains(searchText)
-                || employee.getFirstName().toLowerCase().contains(searchText)
-                || employee.getLastName().toLowerCase().contains(searchText)
-                || employee.getStatus().getName().toLowerCase().contains(searchText)
-                || employee.getApplicationType().getName().toLowerCase().contains(searchText)
-                || employee.getCreatedAt().toString().contains(searchText)
-                || DateFormatter.extractDateAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText)
-                || DateFormatter.extractTimeAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText);
     }
 
     private void updateEmployeeTable(List<Employee> employees) {
