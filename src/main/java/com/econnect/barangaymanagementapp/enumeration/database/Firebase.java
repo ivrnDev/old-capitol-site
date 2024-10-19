@@ -2,7 +2,7 @@ package com.econnect.barangaymanagementapp.enumeration.database;
 
 public enum Firebase {
     EMPLOYEES("/3-Employees"),
-    RESIDENTS("Accounts"),
+    RESIDENTS("Residents"),
     VISITORS("/3-Visitors"),
     ANNOUNCEMENTS("/3-Announcements"),
     EVENTS("/3-Events"),
