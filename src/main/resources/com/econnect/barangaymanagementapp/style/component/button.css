@@ -5,8 +5,12 @@
 
 /* Variants */
 .add {
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
     -fx-background-color: #A7D5FF;
     -fx-padding: 5px 20px;
+    -fx-border-color: #787878;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
 }
 
 .accept {
@@ -19,11 +23,6 @@
 
 .add:hover {
     -fx-background-color: #8FC5FF;
-}
-
-.button {
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
 }
 
 /* Highlighted Variant */

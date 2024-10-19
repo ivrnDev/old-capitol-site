@@ -5,8 +5,8 @@
 
 .search-box {
     -fx-border-radius: 20px;
-    -fx-border-width: 1px;
+    -fx-border-width: 0.5px;
     -fx-border-color: black;
-    
+
 }
 
