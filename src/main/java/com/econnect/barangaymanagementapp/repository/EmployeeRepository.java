@@ -43,18 +43,6 @@ public class EmployeeRepository extends BaseRepository<Employee> {
         });
     }
 
-//    public Optional<Employee> findEmployeeByCredentials(String username, String password) {
-//
-//        try {
-//            ArrayList<Employee> employees = InMemoryDatabase.getInstance().getList();
-//            return employees.stream()
-//                    .filter(employee -> employee.getUsername().equals(username) && employee.getAccess().equals(password))
-//                    .findFirst();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     public List<Employee> findEmployeeByFilter(Predicate<Employee> predicate) {
         return findAllByFilter(apiKey, new TypeReference<>() {
         }, predicate);
