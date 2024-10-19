@@ -5,3 +5,9 @@
 .root-pane.scroll-pane .viewport {
     -fx-background-color: #EEFCFF;
 }
+
+.button-background {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-background-color: #D9D9D9;
+}
