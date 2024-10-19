@@ -27,7 +27,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class SetupRequirementsController<T extends BaseApplicationController> implements BaseViewController {
+public class SetupRequirementsController<T extends ApplicationController> implements BaseViewController {
     private final ModalUtils modalUtils;
     private final ImageService imageService;
     private final EmployeeService employeeService;
@@ -184,7 +184,7 @@ public class SetupRequirementsController<T extends BaseApplicationController> im
     private void reloadTable() {
         applicationsController.reloadTable();
     }
-    
+
     @FXML
     private void closeWindowConfirmation() {
         modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Exit", "Are you sure you want to exit this window? Any unsaved changes will be lost.", result -> {

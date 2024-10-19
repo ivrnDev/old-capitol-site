@@ -20,7 +20,7 @@ import okhttp3.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetupAccountController<T extends BaseApplicationController> implements BaseViewController {
+public class SetupAccountController<T extends ApplicationController> implements BaseViewController {
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
     private T applicationsController;

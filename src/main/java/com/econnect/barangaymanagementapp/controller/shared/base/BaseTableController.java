@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.shared;
+package com.econnect.barangaymanagementapp.controller.shared.base;
 
 import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -30,7 +30,7 @@ public abstract class BaseTableController<T> {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
-    protected abstract void addRow(T data);
+    public abstract void addRow(T data);
 
     public void showNoData() {
         try {

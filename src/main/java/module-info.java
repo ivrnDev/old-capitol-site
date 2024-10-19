@@ -33,15 +33,15 @@ module com.econnect.barangaymanagementapp {
 
     //Barangay Office
     opens com.econnect.barangaymanagementapp.controller.barangayoffice to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.application to javafx.fxml;
 
     //Human Resources
     opens com.econnect.barangaymanagementapp.controller.humanresources to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.humanresources.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.humanresources.table.employee to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.humanresources.table.application to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.shared to javafx.fxml;
 
+    //Shared
+    opens com.econnect.barangaymanagementapp.controller.shared.modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.shared.table.employee to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.shared.table.application to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.shared to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.shared.base to javafx.fxml;
 
 }

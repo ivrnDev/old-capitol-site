@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.shared;
+package com.econnect.barangaymanagementapp.controller.shared.base;
 
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;

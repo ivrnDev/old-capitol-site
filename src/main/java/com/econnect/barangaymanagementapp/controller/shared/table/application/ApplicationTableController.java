@@ -1,7 +1,7 @@
-package com.econnect.barangaymanagementapp.controller.barangayoffice.table.application;
+package com.econnect.barangaymanagementapp.controller.shared.table.application;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ApplicationsController;
-import com.econnect.barangaymanagementapp.controller.shared.BaseTableController;
+import com.econnect.barangaymanagementapp.controller.shared.ApplicationController;
+import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.OFFICE_APPLICATION_ROW;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_ROW;
 
 public class ApplicationTableController extends BaseTableController<Employee> {
     @FXML
@@ -21,19 +21,19 @@ public class ApplicationTableController extends BaseTableController<Employee> {
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
-    private final ApplicationsController applicationsController;
+    private final ApplicationController applicationController;
 
-    public ApplicationTableController(DependencyInjector dependencyInjector, ApplicationsController applicationsController) {
+    public ApplicationTableController(DependencyInjector dependencyInjector, ApplicationController applicationController) {
         super(dependencyInjector);
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;
-        this.applicationsController = applicationsController;
+        this.applicationController = applicationController;
     }
 
     @Override
-    protected void addRow(Employee employeeData) {
+    public void addRow(Employee employeeData) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(OFFICE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationsController);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationController);
             HBox applicationRow = loader.load();
             ApplicationRowController applicationRowController = loader.getController();
             Image defaultImage = super.getImageOrDefault(employeeData.getId());

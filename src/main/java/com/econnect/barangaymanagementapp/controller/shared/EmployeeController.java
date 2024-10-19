@@ -1,12 +1,13 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
+import com.econnect.barangaymanagementapp.controller.shared.table.employee.EmployeeTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
-import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
+import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -23,65 +24,69 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class BaseApplicationController<T extends BaseTableController<Employee>> {
-    @FXML
-    private TextField searchField;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_TABLE;
+
+public class EmployeeController {
 
     @FXML
     private VBox contentPane;
 
-    private final EmployeeService employeeService;
-    private final FXMLLoaderFactory fxmlLoaderFactory;
-    private final DependencyInjector dependencyInjector;
-    private T tableController;
-    private final FXMLPath fxmlPath;
+    @FXML
+    private TextField searchField;
 
-    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
-    private List<Employee> allPendingEmployees;
+    private final EmployeeService employeeService;
+    private final ModalUtils modalUtils;
+    private final FXMLLoaderFactory fxmlLoaderFactory;
+    private EmployeeTableController employeeTableController;
+    private final DependencyInjector dependencyInjector;
+
+    private List<Employee> allEmployees;
     private Task<List<Employee>> searchTask;
     private StackPane loadingIndicator;
 
+    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
-    public BaseApplicationController(DependencyInjector dependencyInjector, FXMLPath fxmlPath) {
+    public EmployeeController(DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
         this.employeeService = dependencyInjector.getEmployeeService();
+        this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
-        this.fxmlPath = fxmlPath;
     }
 
     public void initialize() {
-        loadApplicationTable();
-        populateApplicationRows();
+        loadEmployeeTable();
+        populateEmployeeRows();
+
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
         });
     }
 
-    private void loadApplicationTable() {
+    private void loadEmployeeTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath.getFxmlPath(), dependencyInjector, this);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent employeeTable = loader.load();
-            tableController = loader.getController();
+            employeeTableController = loader.getController();
             contentPane.getChildren().add(employeeTable);
         } catch (IOException e) {
-            e.printStackTrace();
             System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
 
-    private void populateApplicationRows() {
-        addLoadingIndicator();
-        Runnable call = () -> {
-            allPendingEmployees = employeeService.findAllApplicants();
+    public void populateEmployeeRows() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
 
+        Runnable call = () -> {
+            allEmployees = employeeService.findAllActiveEmployees();
             Platform.runLater(() -> {
-                removeLoadingIndicator();
-                if (allPendingEmployees.isEmpty()) {
-                    tableController.clearRow();
-                    tableController.showNoData();
+                contentPane.getChildren().remove(loadingIndicator);
+                if (allEmployees.isEmpty()) {
+                    employeeTableController.clearRow();
+                    employeeTableController.showNoData();
                 } else {
-                    updateEmployeeTable(allPendingEmployees);
+                    updateEmployeeTable(allEmployees);
                 }
             });
         };
@@ -104,7 +109,7 @@ public abstract class BaseApplicationController<T extends BaseTableController<Em
     }
 
     public void reloadTable() {
-        populateApplicationRows();
+        populateEmployeeRows();
     }
 
     private void performSearch() {
@@ -116,7 +121,7 @@ public abstract class BaseApplicationController<T extends BaseTableController<Em
             @Override
             protected List<Employee> call() {
                 String searchText = searchField.getText().trim().toLowerCase();
-                return allPendingEmployees.stream()
+                return allEmployees.stream()
                         .filter(handleFilter(searchText))
                         .collect(Collectors.toList());
             }
@@ -141,32 +146,35 @@ public abstract class BaseApplicationController<T extends BaseTableController<Em
         return employee -> employee.getId().toLowerCase().contains(searchText)
                 || employee.getFirstName().toLowerCase().contains(searchText)
                 || employee.getLastName().toLowerCase().contains(searchText)
+                || employee.getRole().getName().toLowerCase().contains(searchText)
                 || employee.getStatus().getName().toLowerCase().contains(searchText)
-                || employee.getApplicationType().getName().toLowerCase().contains(searchText)
-                || employee.getCreatedAt().toString().contains(searchText)
-                || DateFormatter.extractDateAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText)
-                || DateFormatter.extractTimeAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText);
+                || employee.getDepartment().getName().toLowerCase().contains(searchText);
     }
 
     private void updateEmployeeTable(List<Employee> employees) {
-        tableController.clearRow();
+        employeeTableController.clearRow();
 
         if (employees.isEmpty()) {
-            tableController.showNoData();
+            employeeTableController.showNoData();
         } else {
             employees.forEach(employee -> {
-                Employee currentEmployee = Employee.builder().
-                        id(employee.getId()).
-                        lastName(employee.getLastName()).
-                        firstName(employee.getFirstName()).
-                        status(employee.getStatus()).
-                        applicationType(employee.getApplicationType()).
-                        createdAt(employee.getCreatedAt()).
-                        profileUrl(employee.getProfileUrl()).
-                        build();
-                tableController.addRow(currentEmployee);
+                Employee currentEmployee = Employee.builder()
+                        .id(employee.getId())
+                        .lastName(employee.getLastName())
+                        .firstName(employee.getFirstName())
+                        .role(employee.getRole())
+                        .department(employee.getDepartment())
+                        .status(employee.getStatus())
+                        .profileUrl(employee.getProfileUrl())
+                        .build();
+                employeeTableController.addRow(currentEmployee);
+
             });
         }
     }
 
+    @FXML
+    private void showAddEmployee() {
+        modalUtils.customizeModal(FXMLPath.ADD_EMPLOYEE);
+    }
 }

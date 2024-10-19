@@ -1,7 +1,7 @@
-package com.econnect.barangaymanagementapp.controller.humanresources.table.employee;
+package com.econnect.barangaymanagementapp.controller.shared.table.employee;
 
-import com.econnect.barangaymanagementapp.controller.humanresources.EmployeeController;
-import com.econnect.barangaymanagementapp.controller.shared.BaseTableController;
+import com.econnect.barangaymanagementapp.controller.shared.EmployeeController;
+import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.HR_EMPLOYEE_ROW;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_ROW;
 
 public class EmployeeTableController extends BaseTableController<Employee> {
     @FXML
@@ -33,7 +33,7 @@ public class EmployeeTableController extends BaseTableController<Employee> {
     @Override
     public void addRow(Employee employeeData) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_ROW.getFxmlPath(), dependencyInjector, employeeController);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_ROW.getFxmlPath(), dependencyInjector, employeeController);
             HBox employeeRow = loader.load();
             EmployeeRowController employeeRowController = loader.getController();
             Image defaultImage = super.getImageOrDefault(employeeData.getId());

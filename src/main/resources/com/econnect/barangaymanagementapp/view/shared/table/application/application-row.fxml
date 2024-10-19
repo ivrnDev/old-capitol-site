@@ -10,8 +10,8 @@
 
 <HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row"
       stylesheets="@../../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
-      fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.table.application.ApplicationRowController"
-      xmlns:fx="http://javafx.com/fxml/1">
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationRowController">
     <children>
         <HBox alignment="CENTER" minWidth="90.0">
             <children>
@@ -96,7 +96,8 @@
                 </Label>
             </children>
         </HBox>
-        <HBox fx:id="buttonContainer" alignment="CENTER" prefWidth="250.0" spacing="20.0"/>
+        <HBox fx:id="buttonContainer" alignment="CENTER" prefWidth="250.0" spacing="20.0"
+              stylesheets="@../../../../style/component/button.css"/>
     </children>
     <padding>
         <Insets left="20.0" right="20.0"/>

@@ -13,7 +13,7 @@
 
 <BorderPane stylesheets="@../../style/component/button.css" xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.econnect.barangaymanagementapp.controller.humanresources.ApplicationsController">
+            fx:controller="com.econnect.barangaymanagementapp.controller.shared.ApplicationController">
     <top>
         <fx:include fx:id="header" source="../component/header.fxml"/>
     </top>
