@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
-import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
+import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.SearchService;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
 
-public class ApplicationController<T extends BaseTableController<Employee>> {
+public class ApplicationController {
     @FXML
     private TextField searchField;
 
@@ -33,7 +33,7 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
     private final SearchService<Employee> searchService;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
-    private T tableController;
+    private ApplicationTableController tableController;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private List<Employee> allApplications;
