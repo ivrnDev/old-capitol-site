@@ -118,20 +118,8 @@ public class ApplicationController<T extends BaseTableController<Employee>> {
 
         if (employees.isEmpty()) {
             tableController.showNoData();
-        } else {
-            employees.forEach(employee -> {
-                Employee currentEmployee = Employee.builder().
-                        id(employee.getId()).
-                        lastName(employee.getLastName()).
-                        firstName(employee.getFirstName()).
-                        status(employee.getStatus()).
-                        applicationType(employee.getApplicationType()).
-                        createdAt(employee.getCreatedAt()).
-                        profileUrl(employee.getProfileUrl()).
-                        build();
-                tableController.addRow(currentEmployee);
-            });
+            return;
         }
+        employees.forEach(employee -> tableController.addRow(employee));
     }
-
 }

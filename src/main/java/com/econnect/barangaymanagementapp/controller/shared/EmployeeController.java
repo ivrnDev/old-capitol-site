@@ -125,21 +125,9 @@ public class EmployeeController {
 
         if (employees.isEmpty()) {
             employeeTableController.showNoData();
-        } else {
-            employees.forEach(employee -> {
-                Employee currentEmployee = Employee.builder()
-                        .id(employee.getId())
-                        .lastName(employee.getLastName())
-                        .firstName(employee.getFirstName())
-                        .role(employee.getRole())
-                        .department(employee.getDepartment())
-                        .status(employee.getStatus())
-                        .profileUrl(employee.getProfileUrl())
-                        .build();
-                employeeTableController.addRow(currentEmployee);
-
-            });
+            return;
         }
+        employees.forEach(employee -> employeeTableController.addRow(employee));
     }
 
     @FXML
