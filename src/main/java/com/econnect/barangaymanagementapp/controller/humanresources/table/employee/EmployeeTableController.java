@@ -32,7 +32,6 @@ public class EmployeeTableController extends BaseTableController<Employee> {
 
     @Override
     public void addRow(Employee employeeData) {
-        System.out.println("Adding employee row: " + employeeData);
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(HR_EMPLOYEE_ROW.getFxmlPath(), dependencyInjector, employeeController);
             HBox employeeRow = loader.load();

@@ -22,7 +22,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordUtils passwordUtils;
     private final EmailService emailService;
-    private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, INACTIVE, RESIGNED, RETIRED, REJECTED, PENDING, EVALUATION);
+    private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, RESIGNED, REJECTED, PENDING, EVALUATION);
     private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
     private String password;
 
@@ -141,10 +141,6 @@ public class EmployeeService {
             }
         }
         return null;
-    }
-
-    public Response deactivateEmployee(String employeeId) {
-        return updateEmployeeByStatus(employeeId, INACTIVE);
     }
 
     public Response updateEmployeeToUnderReview(String employeeId) {

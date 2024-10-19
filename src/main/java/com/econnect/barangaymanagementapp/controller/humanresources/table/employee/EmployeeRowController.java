@@ -26,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.ACTIVE;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
 
 public class EmployeeRowController extends BaseRowController<Employee> {
@@ -102,78 +103,36 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     protected void setupButtonContainer() {
         setupViewButton();
         String currentStatus = statusLabel.getText();
-        switch (fromName(currentStatus)) {
-            case PENDING:
-                setupPendingButtons();
-                break;
-            case UNDER_REVIEW:
-                setupUnderReviewButtons();
-                break;
-            case EVALUATION:
-                setupEvaluationButtons();
-                break;
-            default:
-                buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-                    modalUtils.customizeModalWithCallback(
-                            FXMLPath.VIEW_APPLICATION_EMPLOYEE,
-                            ViewEmployeeApplicationController.class,
-                            controller -> controller.setId(employeeIdLabel.getText())
-                    );
-                }));
+        if (!fromName(currentStatus).equals(ACTIVE)) {
+            setupInactiveButton();
+            return;
         }
+        setupActiveButton();
     }
 
-    private void setupPendingButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
+    private void setupActiveButton() {
+        Button updateBtn = ButtonUtils.createButton("Update", ButtonStyle.UPDATE, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
                 if (isConfirmed) updateEmployeeToUnderReview();
             });
         });
 
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
+        Button terminateBtn = ButtonUtils.createButton("Terminate", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Terminate", "Are you sure you want to terminate employee" + employeeIdLabel.getText() + "?", isConfirmed -> {
+                if (isConfirmed) terminateEmployee();
             });
         });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(updateBtn, terminateBtn);
     }
 
-    private void setupUnderReviewButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.SETUP_REQUIREMENTS,
-                    SetupRequirementsController.class,
-                    controller -> controller.setId(employeeIdLabel.getText()),
-                    dependencyInjector,
-                    employeeController
-            );
-        });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
+    private void setupInactiveButton() {
+        Button restoreBtn = ButtonUtils.createButton("Restore", ButtonStyle.UPDATE, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to restore Employee" + employeeIdLabel.getText(), isConfirmed -> {
+                if (isConfirmed) updateEmployeeToUnderReview();
             });
         });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
-    }
 
-    private void setupEvaluationButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.SETUP_ACCOUNT,
-                    SetupAccountController.class,
-                    controller -> controller.setId(employeeIdLabel.getText()),
-                    dependencyInjector,
-                    employeeController
-            );
-        });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
-            });
-        });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().add(restoreBtn);
     }
 
     private void setupViewButton() {
@@ -217,12 +176,12 @@ public class EmployeeRowController extends BaseRowController<Employee> {
         new Thread(task).start();
     }
 
-    private void rejectEmployeeApplication() {
+    private void terminateEmployee() {
         employeeController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
-                return employeeService.rejectEmployee(employeeIdLabel.getText());
+                return employeeService.terminateEmployee(employeeIdLabel.getText());
             }
 
             @Override
@@ -231,7 +190,7 @@ public class EmployeeRowController extends BaseRowController<Employee> {
                 if (response.isSuccessful()) {
                     employeeController.removeLoadingIndicator();
                     reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
+                    modalUtils.showModal(Modal.SUCCESS, "Terminated", "Employee + " + employeeIdLabel.getText() + " has been terminated successfully.");
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
                 }

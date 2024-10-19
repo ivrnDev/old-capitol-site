@@ -7,13 +7,9 @@ public class StatusType {
         UNDER_REVIEW("Under Review"),
         EVALUATION("Evaluation"), //
         ACTIVE("Active"),
-        INACTIVE("Inactive"),
         RESIGNED("Resigned"),
-        RETIRED("Retired"),
         REJECTED("Rejected"),
-        WITHDRAWN("Withdrawn"),
-        TERMINATED("Terminated"),
-        ;
+        TERMINATED("Terminated");
 
         private String status;
 
