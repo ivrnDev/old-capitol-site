@@ -170,15 +170,15 @@ public class AddEmployeeController {
                 if (resident.isPresent()) {
                     residentExists = true;
                     Resident residentInfo = resident.get();
-                    profileLink = residentInfo.getImage1x1URL();
+                    profileLink = residentInfo.getProfileUrl();
                     firstNameInput.setText(residentInfo.getFirstName());
                     lastNameInput.setText(residentInfo.getLastName());
                     middleNameInput.setText(residentInfo.getMiddleName());
                     addressInput.setText(residentInfo.getAddress());
                     birthdateInput.setText(residentInfo.getBirthdate());
                     emailInput.setText(residentInfo.getEmail());
-                    phoneInput.setText(residentInfo.getContact());
-                    loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getImage1x1URL());
+                    phoneInput.setText(residentInfo.getContactNumber());
+                    loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
                 } else {
                     clearInputFields();
                 }
