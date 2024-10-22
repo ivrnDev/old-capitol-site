@@ -22,47 +22,10 @@ public class FormValidator {
     public final Predicate<String> IS_NUMBER = text -> text.matches("\\d+");
     public final Predicate<String> IS_EMAIL = text -> text.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     public final Predicate<String> IS_VALID_PHONE = text -> text.matches("^\\+?[0-9]{10,15}$");
+    public final Predicate<String> dateValidator = text -> text.matches("\\d{1,2}/\\d{1,2}/\\d{4}");
 
     public FormValidator(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
-    }
-
-    public boolean hasEmptyField(Node... nodes) {
-        final boolean[] hasEmptyField = {false};
-
-        Arrays.stream(nodes).forEach(node -> {
-            switch (node) {
-                case TextField textField -> {
-                    if (textField.getText() == null || textField.getText().trim().isEmpty()) {
-                        textField.setStyle("-fx-border-color: red;");
-                        addListeners(textField);
-                        hasEmptyField[0] = true;
-                    } else {
-                        textField.setStyle(null);
-                    }
-                }
-                case ComboBox<?> comboBox -> {
-                    if (comboBox.getValue() == null) {
-                        comboBox.setStyle("-fx-border-color: red;");
-                        addListeners(comboBox);
-                        hasEmptyField[0] = true;
-                    } else {
-                        comboBox.setStyle(null);
-                    }
-                }
-//                case DatePicker datePicker -> {
-//                    if (datePicker.getValue() == null) {
-//                        datePicker.setStyle("-fx-border-color: red;");
-//                        hasEmptyField[0] = true;
-//                    }
-//                }
-                default -> {
-                    System.out.println("Unsupported node type: " + node.getClass().getSimpleName());
-                }
-            }
-        });
-
-        return hasEmptyField[0];
     }
 
     public void validateFile(File file, HBox buttonContainer) {
@@ -71,76 +34,47 @@ public class FormValidator {
 
     public void setupDatePicker(LocalDate minDate, LocalDate maxDate, DatePicker... datePickers) {
         Arrays.stream(datePickers).forEach(node -> {
-            node.valueProperty().addListener(_ -> validateDate(minDate, maxDate, node));
             node.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    if (date.isAfter(maxDate) || date.isBefore(minDate)) {
-                        setDisable(true);
-                        setStyle("-fx-background-color: #ece0e1;");
-                    }
+                    setDisable(date.isBefore(minDate) || date.isAfter(maxDate));
+                }
+            });
+            node.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                if (!isNowFocused) {
+                    handleDateInput(node, minDate, maxDate);
+                }
+            });
+            node.getEditor().setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    handleDateInput(node, minDate, maxDate);
                 }
             });
         });
     }
 
-    public boolean validateDate(LocalDate minDate, LocalDate maxDate, DatePicker... datePickers) {
-        System.out.println("CALL VALIDATE DATE");
-        boolean hasError = false;
-        boolean hasNoValue = false;
-
-        if (datePickers.length == 0) {
-            return false;
-        }
-
-        for (DatePicker datePicker : datePickers) {
-            datePicker.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-                if (!isNowFocused) {
-                    handleDateInput(datePicker);
-                }
-            });
-
-//            datePicker.getEditor().setOnKeyPressed(event -> {
-//                if (event.getCode() == KeyCode.ENTER) {
-//                    handleDateInput(datePicker);
-//                }
-//            });
-
-            LocalDate selectedDate = datePicker.getValue();
-            if (selectedDate == null) {
-                datePicker.setStyle("-fx-border-color: red;");
-                hasNoValue = true;
-            } else if (selectedDate.isBefore(minDate) || selectedDate.isAfter(maxDate)) {
-                datePicker.setStyle("-fx-border-color: red;");
-                hasError = true;
-            } else {
-                datePicker.setStyle(null);
-            }
-        }
-
-        if (hasError) {
-            modalUtils.showModal(ERROR, "Invalid Date", "Selected date is not within the allowed range.");
-        }
-
-        if (hasNoValue) {
-            modalUtils.showModal(ERROR, "Invalid Date", "Please enter a valid date format.");
-        }
-
-        return hasError || hasNoValue;
-    }
-
-    private void handleDateInput(DatePicker datePicker) {
+    private void handleDateInput(DatePicker datePicker, LocalDate minDate, LocalDate maxDate) {
         LocalDate date = null;
         try {
-            date = datePicker.getConverter().fromString(datePicker.getEditor().getText());
+            String text = datePicker.getEditor().getText();
+            if (!dateValidator.test(text)) {
+                modalUtils.showModal(ERROR, "Invalid Date", "Please enter a valid date in the format MM/DD/YYYY.");
+                throw new Exception();
+            }
+            date = datePicker.getConverter().fromString(text);
+            if (date == null || date.isBefore(minDate) || date.isAfter(maxDate)) {
+                modalUtils.showModal(ERROR, "Invalid Date", "Please enter a valid date within the range.");
+                throw new Exception();
+            }
             datePicker.setValue(date);
             datePicker.setStyle(null);
         } catch (Exception e) {
             datePicker.getEditor().setText("");
             datePicker.setValue(null);
             datePicker.setStyle("-fx-border-color: red;");
-            modalUtils.showModal(ERROR, "Invalid Date", "Please enter a valid date format.");
+            throw new RuntimeException("Invalid date input: " + date);
+
         }
     }
 
@@ -154,20 +88,31 @@ public class FormValidator {
         }
     }
 
-    private void addListeners(Node node) {
+    public void addListeners(Node node, Predicate<String> validator, String errorMessage) {
         switch (node) {
             case TextField textField -> {
                 textField.focusedProperty().addListener((_, _, newValue) -> {
-                    if (newValue) {
-                        textField.setStyle(null);
+                    if (!newValue) {
+                        String text = textField.getText();
+                        if (text == null || text.trim().isEmpty() || !validator.test(text)) {
+                            textField.setStyle("-fx-border-color: red;");
+                            modalUtils.showModal(ERROR, "Error", errorMessage);
+                        } else {
+                            textField.setStyle(null);
+                        }
                     }
                 });
                 textField.setOnKeyTyped(_ -> textField.setStyle(null));
             }
             case ComboBox<?> comboBox -> {
-                comboBox.valueProperty().addListener((_, _, newValue) -> {
-                    if (newValue != null) {
-                        comboBox.setStyle(null);
+                comboBox.focusedProperty().addListener((_, _, newValue) -> {
+                    if (!newValue) {
+                        if (comboBox.getValue() == null) {
+                            comboBox.setStyle("-fx-border-color: red;");
+                            modalUtils.showModal(ERROR, "Error", "Please select a valid option.");
+                        } else {
+                            comboBox.setStyle(null);
+                        }
                     }
                 });
             }
