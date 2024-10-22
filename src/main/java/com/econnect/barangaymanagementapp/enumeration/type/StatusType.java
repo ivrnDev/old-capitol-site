@@ -31,6 +31,35 @@ public class StatusType {
         }
     }
 
+    public enum ResidentStatus {
+        PENDING("Pending"),
+        UNDER_REVIEW("Under Review"),
+        VERIFIED("Verified"),
+        DECEASED("Deceased"),
+        MIGRATED("Migrated"),
+        SUSPENDED("Suspended"),
+        REMOVED("Removed");
+
+        private String status;
+
+        ResidentStatus(String status) {
+            this.status = status;
+        }
+
+        public String getName() {
+            return status;
+        }
+
+        public static ResidentStatus fromName(String name) {
+            for (ResidentStatus status : ResidentStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return PENDING;
+        }
+    }
+
 }
 
 

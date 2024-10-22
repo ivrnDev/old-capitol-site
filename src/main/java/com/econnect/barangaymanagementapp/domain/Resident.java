@@ -2,130 +2,66 @@ package com.econnect.barangaymanagementapp.domain;
 
 import com.econnect.barangaymanagementapp.config.deserializer.GenderDeserializer;
 import com.econnect.barangaymanagementapp.enumeration.type.GenderType;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.ZonedDateTime;
+
+import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Resident extends BaseEntity {
-    @JsonProperty("AEmail")
-    private String email;
-
-    @JsonProperty("Address")
-    private String address;
-
-    @JsonProperty("Age")
-    private String age;
-
-    @JsonProperty("Birthdate")
-    private String birthdate;
-
-    @JsonProperty("CapabToTravel")
-    private String capabToTravel;
-
-    @JsonProperty("Contact")
-    private String contact;
-
-    @JsonProperty("EducBG")
-    private String educBG;
-
-    @JsonProperty("EmployBusiness")
-    private String employBusiness;
-
-    @JsonProperty("Evader")
-    private String evader;
-
-    @JsonProperty("FatherFirstName")
-    private String fatherFirstName;
-
-    @JsonProperty("FatherLastName")
-    private String fatherLastName;
-
-    @JsonProperty("FatherMiddleName")
-    private String fatherMiddleName;
-
-    @JsonProperty("FirstName")
     private String firstName;
-
-    @JsonProperty("GOVTID")
-    private String govtID;
-
-    @JsonProperty("ICA")
-    private String ica;
-
-    @JsonProperty("Image1x1URL")
-    private String image1x1URL;
-
-    @JsonProperty("LanguageSpoken")
-    private String languageSpoken;
-
-    @JsonProperty("LastName")
-    private String lastName;
-
-    @JsonProperty("MiddleName")
     private String middleName;
-
-    @JsonProperty("MotherFirstName")
-    private String motherFirstName;
-
-    @JsonProperty("MotherLastName")
-    private String motherLastName;
-
-    @JsonProperty("MotherMiddleName")
-    private String motherMiddleName;
-
-    @JsonProperty("NameExtension")
+    private String lastName;
     private String nameExtension;
-
-    @JsonProperty("OSCA")
-    private String osca;
-
-    @JsonProperty("PMR")
-    private String pmr;
-
-    @JsonProperty("PhilHealth")
-    private String philHealth;
-
-    @JsonProperty("RIP")
-    private String rip;
-
-    @JsonProperty("SCA")
-    private String sca;
-
-    @JsonProperty("SSS")
-    private String sss;
-
-    @JsonProperty("Sex")
+    private String contactNumber;
+    private String email;
+    private String address;
     @JsonDeserialize(using = GenderDeserializer.class)
-    private GenderType gender;
+    private GenderType sex;
+    private String age;
+    private String birthdate;
+    private String birthplace;
+    private String citizenship;
+    private String civilStatus;
+    private MotherTongue motherTounge;
+    private BloodType bloodType;
+    private Religion religion;
+    private String occupation;
 
-    @JsonProperty("SourceIncome")
-    private String sourceIncome;
+    private String fatherFirstName;
+    private String fatherLastName;
+    private String fatherMiddleName;
+    private String fatherNameExtension;
+    private String fatherOccupation;
+    private String fatherBirthdate;
 
-    @JsonProperty("Specialization")
-    private String specialization;
+    private String motherFirstName;
+    private String motherLastName;
+    private String motherMiddleName;
+    private String motherNameExtension;
+    private String motherOccupation;
 
-    @JsonProperty("SpouseFirstName")
     private String spouseFirstName;
-
-    @JsonProperty("SpouseLastName")
     private String spouseLastName;
-
-    @JsonProperty("SpouseMiddleName")
     private String spouseMiddleName;
+    private String spouseNameExtension;
+    private String spouseOccupation;
 
-    @JsonProperty("Status")
-    private String status;
-
-    @JsonProperty("TIN")
-    private String tin;
-
-    @JsonProperty("ValidIDURL")
-    private String validIDURL;
+    private EconomicLevelType houseHoldIncome;
+    private ResidentStatus status;
+    private String profileUrl;
+    private String validIdURL;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 }

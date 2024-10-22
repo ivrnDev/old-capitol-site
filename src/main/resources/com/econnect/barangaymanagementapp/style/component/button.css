@@ -33,7 +33,7 @@
 }
 
 .h-reject {
-    -fx-background-color: #8B0909;
+    -fx-background-color: #AD3838;
     -fx-text-fill: white;
 }
 
@@ -61,6 +61,10 @@
 
 .h-update:hover {
     -fx-background-color: #6A82C4;
+}
+
+.drop-shadow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
 }
 
 

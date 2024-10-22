@@ -36,10 +36,9 @@ public class MainApplication extends Application {
     }
 
     private void test(DependencyInjector dependencyInjector) {
-        var repo = dependencyInjector.getResidentRepository();
-        var emp = repo.findAllResidents();
+        var repo = dependencyInjector.getResidentService();
+        var emp = repo.findAllPendingResidents();
         System.out.println(emp);
-
     }
 
     private void checkResourcesInBackground(Stage stage) {

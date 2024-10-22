@@ -30,6 +30,7 @@ public class DependencyInjector {
     private final JsonConverter jsonConverter;
     private final HTTPClient httpClient;
     private final PasswordUtils passwordUtils;
+    private final FormValidator formValidator;
     private final ImageService imageService;
     private final FileChooserUtils fileChooserUtils;
     private final SearchService<Employee> employeeSearchService;
@@ -58,7 +59,7 @@ public class DependencyInjector {
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
         this.fileChooserUtils = new FileChooserUtils();
-
+        this.formValidator = new FormValidator(this);
 
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);

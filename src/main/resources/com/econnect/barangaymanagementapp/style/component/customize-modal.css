@@ -24,7 +24,7 @@
 
 /* Label */
 .input-label {
-    -fx-background-color: #B6F1F4;
+    -fx-background-color: #ACCEF6;
 }
 
 .input-label-first {
@@ -46,14 +46,20 @@
 }
 
 .text-input-first {
+    -fx-border-width: 1px;
+    -fx-border-radius: 0 10px 0 0;
     -fx-background-radius: 0 10px 0 0;
 }
 
 .text-input-default {
+    -fx-border-width: 1px;
+    -fx-border-radius: 0 10px 10px 0;
     -fx-background-radius: 0 10px 10px 0;
 }
 
 .text-input-last {
+    -fx-border-width: 1px;
+    -fx-border-radius: 0 0 10px 0;
     -fx-background-radius: 0 0 10px 0;
 }
 
@@ -66,43 +72,49 @@
     -fx-background-radius: 10px;
 }
 
-.date-picker {
+.file-date.date-picker {
     -fx-background-color: #ffffff;
     -fx-border-color: #787878;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
 
-.date-picker .text-field {
+.file-date.date-picker .text-field {
     -fx-background-color: #ffffff;
     -fx-border-radius: 10px 0 0 10px;
     -fx-background-radius: 10px 0 0 10px;
 }
 
-.date-picker .arrow-button {
+.file-date.date-picker .arrow-button {
     -fx-background-color: #ffffff;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
 
-.date-picker .text-field:empty:focused {
+.file-date.date-picker .text-field:empty:focused {
     -fx-cursor: default;
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
-/* Button */
-.button {
-    -fx-border-color: #787878;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 10px;
+.input-date.date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
 }
 
-.button-confirm {
-    -fx-background-color: #99FFF9;
+.input-date.date-picker .text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: none;
 }
 
-.button-cancel {
-    -fx-background-color: #FFD9D9;
+.input-date.date-picker .arrow-button {
+    -fx-background-color: #ffffff;
+
+}
+
+.input-date.date-picker .text-field:empty:focused {
+    -fx-cursor: default;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+
 }
 
 /*  Profile Container*/
