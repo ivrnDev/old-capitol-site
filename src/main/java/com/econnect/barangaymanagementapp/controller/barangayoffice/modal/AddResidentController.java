@@ -57,8 +57,6 @@ public class AddResidentController {
     private Button cancelBtn, confirmBtn;
 
     private File profileFile, governmentIdFile;
-    private final LocalDate minimumDate = LocalDate.now().minusYears(120);
-    private final LocalDate maximumDate = LocalDate.now().minusYears(12);
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public AddResidentController(DependencyInjector dependencyInjector) {
@@ -77,65 +75,87 @@ public class AddResidentController {
     }
 
     private void setupInputFields() {
+        LocalDate minimumDate = LocalDate.now().minusYears(120);
+        LocalDate maximumDate = LocalDate.now().minusYears(12);
+
         populateComboBoxes();
-        setupDatePicker();
+        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker};
+        formValidator.setupDatePicker(minimumDate, maximumDate, datePickers);
+        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID cannot be empty.");
+        formValidator.addListeners(lastNameInput, formValidator.IS_NOT_EMPTY, "Last name cannot be empty.");
+        formValidator.addListeners(firstNameInput, formValidator.IS_NOT_EMPTY, "First name cannot be empty.");
+        formValidator.addListeners(middleNameInput, formValidator.IS_NOT_EMPTY, "Middle name cannot be empty.");
+        formValidator.addListeners(birthplaceInput, formValidator.IS_NOT_EMPTY, "Birthplace cannot be empty.");
+        formValidator.addListeners(occupationInput, formValidator.IS_NOT_EMPTY, "Occupation cannot be empty.");
+        formValidator.addListeners(emailInput, formValidator.IS_EMAIL, "Please enter a valid email address.");
+        formValidator.addListeners(addressInput, formValidator.IS_NOT_EMPTY, "Address cannot be empty.");
+        formValidator.addListeners(contactNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
+        formValidator.addListeners(fatherFirstNameInput, formValidator.IS_NOT_EMPTY, "Father's first name cannot be empty.");
+        formValidator.addListeners(fatherLastNameInput, formValidator.IS_NOT_EMPTY, "Father's last name cannot be empty.");
+        formValidator.addListeners(fatherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Father's middle name cannot be empty.");
+        formValidator.addListeners(fatherOccupationInput, formValidator.IS_NOT_EMPTY, "Father's occupation cannot be empty.");
+        formValidator.addListeners(motherFirstNameInput, formValidator.IS_NOT_EMPTY, "Mother's first name cannot be empty.");
+        formValidator.addListeners(motherLastNameInput, formValidator.IS_NOT_EMPTY, "Mother's last name cannot be empty.");
+        formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
+        formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
+        formValidator.addListeners(citizenshipInput, formValidator.IS_NOT_EMPTY, "Citizenship cannot be empty.");
         citizenshipInput.setEditable(false);
         citizenshipInput.setText("Filipino");
     }
 
-//    private void addResident() {
-//        if (!validateFields()) {
-//            return;
-//        }
-//
-//        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
-//        rootPane.getChildren().add(loadingIndicator);
-//
-//        Employee employee = createEmployeeFromInputs();
-//
-//        Task<Void> addEmployeeTask = new Task<>() {
-//            @Override
-//            protected Void call() {
-//                return processEmployeeCreation(employee);
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                loadingIndicator.setVisible(false);
-//                rootPane.getChildren().remove(loadingIndicator);
-//                closeWindow();
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                loadingIndicator.setVisible(false);
-//                rootPane.getChildren().remove(loadingIndicator);
-//                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the employee."));
-//            }
-//        };
-//
-//        new Thread(addEmployeeTask).start();
-//    }
+    //    private void addResident() {
+    //        if (!validateFields()) {
+    //            return;
+    //        }
+    //
+    //        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
+    //        rootPane.getChildren().add(loadingIndicator);
+    //
+    //        Employee employee = createEmployeeFromInputs();
+    //
+    //        Task<Void> addEmployeeTask = new Task<>() {
+    //            @Override
+    //            protected Void call() {
+    //                return processEmployeeCreation(employee);
+    //            }
+    //
+    //            @Override
+    //            protected void succeeded() {
+    //                loadingIndicator.setVisible(false);
+    //                rootPane.getChildren().remove(loadingIndicator);
+    //                closeWindow();
+    //            }
+    //
+    //            @Override
+    //            protected void failed() {
+    //                loadingIndicator.setVisible(false);
+    //                rootPane.getChildren().remove(loadingIndicator);
+    //                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the employee."));
+    //            }
+    //        };
+    //
+    //        new Thread(addEmployeeTask).start();
+    //    }
 
-//    private Void processResidentCreation(Employee employee) {
-//        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeFile, employee.getId());
-//        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceFile, employee.getId());
-//        employee.setResumeUrl(resumeUrl);
-//        employee.setProfileUrl(profileLink);
-//        employee.setNbiClearanceUrl(nbiClearanceUrl);
-//
-//
-//        try (Response response = employeeService.createEmployee(employee)) {
-//            if (response.isSuccessful()) {
-//                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
-//            } else {
-//                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        return null;
-//    }
+    //    private Void processResidentCreation(Employee employee) {
+    //        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeFile, employee.getId());
+    //        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceFile, employee.getId());
+    //        employee.setResumeUrl(resumeUrl);
+    //        employee.setProfileUrl(profileLink);
+    //        employee.setNbiClearanceUrl(nbiClearanceUrl);
+    //
+    //
+    //        try (Response response = employeeService.createEmployee(employee)) {
+    //            if (response.isSuccessful()) {
+    //                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
+    //            } else {
+    //                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
+    //            }
+    //        } catch (Exception e) {
+    //            throw new RuntimeException(e);
+    //        }
+    //        return null;
+    //    }
 
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
         FileChooser fileChooser = fileChooserUtils.createFileChooser();
@@ -210,25 +230,75 @@ public class AddResidentController {
     }
 
     private void validateForm() {
-        boolean hasEmptyInput = formValidator.hasEmptyField(lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, contactNumberInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput, citizenshipInput, suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox, motherSuffixComboBox, birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker);
-        boolean hasEmptyProfile = formValidator.hasEmptyFile(profileFile, uploadProfile);
-        boolean hasEmptyGovernmentId = formValidator.hasEmptyFile(governmentIdFile, uploadGovernmentId);
-        if (hasEmptyInput) {
-            modalUtils.showModal(Modal.ERROR, "Error", "Please fill out all required fields.");
-            return;
+        boolean hasError = false;
+        String errorMessage = "";
+
+        List<TextField> textFields = Arrays.asList(
+                residentIdInput, lastNameInput, firstNameInput, middleNameInput,
+                birthplaceInput, occupationInput, emailInput, addressInput,
+                contactNumberInput, fatherFirstNameInput, fatherLastNameInput,
+                fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
+                motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
+                citizenshipInput
+        );
+
+        //Add date validotor if it is empty
+
+        for (TextField field : textFields) {
+            if (!formValidator.IS_NOT_EMPTY.test(field.getText())) {
+                field.setStyle("-fx-border-color: red;");
+                errorMessage = "Please fill out all required fields.";
+                hasError = true;
+            } else {
+                field.setStyle("");
+            }
+
+            if (field.equals(emailInput) && !formValidator.IS_EMAIL.test(field.getText())) {
+                errorMessage = "Please enter a valid email address.";
+                hasError = true;
+                break;
+            }
+
+            if (field.equals(contactNumberInput) && !formValidator.IS_VALID_PHONE.test(field.getText())) {
+                errorMessage = "Please enter a valid phone number.";
+                hasError = true;
+                break;
+            }
         }
 
-        if (formValidator.validateDate(minimumDate, maximumDate, birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker)) {
-            return;
+        if (!hasError) {
+            List<ComboBox<String>> comboBoxes = Arrays.asList(
+                    suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox,
+                    religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox,
+                    motherSuffixComboBox
+            );
+
+            for (ComboBox<String> comboBox : comboBoxes) {
+                if (comboBox.getValue() == null) {
+                    comboBox.setStyle("-fx-border-color: red;");
+                    errorMessage = "Please fill out all required fields.";
+                    hasError = true;
+
+                } else {
+                    comboBox.setStyle("");
+                }
+            }
         }
 
-        if (hasEmptyProfile) {
-            modalUtils.showModal(Modal.ERROR, "Error", "Please upload a profile picture.");
-            return;
+        if (!hasError) {
+            if (formValidator.hasEmptyFile(governmentIdFile, uploadGovernmentId)) {
+                errorMessage = "Please upload a government ID.";
+                hasError = true;
+            }
+
+            if (formValidator.hasEmptyFile(profileFile, uploadProfile)) {
+                errorMessage = "Please upload a profile picture.";
+                hasError = true;
+            }
         }
-        if (hasEmptyGovernmentId) {
-            modalUtils.showModal(Modal.ERROR, "Error", "Please upload a government ID.");
-            return;
+
+        if (hasError) {
+            modalUtils.showModal(Modal.ERROR, "Error", errorMessage);
         }
     }
 
@@ -242,11 +312,6 @@ public class AddResidentController {
         bloodTypeComboBox.getItems().addAll(Arrays.stream(ResidentInfomationType.BloodType.values()).map(bloodType -> bloodType.getName()).toList());
         sexComboBox.getItems().addAll(Arrays.stream(GenderType.values()).map(gender -> gender.getName()).toList());
         motherToungeComboBox.getItems().addAll(Arrays.stream(ResidentInfomationType.MotherTongue.values()).map(motherTongue -> motherTongue.getName()).toList());
-    }
-
-    private void setupDatePicker() {
-        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker};
-        formValidator.setupDatePicker(minimumDate, maximumDate, datePickers);
     }
 
     private void setPreviewRounded() {
