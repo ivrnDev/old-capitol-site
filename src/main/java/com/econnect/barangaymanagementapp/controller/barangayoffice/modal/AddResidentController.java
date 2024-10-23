@@ -302,7 +302,7 @@ public class AddResidentController {
         sexComboBox.setValue("Male");
         civilStatusComboBox.setValue("Single");
         motherToungeComboBox.setValue("Tagalog");
-        religionComboBox.setValue("Catholicism");
+        religionComboBox.setValue("Catholic");
         bloodTypeComboBox.setValue("O+");
         fatherSuffixComboBox.setValue("Sr.");
         motherSuffixComboBox.setValue("Jr.");
@@ -440,6 +440,7 @@ public class AddResidentController {
         suffixComboBox.getItems().addAll(suffixNamesChoices);
         fatherSuffixComboBox.getItems().addAll(suffixNamesChoices);
         motherSuffixComboBox.getItems().addAll(suffixNamesChoices);
+        spouseSuffixComboBox.getItems().addAll(suffixNamesChoices);
         civilStatusComboBox.getItems().addAll(Arrays.stream(CivilStatus.values()).map(civilStatus -> civilStatus.getName()).toList());
         religionComboBox.getItems().addAll(Arrays.stream(Religion.values()).map(religion -> religion.getName()).toList());
         bloodTypeComboBox.getItems().addAll(Arrays.stream(BloodType.values()).map(bloodType -> bloodType.getName()).toList());

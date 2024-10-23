@@ -35,7 +35,8 @@ public class StatusType {
         VERIFIED("Verified"),
         DECEASED("Deceased"),
         MIGRATED("Migrated"),
-        SUSPENDED("Suspended");
+        SUSPENDED("Suspended"),
+        REMOVED("Removed");
 
         private String status;
 

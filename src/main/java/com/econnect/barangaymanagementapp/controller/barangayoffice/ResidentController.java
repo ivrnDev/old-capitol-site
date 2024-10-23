@@ -83,7 +83,7 @@ public class ResidentController {
         Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
-            allResidents = residentService.findAllResidents();
+            allResidents = residentService.findAllNonDeletedResidents();
             Platform.runLater(() -> {
                 contentPane.getChildren().remove(loadingIndicator);
                 if (allResidents.isEmpty()) {

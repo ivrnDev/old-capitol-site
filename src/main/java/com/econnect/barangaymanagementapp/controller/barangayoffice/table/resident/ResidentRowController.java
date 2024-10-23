@@ -1,8 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.ResidentController;
-import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
-import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
 import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Resident;
@@ -40,7 +38,7 @@ public class ResidentRowController extends BaseRowController<Resident> {
     private HBox tableRow, buttonContainer;
 
     @FXML
-    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, dateLabel;
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, contactNumberLabel, emailLabel, dateLabel;
 
     @FXML
     private ImageView profilePicture;
@@ -66,6 +64,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
         lastNameLabel.setText(residentData.getLastName());
         firstNameLabel.setText(residentData.getFirstName());
         statusLabel.setText(residentData.getStatus().getName());
+        contactNumberLabel.setText(residentData.getContactNumber());
+        emailLabel.setText(residentData.getEmail());
         dateLabel.setText(DateFormatter.extractDateAndFormat(residentData.getCreatedAt()));
     }
 
@@ -106,15 +106,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
             case SUSPENDED:
                 setupInactiveButton();
                 break;
-            default:
-                buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-                    modalUtils.customizeModalWithCallback(
-                            FXMLPath.VIEW_APPLICATION_EMPLOYEE,
-                            ViewEmployeeApplicationController.class,
-                            controller -> controller.setId(residentIdLabel.getText())
-                    );
-                }));
         }
+        setupDeleteButton();
     }
 
     private void setupInactiveButton() {
@@ -133,6 +126,15 @@ public class ResidentRowController extends BaseRowController<Resident> {
             });
         });
         buttonContainer.getChildren().addAll(suspend);
+    }
+
+    private void setupDeleteButton() {
+        Button delete = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Delete", "Would you like to delete resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
+                if (isConfirmed) updateResidentStatus(REMOVED);
+            });
+        });
+        buttonContainer.getChildren().add(delete);
     }
 
     private void setupViewButton() {
