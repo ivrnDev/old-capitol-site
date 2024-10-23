@@ -86,7 +86,6 @@ public class FormValidator {
             datePicker.getEditor().setText("");
             datePicker.setValue(null);
             datePicker.setStyle("-fx-border-color: red;");
-            throw new RuntimeException("Invalid date input: " + date);
         }
     }
 
