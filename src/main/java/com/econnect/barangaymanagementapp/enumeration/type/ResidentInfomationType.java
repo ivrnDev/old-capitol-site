@@ -31,6 +31,15 @@ public class ResidentInfomationType {
             }
             throw new IllegalArgumentException("Income level not found for monthly income: " + income);
         }
+
+        public static EconomicLevelType fromName(String name) {
+            for (EconomicLevelType level : EconomicLevelType.values()) {
+                if (level.getName().equalsIgnoreCase(name)) {
+                    return level;
+                }
+            }
+            throw new IllegalArgumentException("No EconomicLevelType found with name: " + name);
+        }
     }
 
     @Getter
@@ -53,6 +62,15 @@ public class ResidentInfomationType {
         MotherTongue(String name) {
             this.name = name;
         }
+
+        public static MotherTongue fromName(String name) {
+            for (MotherTongue tongue : MotherTongue.values()) {
+                if (tongue.getName().equalsIgnoreCase(name)) {
+                    return tongue;
+                }
+            }
+            throw new IllegalArgumentException("No MotherTongue found with name: " + name);
+        }
     }
 
     @Getter
@@ -70,6 +88,15 @@ public class ResidentInfomationType {
 
         BloodType(String name) {
             this.name = name;
+        }
+
+        public static BloodType fromName(String name) {
+            for (BloodType bloodType : BloodType.values()) {
+                if (bloodType.getName().equalsIgnoreCase(name)) {
+                    return bloodType;
+                }
+            }
+            throw new IllegalArgumentException("No BloodType found with name: " + name);
         }
     }
 
@@ -91,6 +118,15 @@ public class ResidentInfomationType {
         Religion(String name) {
             this.name = name;
         }
+
+        public static Religion fromName(String name) {
+            for (Religion religion : Religion.values()) {
+                if (religion.getName().equalsIgnoreCase(name)) {
+                    return religion;
+                }
+            }
+            throw new IllegalArgumentException("No Religion found with name: " + name);
+        }
     }
 
     @Getter
@@ -102,6 +138,15 @@ public class ResidentInfomationType {
 
         CivilStatus(String name) {
             this.name = name;
+        }
+
+        public static CivilStatus fromName(String name) {
+            for (CivilStatus status : CivilStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("No CivilStatus found with name: " + name);
         }
     }
 
@@ -121,8 +166,14 @@ public class ResidentInfomationType {
         SuffixName(String name) {
             this.name = name;
         }
+
+        public static SuffixName fromName(String name) {
+            for (SuffixName suffix : SuffixName.values()) {
+                if (suffix.getName().equalsIgnoreCase(name)) {
+                    return suffix;
+                }
+            }
+            throw new IllegalArgumentException("No SuffixName found with name: " + name);
+        }
     }
 }
-
-
-
