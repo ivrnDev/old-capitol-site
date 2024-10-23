@@ -28,7 +28,7 @@
             </font>
         </Text>
         <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="1082.0" layoutY="9.0"
-                   onMouseClicked="#closeWindowConfirmation" pickOnBounds="true" preserveRatio="true"
+                   pickOnBounds="true" preserveRatio="true"
                    AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="9.0">
             <image>
                 <Image url="@../../../icon/close.png"/>

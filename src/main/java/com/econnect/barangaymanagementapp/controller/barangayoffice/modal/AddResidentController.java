@@ -27,8 +27,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import static com.econnect.barangaymanagementapp.enumeration.modal.Modal.ERROR;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.GOVERNMENT_ID;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.PROFILE_PICTURE;
 
@@ -185,10 +187,10 @@ public class AddResidentController {
 
     public void mockData() {
         residentIdInput.setText("RES-0001");
-        lastNameInput.setText("Dela Cruz");
-        firstNameInput.setText("Juan");
-        middleNameInput.setText("Santos");
-        suffixInput.setValue("Jr.");
+//        lastNameInput.setText("Dela Cruz");
+//        firstNameInput.setText("Juan");
+//        middleNameInput.setText("Santos");
+//        suffixInput.setValue("Jr.");
         birthplaceInput.setText("dsa");
         occupationInput.setText("Software Engineer");
         emailInput.setText("");
@@ -207,13 +209,13 @@ public class AddResidentController {
         citizenshipInput.setText("Filipino");
         suffixInput.setValue("Jr.");
         suffixInput.setValue("Jr.");
-        sexComboBox.setValue("Male");
-        civilStatusComboBox.setValue("Single");
-        motherToungeComboBox.setValue("Tagalog");
-        religionComboBox.setValue("Catholicism");
-        bloodTypeComboBox.setValue("O+");
-        fatherSuffixNameComboBox.setValue("Sr.");
-        motherSuffixComboBox.setValue("Jr.");
+//        sexComboBox.setValue("Male");
+//        civilStatusComboBox.setValue("Single");
+//        motherToungeComboBox.setValue("Tagalog");
+//        religionComboBox.setValue("Catholicism");
+//        bloodTypeComboBox.setValue("O+");
+//        fatherSuffixNameComboBox.setValue("Sr.");
+//        motherSuffixComboBox.setValue("Jr.");
 
     }
 
@@ -242,27 +244,40 @@ public class AddResidentController {
                 citizenshipInput
         );
 
-        //Add date validotor if it is empty
+        List<DatePicker> datePickers = Arrays.asList(
+                birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker
+        );
 
+        TextField firstFieldError = null;
         for (TextField field : textFields) {
             if (!formValidator.IS_NOT_EMPTY.test(field.getText())) {
                 field.setStyle("-fx-border-color: red;");
-                errorMessage = "Please fill out all required fields.";
+                if (firstFieldError == null) {
+                    errorMessage = "Please fill out all required fields.";
+                    firstFieldError = field;
+                    field.requestFocus();
+                }
                 hasError = true;
             } else {
                 field.setStyle("");
             }
 
-            if (field.equals(emailInput) && !formValidator.IS_EMAIL.test(field.getText())) {
-                errorMessage = "Please enter a valid email address.";
-                hasError = true;
-                break;
+            if (firstFieldError == null) {
+                if (field.equals(emailInput) && !formValidator.IS_EMAIL.test(field.getText())) {
+                    field.requestFocus();
+                    errorMessage = "Please enter a valid email address.";
+                    hasError = true;
+                    break;
+                }
             }
 
-            if (field.equals(contactNumberInput) && !formValidator.IS_VALID_PHONE.test(field.getText())) {
-                errorMessage = "Please enter a valid phone number.";
-                hasError = true;
-                break;
+            if (firstFieldError == null) {
+                if (field.equals(contactNumberInput) && !formValidator.IS_VALID_PHONE.test(field.getText())) {
+                    field.requestFocus();
+                    errorMessage = "Please enter a valid phone number.";
+                    hasError = true;
+                    break;
+                }
             }
         }
 
@@ -276,11 +291,25 @@ public class AddResidentController {
             for (ComboBox<String> comboBox : comboBoxes) {
                 if (comboBox.getValue() == null) {
                     comboBox.setStyle("-fx-border-color: red;");
-                    errorMessage = "Please fill out all required fields.";
+                    errorMessage = "Please select a valid option in the dropdown.";
                     hasError = true;
-
                 } else {
                     comboBox.setStyle("");
+                }
+            }
+        }
+        DatePicker firstDatePickerField = null;
+        if (!hasError) {
+            for (DatePicker datePicker : datePickers) {
+                if (!formValidator.DATE_VALIDATOR.test(datePicker.getEditor().getText())) {
+                    if (firstDatePickerField == null) {
+                        firstDatePickerField = datePicker;
+                        datePicker.requestFocus();
+                    }
+                    datePicker.setStyle("-fx-border-color: red;");
+                    hasError = true;
+                    errorMessage = "Please enter a valid date in the format MM/DD/YYYY.";
+                    break;
                 }
             }
         }
@@ -324,15 +353,13 @@ public class AddResidentController {
     }
 
     public void closeWindow() {
+        formValidator.removeListeners();
         modalUtils.closeCustomizeModal();
     }
 
-    @FXML
     private void closeWindowConfirmation() {
         modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Exit", "Are you sure you want to exit this window? Any unsaved changes will be lost.", result -> {
             if (result) closeWindow();
         });
     }
-
-
 }
