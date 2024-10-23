@@ -1,7 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -25,11 +23,10 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_TABLE;
 
 public class RequestController {
-    @FXML
+   /* @FXML
     private TextField residentApplicationSearchField, residentListSearchField;
 
     @FXML
@@ -162,5 +159,5 @@ public class RequestController {
 
     public void reloadTable() {
         populateResidentApplicationRow();
-    }
+    }*/
 }

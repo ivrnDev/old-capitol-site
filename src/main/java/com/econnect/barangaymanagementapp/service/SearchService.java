@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import javafx.concurrent.Task;
 
@@ -64,5 +65,53 @@ public class SearchService<T> {
                 || employee.getRole().getName().toLowerCase().contains(searchText)
                 || employee.getStatus().getName().toLowerCase().contains(searchText)
                 || employee.getDepartment().getName().toLowerCase().contains(searchText);
+    }
+
+    public Predicate<Resident> createResidentFilter(String searchText) {
+        return resident -> resident.getId().toLowerCase().contains(searchText)
+                || resident.getFirstName().toLowerCase().contains(searchText)
+                || resident.getMiddleName().toLowerCase().contains(searchText)
+                || resident.getLastName().toLowerCase().contains(searchText)
+                || resident.getNameExtension().toLowerCase().contains(searchText)
+                || resident.getContactNumber().toLowerCase().contains(searchText)
+                || resident.getEmail().toLowerCase().contains(searchText)
+                || resident.getAddress().toLowerCase().contains(searchText)
+                || resident.getSex().getName().toLowerCase().contains(searchText)
+                || resident.getBirthdate().toLowerCase().contains(searchText)
+                || resident.getAge().toLowerCase().contains(searchText)
+                || resident.getBirthplace().toLowerCase().contains(searchText)
+                || resident.getCitizenship().toLowerCase().contains(searchText)
+                || resident.getOccupation().toLowerCase().contains(searchText)
+                || resident.getCivilStatus().getName().toLowerCase().contains(searchText)
+                || resident.getMotherTounge().getName().toLowerCase().contains(searchText)
+                || resident.getBloodType().getName().toLowerCase().contains(searchText)
+                || resident.getReligion().getName().toLowerCase().contains(searchText)
+                || resident.getFatherFirstName().toLowerCase().contains(searchText)
+                || resident.getFatherLastName().toLowerCase().contains(searchText)
+                || resident.getFatherMiddleName().toLowerCase().contains(searchText)
+                || resident.getFatherSuffixName().toLowerCase().contains(searchText)
+                || resident.getFatherOccupation().toLowerCase().contains(searchText)
+                || resident.getFatherBirthdate().toLowerCase().contains(searchText)
+                || resident.getMotherFirstName().toLowerCase().contains(searchText)
+                || resident.getMotherLastName().toLowerCase().contains(searchText)
+                || resident.getMotherMiddleName().toLowerCase().contains(searchText)
+                || resident.getMotherSuffixName().toLowerCase().contains(searchText)
+                || resident.getMotherOccupation().toLowerCase().contains(searchText)
+                || resident.getMotherBirthdate().toLowerCase().contains(searchText)
+                || resident.getSpouseFirstName().toLowerCase().contains(searchText)
+                || resident.getSpouseLastName().toLowerCase().contains(searchText)
+                || resident.getSpouseMiddleName().toLowerCase().contains(searchText)
+                || resident.getSpouseSuffixName().toLowerCase().contains(searchText)
+                || resident.getSpouseOccupation().toLowerCase().contains(searchText)
+                || resident.getSpouseBirthdate().toLowerCase().contains(searchText)
+                || resident.getHouseHoldIncome().toLowerCase().contains(searchText)
+                || resident.getEconomicLevel().getName().toLowerCase().contains(searchText)
+                || resident.getStatus().getName().toLowerCase().contains(searchText)
+                || resident.getProfileUrl().toLowerCase().contains(searchText)
+                || resident.getValidIdURL().toLowerCase().contains(searchText)
+                || DateFormatter.extractDateAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText)
+                || DateFormatter.extractTimeAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText)
+                || DateFormatter.extractDateAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText)
+                || DateFormatter.extractTimeAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText);
     }
 }

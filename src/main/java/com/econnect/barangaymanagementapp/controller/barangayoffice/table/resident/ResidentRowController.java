@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident;
 
-import com.econnect.barangaymanagementapp.controller.shared.ApplicationController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.ResidentController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
 import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
@@ -8,11 +8,12 @@ import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowControll
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.service.EmployeeService;
+import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
-import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
@@ -26,40 +27,37 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 
 public class ResidentRowController extends BaseRowController<Resident> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
-    private final EmployeeService employeeService;
-    private final ApplicationController applicationController;
+    private final ResidentService residentService;
+    private final ResidentController residentController;
     private final DependencyInjector dependencyInjector;
-    private final UserSession userSession;
 
     @FXML
     private HBox tableRow, buttonContainer;
 
-
     @FXML
-    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, dateLabel;
 
     @FXML
     private ImageView profilePicture;
 
-    public ResidentRowController(DependencyInjector dependencyInjector, ApplicationController applicationController) {
+    public ResidentRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
         super(dependencyInjector);
         this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
-        this.employeeService = dependencyInjector.getEmployeeService();
-        this.applicationController = applicationController;
-        this.userSession = UserSession.getInstance();
+        this.residentService = dependencyInjector.getResidentService();
+        this.residentController = residentController;
     }
 
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
-//        Platform.runLater(() -> setupButtonContainer());
+        Platform.runLater(() -> setupButtonContainer());
     }
 
     @Override
@@ -68,6 +66,7 @@ public class ResidentRowController extends BaseRowController<Resident> {
         lastNameLabel.setText(residentData.getLastName());
         firstNameLabel.setText(residentData.getFirstName());
         statusLabel.setText(residentData.getStatus().getName());
+        dateLabel.setText(DateFormatter.extractDateAndFormat(residentData.getCreatedAt()));
     }
 
     @Override
@@ -101,14 +100,11 @@ public class ResidentRowController extends BaseRowController<Resident> {
         setupViewButton();
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
-            case PENDING:
-                setupPendingButtons();
+            case VERIFIED:
+                setupActiveButton();
                 break;
-            case UNDER_REVIEW:
-                setupUnderReviewButtons();
-                break;
-            case EVALUATION:
-                setupEvaluationButtons();
+            case SUSPENDED:
+                setupInactiveButton();
                 break;
             default:
                 buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
@@ -121,57 +117,22 @@ public class ResidentRowController extends BaseRowController<Resident> {
         }
     }
 
-    private void setupPendingButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-                if (isConfirmed) updateEmployeeToUnderReview();
+    private void setupInactiveButton() {
+        Button restore = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to restore resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
+                if (isConfirmed) updateResidentStatus(VERIFIED);
             });
         });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
-            });
-        });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(restore);
     }
 
-    private void setupUnderReviewButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.SETUP_REQUIREMENTS,
-                    SetupRequirementsController.class,
-                    controller -> controller.setId(residentIdLabel.getText()),
-                    dependencyInjector,
-                    applicationController
-            );
-        });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
+    private void setupActiveButton() {
+        Button suspend = ButtonUtils.createButton("Suspend", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Suspend", "Would you like to suspend resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
+                if (isConfirmed) updateResidentStatus(SUSPENDED);
             });
         });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
-    }
-
-    private void setupEvaluationButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.SETUP_ACCOUNT,
-                    SetupAccountController.class,
-                    controller -> controller.setId(residentIdLabel.getText()),
-                    dependencyInjector,
-                    applicationController
-            );
-        });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
-            });
-        });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(suspend);
     }
 
     private void setupViewButton() {
@@ -185,51 +146,25 @@ public class ResidentRowController extends BaseRowController<Resident> {
         buttonContainer.getChildren().add(viewBtn);
     }
 
-    private void updateEmployeeToUnderReview() {
-        applicationController.addLoadingIndicator();
+    private void updateResidentStatus(StatusType.ResidentStatus status) {
+        residentController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
-                return employeeService.updateEmployeeToUnderReview(residentIdLabel.getText());
+                return residentService.updateResidentByStatus(residentIdLabel.getText(), status);
             }
 
             @Override
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    applicationController.removeLoadingIndicator();
+                    residentController.removeLoadingIndicator();
                     reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentIdLabel.getText() + " has been emailed successfully.");
-                } else {
-                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while notifying employee.");
-                }
-            }
-
-            @Override
-            protected void failed() {
-                Throwable exception = getException();
-                exception.printStackTrace();
-                modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred: " + exception.getMessage());
-            }
-        };
-        new Thread(task).start();
-    }
-
-    private void rejectEmployeeApplication() {
-        applicationController.addLoadingIndicator();
-        Task<Response> task = new Task<>() {
-            @Override
-            protected Response call() {
-                return employeeService.rejectEmployee(residentIdLabel.getText());
-            }
-
-            @Override
-            protected void succeeded() {
-                Response response = getValue();
-                if (response.isSuccessful()) {
-                    applicationController.removeLoadingIndicator();
-                    reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
+                    if (status == SUSPENDED) {
+                        modalUtils.showModal(Modal.SUCCESS, "Suspended", "Resident #" + residentIdLabel.getText() + " has been suspended.");
+                    } else {
+                        modalUtils.showModal(Modal.SUCCESS, "Restored", "Resident #" + residentIdLabel.getText() + " has been restored.");
+                    }
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
                 }
@@ -239,6 +174,6 @@ public class ResidentRowController extends BaseRowController<Resident> {
     }
 
     protected void reloadTable() {
-        applicationController.reloadTable();
+        residentController.reloadTable();
     }
 }

@@ -32,13 +32,10 @@ public class StatusType {
     }
 
     public enum ResidentStatus {
-        PENDING("Pending"),
-        UNDER_REVIEW("Under Review"),
         VERIFIED("Verified"),
         DECEASED("Deceased"),
         MIGRATED("Migrated"),
-        SUSPENDED("Suspended"),
-        REMOVED("Removed");
+        SUSPENDED("Suspended");
 
         private String status;
 
@@ -56,7 +53,7 @@ public class StatusType {
                     return status;
                 }
             }
-            return PENDING;
+            return null;
         }
     }
 

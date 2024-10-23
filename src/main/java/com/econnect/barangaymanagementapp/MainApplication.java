@@ -35,11 +35,11 @@ public class MainApplication extends Application {
 //        checkResourcesInBackground(stage);
     }
 
-    private void test(DependencyInjector dependencyInjector) {
-        var repo = dependencyInjector.getResidentService();
-        var emp = repo.findAllPendingResidents();
-        System.out.println(emp);
-    }
+//    private void test(DependencyInjector dependencyInjector) {
+//        var repo = dependencyInjector.getResidentService();
+//        var emp = repo.findAllPendingResidents();
+//        System.out.println(emp);
+//    }
 
     private void checkResourcesInBackground(Stage stage) {
         scheduler = Executors.newScheduledThreadPool(1);

@@ -15,7 +15,7 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Res
 
 public class ResidentService {
     private final ResidentRepository residentRepository;
-    private final Set<StatusType.ResidentStatus> INACTIVE_RESIDENT = Set.of(DECEASED, MIGRATED, REMOVED, SUSPENDED);
+    private final Set<StatusType.ResidentStatus> INACTIVE_RESIDENT = Set.of(DECEASED, MIGRATED, SUSPENDED);
 
     public ResidentService(DependencyInjector dependencyInjector) {
         this.residentRepository = dependencyInjector.getResidentRepository();
@@ -29,16 +29,12 @@ public class ResidentService {
         return residentRepository.findAllResidents();
     }
 
-    public List<Resident> findAllPendingResidents() {
-        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(PENDING));
-    }
-
-    public List<Resident> findAllNonPendingResidents() {
-        return residentRepository.findResidentByFilter(resident -> !resident.getStatus().equals(PENDING));
-    }
-
     public Optional<Resident> findResidentById(String id) {
         return residentRepository.findResidentById(id);
+    }
+
+    public Response updateResidentByStatus(String residentId, StatusType.ResidentStatus status) {
+        return residentRepository.updateResidentByStatus(residentId, status);
     }
 
     public String generateResidentId() {

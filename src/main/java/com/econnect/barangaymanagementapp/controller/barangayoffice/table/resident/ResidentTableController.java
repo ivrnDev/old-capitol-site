@@ -13,13 +13,13 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_APPLICATION_ROW;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_ROW;
 
 public class ResidentTableController extends BaseTableController<Resident> {
-    private final ResidentController residentController;
     @FXML
     private VBox tableContent;
 
+    private final ResidentController residentController;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
 
@@ -33,14 +33,14 @@ public class ResidentTableController extends BaseTableController<Resident> {
     @Override
     public void addRow(Resident residentData) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_ROW.getFxmlPath(), dependencyInjector, residentController);
-            HBox applicationRow = loader.load();
-            ResidentRowController residentApplicationRowController = loader.getController();
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_ROW.getFxmlPath(), dependencyInjector, residentController);
+            HBox residentRow = loader.load();
+            ResidentRowController residentRowController = loader.getController();
             Image defaultImage = super.getImageOrDefault(residentData.getId());
-            residentApplicationRowController.setImage(defaultImage);
-            residentApplicationRowController.setData(residentData);
-            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentApplicationRowController);
-            tableContent.getChildren().add(applicationRow);
+            residentRowController.setImage(defaultImage);
+            residentRowController.setData(residentData);
+            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentRowController);
+            tableContent.getChildren().add(residentRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Error adding employee row: " + e.getMessage(), e);
