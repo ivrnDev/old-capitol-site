@@ -99,6 +99,16 @@ public class FormValidator {
         }
     }
 
+    public boolean hasEmptyComboBox(ComboBox<?> comboBox) {
+        if (comboBox.getValue() == null) {
+            comboBox.setStyle("-fx-border-color: red;");
+            return true;
+        } else {
+            comboBox.setStyle(null);
+            return false;
+        }
+    }
+
     public void addListeners(Node node, Predicate<String> validator, String errorMessage) {
         switch (node) {
             case TextField textField -> {

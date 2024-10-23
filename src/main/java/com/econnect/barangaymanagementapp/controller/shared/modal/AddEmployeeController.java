@@ -14,7 +14,9 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
+import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -35,96 +37,55 @@ import okhttp3.Response;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.FileType.NBI_CLEARANCE;
+import static com.econnect.barangaymanagementapp.enumeration.type.FileType.RESUME;
 
 public class AddEmployeeController {
-    private final ModalUtils modalUtils;
-    private final EmployeeService employeeService;
-    private final ResidentService residentService;
-    private final ImageService imageService;
-    private Stage currentStage;
-
     @FXML
     private AnchorPane rootPane;
 
     @FXML
-    private ImageView closeBtn;
+    private ImageView closeBtn, profilePreview, resumePreview, clearancePreview;
 
     @FXML
-    private TextField residentIdInput;
+    private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, addressInput, birthdateInput, emailInput, phoneInput;
 
     @FXML
-    private TextField lastNameInput;
+    private ComboBox<String> employmentComboBox;
 
     @FXML
-    private TextField firstNameInput;
+    private HBox uploadResume, viewResumeBtn, uploadClearance, viewClearanceBtn;
 
     @FXML
-    private TextField middleNameInput;
-
-    @FXML
-    private TextField addressInput;
-
-    @FXML
-    private TextField birthdateInput;
-
-    @FXML
-    private ComboBox<String> volunteerComboBox;
-
-    @FXML
-    private TextField emailInput;
-
-    @FXML
-    private TextField phoneInput;
-
-    @FXML
-    private StackPane profileContainer;
-
-    @FXML
-    private ImageView profilePreview;
-
-    @FXML
-    private HBox uploadResume;
-
-    @FXML
-    private HBox viewResumeBtn;
-
-    @FXML
-    private ImageView resumePreview;
-
-    @FXML
-    private Label resumeLabel;
-
-    @FXML
-    private HBox uploadClearance;
-
-    @FXML
-    private Label clearanceLabel;
-
-    @FXML
-    private HBox viewClearanceBtn;
-
-    @FXML
-    private ImageView clearancePreview;
+    private Label resumeLabel, clearanceLabel;
 
     @FXML
     private DatePicker nbiExpirationInput;
 
     @FXML
-    private Button cancelBtn;
+    private StackPane profileContainer;
 
     @FXML
-    private Button confirmBtn;
+    private Button cancelBtn, confirmBtn;
 
+    private final ModalUtils modalUtils;
+    private final EmployeeService employeeService;
+    private final ResidentService residentService;
+    private final ImageService imageService;
+    private final FormValidator formValidator;
+    private final FileChooserUtils fileChooserUtils;
+    private Stage currentStage;
     private File resumeFile;
     private File clearanceFile;
     private Boolean residentExists = false;
     private String profileLink;
+
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
@@ -133,15 +94,16 @@ public class AddEmployeeController {
         this.employeeService = dependencyInjector.getEmployeeService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
+        this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
+        this.formValidator = new FormValidator(dependencyInjector);
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
     public void initialize() {
-        ImageUtils.setRoundedClip(profilePreview, 20, 20);
-        ImageUtils.setRoundedClip(resumePreview, 10, 10);
-
-        residentIdInput.setOnKeyPressed(_ -> configureResidentIdInput());
+        setupPreviewRounded();
         setupActionButtons();
+        setupInputFields();
+        residentIdInput.setOnKeyPressed(_ -> configureResidentIdInput());
     }
 
     private void configureResidentIdInput() {
@@ -205,10 +167,6 @@ public class AddEmployeeController {
     }
 
     private void addEmployee() {
-        if (!validateFields()) {
-            return;
-        }
-
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
         rootPane.getChildren().add(loadingIndicator);
 
@@ -253,7 +211,7 @@ public class AddEmployeeController {
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)
-                .employment(volunteerComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
+                .employment(employmentComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
                 .nbiClearanceExpiration(String.valueOf(nbiExpirationInput.getValue()))
                 .build();
     }
@@ -264,7 +222,6 @@ public class AddEmployeeController {
         employee.setResumeUrl(resumeUrl);
         employee.setProfileUrl(profileLink);
         employee.setNbiClearanceUrl(nbiClearanceUrl);
-
 
         try (Response response = employeeService.createEmployee(employee)) {
             if (response.isSuccessful()) {
@@ -278,47 +235,64 @@ public class AddEmployeeController {
         return null;
     }
 
-    private boolean validateFields() {
+    private void setupInputFields() {
+        LocalDate minDate = LocalDate.now().plusMonths(3);
+        LocalDate maxDate = LocalDate.now().plusYears(1);
+        formValidator.setupDatePicker(minDate, maxDate, nbiExpirationInput);
+        formValidator.addListeners(employmentComboBox, formValidator.IS_NOT_EMPTY, "Employment type cannot be empty.");
+    }
+
+    private void validateFields() {
+        boolean hasError = false;
+        String errorMessage = "";
+
         if (!residentExists) {
-            modalUtils.showModal(Modal.ERROR, "Failed", "Resident does not exist");
-            return false;
+            modalUtils.showModal(Modal.ERROR, "Failed", "Resident does not exist.");
+            return;
         }
 
-        if (resumeFile == null) {
-            modalUtils.showModal(Modal.ERROR, "Failed", "Please upload a resume");
-            return false;
+        if (formValidator.hasEmptyComboBox(employmentComboBox)) {
+            modalUtils.showModal(Modal.ERROR, "Failed", "Please select employment type.");
+            return;
         }
 
-        if (clearanceFile == null) {
-            modalUtils.showModal(Modal.ERROR, "Failed", "Please upload an NBI Clearance");
-            return false;
+        if (formValidator.hasEmptyFile(clearanceFile, uploadClearance)) {
+            hasError = true;
+            errorMessage = "Please upload NBI Clearance.";
         }
 
-        if (nbiExpirationInput.getValue() == null) {
+        if (formValidator.hasEmptyFile(resumeFile, uploadResume)) {
+            hasError = true;
+            errorMessage = "Please upload resume.";
+        }
+
+        if (hasError) {
+            modalUtils.showModal(Modal.ERROR, "Error", errorMessage);
+            return;
+        }
+
+        if (!formValidator.DATE_VALIDATOR.test(nbiExpirationInput.getEditor().getText())) {
+            nbiExpirationInput.setStyle("-fx-border-color: red");
+            nbiExpirationInput.requestFocus();
             modalUtils.showModal(Modal.ERROR, "Failed", "Please set NBI Clearance expiration date");
-            return false;
+            return;
         }
 
-        if (volunteerComboBox.getValue() == null) {
-            modalUtils.showModal(Modal.ERROR, "Failed", "Please select employment type");
-            return false;
-        }
-
-
-        return true;
+        addEmployee();
     }
 
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
-        FileChooser fileChooser = createFileChooser();
-
+        FileChooser fileChooser = fileChooserUtils.createFileChooser();
         File file = fileChooser.showOpenDialog(currentStage);
 
         if (file != null) {
             try {
                 if (fileType.equals(RESUME)) {
                     resumeFile = file;
+                    formValidator.hasEmptyFile(resumeFile, uploadResume);
                 } else if (fileType.equals(NBI_CLEARANCE)) {
                     clearanceFile = file;
+                    formValidator.hasEmptyFile(clearanceFile, uploadClearance);
                 }
 
                 preview.setImage(new Image(new FileInputStream(file)));
@@ -332,18 +306,6 @@ public class AddEmployeeController {
         } else {
             Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "No File Selected", "Please select a valid file."));
         }
-    }
-
-    private FileChooser createFileChooser() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-
-        String userHome = System.getProperty("user.home");
-        File picturesDirectory = new File(userHome, "Pictures");
-        if (picturesDirectory.exists()) {
-            fileChooser.setInitialDirectory(picturesDirectory);
-        }
-        return fileChooser;
     }
 
     private void loadProfileImage(String directory, String link) {
@@ -383,8 +345,8 @@ public class AddEmployeeController {
     private void setupActionButtons() {
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
-        confirmBtn.setOnAction(_ -> addEmployee());
-        volunteerComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
+        confirmBtn.setOnAction(_ -> validateFields());
+        employmentComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
 
         profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
         viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
@@ -394,16 +356,19 @@ public class AddEmployeeController {
         uploadClearance.setOnMouseClicked(_ -> uploadImage(viewClearanceBtn, clearancePreview, clearanceLabel, NBI_CLEARANCE));
     }
 
+    private void setupPreviewRounded() {
+        ImageUtils.setRoundedClip(profilePreview, 20, 20);
+        ImageUtils.setRoundedClip(resumePreview, 10, 10);
+    }
+
     public void closeWindow() {
+        formValidator.removeListeners();
         modalUtils.closeCustomizeModal();
     }
 
-    @FXML
     private void closeWindowConfirmation() {
         modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Exit", "Are you sure you want to exit this window? Any unsaved changes will be lost.", result -> {
             if (result) closeWindow();
         });
     }
-
-
 }

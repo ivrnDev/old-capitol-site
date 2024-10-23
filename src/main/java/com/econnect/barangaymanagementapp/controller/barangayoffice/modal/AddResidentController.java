@@ -81,7 +81,7 @@ public class AddResidentController {
     }
 
     public void initialize() {
-        setPreviewRounded();
+        setupPreviewRounded();
         setupActionButtons();
         setupInputFields();
         mockData();
@@ -220,12 +220,21 @@ public class AddResidentController {
         formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
         formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
         formValidator.addListeners(houseHoldIncomeComboBox, formValidator.IS_NOT_EMPTY, "Household's income cannot be empty.");
+        formValidator.addListeners(bloodTypeComboBox, formValidator.IS_NOT_EMPTY, "Blood type cannot be empty.");
+        formValidator.addListeners(religionComboBox, formValidator.IS_NOT_EMPTY, "Religion cannot be empty.");
+        formValidator.addListeners(sexComboBox, formValidator.IS_NOT_EMPTY, "Sex cannot be empty");
+        formValidator.addListeners(civilStatusComboBox, formValidator.IS_NOT_EMPTY, "Civil status cannot be empty.");
+        formValidator.addListeners(motherToungeComboBox, formValidator.IS_NOT_EMPTY, "Mother tounge cannot be empty.");
+        formValidator.addListeners(suffixComboBox, formValidator.IS_NOT_EMPTY, "Suffix cannot be empty.");
+        formValidator.addListeners(fatherSuffixComboBox, formValidator.IS_NOT_EMPTY, "Father's suffix cannot be empty.");
+        formValidator.addListeners(motherSuffixComboBox, formValidator.IS_NOT_EMPTY, "Mother's suffix cannot be empty.");
 
         if (spouseInputContainer.isVisible()) {
             formValidator.addListeners(spouseFirstNameInput, formValidator.IS_NOT_EMPTY, "Spouse's first name cannot be empty.");
             formValidator.addListeners(spouseLastNameInput, formValidator.IS_NOT_EMPTY, "Spouse's last name cannot be empty.");
             formValidator.addListeners(spouseMiddleNameInput, formValidator.IS_NOT_EMPTY, "Spouse's middle name cannot be empty.");
             formValidator.addListeners(spouseOccupationInput, formValidator.IS_NOT_EMPTY, "Spouse's occupation cannot be empty.");
+            formValidator.addListeners(spouseSuffixComboBox, formValidator.IS_NOT_EMPTY, "Spouse's suffix cannot be empty.");
         }
 
         citizenshipInput.setEditable(false);
@@ -237,7 +246,8 @@ public class AddResidentController {
             spouseSuffixComboBox.setValue(NONE.getName());
         }
         motherToungeComboBox.setValue(TAGALOG.getName());
-
+        civilStatusComboBox.setValue(CivilStatus.SINGLE.getName());
+        religionComboBox.setValue(Religion.CATHOLICISM.getName());
     }
 
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
@@ -438,7 +448,7 @@ public class AddResidentController {
         houseHoldIncomeComboBox.getItems().addAll(Arrays.stream(EconomicLevelType.values()).map(economicLevel -> economicLevel.getFormattedRange()).toList());
     }
 
-    private void setPreviewRounded() {
+    private void setupPreviewRounded() {
         ImageUtils.setRoundedClip(profilePreview, 20, 20);
         ImageUtils.setRoundedClip(governmentIdPreview, 10, 10);
     }
