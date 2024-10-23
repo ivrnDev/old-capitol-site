@@ -187,10 +187,10 @@ public class AddResidentController {
 
     public void mockData() {
         residentIdInput.setText("RES-0001");
-//        lastNameInput.setText("Dela Cruz");
-//        firstNameInput.setText("Juan");
+        lastNameInput.setText("Dela Cruz");
+        firstNameInput.setText("Juan");
 //        middleNameInput.setText("Santos");
-//        suffixInput.setValue("Jr.");
+        suffixInput.setValue("Jr.");
         birthplaceInput.setText("dsa");
         occupationInput.setText("Software Engineer");
         emailInput.setText("");
@@ -248,16 +248,24 @@ public class AddResidentController {
                 birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker
         );
 
+        List<ComboBox<String>> comboBoxes = Arrays.asList(
+                suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox,
+                religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox,
+                motherSuffixComboBox
+        );
+
         TextField firstFieldError = null;
+        boolean hasEmptyComboBox = false;
+        boolean hasEmptyField = false;
         for (TextField field : textFields) {
             if (!formValidator.IS_NOT_EMPTY.test(field.getText())) {
                 field.setStyle("-fx-border-color: red;");
+                hasEmptyField = true;
+
                 if (firstFieldError == null) {
-                    errorMessage = "Please fill out all required fields.";
                     firstFieldError = field;
                     field.requestFocus();
                 }
-                hasError = true;
             } else {
                 field.setStyle("");
             }
@@ -281,23 +289,20 @@ public class AddResidentController {
             }
         }
 
-        if (!hasError) {
-            List<ComboBox<String>> comboBoxes = Arrays.asList(
-                    suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox,
-                    religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox,
-                    motherSuffixComboBox
-            );
-
-            for (ComboBox<String> comboBox : comboBoxes) {
-                if (comboBox.getValue() == null) {
-                    comboBox.setStyle("-fx-border-color: red;");
-                    errorMessage = "Please select a valid option in the dropdown.";
-                    hasError = true;
-                } else {
-                    comboBox.setStyle("");
-                }
+        for (ComboBox<String> comboBox : comboBoxes) {
+            if (comboBox.getValue() == null) {
+                comboBox.setStyle("-fx-border-color: red;");
+                hasEmptyComboBox = true;
+            } else {
+                comboBox.setStyle("");
             }
         }
+
+        if (hasEmptyComboBox || hasEmptyField) {
+            errorMessage = "Please fill out all required fields.";
+            hasError = true;
+        }
+
         DatePicker firstDatePickerField = null;
         if (!hasError) {
             for (DatePicker datePicker : datePickers) {
