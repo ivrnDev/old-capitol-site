@@ -3,6 +3,28 @@ package com.econnect.barangaymanagementapp.enumeration.type;
 import lombok.Getter;
 
 public class ResidentInfomationType {
+
+    @Getter
+    public enum GenderType {
+        MALE("Male"),
+        FEMALE("Female");
+
+        private String name;
+
+        GenderType(String gender) {
+            this.name = gender;
+        }
+
+        public static GenderType fromName(String text) {
+            for (GenderType gender : GenderType.values()) {
+                if (gender.name().equalsIgnoreCase(text)) {
+                    return gender;
+                }
+            }
+            throw new IllegalArgumentException("No GenderType found with name: " + text);
+        }
+    }
+
     @Getter
     public enum EconomicLevelType {
         POOR("Poor", 0, 12030),
@@ -30,6 +52,35 @@ public class ResidentInfomationType {
                 }
             }
             throw new IllegalArgumentException("Income level not found for monthly income: " + income);
+        }
+
+        public String getFormattedRange() {
+            String formattedLower = String.format("Php. %,d", minMonthlyIncome);
+            String formattedUpper = maxMonthlyIncome == Integer.MAX_VALUE ? "and above" : String.format("Php. %,d", maxMonthlyIncome);
+            return formattedLower + " - " + formattedUpper;
+        }
+
+        public static EconomicLevelType fromFormattedRange(String formattedRange) {
+            if (formattedRange.contains("and above")) {
+                String lowerBound = formattedRange.replace("Php. ", "").replace(",", "");
+                int minIncome = Integer.parseInt(lowerBound.split(" ")[0]);
+                for (EconomicLevelType level : EconomicLevelType.values()) {
+                    if (level.minMonthlyIncome == minIncome && level.maxMonthlyIncome == Integer.MAX_VALUE) {
+                        return level;
+                    }
+                }
+            } else {
+                String[] incomeBounds = formattedRange.replace("Php. ", "").replace(",", "").split(" - ");
+                int minIncome = Integer.parseInt(incomeBounds[0]);
+                int maxIncome = Integer.parseInt(incomeBounds[1]);
+
+                for (EconomicLevelType level : EconomicLevelType.values()) {
+                    if (level.minMonthlyIncome == minIncome && level.maxMonthlyIncome == maxIncome) {
+                        return level;
+                    }
+                }
+            }
+            throw new IllegalArgumentException("No EconomicLevelType found for range: " + formattedRange);
         }
 
         public static EconomicLevelType fromName(String name) {
@@ -102,7 +153,7 @@ public class ResidentInfomationType {
 
     @Getter
     public enum Religion {
-        CATHOLICISM("Catholicism"),
+        CATHOLICISM("Catholic"),
         PROTESTANTISM("Protestantism"),
         ISLAM("Islam"),
         EVANGELICAL("Evangelical"),

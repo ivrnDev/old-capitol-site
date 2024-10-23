@@ -1,20 +1,21 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 
 import com.econnect.barangaymanagementapp.domain.Resident;
+import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.FileType;
-import com.econnect.barangaymanagementapp.enumeration.type.GenderType;
-import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType;
 import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.CivilStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.ImageService;
+import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -26,12 +27,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+import okhttp3.Response;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +51,7 @@ public class AddResidentController {
     @FXML
     private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, contactNumberInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput, citizenshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput;
     @FXML
-    private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox;
+    private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox, houseHoldIncomeComboBox;
     @FXML
     private DatePicker birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker;
     @FXML
@@ -65,6 +67,7 @@ public class AddResidentController {
     private final ImageService imageService;
     private final FileChooserUtils fileChooserUtils;
     private final FormValidator formValidator;
+    private final ResidentService residentService;
     private Stage currentStage;
     private File profileFile, governmentIdFile;
 
@@ -73,6 +76,7 @@ public class AddResidentController {
         this.imageService = dependencyInjector.getImageService();
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.formValidator = dependencyInjector.getFormValidator();
+        this.residentService = dependencyInjector.getResidentService();
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
@@ -83,55 +87,54 @@ public class AddResidentController {
         mockData();
     }
 
-//    private void addResident() {
-//        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
-//        rootPane.getChildren().add(loadingIndicator);
-//
-//        Resident employee = createResidentFromInput();
-//
-//        Task<Void> addResidentTask = new Task<>() {
-//            @Override
-//            protected Void call() {
-//                return processResidentCreation(employee);
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                loadingIndicator.setVisible(false);
-//                rootPane.getChildren().remove(loadingIndicator);
-//                closeWindow();
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                loadingIndicator.setVisible(false);
-//                rootPane.getChildren().remove(loadingIndicator);
-//                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the resident."));
-//            }
-//        };
-//
-//        new Thread(addResidentTask).start();
-//    }
+    private void addResident() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
+        rootPane.getChildren().add(loadingIndicator);
 
-//    private Void processResidentCreation(Resident employee) {
-//        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeFile, employee.getId());
-//        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceFile, employee.getId());
-//        employee.setResumeUrl(resumeUrl);
-//        employee.setProfileUrl(profileLink);
-//        employee.setNbiClearanceUrl(nbiClearanceUrl);
-//
-//
-//        try (Response response = employeeService.createEmployee(employee)) {
-//            if (response.isSuccessful()) {
-//                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
-//            } else {
-//                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        return null;
-//    }
+        Resident employee = createResidentFromInput();
+
+        Task<Void> addResidentTask = new Task<>() {
+            @Override
+            protected Void call() {
+                return processResidentCreation(employee);
+            }
+
+            @Override
+            protected void succeeded() {
+                loadingIndicator.setVisible(false);
+                rootPane.getChildren().remove(loadingIndicator);
+                closeWindow();
+            }
+
+            @Override
+            protected void failed() {
+                loadingIndicator.setVisible(false);
+                rootPane.getChildren().remove(loadingIndicator);
+                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the resident."));
+            }
+        };
+
+        new Thread(addResidentTask).start();
+    }
+
+    private Void processResidentCreation(Resident resident) {
+        String id = residentService.generateResidentId();
+        String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileFile, id);
+        String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdFile, id);
+        resident.setId(id);
+        resident.setProfileUrl(profileUrl);
+        resident.setValidIdURL(governmentIDUrl);
+        try (Response response = residentService.createResident(resident)) {
+            if (response.isSuccessful()) {
+                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Resident added successfully"));
+            } else {
+                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add resident"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
     private Resident createResidentFromInput() {
         return Resident.builder()
@@ -142,7 +145,7 @@ public class AddResidentController {
                 .contactNumber(contactNumberInput.getText())
                 .email(emailInput.getText())
                 .address(addressInput.getText())
-                .birthdate(birthdatePicker.getValue() != null ? birthdatePicker.getValue().toString() : null)
+                .birthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(motherBirthdatePicker.getValue()) : null)
                 .birthplace(birthplaceInput.getText())
                 .citizenship(citizenshipInput.getText())
                 .civilStatus(CivilStatus.fromName(civilStatusComboBox.getValue()))
@@ -150,32 +153,37 @@ public class AddResidentController {
                 .bloodType(BloodType.fromName(bloodTypeComboBox.getValue()))
                 .religion(Religion.fromName(religionComboBox.getValue()))
                 .occupation(occupationInput.getText())
+                .age(birthdatePicker.getValue() != null ? DateFormatter.calculateAge(birthdatePicker.getValue()) : null)
+                .sex(GenderType.fromName(sexComboBox.getValue()))
+                .houseHoldIncome(houseHoldIncomeComboBox.getValue())
+                .economicLevel(EconomicLevelType.fromFormattedRange(houseHoldIncomeComboBox.getValue()))
 
                 .fatherFirstName(fatherFirstNameInput.getText())
                 .fatherMiddleName(fatherMiddleNameInput.getText())
                 .fatherLastName(fatherLastNameInput.getText())
                 .fatherSuffixName(fatherSuffixComboBox.getValue())
                 .fatherOccupation(fatherOccupationInput.getText())
-                .fatherBirthdate(fatherBirthdatePicker.getValue() != null ? fatherBirthdatePicker.getValue().toString() : null) // Convert LocalDate to String
+                .fatherBirthdate(fatherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(fatherBirthdatePicker.getValue()) : null)
 
                 .motherFirstName(motherFirstNameInput.getText())
                 .motherMiddleName(motherMiddleNameInput.getText())
                 .motherLastName(motherLastNameInput.getText())
                 .motherSuffixName(motherSuffixComboBox.getValue())
                 .motherOccupation(motherOccupationInput.getText())
+                .motherBirthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(motherBirthdatePicker.getValue()) : null)
 
-//                .spouseFirstName(spouseFirstNameInput.getText()) // Add spouse fields if they exist
-//                .spouseMiddleName(spouseMiddleNameInput.getText())
-//                .spouseLastName(spouseLastNameInput.getText())
-//                .spouseSuffixName(spouseSuffixComboBox.getValue())
-//                .spouseOccupation(spouseOccupationInput.getText())
-//
-//                .houseHoldIncome(houseHoldIncomeComboBox.getValue()) // Ensure the combo box returns the correct type
-//                .status(ResidentStatus.ACTIVE) // Default status or based on your logic
-//                .profileUrl(profileFile != null ? profileFile.toURI().toString() : null) // Handle profile URL
-//                .validIdURL(governmentIdFile != null ? governmentIdFile.toURI().toString() : null) // Handle valid ID URL
-//                .createdAt(ZonedDateTime.now()) // Set created time, adjust as necessary
-//                .updatedAt(ZonedDateTime.now()) // Set updated time, adjust as necessary
+                .spouseFirstName(spouseFirstNameInput.getText())
+                .spouseMiddleName(spouseMiddleNameInput.getText())
+                .spouseLastName(spouseLastNameInput.getText())
+                .spouseSuffixName(spouseSuffixComboBox.getValue())
+                .spouseOccupation(spouseOccupationInput.getText())
+                .spouseBirthdate(spouseBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(spouseBirthdatePicker.getValue()) : null)
+
+                .status(StatusType.ResidentStatus.VERIFIED)
+                .profileUrl(profileFile != null ? profileFile.toURI().toString() : null)
+                .validIdURL(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
+                .createdAt(ZonedDateTime.now())
+                .updatedAt(ZonedDateTime.now())
                 .build();
     }
 
@@ -211,6 +219,7 @@ public class AddResidentController {
         formValidator.addListeners(motherLastNameInput, formValidator.IS_NOT_EMPTY, "Mother's last name cannot be empty.");
         formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
         formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
+        formValidator.addListeners(houseHoldIncomeComboBox, formValidator.IS_NOT_EMPTY, "Household's income cannot be empty.");
 
         if (spouseInputContainer.isVisible()) {
             formValidator.addListeners(spouseFirstNameInput, formValidator.IS_NOT_EMPTY, "Spouse's first name cannot be empty.");
@@ -224,8 +233,11 @@ public class AddResidentController {
         suffixComboBox.setValue(NONE.getName());
         fatherSuffixComboBox.setValue(NONE.getName());
         motherSuffixComboBox.setValue(NONE.getName());
-        spouseSuffixComboBox.setValue(NONE.getName());
+        if (spouseInputContainer.isVisible()) {
+            spouseSuffixComboBox.setValue(NONE.getName());
+        }
         motherToungeComboBox.setValue(TAGALOG.getName());
+
     }
 
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
@@ -315,7 +327,7 @@ public class AddResidentController {
         List<ComboBox<String>> comboBoxes = new ArrayList<>(Arrays.asList(
                 suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox,
                 religionComboBox, bloodTypeComboBox, fatherSuffixComboBox,
-                motherSuffixComboBox
+                motherSuffixComboBox, houseHoldIncomeComboBox
         ));
 
         if (spouseInputContainer.isVisible()) {
@@ -410,7 +422,7 @@ public class AddResidentController {
             modalUtils.showModal(Modal.ERROR, "Error", errorMessage);
             return;
         }
-//        addResident();
+        addResident();
     }
 
     private void populateComboBoxes() {
@@ -423,6 +435,7 @@ public class AddResidentController {
         bloodTypeComboBox.getItems().addAll(Arrays.stream(BloodType.values()).map(bloodType -> bloodType.getName()).toList());
         sexComboBox.getItems().addAll(Arrays.stream(GenderType.values()).map(gender -> gender.getName()).toList());
         motherToungeComboBox.getItems().addAll(Arrays.stream(MotherTongue.values()).map(motherTongue -> motherTongue.getName()).toList());
+        houseHoldIncomeComboBox.getItems().addAll(Arrays.stream(EconomicLevelType.values()).map(economicLevel -> economicLevel.getFormattedRange()).toList());
     }
 
     private void setPreviewRounded() {

@@ -1,15 +1,18 @@
 package com.econnect.barangaymanagementapp.domain;
 
-import com.econnect.barangaymanagementapp.config.deserializer.GenderDeserializer;
-import com.econnect.barangaymanagementapp.enumeration.type.GenderType;
+import com.econnect.barangaymanagementapp.config.deserializer.JacksonFactory;
+import com.econnect.barangaymanagementapp.config.deserializer.GenericSerializer;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
@@ -18,6 +21,7 @@ import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfoma
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@JsonSerialize(using = GenericSerializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Resident extends BaseEntity {
     private String firstName;
@@ -27,17 +31,16 @@ public class Resident extends BaseEntity {
     private String contactNumber;
     private String email;
     private String address;
-    @JsonDeserialize(using = GenderDeserializer.class)
     private GenderType sex;
-    private String age;
     private String birthdate;
+    private String age;
     private String birthplace;
     private String citizenship;
+    private String occupation;
     private CivilStatus civilStatus;
     private MotherTongue motherTounge;
     private BloodType bloodType;
     private Religion religion;
-    private String occupation;
 
     private String fatherFirstName;
     private String fatherLastName;
@@ -51,14 +54,17 @@ public class Resident extends BaseEntity {
     private String motherMiddleName;
     private String motherSuffixName;
     private String motherOccupation;
+    private String motherBirthdate;
 
     private String spouseFirstName;
     private String spouseLastName;
     private String spouseMiddleName;
     private String spouseSuffixName;
     private String spouseOccupation;
+    private String spouseBirthdate;
 
-    private EconomicLevelType houseHoldIncome;
+    private String houseHoldIncome;
+    private EconomicLevelType economicLevel;
     private ResidentStatus status;
     private String profileUrl;
     private String validIdURL;

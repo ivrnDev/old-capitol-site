@@ -60,7 +60,7 @@ public class ResidentController {
         addResidentBtn.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ADD_RESIDENT));
         residentApplicationTableController = loadTable(RESIDENT_APPLICATION_TABLE);
         residentTableController = loadTable(RESIDENT_TABLE);
-        populateResidentApplicationRow();
+//        populateResidentApplicationRow();
 //        populateResidentRow();
         residentApplicationSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());

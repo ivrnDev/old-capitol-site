@@ -175,7 +175,7 @@ public class AddEmployeeController {
                     lastNameInput.setText(residentInfo.getLastName());
                     middleNameInput.setText(residentInfo.getMiddleName());
                     addressInput.setText(residentInfo.getAddress());
-                    birthdateInput.setText(residentInfo.getBirthdate());
+                    birthdateInput.setText(residentInfo.getBirthdate().toString());
                     emailInput.setText(residentInfo.getEmail());
                     phoneInput.setText(residentInfo.getContactNumber());
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());

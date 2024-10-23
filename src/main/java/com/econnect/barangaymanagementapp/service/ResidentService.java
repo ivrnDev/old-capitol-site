@@ -6,6 +6,7 @@ import com.econnect.barangaymanagementapp.repository.ResidentRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,5 +39,12 @@ public class ResidentService {
 
     public Optional<Resident> findResidentById(String id) {
         return residentRepository.findResidentById(id);
+    }
+
+    public String generateResidentId() {
+        int OTP_LENGTH = 6;
+        SecureRandom random = new SecureRandom();
+        int otp = random.nextInt((int) Math.pow(10, OTP_LENGTH));
+        return String.format("%06d", otp);
     }
 }

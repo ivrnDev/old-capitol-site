@@ -58,33 +58,29 @@
                                                     </padding>
                                                     <styleClass>
                                                         <String fx:value="input-label" />
-                                                        <String fx:value="input-label-default" />
+                                                        <String fx:value="input-label-first" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="residentIdInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="residentIdInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
-                                                    <styleClass>
-                                                        <String fx:value="text-input" />
-                                                        <String fx:value="text-input-default" />
-                                                    </styleClass>
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT" />
                                                     </cursor>
                                                 </TextField>
                                             </children>
                                             <VBox.margin>
-                                                <Insets bottom="40.0" />
+                                                <Insets />
                                             </VBox.margin>
-                                            <styleClass>
-                                                <String fx:value="input-container-default" />
-                                                <String fx:value="input-container" />
-                                            </styleClass>
+                                 <styleClass>
+                                    <String fx:value="input-container" />
+                                    <String fx:value="input-container-first" />
+                                 </styleClass>
                                         </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Last Name" textOverrun="CLIP">
                                                             <font>
@@ -98,12 +94,8 @@
                                                     <padding>
                                                         <Insets left="20.0" />
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="input-label-first" />
-                                                        <String fx:value="input-label" />
-                                                    </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -112,10 +104,6 @@
                                                     </cursor>
                                                 </TextField>
                                             </children>
-                                            <styleClass>
-                                                <String fx:value="input-container" />
-                                                <String fx:value="input-container-first" />
-                                            </styleClass>
                                         </HBox>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="85.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
@@ -256,9 +244,9 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Citizenship" textOverrun="CLIP">
                                                             <font>
@@ -272,12 +260,8 @@
                                                     <padding>
                                                         <Insets left="20.0" />
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="input-label-last" />
-                                                        <String fx:value="input-label" />
-                                                    </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="citizenshipInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="citizenshipInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -286,15 +270,7 @@
                                                     </cursor>
                                                 </TextField>
                                             </children>
-                                            <styleClass>
-                                                <String fx:value="input-container-last" />
-                                                <String fx:value="input-container" />
-                                            </styleClass>
                                         </HBox>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                    <children>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
@@ -311,32 +287,36 @@
                                                     <padding>
                                                         <Insets left="20.0" />
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="input-label-first" />
-                                                        <String fx:value="input-label" />
-                                                    </styleClass>
+                                       <styleClass>
+                                          <String fx:value="input-label" />
+                                          <String fx:value="input-label-last" />
+                                       </styleClass>
                                                 </HBox>
                                                 <ComboBox fx:id="sexComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
-                                                    <styleClass>
-                                                        <String fx:value="text-input-first" />
-                                                        <String fx:value="text-input" />
-                                                    </styleClass>
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                     <padding>
                                                         <Insets left="-1.0" />
                                                     </padding>
+                                       <styleClass>
+                                          <String fx:value="text-input-last" />
+                                          <String fx:value="text-input" />
+                                       </styleClass>
                                                 </ComboBox>
                                             </children>
-                                            <styleClass>
-                                                <String fx:value="input-container" />
-                                                <String fx:value="input-container-first" />
-                                            </styleClass>
+                                 <styleClass>
+                                    <String fx:value="input-container" />
+                                    <String fx:value="input-container-last" />
+                                 </styleClass>
                                         </HBox>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                    </children>
+                                </VBox>
+                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Civil Status" textOverrun="CLIP">
                                                             <font>
@@ -350,16 +330,28 @@
                                                     <padding>
                                                         <Insets left="20.0" />
                                                     </padding>
+                                       <styleClass>
+                                          <String fx:value="input-label" />
+                                          <String fx:value="input-label-first" />
+                                       </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                     <padding>
                                                         <Insets left="-1.0" />
                                                     </padding>
+                                       <styleClass>
+                                          <String fx:value="text-input" />
+                                          <String fx:value="text-input-first" />
+                                       </styleClass>
                                                 </ComboBox>
                                             </children>
+                                 <styleClass>
+                                    <String fx:value="input-container" />
+                                    <String fx:value="input-container-first" />
+                                 </styleClass>
                                         </HBox>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
@@ -523,9 +515,9 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Contact Number" textOverrun="CLIP">
                                                             <font>
@@ -539,12 +531,8 @@
                                                     <padding>
                                                         <Insets left="20.0" />
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="input-label-last" />
-                                                        <String fx:value="input-label" />
-                                                    </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="contactNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="contactNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -553,11 +541,46 @@
                                                     </cursor>
                                                 </TextField>
                                             </children>
-                                            <styleClass>
-                                                <String fx:value="input-container" />
-                                                <String fx:value="input-container-last" />
-                                            </styleClass>
                                         </HBox>
+                              <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Household Income" textOverrun="CLIP">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets left="20.0" />
+                                       </padding>
+                                       <styleClass>
+                                          <String fx:value="input-label" />
+                                          <String fx:value="input-label-last" />
+                                       </styleClass>
+                                    </HBox>
+                                    <ComboBox fx:id="houseHoldIncomeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                       <styleClass>
+                                          <String fx:value="text-input" />
+                                          <String fx:value="text-input-last" />
+                                       </styleClass>
+                                    </ComboBox>
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="input-container" />
+                                    <String fx:value="input-container-last" />
+                                 </styleClass>
+                              </HBox>
                                     </children>
                                 </VBox>
                             </children>
