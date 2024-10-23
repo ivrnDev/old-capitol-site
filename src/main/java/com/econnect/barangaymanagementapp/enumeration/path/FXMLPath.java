@@ -18,7 +18,7 @@ public enum FXMLPath {
     DEFAULT_PROFILE("images/default-profile.png"),
 
     //Modal
-    ADD_EMPLOYEE("view/shared/modal/add-resident.fxml"),
+    ADD_EMPLOYEE("view/shared/modal/add-employee.fxml"),
     ADD_RESIDENT("view/barangayoffice/modal/add-resident.fxml"),
     VIEW_APPLICATION_EMPLOYEE("view/shared/view-application-employee.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
