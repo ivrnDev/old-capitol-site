@@ -27,20 +27,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import static com.econnect.barangaymanagementapp.enumeration.modal.Modal.ERROR;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.GOVERNMENT_ID;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.PROFILE_PICTURE;
+import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.SuffixName.NONE;
+import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.SuffixName.values;
 
 public class AddResidentController {
-    private final ModalUtils modalUtils;
-    private final ImageService imageService;
-    private final FileChooserUtils fileChooserUtils;
-    private final FormValidator formValidator;
-    private Stage currentStage;
-
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -58,8 +52,28 @@ public class AddResidentController {
     @FXML
     private Button cancelBtn, confirmBtn;
 
+    private final ModalUtils modalUtils;
+    private final ImageService imageService;
+    private final FileChooserUtils fileChooserUtils;
+    private final FormValidator formValidator;
+    private Stage currentStage;
     private File profileFile, governmentIdFile;
-    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
+    List<TextField> textFields = Arrays.asList(
+            residentIdInput, lastNameInput, firstNameInput, middleNameInput,
+            birthplaceInput, occupationInput, emailInput, addressInput,
+            contactNumberInput, fatherFirstNameInput, fatherLastNameInput,
+            fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
+            motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
+            citizenshipInput
+    );
+    List<DatePicker> datePickers = Arrays.asList(
+            birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker
+    );
+    List<ComboBox<String>> comboBoxes = Arrays.asList(
+            suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox,
+            religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox,
+            motherSuffixComboBox
+    );
 
     public AddResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -74,35 +88,6 @@ public class AddResidentController {
         setupActionButtons();
         setupInputFields();
         mockData();
-    }
-
-    private void setupInputFields() {
-        LocalDate minimumDate = LocalDate.now().minusYears(120);
-        LocalDate maximumDate = LocalDate.now().minusYears(12);
-
-        populateComboBoxes();
-        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker};
-        formValidator.setupDatePicker(minimumDate, maximumDate, datePickers);
-        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID cannot be empty.");
-        formValidator.addListeners(lastNameInput, formValidator.IS_NOT_EMPTY, "Last name cannot be empty.");
-        formValidator.addListeners(firstNameInput, formValidator.IS_NOT_EMPTY, "First name cannot be empty.");
-        formValidator.addListeners(middleNameInput, formValidator.IS_NOT_EMPTY, "Middle name cannot be empty.");
-        formValidator.addListeners(birthplaceInput, formValidator.IS_NOT_EMPTY, "Birthplace cannot be empty.");
-        formValidator.addListeners(occupationInput, formValidator.IS_NOT_EMPTY, "Occupation cannot be empty.");
-        formValidator.addListeners(emailInput, formValidator.IS_EMAIL, "Please enter a valid email address.");
-        formValidator.addListeners(addressInput, formValidator.IS_NOT_EMPTY, "Address cannot be empty.");
-        formValidator.addListeners(contactNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
-        formValidator.addListeners(fatherFirstNameInput, formValidator.IS_NOT_EMPTY, "Father's first name cannot be empty.");
-        formValidator.addListeners(fatherLastNameInput, formValidator.IS_NOT_EMPTY, "Father's last name cannot be empty.");
-        formValidator.addListeners(fatherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Father's middle name cannot be empty.");
-        formValidator.addListeners(fatherOccupationInput, formValidator.IS_NOT_EMPTY, "Father's occupation cannot be empty.");
-        formValidator.addListeners(motherFirstNameInput, formValidator.IS_NOT_EMPTY, "Mother's first name cannot be empty.");
-        formValidator.addListeners(motherLastNameInput, formValidator.IS_NOT_EMPTY, "Mother's last name cannot be empty.");
-        formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
-        formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
-        formValidator.addListeners(citizenshipInput, formValidator.IS_NOT_EMPTY, "Citizenship cannot be empty.");
-        citizenshipInput.setEditable(false);
-        citizenshipInput.setText("Filipino");
     }
 
     //    private void addResident() {
@@ -159,6 +144,38 @@ public class AddResidentController {
     //        return null;
     //    }
 
+    private void setupInputFields() {
+        LocalDate birthMinDate = LocalDate.now().minusYears(120);
+        LocalDate birthMaxDate = LocalDate.now().minusYears(12);
+
+        populateComboBoxes();
+        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker};
+        formValidator.setupDatePicker(birthMinDate, birthMaxDate, datePickers);
+        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID cannot be empty.");
+        formValidator.addListeners(lastNameInput, formValidator.IS_NOT_EMPTY, "Last name cannot be empty.");
+        formValidator.addListeners(firstNameInput, formValidator.IS_NOT_EMPTY, "First name cannot be empty.");
+        formValidator.addListeners(middleNameInput, formValidator.IS_NOT_EMPTY, "Middle name cannot be empty.");
+        formValidator.addListeners(birthplaceInput, formValidator.IS_NOT_EMPTY, "Birthplace cannot be empty.");
+        formValidator.addListeners(occupationInput, formValidator.IS_NOT_EMPTY, "Occupation cannot be empty.");
+        formValidator.addListeners(emailInput, formValidator.IS_EMAIL, "Please enter a valid email address.");
+        formValidator.addListeners(addressInput, formValidator.IS_NOT_EMPTY, "Address cannot be empty.");
+        formValidator.addListeners(contactNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
+        formValidator.addListeners(fatherFirstNameInput, formValidator.IS_NOT_EMPTY, "Father's first name cannot be empty.");
+        formValidator.addListeners(fatherLastNameInput, formValidator.IS_NOT_EMPTY, "Father's last name cannot be empty.");
+        formValidator.addListeners(fatherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Father's middle name cannot be empty.");
+        formValidator.addListeners(fatherOccupationInput, formValidator.IS_NOT_EMPTY, "Father's occupation cannot be empty.");
+        formValidator.addListeners(motherFirstNameInput, formValidator.IS_NOT_EMPTY, "Mother's first name cannot be empty.");
+        formValidator.addListeners(motherLastNameInput, formValidator.IS_NOT_EMPTY, "Mother's last name cannot be empty.");
+        formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
+        formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
+        formValidator.addListeners(citizenshipInput, formValidator.IS_NOT_EMPTY, "Citizenship cannot be empty.");
+        citizenshipInput.setEditable(false);
+        citizenshipInput.setText("Filipino");
+        suffixInput.setValue(NONE.getName());
+        fatherSuffixNameComboBox.setValue(NONE.getName());
+        motherSuffixComboBox.setValue(NONE.getName());
+    }
+
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
         FileChooser fileChooser = fileChooserUtils.createFileChooser();
         File file = fileChooser.showOpenDialog(currentStage);
@@ -186,10 +203,10 @@ public class AddResidentController {
     }
 
     public void mockData() {
-        residentIdInput.setText("RES-0001");
+//        residentIdInput.setText("RES-0001");
         lastNameInput.setText("Dela Cruz");
         firstNameInput.setText("Juan");
-//        middleNameInput.setText("Santos");
+        middleNameInput.setText("Santos");
         suffixInput.setValue("Jr.");
         birthplaceInput.setText("dsa");
         occupationInput.setText("Software Engineer");
@@ -209,13 +226,13 @@ public class AddResidentController {
         citizenshipInput.setText("Filipino");
         suffixInput.setValue("Jr.");
         suffixInput.setValue("Jr.");
-//        sexComboBox.setValue("Male");
-//        civilStatusComboBox.setValue("Single");
-//        motherToungeComboBox.setValue("Tagalog");
-//        religionComboBox.setValue("Catholicism");
-//        bloodTypeComboBox.setValue("O+");
-//        fatherSuffixNameComboBox.setValue("Sr.");
-//        motherSuffixComboBox.setValue("Jr.");
+        sexComboBox.setValue("Male");
+        civilStatusComboBox.setValue("Single");
+        motherToungeComboBox.setValue("Tagalog");
+        religionComboBox.setValue("Catholicism");
+        bloodTypeComboBox.setValue("O+");
+        fatherSuffixNameComboBox.setValue("Sr.");
+        motherSuffixComboBox.setValue("Jr.");
 
     }
 
@@ -235,28 +252,11 @@ public class AddResidentController {
         boolean hasError = false;
         String errorMessage = "";
 
-        List<TextField> textFields = Arrays.asList(
-                residentIdInput, lastNameInput, firstNameInput, middleNameInput,
-                birthplaceInput, occupationInput, emailInput, addressInput,
-                contactNumberInput, fatherFirstNameInput, fatherLastNameInput,
-                fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
-                motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
-                citizenshipInput
-        );
-
-        List<DatePicker> datePickers = Arrays.asList(
-                birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker
-        );
-
-        List<ComboBox<String>> comboBoxes = Arrays.asList(
-                suffixInput, sexComboBox, civilStatusComboBox, motherToungeComboBox,
-                religionComboBox, bloodTypeComboBox, fatherSuffixNameComboBox,
-                motherSuffixComboBox
-        );
-
         TextField firstFieldError = null;
+        DatePicker firstDatePickerField = null;
         boolean hasEmptyComboBox = false;
         boolean hasEmptyField = false;
+
         for (TextField field : textFields) {
             if (!formValidator.IS_NOT_EMPTY.test(field.getText())) {
                 field.setStyle("-fx-border-color: red;");
@@ -303,7 +303,6 @@ public class AddResidentController {
             hasError = true;
         }
 
-        DatePicker firstDatePickerField = null;
         if (!hasError) {
             for (DatePicker datePicker : datePickers) {
                 if (!formValidator.DATE_VALIDATOR.test(datePicker.getEditor().getText())) {
@@ -337,7 +336,7 @@ public class AddResidentController {
     }
 
     private void populateComboBoxes() {
-        List<String> suffixNamesChoices = Arrays.stream(ResidentInfomationType.SuffixName.values()).map(suffix -> suffix.getName()).toList();
+        List<String> suffixNamesChoices = Arrays.stream(values()).map(suffix -> suffix.getName()).toList();
         suffixInput.getItems().addAll(suffixNamesChoices);
         fatherSuffixNameComboBox.getItems().addAll(suffixNamesChoices);
         motherSuffixComboBox.getItems().addAll(suffixNamesChoices);
