@@ -120,7 +120,7 @@ public class ResidentRowController extends BaseRowController<Resident> {
     }
 
     private void setupActiveButton() {
-        Button suspend = ButtonUtils.createButton("Suspend", ButtonStyle.REJECT, () -> {
+        Button suspend = ButtonUtils.createButton("Suspend", ButtonStyle.WARNING, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Suspend", "Would you like to suspend resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(SUSPENDED);
             });
