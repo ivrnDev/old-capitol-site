@@ -67,7 +67,7 @@
                 </Label>
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="746.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0">
+        <HBox alignment="CENTER" layoutX="746.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="emailLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="36.0" maxWidth="120.0" minWidth="80.0" text="villamora@gmail.com" textAlignment="CENTER" wrapText="true">
                     <font>
@@ -76,7 +76,7 @@
                 </Label>
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="871.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0">
+        <HBox alignment="CENTER" layoutX="871.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label fx:id="dateLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="36.0" maxWidth="120.0" minWidth="80.0" text="23931" textAlignment="CENTER" wrapText="true">
                     <font>
