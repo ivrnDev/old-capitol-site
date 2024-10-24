@@ -4,7 +4,8 @@ public enum ButtonStyle {
     ACCEPT("h-accept"),
     REJECT("h-reject"),
     VIEW("h-view"),
-    UPDATE("h-update");
+    UPDATE("h-update"),
+    WARNING("h-warning");
 
     private final String rootStyle;
 

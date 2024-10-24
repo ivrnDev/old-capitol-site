@@ -37,6 +37,11 @@
     -fx-text-fill: white;
 }
 
+.h-warning {
+    -fx-background-color: #cb8103;
+    -fx-text-fill: white;
+}
+
 .h-view {
     -fx-background-color: #2F00ED;
     -fx-text-fill: white;
