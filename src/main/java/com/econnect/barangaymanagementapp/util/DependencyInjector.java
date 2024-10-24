@@ -60,6 +60,7 @@ public class DependencyInjector {
         this.imageService = new ImageService(this);
         this.fileChooserUtils = new FileChooserUtils();
         this.formValidator = new FormValidator(this);
+        this.emailService = new EmailService();
 
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
@@ -67,7 +68,6 @@ public class DependencyInjector {
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
         this.loginService = new LoginService(this);
-        this.emailService = new EmailService();
         this.employeeSearchService = new SearchService<>();
         this.residentSearchService = new SearchService<>();
     }
