@@ -85,6 +85,15 @@
                 </Label>
             </children>
         </HBox>
+      <HBox alignment="CENTER" layoutX="871.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="36.0" maxWidth="120.0" minWidth="80.0" text="23931" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
         <HBox fx:id="buttonContainer" alignment="CENTER" prefWidth="250.0" spacing="20.0" stylesheets="@../../../../style/component/button.css" />
     </children>
     <padding>
