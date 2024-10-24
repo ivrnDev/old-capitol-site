@@ -4,7 +4,7 @@ public enum NavigationType {
     DASHBOARD("Dashboard", "icon/sidebar/dashboard.png", "icon/sidebar/selected/dashboard-selected.png"),
     ANALYTICS("Analytics", "icon/sidebar/analytics.png", "icon/sidebar/selected/analytics-selected.png"),
     EMPLOYEES("Employees", "icon/sidebar/employees.png", "icon/sidebar/selected/employees-selected.png"),
-    RESIDENTS("Residents", "icon/sidebar/residents.png", "icon/sidebar/selected/residents-selected.png"),
+    RESIDENTS("Residents", "icon/sidebar/resident.png", "icon/sidebar/selected/resident-selected.png"),
     HISTORY("History", "icon/sidebar/history.png", "icon/sidebar/selected/history-selected.png"),
     APPLICATIONS("Applications", "icon/sidebar/applications.png", "icon/sidebar/selected/applications-selected.png"),
     ;
