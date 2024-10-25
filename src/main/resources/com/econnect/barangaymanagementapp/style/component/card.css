@@ -1,0 +1,11 @@
+.card-variant-2 {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: #FDFFFF;
+    -fx-border-color: #787878;
+    -fx-cursor: hand;
+}
+
+.card-variant-2:hover {
+    -fx-background-color: #F0F0F0;
+}

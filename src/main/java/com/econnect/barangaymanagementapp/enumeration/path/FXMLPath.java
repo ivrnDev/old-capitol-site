@@ -21,7 +21,14 @@ public enum FXMLPath {
     ADD_RESIDENT("view/barangayoffice/modal/add-resident.fxml"),
     VIEW_APPLICATION_EMPLOYEE("view/shared/modal/view-application-employee.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
-    SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml");
+    SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml"),
+
+    //Form
+    CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),
+    RESIDENCY_FORM("view/barangayoffice/modal/residency-form.fxml"),
+    CLEARANCE_FORM("view/barangayoffice/modal/clearance-form.fxml"),
+    INDIGENCY_FORM("view/barangayoffice/modal/indigency-form.fxml"),
+    CENSUS_FORM("view/barangayoffice/modal/census-form.fxml");
 
     private final String fxmlPath;
 
