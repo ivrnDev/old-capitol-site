@@ -98,14 +98,14 @@
                 <Insets left="20.0" right="20.0" />
             </padding>
             <VBox.margin>
-                <Insets bottom="40.0" />
+                <Insets bottom="20.0" />
             </VBox.margin>
         </HBox>
         <ScrollPane fitToWidth="true" minHeight="-Infinity">
             <content>
                 <VBox fx:id="tableContent" spacing="20.0">
                     <padding>
-                        <Insets bottom="10.0" />
+                        <Insets bottom="20.0" />
                     </padding>
                 </VBox>
             </content>

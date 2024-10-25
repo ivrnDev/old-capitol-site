@@ -105,15 +105,14 @@
                 <Insets left="20.0" right="20.0"/>
             </padding>
             <VBox.margin>
-                <Insets bottom="40.0"/>
+                <Insets bottom="20.0"/>
             </VBox.margin>
         </HBox>
-        <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
+        <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
             <content>
-                <VBox fx:id="tableContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                      spacing="20.0">
+                <VBox fx:id="tableContent" spacing="20.0">
                     <padding>
-                        <Insets bottom="10.0"/>
+                        <Insets bottom="20.0"/>
                     </padding>
                 </VBox>
             </content>
