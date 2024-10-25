@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
+import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -23,6 +24,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_TABLE;
 
 public class ResidentController {
@@ -31,19 +33,24 @@ public class ResidentController {
     private VBox contentPane;
 
     @FXML
-    public Button addResidentBtn;
+    private VBox residentApplicationContent, residentListContent;
 
     @FXML
-    private TextField searchField;
+    private TextField residentApplicationSearchField, residentListSearchField;
+
+    @FXML
+    public Button addResidentBtn;
 
     private final ResidentService residentService;
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private ResidentTableController residentTableController;
+    private ResidentApplicationTableController residentApplicationTableController;
     private final SearchService<Resident> searchService;
     private final DependencyInjector dependencyInjector;
 
     private List<Resident> allResidents;
+    private List<Resident> allPendingResidents;
     private StackPane loadingIndicator;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -57,14 +64,11 @@ public class ResidentController {
     }
 
     public void initialize() {
-        addResidentBtn.setOnMouseClicked(_ -> showAddResident());
         loadResidentTable();
+        loadResidentApplicationTable();
         populateResidentRows();
-
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchDelay.setOnFinished(_ -> performSearch());
-            searchDelay.playFromStart();
-        });
+        populateResidentApplicationRows();
+        setupListener();
     }
 
     private void loadResidentTable() {
@@ -72,20 +76,29 @@ public class ResidentController {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_TABLE.getFxmlPath(), dependencyInjector, this);
             Parent residentTable = loader.load();
             residentTableController = loader.getController();
-            contentPane.getChildren().add(residentTable);
+            residentListContent.getChildren().add(residentTable);
+        } catch (IOException e) {
+            System.err.println("Error loading employee table: " + e.getMessage());
+        }
+    }
+
+    private void loadResidentApplicationTable() {
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_TABLE.getFxmlPath(), dependencyInjector, this);
+            Parent residentTable = loader.load();
+            residentApplicationTableController = loader.getController();
+            residentApplicationContent.getChildren().add(residentTable);
         } catch (IOException e) {
             System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
 
     public void populateResidentRows() {
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
-        Platform.runLater(() -> contentPane.getChildren().add(loadingIndicator));
-
+        addResidentLoadingIndicator();
         Runnable call = () -> {
-            allResidents = residentService.findAllNonDeletedResidents();
+            allResidents = residentService.findAllNonDeletedAndPendingResidents();
             Platform.runLater(() -> {
-                contentPane.getChildren().remove(loadingIndicator);
+                removeResidentLoadingIndicator();
                 if (allResidents.isEmpty()) {
                     residentTableController.clearRow();
                     residentTableController.showNoData();
@@ -96,15 +109,38 @@ public class ResidentController {
         };
 
         Runnable onFailed = () -> {
-            Platform.runLater(() -> contentPane.getChildren().remove(loadingIndicator));
-            System.err.println("Error loading employees");
+            removeResidentLoadingIndicator();
+            System.err.println("Error loading residents");
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
-    private void performSearch() {
-        String searchText = searchField.getText().trim().toLowerCase();
+    public void populateResidentApplicationRows() {
+        addResidentApplicationLoadingIndicator();
+        Runnable call = () -> {
+            allPendingResidents = residentService.findAllPendingResidents();
+            Platform.runLater(() -> {
+                removeResidentApplicationLoadingIndicator();
+                if (allPendingResidents.isEmpty()) {
+                    residentApplicationTableController.clearRow();
+                    residentApplicationTableController.showNoData();
+                } else {
+                    updateResidentApplicationRow(allPendingResidents);
+                }
+            });
+        };
+
+        Runnable onFailed = () -> {
+            removeResidentApplicationLoadingIndicator();
+            System.err.println("Error loading resident applications");
+        };
+
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+    }
+
+    private void performResidentSearch() {
+        String searchText = residentListSearchField.getText().trim().toLowerCase();
         searchService.performSearch(
                 searchText,
                 allResidents,
@@ -112,17 +148,13 @@ public class ResidentController {
                 (filteredResidents) -> updateResidentRow(filteredResidents));
     }
 
-    public void addLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
-        contentPane.getChildren().add(loadingIndicator);
-    }
-
-    public void removeLoadingIndicator() {
-        contentPane.getChildren().remove(loadingIndicator);
-    }
-
-    public void reloadTable() {
-        populateResidentRows();
+    private void performResidentApplicationSearch() {
+        String searchText = residentApplicationSearchField.getText().trim().toLowerCase();
+        searchService.performSearch(
+                searchText,
+                allPendingResidents,
+                searchService.createResidentFilter(searchText),
+                (filteredResidents) -> updateResidentApplicationRow(filteredResidents));
     }
 
     private void updateResidentRow(List<Resident> residents) {
@@ -133,6 +165,56 @@ public class ResidentController {
             return;
         }
         residents.forEach(resident -> residentTableController.addRow(resident));
+    }
+
+    private void updateResidentApplicationRow(List<Resident> residents) {
+        residentApplicationTableController.clearRow();
+
+        if (residents.isEmpty()) {
+            residentApplicationTableController.showNoData();
+            return;
+        }
+        residents.forEach(resident -> residentApplicationTableController.addRow(resident));
+    }
+
+    private void setupListener() {
+        addResidentBtn.setOnMouseClicked(_ -> showAddResident());
+
+        residentListSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(_ -> performResidentSearch());
+            searchDelay.playFromStart();
+        });
+
+        residentApplicationSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(_ -> performResidentApplicationSearch());
+            searchDelay.playFromStart();
+        });
+    }
+
+    public void addResidentLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        residentListContent.getChildren().add(loadingIndicator);
+    }
+
+    public void addResidentApplicationLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        residentApplicationContent.getChildren().add(loadingIndicator);
+    }
+
+    public void removeResidentLoadingIndicator() {
+        contentPane.getChildren().remove(loadingIndicator);
+    }
+
+    public void removeResidentApplicationLoadingIndicator() {
+        contentPane.getChildren().remove(loadingIndicator);
+    }
+
+    public void reloadResidentTable() {
+        populateResidentRows();
+    }
+
+    public void reloadResidentApplicationTable() {
+        populateResidentApplicationRows();
     }
 
     private void showAddResident() {

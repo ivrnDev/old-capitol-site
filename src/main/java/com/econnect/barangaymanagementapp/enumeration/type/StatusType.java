@@ -36,7 +36,9 @@ public class StatusType {
         DECEASED("Deceased"),
         MIGRATED("Migrated"),
         SUSPENDED("Suspended"),
-        REMOVED("Removed");
+        REMOVED("Removed"),
+        PENDING("Pending"),
+        REJECTED("Rejected");
 
         private String status;
 

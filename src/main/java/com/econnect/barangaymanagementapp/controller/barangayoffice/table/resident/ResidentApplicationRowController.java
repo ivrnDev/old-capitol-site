@@ -27,12 +27,11 @@ import okhttp3.Response;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 
-public class ResidentRowController extends BaseRowController<Resident> {
+public class ResidentApplicationRowController extends BaseRowController<Resident> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
     private final ResidentController residentController;
-    private final DependencyInjector dependencyInjector;
 
     @FXML
     private HBox tableRow, buttonContainer;
@@ -43,9 +42,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
     @FXML
     private ImageView profilePicture;
 
-    public ResidentRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
+    public ResidentApplicationRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
         super(dependencyInjector);
-        this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.residentService = dependencyInjector.getResidentService();
@@ -101,46 +99,26 @@ public class ResidentRowController extends BaseRowController<Resident> {
         setupViewButton();
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
-            case VERIFIED:
-                setupActiveButton();
-                setupDeleteButton();
-                break;
-            case SUSPENDED:
-                setupInactiveButton();
-                setupDeleteButton();
-                break;
-            default:
-                setupDeleteButton();
-                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+            case PENDING:
+                setupPendingButtons();
                 break;
         }
     }
 
-    private void setupInactiveButton() {
-        Button restore = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to restore resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
+    private void setupPendingButtons() {
+        Button verify = ButtonUtils.createButton("Verify", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Verify", "Would you like to verify resident #" + residentIdLabel.getText() + "application?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(VERIFIED);
             });
         });
-        buttonContainer.getChildren().addAll(restore);
-    }
 
-    private void setupActiveButton() {
-        Button suspend = ButtonUtils.createButton("Suspend", ButtonStyle.WARNING, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Suspend", "Would you like to suspend resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
-                if (isConfirmed) updateResidentStatus(SUSPENDED);
+        Button reject = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Would you like to reject resident #" + residentIdLabel.getText() + "application?", isConfirmed -> {
+                if (isConfirmed) updateResidentStatus(REJECTED);
             });
         });
-        buttonContainer.getChildren().addAll(suspend);
-    }
 
-    private void setupDeleteButton() {
-        Button delete = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Delete", "Would you like to delete resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
-                if (isConfirmed) updateResidentStatus(REMOVED);
-            });
-        });
-        buttonContainer.getChildren().add(delete);
+        buttonContainer.getChildren().addAll(verify, reject);
     }
 
     private void setupViewButton() {
@@ -155,7 +133,7 @@ public class ResidentRowController extends BaseRowController<Resident> {
     }
 
     private void updateResidentStatus(StatusType.ResidentStatus status) {
-        residentController.addResidentLoadingIndicator();
+        residentController.addResidentApplicationLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -166,12 +144,12 @@ public class ResidentRowController extends BaseRowController<Resident> {
             protected void succeeded() {
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    residentController.removeResidentLoadingIndicator();
+                    residentController.removeResidentApplicationLoadingIndicator();
                     reloadTable();
-                    if (status == SUSPENDED) {
-                        modalUtils.showModal(Modal.SUCCESS, "Suspended", "Resident #" + residentIdLabel.getText() + " has been suspended.");
+                    if (status == VERIFIED) {
+                        modalUtils.showModal(Modal.SUCCESS, "Verified", "Resident #" + residentIdLabel.getText() + "appplication has been verified successfully.");
                     } else {
-                        modalUtils.showModal(Modal.SUCCESS, "Restored", "Resident #" + residentIdLabel.getText() + " has been restored.");
+                        modalUtils.showModal(Modal.SUCCESS, "Rejected", "Resident #" + residentIdLabel.getText() + "application has been rejected.");
                     }
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
@@ -182,6 +160,7 @@ public class ResidentRowController extends BaseRowController<Resident> {
     }
 
     protected void reloadTable() {
+        residentController.reloadResidentApplicationTable();
         residentController.reloadResidentTable();
     }
 }

@@ -10,6 +10,8 @@ public enum FXMLPath {
 
     RESIDENT_TABLE("view/barangayoffice/table/resident/resident-table.fxml"),
     RESIDENT_ROW("view/barangayoffice/table/resident/resident-row.fxml"),
+    RESIDENT_APPLICATION_TABLE("view/barangayoffice/table/resident/resident-application-table.fxml"),
+    RESIDENT_APPLICATION_ROW("view/barangayoffice/table/resident/resident-application-row.fxml"),
 
     RESOURCE_ERROR_MODAL("view/component/modal/resource-error.fxml"),
     DEFAULT_PROFILE("images/default-profile.png"),

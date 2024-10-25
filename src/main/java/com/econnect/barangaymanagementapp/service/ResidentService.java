@@ -29,8 +29,12 @@ public class ResidentService {
         return residentRepository.findAllResidents();
     }
 
-    public List<Resident> findAllNonDeletedResidents() {
-        return residentRepository.findResidentByFilter(resident -> !resident.getStatus().equals(REMOVED));
+    public List<Resident> findAllNonDeletedAndPendingResidents() {
+        return residentRepository.findResidentByFilter(resident -> !resident.getStatus().equals(REMOVED) && !resident.getStatus().equals(PENDING));
+    }
+
+    public List<Resident> findAllPendingResidents() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(PENDING));
     }
 
     public Optional<Resident> findResidentById(String id) {

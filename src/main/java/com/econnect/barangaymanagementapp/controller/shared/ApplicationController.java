@@ -48,7 +48,7 @@ public class ApplicationController {
 
     public void initialize() {
         loadApplicationTable();
-        populateApplicationRows();
+//        populateApplicationRows();
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
