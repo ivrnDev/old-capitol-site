@@ -116,7 +116,6 @@
                         <Insets bottom="10.0"/>
                     </padding>
                 </VBox>
-                a
             </content>
             <VBox.margin>
                 <Insets/>
