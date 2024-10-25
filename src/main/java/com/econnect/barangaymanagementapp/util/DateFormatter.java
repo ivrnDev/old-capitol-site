@@ -31,6 +31,16 @@ public class DateFormatter {
         }
     }
 
+    public static LocalDate toLocalDateFormat(String inputDate) {
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+            return LocalDate.parse(inputDate, inputFormatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static String calculateAge(LocalDate birthdate) {
         LocalDate currentDate = LocalDate.now();
         int age = currentDate.getYear() - birthdate.getYear();
