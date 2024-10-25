@@ -1,18 +1,14 @@
 package com.econnect.barangaymanagementapp.domain;
 
-import com.econnect.barangaymanagementapp.config.deserializer.JacksonFactory;
 import com.econnect.barangaymanagementapp.config.deserializer.GenericSerializer;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus;
-import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
