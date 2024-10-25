@@ -113,6 +113,10 @@ public class ApplicationController {
         populateApplicationRows();
     }
 
+    public void clearRow() {
+        tableController.clearRow();
+    }
+
     private void updateEmployeeTable(List<Employee> employees) {
         tableController.clearRow();
 
