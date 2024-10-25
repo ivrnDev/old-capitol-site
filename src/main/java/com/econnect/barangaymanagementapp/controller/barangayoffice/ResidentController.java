@@ -202,11 +202,11 @@ public class ResidentController {
     }
 
     public void removeResidentLoadingIndicator() {
-        contentPane.getChildren().remove(loadingIndicator);
+        residentListContent.getChildren().remove(loadingIndicator);
     }
 
     public void removeResidentApplicationLoadingIndicator() {
-        contentPane.getChildren().remove(loadingIndicator);
+        residentApplicationContent.getChildren().remove(loadingIndicator);
     }
 
     public void reloadResidentTable() {
