@@ -8,6 +8,8 @@ import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicat
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -27,7 +29,9 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import okhttp3.Response;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.fromName;
+import java.util.Optional;
+
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
 public class ApplicationRowController extends BaseRowController<Employee> {
     private final ModalUtils modalUtils;
@@ -36,10 +40,10 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     private final ApplicationController applicationController;
     private final DependencyInjector dependencyInjector;
     private final UserSession userSession;
+    private String residentId;
 
     @FXML
     private HBox tableRow, buttonContainer;
-
 
     @FXML
     private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
@@ -65,6 +69,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
     @Override
     protected void setData(Employee employeeData) {
+        residentId = employeeData.getId();
         residentIdLabel.setText(employeeData.getId());
         lastNameLabel.setText(employeeData.getLastName());
         firstNameLabel.setText(employeeData.getFirstName());
@@ -102,8 +107,8 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     protected void setupButtonContainer() {
-        setupViewButton();
         String currentStatus = statusLabel.getText();
+        setupViewButton();
         switch (fromName(currentStatus)) {
             case PENDING:
                 setupPendingButtons();
@@ -114,49 +119,45 @@ public class ApplicationRowController extends BaseRowController<Employee> {
             case EVALUATION:
                 setupEvaluationButtons();
                 break;
-            default:
-                buttonContainer.getChildren().add(ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-                    modalUtils.customizeModalWithCallback(
-                            FXMLPath.VIEW_APPLICATION_EMPLOYEE,
-                            ViewEmployeeApplicationController.class,
-                            controller -> controller.setId(residentIdLabel.getText())
-                    );
-                }));
         }
+        setupRejectButton();
     }
 
     private void setupPendingButtons() {
         Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-                if (isConfirmed) updateEmployeeToUnderReview();
+                if (isConfirmed) updateEmployeeStatus(UNDER_REVIEW);
             });
         });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
-            });
-        });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(acceptBtn);
     }
 
     private void setupUnderReviewButtons() {
         Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.SETUP_REQUIREMENTS,
-                    SetupRequirementsController.class,
-                    controller -> controller.setId(residentIdLabel.getText()),
-                    dependencyInjector,
-                    applicationController
-            );
+            if (typeLabel.getText().equalsIgnoreCase(ApplicationType.ONLINE.getName())) {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.SETUP_REQUIREMENTS,
+                        SetupRequirementsController.class,
+                        controller -> controller.setId(residentIdLabel.getText()),
+                        dependencyInjector,
+                        applicationController
+                );
+            } else {
+                modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
+                    if (isConfirmed) updateEmployeeStatus(EVALUATION);
+                });
+            }
         });
+        buttonContainer.getChildren().add(acceptBtn);
+    }
 
+    private void setupRejectButton() {
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
+                if (isConfirmed) updateEmployeeStatus(REJECTED);
             });
         });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().add(rejectBtn);
     }
 
     private void setupEvaluationButtons() {
@@ -169,13 +170,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                     applicationController
             );
         });
-
-        Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
-                if (isConfirmed) rejectEmployeeApplication();
-            });
-        });
-        buttonContainer.getChildren().addAll(acceptBtn, rejectBtn);
+        buttonContainer.getChildren().addAll(acceptBtn);
     }
 
     private void setupViewButton() {
@@ -189,54 +184,48 @@ public class ApplicationRowController extends BaseRowController<Employee> {
         buttonContainer.getChildren().add(viewBtn);
     }
 
-    private void updateEmployeeToUnderReview() {
+    private void updateEmployeeStatus(StatusType.EmployeeStatus status) {
         applicationController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
-                return employeeService.updateEmployeeToUnderReview(residentIdLabel.getText());
+                Response response = null;
+                switch (status) {
+                    case UNDER_REVIEW -> response = employeeService.updateEmployeeToUnderReview(residentId);
+                    case EVALUATION -> response = employeeService.updateEmployeeToEvaluation(residentId);
+                    case REJECTED -> response = employeeService.rejectEmployee(residentId);
+                }
+                return response;
             }
 
             @Override
             protected void succeeded() {
                 Response response = getValue();
+                if (response == null) {
+                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while updating employee application.");
+                    return;
+                }
                 if (response.isSuccessful()) {
                     applicationController.removeLoadingIndicator();
                     reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentIdLabel.getText() + " has been emailed successfully.");
+                    switch (status) {
+                        case UNDER_REVIEW ->
+                                modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentId + " has been notified successfully.");
+                        case EVALUATION ->
+                                modalUtils.showModal(Modal.SUCCESS, "Evaluated", "Employee + " + residentId + " has been successully evaluated.");
+                        case REJECTED ->
+                                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee + " + residentId + " has been rejected successfully.");
+                    }
                 } else {
-                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while notifying employee.");
+                    applicationController.removeLoadingIndicator();
+                    modalUtils.showModal(Modal.ERROR, "Failed", "An error occurred while updating employee application.");
                 }
             }
 
             @Override
             protected void failed() {
-                Throwable exception = getException();
-                exception.printStackTrace();
-                modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred: " + exception.getMessage());
-            }
-        };
-        new Thread(task).start();
-    }
-
-    private void rejectEmployeeApplication() {
-        applicationController.addLoadingIndicator();
-        Task<Response> task = new Task<>() {
-            @Override
-            protected Response call() {
-                return employeeService.rejectEmployee(residentIdLabel.getText());
-            }
-
-            @Override
-            protected void succeeded() {
-                Response response = getValue();
-                if (response.isSuccessful()) {
-                    applicationController.removeLoadingIndicator();
-                    reloadTable();
-                    modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee application has been rejected.");
-                } else {
-                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
-                }
+                applicationController.removeLoadingIndicator();
+                modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred while updating employee application.");
             }
         };
         new Thread(task).start();
