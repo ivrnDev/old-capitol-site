@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
+import com.econnect.barangaymanagementapp.repository.AccountRepository;
 import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.repository.ResidentRepository;
 import com.econnect.barangaymanagementapp.service.*;
@@ -37,6 +38,7 @@ public class DependencyInjector {
     private final SearchService<Resident> residentSearchService;
 
 
+    private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
     private final ResidentRepository residentRepository;
 
@@ -62,6 +64,7 @@ public class DependencyInjector {
         this.formValidator = new FormValidator(this);
         this.emailService = new EmailService();
 
+        this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
 
