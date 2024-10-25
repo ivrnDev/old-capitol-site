@@ -16,4 +16,13 @@ public class ButtonUtils {
         button.setOnAction(_ -> callback.onClicked());
         return button;
     }
+
+    public static Button createInvisibleButton() {
+        Button button = new Button();
+        button.setPrefWidth(70);
+        button.setPrefHeight(25);
+        button.setCursor(Cursor.HAND);
+        button.setVisible(false);
+        return button;
+    }
 }
