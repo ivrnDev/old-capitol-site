@@ -145,12 +145,19 @@
 }
 
 /* Check Box */
-
 .check-box .box {
     -fx-background-color: white;
     -fx-border-color: #2c2b2b;
     -fx-border-radius: 5px;
     -fx-background-radius-radius: 5px;
+}
+
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
 }
 
 /*  Profile Container*/
