@@ -28,7 +28,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 
-public class CertificateFormController {
+public class RequestForm {
     @FXML
     private AnchorPane rootPane;
 
@@ -56,7 +55,7 @@ public class CertificateFormController {
     private TextArea purposeInput;
 
     @FXML
-    private CheckBox clearanceCheckBox, indigencyCheckBox, cedulaCheckBox, bankCertificateCheckBox, businessPermitCheckBox, financialCheckBox, barangayIdCheckBox;
+    private CheckBox clearanceCheckBox, indigencyCheckBox, residencyComboBox;
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
@@ -69,7 +68,7 @@ public class CertificateFormController {
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private boolean residentExists = false;
 
-    public CertificateFormController(DependencyInjector dependencyInjector) {
+    public RequestForm(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.requestService = dependencyInjector.getRequestService();
         this.residentService = dependencyInjector.getResidentService();
@@ -122,7 +121,7 @@ public class CertificateFormController {
     }
 
     private List<Request> createRequestsFromInput() {
-        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, cedulaCheckBox, bankCertificateCheckBox, businessPermitCheckBox, financialCheckBox, barangayIdCheckBox);
+        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
         List<Request> requests = new ArrayList<>();
 
         for (CheckBox checkBox : checkBoxes) {
@@ -136,7 +135,6 @@ public class CertificateFormController {
                 } else {
                     request.setPurpose("");
                 }
-                
                 if (requestType != null) {
                     request.setRequestType(requestType);
                     requests.add(request);
@@ -159,7 +157,7 @@ public class CertificateFormController {
         Task<Optional<Resident>> residentTask = new Task<>() {
             @Override
             protected Optional<Resident> call() {
-                return residentService.findResidentById(residentId);
+                return residentService.findActiveResidentById(residentId);
             }
 
             @Override
@@ -195,6 +193,8 @@ public class CertificateFormController {
     }
 
     private void clearInputFields() {
+        profilePicture.setOnMouseClicked(null);
+        profilePicture.setCursor(Cursor.DEFAULT);
         profilePicture.setImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
         validIdImage = null;
         viewGovernmentID.setOnMouseClicked(null);
@@ -220,7 +220,7 @@ public class CertificateFormController {
             return;
         }
 
-        if (!clearanceCheckBox.isSelected() && !indigencyCheckBox.isSelected() && !cedulaCheckBox.isSelected() && !bankCertificateCheckBox.isSelected() && !businessPermitCheckBox.isSelected() && !financialCheckBox.isSelected() && !barangayIdCheckBox.isSelected()) {
+        if (!clearanceCheckBox.isSelected() && !indigencyCheckBox.isSelected() && !residencyComboBox.isSelected()) {
             modalUtils.showModal(Modal.ERROR, "No Certificate Selected", "Please select at least one certificate to be issued.");
             return;
         }
@@ -236,6 +236,8 @@ public class CertificateFormController {
     }
 
     private void loadProfileImage(String directory, String link) {
+        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), currentStage));
+        profilePicture.setCursor(Cursor.HAND);
         profilePicture.setVisible(false);
         profilePicture.setManaged(false);
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(profileContainer.getWidth(), profileContainer.getHeight());
@@ -285,7 +287,6 @@ public class CertificateFormController {
 
     private void setupViewImage() {
         ImageUtils.setCircleClip(profilePicture);
-        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), currentStage));
     }
 
     private void setupEventListener() {
