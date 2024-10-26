@@ -178,7 +178,7 @@ public class RequestForm {
                     occupationInput.setText(residentInfo.getOccupation());
                     sexInput.setText(residentInfo.getSex().getName());
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
-                    loadValidId(Firestore.VALID_ID.getPath(), residentInfo.getValidIdURL());
+                    loadValidId(Firestore.VALID_ID.getPath(), residentInfo.getValidIdUrl());
                 } else {
                     clearInputFields();
                 }
@@ -278,7 +278,6 @@ public class RequestForm {
             @Override
             protected void failed() {
                 viewGovernmentID.setCursor(Cursor.DEFAULT);
-
                 System.err.println("Error loading valid ID");
             }
         };
