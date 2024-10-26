@@ -25,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import okhttp3.Response;
@@ -37,6 +38,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.GOVERNMENT_ID;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.PROFILE_PICTURE;
@@ -49,19 +51,27 @@ public class AddResidentController {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, contactNumberInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput, citizenshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput;
+    private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, contactNumberInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput, citizenshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput, tinIdNumberInput;
     @FXML
-    private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox, houseHoldIncomeComboBox;
+    private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox, residencyStatusComboBox;
     @FXML
-    private DatePicker birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker;
+    private DatePicker birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker, validIdExpirationDatePicker;
     @FXML
-    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, spouseInputContainer;
+    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId;
+    @FXML
+    private VBox spouseInputContainer;
     @FXML
     private Label profileLabel, governmentIdLabel;
     @FXML
-    private ImageView profilePreview, governmentIdPreview, closeBtn;
+    private ImageView profilePreview, governmentIdPreview, tinIdPreview, closeBtn;
     @FXML
     private Button cancelBtn, confirmBtn;
+    @FXML
+    private CheckBox ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox;
+    @FXML
+    private RadioButton notAttendedRadio, elementaryLevelRadio, elementaryGraduateRadio, highschoolLevelRadio, highschoolGraduateRadio, vocationalRadio, collegeLevelRadio, collegeGraduateRadio, postGraduateRadio;
+    @FXML
+    private ToggleGroup educationalAttainment;
 
     private final ModalUtils modalUtils;
     private final ImageService imageService;
@@ -69,7 +79,7 @@ public class AddResidentController {
     private final FormValidator formValidator;
     private final ResidentService residentService;
     private Stage currentStage;
-    private File profileFile, governmentIdFile;
+    private File profileFile, governmentIdFile, tidIdFile;
 
     public AddResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -121,9 +131,11 @@ public class AddResidentController {
         String id = residentService.generateResidentId();
         String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileFile, id);
         String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdFile, id);
+        String tinIdURl = imageService.uploadImage(Firestore.TIN_ID, tidIdFile, id);
         resident.setId(id);
         resident.setProfileUrl(profileUrl);
-        resident.setValidIdURL(governmentIDUrl);
+        resident.setValidIdUrl(governmentIDUrl);
+        resident.setTinIdUrl(tinIdURl);
         try (Response response = residentService.createResident(resident)) {
             if (response.isSuccessful()) {
                 Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Resident added successfully"));
@@ -145,7 +157,7 @@ public class AddResidentController {
                 .contactNumber(contactNumberInput.getText())
                 .email(emailInput.getText())
                 .address(addressInput.getText())
-                .birthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(motherBirthdatePicker.getValue()) : null)
+                .birthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(motherBirthdatePicker.getValue()) : null)
                 .birthplace(birthplaceInput.getText())
                 .citizenship(citizenshipInput.getText())
                 .civilStatus(CivilStatus.fromName(civilStatusComboBox.getValue()))
@@ -155,33 +167,39 @@ public class AddResidentController {
                 .occupation(occupationInput.getText())
                 .age(birthdatePicker.getValue() != null ? DateFormatter.calculateAge(birthdatePicker.getValue()) : null)
                 .sex(GenderType.fromName(sexComboBox.getValue()))
-                .houseHoldIncome(houseHoldIncomeComboBox.getValue())
-                .economicLevel(EconomicLevelType.fromFormattedRange(houseHoldIncomeComboBox.getValue()))
 
                 .fatherFirstName(fatherFirstNameInput.getText())
                 .fatherMiddleName(fatherMiddleNameInput.getText())
                 .fatherLastName(fatherLastNameInput.getText())
                 .fatherSuffixName(fatherSuffixComboBox.getValue())
                 .fatherOccupation(fatherOccupationInput.getText())
-                .fatherBirthdate(fatherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(fatherBirthdatePicker.getValue()) : null)
+                .fatherBirthdate(fatherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(fatherBirthdatePicker.getValue()) : null)
 
                 .motherFirstName(motherFirstNameInput.getText())
                 .motherMiddleName(motherMiddleNameInput.getText())
                 .motherLastName(motherLastNameInput.getText())
                 .motherSuffixName(motherSuffixComboBox.getValue())
                 .motherOccupation(motherOccupationInput.getText())
-                .motherBirthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(motherBirthdatePicker.getValue()) : null)
+                .motherBirthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(motherBirthdatePicker.getValue()) : null)
 
                 .spouseFirstName(spouseFirstNameInput.getText())
                 .spouseMiddleName(spouseMiddleNameInput.getText())
                 .spouseLastName(spouseLastNameInput.getText())
                 .spouseSuffixName(spouseSuffixComboBox.getValue())
                 .spouseOccupation(spouseOccupationInput.getText())
-                .spouseBirthdate(spouseBirthdatePicker.getValue() != null ? DateFormatter.toBirthdateFormat(spouseBirthdatePicker.getValue()) : null)
+                .spouseBirthdate(spouseBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(spouseBirthdatePicker.getValue()) : null)
 
                 .status(StatusType.ResidentStatus.VERIFIED)
+                .residencyStatus(ResidencyStatus.fromName(residencyStatusComboBox.getValue()))
+                .sourceOfIncome(getSourceOfIncome())
+                .educationalAttainment(educationalAttainment.getSelectedToggle() != null
+                        ? ((RadioButton) educationalAttainment.getSelectedToggle()).getText()
+                        : null)
                 .profileUrl(profileFile != null ? profileFile.toURI().toString() : null)
-                .validIdURL(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
+                .validIdUrl(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
+                .tinIdUrl(tidIdFile != null ? tidIdFile.toURI().toString() : null)
+                .tinIdNumber(tinIdNumberInput.getText())
+                .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.toStandardFormat(validIdExpirationDatePicker.getValue()) : null)
                 .createdAt(ZonedDateTime.now())
                 .updatedAt(ZonedDateTime.now())
                 .build();
@@ -203,6 +221,7 @@ public class AddResidentController {
         populateComboBoxes();
         DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker};
         formValidator.setupDatePicker(birthMinDate, birthMaxDate, datePickers);
+        formValidator.setupDatePicker(LocalDate.now(), LocalDate.now().plusYears(10), validIdExpirationDatePicker);
         formValidator.addListeners(lastNameInput, formValidator.IS_NOT_EMPTY, "Last name cannot be empty.");
         formValidator.addListeners(firstNameInput, formValidator.IS_NOT_EMPTY, "First name cannot be empty.");
         formValidator.addListeners(middleNameInput, formValidator.IS_NOT_EMPTY, "Middle name cannot be empty.");
@@ -219,7 +238,6 @@ public class AddResidentController {
         formValidator.addListeners(motherLastNameInput, formValidator.IS_NOT_EMPTY, "Mother's last name cannot be empty.");
         formValidator.addListeners(motherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Mother's middle name cannot be empty.");
         formValidator.addListeners(motherOccupationInput, formValidator.IS_NOT_EMPTY, "Mother's occupation cannot be empty.");
-        formValidator.addListeners(houseHoldIncomeComboBox, formValidator.IS_NOT_EMPTY, "Household's income cannot be empty.");
         formValidator.addListeners(bloodTypeComboBox, formValidator.IS_NOT_EMPTY, "Blood type cannot be empty.");
         formValidator.addListeners(religionComboBox, formValidator.IS_NOT_EMPTY, "Religion cannot be empty.");
         formValidator.addListeners(sexComboBox, formValidator.IS_NOT_EMPTY, "Sex cannot be empty");
@@ -228,7 +246,8 @@ public class AddResidentController {
         formValidator.addListeners(suffixComboBox, formValidator.IS_NOT_EMPTY, "Suffix cannot be empty.");
         formValidator.addListeners(fatherSuffixComboBox, formValidator.IS_NOT_EMPTY, "Father's suffix cannot be empty.");
         formValidator.addListeners(motherSuffixComboBox, formValidator.IS_NOT_EMPTY, "Mother's suffix cannot be empty.");
-
+        formValidator.addListeners(residencyStatusComboBox, formValidator.IS_NOT_EMPTY, "Residency status cannot be empty.");
+        formValidator.addListeners(tinIdNumberInput, formValidator.IS_NUMBER, "TIN ID must be a number.");
         if (spouseInputContainer.isVisible()) {
             formValidator.addListeners(spouseFirstNameInput, formValidator.IS_NOT_EMPTY, "Spouse's first name cannot be empty.");
             formValidator.addListeners(spouseLastNameInput, formValidator.IS_NOT_EMPTY, "Spouse's last name cannot be empty.");
@@ -248,6 +267,7 @@ public class AddResidentController {
         motherToungeComboBox.setValue(TAGALOG.getName());
         civilStatusComboBox.setValue(CivilStatus.SINGLE.getName());
         religionComboBox.setValue(Religion.CATHOLICISM.getName());
+        residencyStatusComboBox.setValue(ResidencyStatus.OWNER.getName());
     }
 
     private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
@@ -262,6 +282,9 @@ public class AddResidentController {
                 } else if (fileType.equals(GOVERNMENT_ID)) {
                     governmentIdFile = file;
                     formValidator.validateFile(governmentIdFile, uploadGovernmentId);
+                } else if (fileType.equals(FileType.TIN_ID)) {
+                    tidIdFile = file;
+                    formValidator.validateFile(tidIdFile, uploadTinId);
                 }
 
                 preview.setImage(new Image(new FileInputStream(file)));
@@ -315,9 +338,11 @@ public class AddResidentController {
 
         viewProfileBtn.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
         viewGovernmentIdBtn.setOnMouseClicked(_ -> showImageView(governmentIdPreview.getImage()));
+        viewTinId.setOnMouseClicked(_ -> showImageView(tinIdPreview.getImage()));
 
         uploadProfile.setOnMouseClicked(_ -> uploadImage(viewProfileBtn, profilePreview, profileLabel, PROFILE_PICTURE));
         uploadGovernmentId.setOnMouseClicked(_ -> uploadImage(viewGovernmentIdBtn, governmentIdPreview, governmentIdLabel, GOVERNMENT_ID));
+        uploadTinId.setOnMouseClicked(_ -> uploadImage(viewTinId, tinIdPreview, governmentIdLabel, FileType.TIN_ID));
     }
 
     private void validateForm() {
@@ -327,17 +352,17 @@ public class AddResidentController {
                 contactNumberInput, fatherFirstNameInput, fatherLastNameInput,
                 fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
                 motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
-                citizenshipInput
+                citizenshipInput, tinIdNumberInput
         ));
 
         List<DatePicker> datePickers = new ArrayList<>(Arrays.asList(
-                birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker
+                birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, validIdExpirationDatePicker
         ));
 
         List<ComboBox<String>> comboBoxes = new ArrayList<>(Arrays.asList(
                 suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox,
                 religionComboBox, bloodTypeComboBox, fatherSuffixComboBox,
-                motherSuffixComboBox, houseHoldIncomeComboBox
+                motherSuffixComboBox, residencyStatusComboBox
         ));
 
         if (spouseInputContainer.isVisible()) {
@@ -385,6 +410,15 @@ public class AddResidentController {
                     break;
                 }
             }
+
+            if (firstFieldError == null) {
+                if (field.equals(tinIdNumberInput) && !formValidator.IS_NUMBER.test(field.getText())) {
+                    field.requestFocus();
+                    errorMessage = "TIN ID must be a number.";
+                    hasError = true;
+                    break;
+                }
+            }
         }
 
         for (ComboBox<String> comboBox : comboBoxes) {
@@ -416,7 +450,17 @@ public class AddResidentController {
             }
         }
 
+        if (!ownEarningsCheckBox.isSelected() && !ownPensionCheckBox.isSelected() && !stocksCheckBox.isSelected() && !dependentCheckBox.isSelected() && !spouseSalaryCheckBox.isSelected() && !spousePensionCheckBox.isSelected() && !insuranceCheckBox.isSelected() && !rentalCheckBox.isSelected() && !savingsCheckBox.isSelected()) {
+            errorMessage = "Please select at least one source of income.";
+            hasError = true;
+        }
+
         if (!hasError) {
+            if (formValidator.hasEmptyFile(tidIdFile, uploadTinId)) {
+                errorMessage = "Please upload a TIN ID.";
+                hasError = true;
+            }
+
             if (formValidator.hasEmptyFile(governmentIdFile, uploadGovernmentId)) {
                 errorMessage = "Please upload a government ID.";
                 hasError = true;
@@ -426,6 +470,8 @@ public class AddResidentController {
                 errorMessage = "Please upload a profile picture.";
                 hasError = true;
             }
+
+
         }
 
         if (hasError) {
@@ -446,12 +492,26 @@ public class AddResidentController {
         bloodTypeComboBox.getItems().addAll(Arrays.stream(BloodType.values()).map(bloodType -> bloodType.getName()).toList());
         sexComboBox.getItems().addAll(Arrays.stream(GenderType.values()).map(gender -> gender.getName()).toList());
         motherToungeComboBox.getItems().addAll(Arrays.stream(MotherTongue.values()).map(motherTongue -> motherTongue.getName()).toList());
-        houseHoldIncomeComboBox.getItems().addAll(Arrays.stream(EconomicLevelType.values()).map(economicLevel -> economicLevel.getFormattedRange()).toList());
+        residencyStatusComboBox.getItems().addAll(Arrays.stream(ResidencyStatus.values()).map(residencyStatus -> residencyStatus.getName()).toList());
+    }
+
+    private String getSourceOfIncome() {
+        List<CheckBox> incomeSources = Arrays.asList(
+                ownEarningsCheckBox, ownPensionCheckBox,
+                stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox,
+                spousePensionCheckBox, insuranceCheckBox, rentalCheckBox
+        );
+
+        return incomeSources.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.joining(", "));
     }
 
     private void setupPreviewRounded() {
-        ImageUtils.setRoundedClip(profilePreview, 20, 20);
-        ImageUtils.setRoundedClip(governmentIdPreview, 10, 10);
+        ImageUtils.setCircleClip(profilePreview);
+        ImageUtils.setCircleClip(governmentIdPreview);
+        ImageUtils.setCircleClip(tinIdPreview);
     }
 
     private void showImageView(Image image) {

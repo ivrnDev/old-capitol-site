@@ -59,11 +59,16 @@ public class Resident extends BaseEntity {
     private String spouseOccupation;
     private String spouseBirthdate;
 
-    private String houseHoldIncome;
-    private EconomicLevelType economicLevel;
+    private String sourceOfIncome;
+
+    private ResidencyStatus residencyStatus;
     private ResidentStatus status;
+    private String educationalAttainment;
     private String profileUrl;
-    private String validIdURL;
+    private String validIdUrl;
+    private String validIdExpiration;
+    private String tinIdUrl;
+    private String tinIdNumber;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

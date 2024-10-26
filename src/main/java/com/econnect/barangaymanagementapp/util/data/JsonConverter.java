@@ -28,6 +28,9 @@ public class JsonConverter {
                 new JacksonFactory.EnumDeserializer<>(EconomicLevelType::fromName));
         customModule.addDeserializer(MotherTongue.class,
                 new JacksonFactory.EnumDeserializer<>(MotherTongue::fromName));
+        customModule.addDeserializer(ResidencyStatus.class,
+                new JacksonFactory.EnumDeserializer<>(ResidencyStatus::fromName));
+
 
         customModule.addSerializer(GenderType.class,
                 new JacksonFactory.EnumSerializer<>(GenderType::getName));
@@ -41,8 +44,8 @@ public class JsonConverter {
                 new JacksonFactory.EnumSerializer<>(EconomicLevelType::getName));
         customModule.addSerializer(MotherTongue.class,
                 new JacksonFactory.EnumSerializer<>(MotherTongue::getName));
-        customModule.addSerializer(RequestType.class,
-                new JacksonFactory.EnumSerializer<>(RequestType::getName));
+        customModule.addSerializer(ResidencyStatus.class,
+                new JacksonFactory.EnumSerializer<>(ResidencyStatus::getName));
 
 
         this.objectMapper = new ObjectMapper()

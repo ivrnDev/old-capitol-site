@@ -1,19 +1,17 @@
 package com.econnect.barangaymanagementapp.enumeration.type;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class ResidentInfomationType {
 
     @Getter
+    @AllArgsConstructor
     public enum GenderType {
         MALE("Male"),
         FEMALE("Female");
 
         private String name;
-
-        GenderType(String gender) {
-            this.name = gender;
-        }
 
         public static GenderType fromName(String text) {
             for (GenderType gender : GenderType.values()) {
@@ -26,6 +24,7 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum EconomicLevelType {
         POOR("Poor", 0, 12030),
         LOW_INCOME_BUT_NOT_POOR("Low-income but not poor", 12030, 24060),
@@ -38,12 +37,6 @@ public class ResidentInfomationType {
         private final String name;
         private final int minMonthlyIncome;
         private final int maxMonthlyIncome;
-
-        EconomicLevelType(String name, int minMonthlyIncome, int maxMonthlyIncome) {
-            this.name = name;
-            this.minMonthlyIncome = minMonthlyIncome;
-            this.maxMonthlyIncome = maxMonthlyIncome;
-        }
 
         public static EconomicLevelType fromMonthlyIncome(int income) {
             for (EconomicLevelType level : EconomicLevelType.values()) {
@@ -94,6 +87,7 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum MotherTongue {
         TAGALOG("Tagalog"),
         CEBUANO("Cebuano"),
@@ -110,10 +104,6 @@ public class ResidentInfomationType {
 
         private final String name;
 
-        MotherTongue(String name) {
-            this.name = name;
-        }
-
         public static MotherTongue fromName(String name) {
             for (MotherTongue tongue : MotherTongue.values()) {
                 if (tongue.getName().equalsIgnoreCase(name)) {
@@ -125,6 +115,7 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum BloodType {
         A_POSITIVE("A+"),
         A_NEGATIVE("A-"),
@@ -137,10 +128,6 @@ public class ResidentInfomationType {
 
         private final String name;
 
-        BloodType(String name) {
-            this.name = name;
-        }
-
         public static BloodType fromName(String name) {
             for (BloodType bloodType : BloodType.values()) {
                 if (bloodType.getName().equalsIgnoreCase(name)) {
@@ -152,6 +139,7 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum Religion {
         CATHOLICISM("Catholic"),
         PROTESTANTISM("Protestantism"),
@@ -166,10 +154,6 @@ public class ResidentInfomationType {
 
         private final String name;
 
-        Religion(String name) {
-            this.name = name;
-        }
-
         public static Religion fromName(String name) {
             for (Religion religion : Religion.values()) {
                 if (religion.getName().equalsIgnoreCase(name)) {
@@ -181,15 +165,12 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum CivilStatus {
         SINGLE("Single"),
         MARRIED("Married");
 
         private final String name;
-
-        CivilStatus(String name) {
-            this.name = name;
-        }
 
         public static CivilStatus fromName(String name) {
             for (CivilStatus status : CivilStatus.values()) {
@@ -202,6 +183,7 @@ public class ResidentInfomationType {
     }
 
     @Getter
+    @AllArgsConstructor
     public enum SuffixName {
         NONE("None"),
         JR("Jr."),
@@ -214,10 +196,6 @@ public class ResidentInfomationType {
 
         private final String name;
 
-        SuffixName(String name) {
-            this.name = name;
-        }
-
         public static SuffixName fromName(String name) {
             for (SuffixName suffix : SuffixName.values()) {
                 if (suffix.getName().equalsIgnoreCase(name)) {
@@ -225,6 +203,45 @@ public class ResidentInfomationType {
                 }
             }
             throw new IllegalArgumentException("No SuffixName found with name: " + name);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ResidencyStatus {
+        RENTER("Renter"),
+        OWNER("Owner"),
+        SHARER("Sharer");
+
+        private final String name;
+
+        public static ResidencyStatus fromName(String name) {
+            for (ResidencyStatus status : ResidencyStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("No Residency Status found with name: " + name);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ResidentType {
+        ADULT("Adult"),
+        SENIOR_CITIZEN("Senior Citizen"),
+        STUDENT("Student"),
+        PWD("Person with Disability");
+
+        private final String name;
+
+        public static ResidentType fromName(String name) {
+            for (ResidentType status : ResidentType.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("No Residency Type found with name: " + name);
         }
     }
 }
