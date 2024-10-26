@@ -21,7 +21,7 @@ public class DateFormatter {
         return inputDate.format(timeFormat);
     }
 
-    public static String toBirthdateFormat(LocalDate inputDate) {
+    public static String toStandardFormat(LocalDate inputDate) {
         try {
             DateTimeFormatter birthdateFormat = DateTimeFormatter.ofPattern("M/d/yyyy");
             return inputDate.format(birthdateFormat);

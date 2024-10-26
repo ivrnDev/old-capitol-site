@@ -103,13 +103,15 @@ public class SearchService<T> {
                     || (resident.getSpouseMiddleName() != null && resident.getSpouseMiddleName().toLowerCase().contains(searchText))
                     || (resident.getSpouseSuffixName() != null && resident.getSpouseSuffixName().toLowerCase().contains(searchText))
                     || (resident.getSpouseOccupation() != null && resident.getSpouseOccupation().toLowerCase().contains(searchText))
-                    || (resident.getHouseHoldIncome() != null && resident.getHouseHoldIncome().toLowerCase().contains(searchText))
-                    || (resident.getEconomicLevel() != null && resident.getEconomicLevel().getName() != null && resident.getEconomicLevel().getName().toLowerCase().contains(searchText))
+                    || (resident.getResidencyStatus() != null && resident.getResidencyStatus().getName().toLowerCase().contains(searchText))
                     || (resident.getStatus() != null && resident.getStatus().getName() != null && resident.getStatus().getName().toLowerCase().contains(searchText))
+                    || (resident.getEducationalAttainment() != null && resident.getEducationalAttainment().toLowerCase().contains(searchText))
+                    || (resident.getSourceOfIncome() != null && resident.getSourceOfIncome().toLowerCase().contains(searchText))
                     || (resident.getCreatedAt() != null && DateFormatter.extractDateAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText))
                     || (resident.getCreatedAt() != null && DateFormatter.extractTimeAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText))
                     || (resident.getUpdatedAt() != null && DateFormatter.extractDateAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText))
                     || (resident.getUpdatedAt() != null && DateFormatter.extractTimeAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText));
+
         };
     }
 

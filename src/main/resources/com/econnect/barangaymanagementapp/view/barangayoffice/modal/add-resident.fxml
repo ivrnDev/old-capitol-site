@@ -4,11 +4,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -34,17 +37,17 @@
         </ImageView>
         <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="1.0" layoutY="65.0" prefHeight="488.0" prefWidth="1117.0" styleClass="scroll-panel" stylesheets="@../../../style/component/content.css" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="2.0">
             <content>
-                <VBox spacing="20.0" stylesheets="@../../../style/component/customize-modal.css">
+                <VBox alignment="CENTER" spacing="20.0" stylesheets="@../../../style/component/customize-modal.css">
                     <children>
                         <HBox spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Resident ID" textOverrun="CLIP">
+                                                        <Label text="Last Name" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
@@ -61,7 +64,7 @@
                                                         <String fx:value="input-label-first" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="residentIdInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -70,40 +73,10 @@
                                                     </cursor>
                                                 </TextField>
                                             </children>
-                                            <VBox.margin>
-                                                <Insets />
-                                            </VBox.margin>
                                             <styleClass>
                                                 <String fx:value="input-container" />
                                                 <String fx:value="input-container-first" />
                                             </styleClass>
-                                        </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Last Name" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0" />
-                                                    </font>
-                                                    <cursor>
-                                                        <Cursor fx:constant="DEFAULT" />
-                                                    </cursor>
-                                                </TextField>
-                                            </children>
                                         </HBox>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="85.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
@@ -515,38 +488,11 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Contact Number" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <TextField fx:id="contactNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0" />
-                                                    </font>
-                                                    <cursor>
-                                                        <Cursor fx:constant="DEFAULT" />
-                                                    </cursor>
-                                                </TextField>
-                                            </children>
-                                        </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Household Income" textOverrun="CLIP">
+                                                        <Label text="Contact Number" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
@@ -563,18 +509,14 @@
                                                         <String fx:value="input-label-last" />
                                                     </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="houseHoldIncomeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="contactNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
                                                     <cursor>
-                                                        <Cursor fx:constant="HAND" />
+                                                        <Cursor fx:constant="DEFAULT" />
                                                     </cursor>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                    <styleClass>
-                                                        <String fx:value="text-input" />
-                                                        <String fx:value="text-input-last" />
-                                                    </styleClass>
-                                                </ComboBox>
+                                                </TextField>
                                             </children>
                                             <styleClass>
                                                 <String fx:value="input-container" />
@@ -587,6 +529,158 @@
                             <VBox.margin>
                                 <Insets bottom="20.0" />
                             </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="40.0" layoutY="383.0" spacing="40.0">
+                            <children>
+                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="arrow-button" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label text="Highest Educational Attainment" textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial" size="17.0" />
+                                            </font>
+                                        </Label>
+                                        <HBox>
+                                            <children>
+                                                <VBox prefWidth="143.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <RadioButton fx:id="notAttendedRadio" mnemonicParsing="false" selected="true" text="Not Attended School">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                            <toggleGroup>
+                                                                <ToggleGroup fx:id="educationalAttainment" />
+                                                            </toggleGroup>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="elementaryLevelRadio" mnemonicParsing="false" text="Elementary Level" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="elementaryGraduateRadio" mnemonicParsing="false" text="Elementary Graduate" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="highschoolLevelRadio" mnemonicParsing="false" text="Highschool Level" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="highschoolGraduateRadio" mnemonicParsing="false" text="Highschool Graduate" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="vocationalRadio" mnemonicParsing="false" text="Vocational" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="collegeLevelRadio" mnemonicParsing="false" text="College Level" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="collegeGraduateRadio" mnemonicParsing="false" text="College Graduate" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                        <RadioButton fx:id="postGraduateRadio" mnemonicParsing="false" text="Post Graduate" toggleGroup="$educationalAttainment">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </RadioButton>
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="20.0" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    </padding>
+                                </VBox>
+                                <VBox layoutX="10.0" layoutY="10.0" prefHeight="277.0" prefWidth="383.0" spacing="40.0" styleClass="arrow-button" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label prefHeight="20.0" text="Source of Income and Assistance " textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial" size="17.0" />
+                                            </font>
+                                        </Label>
+                                        <HBox>
+                                            <children>
+                                                <VBox prefHeight="195.0" prefWidth="185.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <CheckBox fx:id="ownEarningsCheckBox" mnemonicParsing="false" text="Own earnings, salary, wages" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="ownPensionCheckBox" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Own Pension" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="stocksCheckBox" layoutX="10.0" layoutY="53.0" mnemonicParsing="false" text="Stock or Dividends" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="dependentCheckBox" layoutX="10.0" layoutY="96.0" mnemonicParsing="false" text="Dependent on Children / Relatives">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="spouseSalaryCheckBox" layoutX="10.0" layoutY="139.0" mnemonicParsing="false" text="Spouse's Salary" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="spousePensionCheckBox" mnemonicParsing="false" text="Spouse's Pension" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                    </children>
+                                                </VBox>
+                                                <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <CheckBox fx:id="insuranceCheckBox" mnemonicParsing="false" text="Insurance" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="rentalCheckBox" mnemonicParsing="false" text="Rental / Sharecorp" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="savingsCheckBox" mnemonicParsing="false" text="Savings" wrapText="true">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </CheckBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    </padding>
+                                </VBox>
+                            </children>
+                            <styleClass>
+                                <String fx:value="input-container" />
+                                <String fx:value="input-container-default" />
+                            </styleClass>
                         </HBox>
                         <HBox layoutX="40.0" layoutY="10.0" spacing="40.0">
                             <children>
@@ -964,9 +1058,9 @@
                                 </VBox>
                             </children>
                         </HBox>
-                        <HBox fx:id="spouseInputContainer" layoutX="40.0" layoutY="386.0" spacing="40.0">
+                        <HBox layoutX="40.0" layoutY="386.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox fx:id="spouseInputContainer" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
@@ -1152,9 +1246,119 @@
                                         </HBox>
                                     </children>
                                 </VBox>
+                                <VBox layoutX="10.0" layoutY="10.0" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Residency Status" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                    <styleClass>
+                                                        <String fx:value="input-label-first" />
+                                                        <String fx:value="input-label" />
+                                                    </styleClass>
+                                                </HBox>
+                                                <ComboBox fx:id="residencyStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                    <padding>
+                                                        <Insets left="-1.0" />
+                                                    </padding>
+                                                    <styleClass>
+                                                        <String fx:value="text-input" />
+                                                        <String fx:value="text-input-first" />
+                                                    </styleClass>
+                                                </ComboBox>
+                                            </children>
+                                            <styleClass>
+                                                <String fx:value="input-container" />
+                                                <String fx:value="input-container-first" />
+                                            </styleClass>
+                                        </HBox>
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Tin ID Number" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <TextField fx:id="tinIdNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Valid ID Expiration" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                    <styleClass>
+                                                        <String fx:value="input-label-last" />
+                                                        <String fx:value="input-label" />
+                                                    </styleClass>
+                                                </HBox>
+                                                <DatePicker fx:id="validIdExpirationDatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                    <styleClass>
+                                                        <String fx:value="input-date" />
+                                                        <String fx:value="text-input" />
+                                                        <String fx:value="text-input-last" />
+                                                    </styleClass>
+                                                    <padding>
+                                                        <Insets left="-1.0" />
+                                                    </padding>
+                                                </DatePicker>
+                                            </children>
+                                            <styleClass>
+                                                <String fx:value="input-container-last" />
+                                                <String fx:value="input-container" />
+                                            </styleClass>
+                                        </HBox>
+                                    </children>
+                                </VBox>
                             </children>
                         </HBox>
-                        <HBox spacing="30.0">
+                        <HBox spacing="50.0">
                             <children>
                                 <HBox fx:id="uploadProfile" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefWidth="183.0" spacing="10.0" styleClass="file-chooser">
                                     <children>
@@ -1198,7 +1402,7 @@
                                 </HBox>
                             </children>
                         </HBox>
-                        <HBox spacing="30.0">
+                        <HBox spacing="50.0">
                             <children>
                                 <HBox fx:id="uploadGovernmentId" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefWidth="183.0" spacing="10.0" styleClass="file-chooser">
                                     <children>
@@ -1223,6 +1427,50 @@
                                 <HBox fx:id="viewGovernmentIdBtn" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefWidth="183.0" spacing="10.0" styleClass="file-chooser" visible="false">
                                     <children>
                                         <ImageView fx:id="governmentIdPreview" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../icon/upload-image.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label text="View Government ID" textFill="#686464">
+                                            <font>
+                                                <Font name="Arial" size="15.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                                    </padding>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox spacing="50.0">
+                            <children>
+                                <HBox fx:id="uploadTinId" alignment="CENTER_LEFT" prefWidth="183.0" spacing="10.0" styleClass="file-chooser">
+                                    <children>
+                                        <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../../icon/upload-image.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label fx:id="tinIdLabel" text="Tin ID" textFill="#686464">
+                                            <font>
+                                                <Font name="Arial" size="15.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                                    </padding>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </HBox>
+                                <HBox fx:id="viewTinId" alignment="CENTER_LEFT" prefWidth="183.0" spacing="10.0" styleClass="file-chooser" visible="false">
+                                    <children>
+                                        <ImageView fx:id="tinIdPreview" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../../../icon/upload-image.png" />
                                             </image>
