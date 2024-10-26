@@ -8,10 +8,9 @@
 
 .root-pane {
     -fx-background-color: #EEFCFF;
-
 }
 
-.button-background {
+.label-background {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-background-color: #D9D9D9;

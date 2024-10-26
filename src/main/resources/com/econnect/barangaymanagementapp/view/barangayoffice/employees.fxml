@@ -21,15 +21,15 @@
         <fx:include fx:id="sidebar" source="../component/sidebar.fxml" />
     </left>
     <center>
-        <VBox fx:id="contentPane" prefHeight="600.0" prefWidth="1080.0" spacing="30.0" BorderPane.alignment="CENTER">
+        <VBox fx:id="contentPane" prefHeight="600.0" prefWidth="1080.0" spacing="30.0" styleClass="scroll-panel" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
             <children>
                 <AnchorPane>
                     <children>
-                  <Text fill="#58595a" layoutX="7.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EMPLOYEES">
-                     <font>
-                        <Font name="Arial Bold" size="25.0" />
-                     </font>
-                  </Text>
+                        <Text fill="#58595a" layoutX="7.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EMPLOYEES">
+                            <font>
+                                <Font name="Arial Bold" size="25.0" />
+                            </font>
+                        </Text>
                         <Button fx:id="addEmployeeBtn" layoutX="639.0" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#showAddEmployee" prefHeight="28.0" prefWidth="175.0" styleClass="add" stylesheets="@../../style/component/button.css" text="Add Employee" textFill="#414141" AnchorPane.rightAnchor="226.0">
                             <font>
                                 <Font name="Arial" size="14.0" />

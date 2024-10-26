@@ -53,8 +53,6 @@
                         </Text>
                     </children>
                 </AnchorPane>
-                <!--Insert the table once-->
-                <!--<fx:include fx:id="table" source="Table/application-table.fxml"/>-->
             </children>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
