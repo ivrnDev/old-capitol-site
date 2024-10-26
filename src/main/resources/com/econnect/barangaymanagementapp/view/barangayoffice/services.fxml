@@ -56,7 +56,7 @@
                                                 <Image url="@../../icon/document-icon.png" />
                                             </image>
                                         </ImageView>
-                                        <Label text="Barangay Request" textAlignment="CENTER" wrapText="true">
+                                        <Label text="Barangay Certificates" textAlignment="CENTER" wrapText="true">
                                             <font>
                                                 <Font name="Arial" size="18.0" />
                                             </font>
@@ -66,7 +66,7 @@
                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                     </padding>
                                 </VBox>
-                                <VBox fx:id="applyWorkForm" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1">
+                                <VBox fx:id="applyWorkForm" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
@@ -86,14 +86,14 @@
                                         <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
                                     </GridPane.margin>
                                 </VBox>
-                                <VBox fx:id="eventRequestForm" alignment="CENTER" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2">
+                                <VBox fx:id="cedulaRequestForm" alignment="CENTER" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2">
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
                                                 <Image url="@../../icon/request/id.png" />
                                             </image>
                                         </ImageView>
-                                        <Label text="Events" textAlignment="CENTER" wrapText="true">
+                                        <Label text="Cedula" textAlignment="CENTER" wrapText="true">
                                             <font>
                                                 <Font name="Arial" size="18.0" />
                                             </font>
@@ -186,6 +186,46 @@
                                         <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
                                     </GridPane.margin>
                                 </VBox>
+                        <VBox fx:id="barangayIdForm" alignment="CENTER" layoutX="362.0" layoutY="24.0" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1">
+                           <children>
+                              <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                 <image>
+                                    <Image url="@../../icon/request/id.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Barangay ID" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox fx:id="eventRequestForm" alignment="CENTER" layoutX="679.0" layoutY="24.0" maxHeight="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                 <image>
+                                    <Image url="@../../icon/request/id.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Events" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="Arial" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="35.0" left="35.0" right="35.0" top="35.0" />
+                           </GridPane.margin>
+                        </VBox>
                             </children>
                         </GridPane>
                     </content>
