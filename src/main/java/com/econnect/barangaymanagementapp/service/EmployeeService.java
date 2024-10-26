@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
@@ -88,6 +89,10 @@ public class EmployeeService {
 
     public int countAllActiveEmployees() {
         return findAllActiveEmployees().size();
+    }
+
+    public Response updateEmployeeToEvaluation(String employeeId) {
+        return updateEmployeeByStatus(employeeId, EVALUATION);
     }
 
     public Response updateEmployeeToEvaluation(String employeeId, String clearanceLink, String expirationDate) {
@@ -195,6 +200,10 @@ public class EmployeeService {
         return response;
     }
 
+    public void listenToUpdates(Consumer<Boolean> handleDataUpdate) {
+        employeeRepository.listenToUpdates(handleDataUpdate);
+    }
+
     private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
         Optional<Employee> response = findEmployeeById(employeeId);
 
@@ -208,7 +217,7 @@ public class EmployeeService {
         return employeeRepository.updateEmployeeByStatus(employeeId, status);
     }
 
-    private Response updateEmployeeByStatus(String employeeId, StatusType.EmployeeStatus status) {
+    public Response updateEmployeeByStatus(String employeeId, StatusType.EmployeeStatus status) {
         if (!status.equals(ACTIVE)) {
             return employeeRepository.updateEmployeeByStatus(employeeId, status);
         }

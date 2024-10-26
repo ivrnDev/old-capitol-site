@@ -10,6 +10,7 @@ import okhttp3.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class EmployeeRepository extends BaseRepository<Employee> {
@@ -52,4 +53,9 @@ public class EmployeeRepository extends BaseRepository<Employee> {
         return updateBy(apiKey, employeeId, new TypeReference<>() {
         }, employee -> employee.setStatus(status));
     }
+
+    public void listenToUpdates(Consumer<Boolean> handleDataUpdates) {
+        listenToUpdates(apiKey, handleDataUpdates);
+    }
+
 }

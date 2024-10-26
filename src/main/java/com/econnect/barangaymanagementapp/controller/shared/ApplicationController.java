@@ -49,10 +49,16 @@ public class ApplicationController {
     public void initialize() {
         loadApplicationTable();
         populateApplicationRows();
+//        initializeListener();
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
         });
+    }
+
+    private void initializeListener() {
+        employeeService.listenToUpdates(result ->
+                Platform.runLater(() -> reloadTable()));
     }
 
     private void loadApplicationTable() {

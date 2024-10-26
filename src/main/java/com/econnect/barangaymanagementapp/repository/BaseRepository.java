@@ -7,13 +7,14 @@ import com.econnect.barangaymanagementapp.util.HTTPClient;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public abstract class BaseRepository<T> {
     protected final HTTPClient client;
     protected final JsonConverter jsonConverter;
     private final ModalUtils modalUtils;
+    private Call sseCall;
 
     public BaseRepository(DependencyInjector dependencyInjector) {
         this.client = dependencyInjector.getHttpClient();
@@ -158,5 +160,83 @@ public abstract class BaseRepository<T> {
         return allEntities.stream()
                 .filter(filter)
                 .collect(Collectors.toList());
+    }
+
+    public void listenToUpdates(String apiKey, Consumer<Boolean> handleDataUpdate) {
+        Request request = new Request.Builder()
+                .url(apiKey + ".json")
+                .addHeader("Accept", "text/event-stream")
+                .get()
+                .build();
+
+        Call sseCall;
+        try {
+            sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).pingInterval(15, TimeUnit.SECONDS).build().newCall(request);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Failed to create call for SSE: " + e.getMessage());
+            return; // Exit if unable to create the call
+        }
+
+
+        sseCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (!call.isCanceled()) {
+                    System.err.println("Connection failed for SSE: " + e.getMessage());
+                    retryConnection(apiKey, handleDataUpdate);
+                } else {
+                    System.out.println("SSE connection closed by user.");
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    System.err.println("Failed to receive SSE updates: " + response.message());
+                    retryConnection(apiKey, handleDataUpdate);
+                    return;
+                }
+
+                System.out.println("Successfully connected to SSE updates.");
+
+                System.out.println("Current response" + new BufferedReader(new InputStreamReader(response.body().byteStream())).readLine());
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.startsWith("event: ")) {
+                            String eventType = line.substring(7).trim();
+                            handleDataUpdate.accept(true);
+                            System.out.println("Event received: " + eventType);
+                        }
+                    }
+                } catch (SocketTimeoutException e) {
+                    e.printStackTrace();
+                    retryConnection(apiKey, handleDataUpdate);
+                    System.err.println("SocketTimeoutException: " + e.getMessage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    retryConnection(apiKey, handleDataUpdate);
+                    System.err.println("Error reading SSE updates: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void retryConnection(String apiKey, Consumer<Boolean> handleDataUpdate) {
+        System.out.println("Retrying connection in 5 seconds...");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Retry interrupted: " + e.getMessage());
+        }
+        listenToUpdates(apiKey, handleDataUpdate);
+    }
+
+    public void closeConnection() {
+        if (sseCall != null) {
+            sseCall.cancel();
+            System.out.println("SSE connection closed.");
+        }
     }
 }

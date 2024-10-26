@@ -33,7 +33,7 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(messageText);
 
-            Transport.send(message);
+//            Transport.send(message);
             return true;
 
         } catch (MessagingException e) {
