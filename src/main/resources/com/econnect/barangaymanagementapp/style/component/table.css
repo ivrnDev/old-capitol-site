@@ -20,13 +20,13 @@
 }
 
 .table-row.selected {
-    -fx-border-color: blue;
+    -fx-border-color: #ACCEF6;
     -fx-border-width: 1px;
-    -fx-background-color: rgba(173, 216, 230, 0.5);
+    -fx-background-color: #f0f0f0
 }
 
 .table-row:hover {
-    -fx-background-color: rgba(173, 216, 230, 0.5);
+    -fx-background-color: #f0f0f0
 }
 
 .no-data-row {
@@ -35,6 +35,8 @@
     -fx-background-color: #f8d7da;
     -fx-border-color: #f5c6cb;
     -fx-border-width: 1;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
 }
 
 

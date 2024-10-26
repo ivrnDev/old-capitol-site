@@ -1,6 +1,6 @@
 .panel {
     -fx-border-color: #000000;
-    -fx-background-color: #EEFCFF;
+    -fx-background-color: #F8FEFF;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
@@ -24,7 +24,7 @@
 
 /* Label */
 .input-label {
-    -fx-background-color: #ACCEF6;
+    -fx-background-color: #EEFCFF;
 }
 
 .input-label-first {
