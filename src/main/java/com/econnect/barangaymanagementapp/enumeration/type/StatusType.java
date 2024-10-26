@@ -1,7 +1,12 @@
 package com.econnect.barangaymanagementapp.enumeration.type;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 public class StatusType {
 
+    @AllArgsConstructor
+    @Getter
     public enum EmployeeStatus {
         PENDING("Pending"), //Encoding  of new employee with no requirements
         UNDER_REVIEW("Under Review"),
@@ -11,15 +16,7 @@ public class StatusType {
         REJECTED("Rejected"),
         TERMINATED("Terminated");
 
-        private String status;
-
-        EmployeeStatus(String status) {
-            this.status = status;
-        }
-
-        public String getName() {
-            return status;
-        }
+        private final String name;
 
         public static EmployeeStatus fromName(String name) {
             for (EmployeeStatus status : EmployeeStatus.values()) {
@@ -31,6 +28,8 @@ public class StatusType {
         }
     }
 
+    @AllArgsConstructor
+    @Getter
     public enum ResidentStatus {
         VERIFIED("Verified"),
         DECEASED("Deceased"),
@@ -39,15 +38,29 @@ public class StatusType {
         REMOVED("Removed"),
         PENDING("Pending"),
         REJECTED("Rejected");
+        private final String name;
 
-        private String status;
-
-        ResidentStatus(String status) {
-            this.status = status;
+        public static ResidentStatus fromName(String name) {
+            for (ResidentStatus status : ResidentStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
         }
+    }
 
-        public String getName() {
-            return status;
+    @Getter
+    public enum RequestStatus {
+        PENDING("Pending"),
+        IN_PROGRESS("In Progress"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected");
+
+        private String name;
+
+        RequestStatus(String name) {
+            this.name = name;
         }
 
         public static ResidentStatus fromName(String name) {
@@ -59,6 +72,7 @@ public class StatusType {
             return null;
         }
     }
+
 
 }
 

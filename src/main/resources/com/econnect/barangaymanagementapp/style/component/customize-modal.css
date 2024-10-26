@@ -86,6 +86,10 @@
     -fx-background-radius: 10px;
 }
 
+.error.text-area .content {
+    -fx-border-color: red;
+}
+
 /* File Chooser*/
 
 .file-chooser {

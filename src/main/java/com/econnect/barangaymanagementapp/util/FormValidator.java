@@ -5,10 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 
@@ -26,6 +23,7 @@ public class FormValidator {
     private final Map<TextField, ChangeListener<Boolean>> textFieldListenerMap = new HashMap<>();
     private final Map<DatePicker, ChangeListener<Boolean>> datePickerListenerMap = new HashMap<>();
     private final Map<ComboBox, ChangeListener<Boolean>> comboBoxListenerMap = new HashMap<>();
+    private final Map<TextArea, ChangeListener<Boolean>> textAreaListenerMap = new HashMap<>();
 
     public final Predicate<String> IS_NOT_EMPTY = text -> text != null && !text.trim().isEmpty();
     public final Predicate<String> IS_NUMBER = text -> text.matches("\\d+");
@@ -125,6 +123,20 @@ public class FormValidator {
                 textField.focusedProperty().addListener(listener);
                 textFieldListenerMap.put(textField, listener);
             }
+            case TextArea textArea -> {
+                ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
+                    if (!newValue) {
+                        if (!validator.test(textArea.getText())) {
+                            textArea.getStyleClass().add("error");
+                            modalUtils.showModal(ERROR, "Error", errorMessage);
+                        } else {
+                            textArea.getStyleClass().remove("error");
+                        }
+                    }
+                };
+                textArea.focusedProperty().addListener(listener);
+                textAreaListenerMap.put(textArea, listener);
+            }
             case ComboBox<?> comboBox -> {
                 ChangeListener<Boolean> comboBoxListener = (_, _, newValue) -> {
                     if (!newValue) {
@@ -153,6 +165,35 @@ public class FormValidator {
 
         comboBoxListenerMap.forEach((comboBox, listener) -> comboBox.focusedProperty().removeListener(listener));
         comboBoxListenerMap.clear();
+
+        textAreaListenerMap.forEach((textArea, listener) -> textArea.focusedProperty().removeListener(listener));
+        textAreaListenerMap.clear();
+    }
+
+    public void removeListener(Node node) {
+        switch (node) {
+            case TextField textField -> {
+                ChangeListener<Boolean> listener = textFieldListenerMap.get(textField);
+                textField.focusedProperty().removeListener(listener);
+                textFieldListenerMap.remove(textField);
+            }
+            case DatePicker datePicker -> {
+                ChangeListener<Boolean> listener = datePickerListenerMap.get(datePicker);
+                datePicker.getEditor().focusedProperty().removeListener(listener);
+                datePickerListenerMap.remove(datePicker);
+            }
+            case ComboBox<?> comboBox -> {
+                ChangeListener<Boolean> listener = comboBoxListenerMap.get(comboBox);
+                comboBox.focusedProperty().removeListener(listener);
+                comboBoxListenerMap.remove(comboBox);
+            }
+            case TextArea textArea -> {
+                ChangeListener<Boolean> listener = textAreaListenerMap.get(textArea);
+                textArea.focusedProperty().removeListener(listener);
+                textAreaListenerMap.remove(textArea);
+            }
+            default -> throw new IllegalArgumentException("Unsupported node type: " + node.getClass().getSimpleName());
+        }
     }
 }
 

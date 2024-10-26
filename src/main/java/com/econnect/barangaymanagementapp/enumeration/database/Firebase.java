@@ -4,6 +4,7 @@ public enum Firebase {
     EMPLOYEES("/3-Employees"),
     RESIDENTS("Residents"),
     ACCOUNTS("/Accounts"),
+    REQUESTS("/3- Requests"),
     VISITORS("/3-Visitors"),
     ANNOUNCEMENTS("/3-Announcements"),
     EVENTS("/3-Events"),

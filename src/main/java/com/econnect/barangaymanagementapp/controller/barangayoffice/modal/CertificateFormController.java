@@ -1,12 +1,16 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 
 import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.service.ImageService;
+import com.econnect.barangaymanagementapp.service.RequestService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -24,6 +28,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,7 +47,7 @@ public class CertificateFormController {
     private Button cancelBtn, confirmBtn;
 
     @FXML
-    private HBox viewGovernmentID, profileContainer;
+    private HBox viewGovernmentID, profileContainer, purposeContainer;
 
     @FXML
     private TextField residentIdInput, nameInput, addressInput, emailInput, contactNumberInput, birthdateInput, occupationInput, sexInput;
@@ -49,10 +56,12 @@ public class CertificateFormController {
     private TextArea purposeInput;
 
     @FXML
-    private CheckBox clearanceCheckBox, indigencyCheckBox, cedulaCheckBox, bankCertificateCheckBox, businessPermitCheckBox, financialCheckBox;
+    private CheckBox clearanceCheckBox, indigencyCheckBox, cedulaCheckBox, bankCertificateCheckBox, businessPermitCheckBox, financialCheckBox, barangayIdCheckBox;
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
+    private final FormValidator formValidator;
+    private final RequestService requestService;
     private final ResidentService residentService;
     private final ImageService imageService;
     private Image validIdImage;
@@ -62,14 +71,82 @@ public class CertificateFormController {
 
     public CertificateFormController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.requestService = dependencyInjector.getRequestService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
+        this.formValidator = dependencyInjector.getFormValidator();
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
     public void initialize() {
         setupEventListener();
         setupViewImage();
+    }
+
+    private void submitData() {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
+        rootPane.getChildren().add(loadingIndicator);
+
+        Task<Void> addResidentTask = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    List<Request> requests = createRequestsFromInput();
+                    for (Request request : requests) {
+                        requestService.createRequest(request);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Error during request creation", e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                loadingIndicator.setVisible(false);
+                rootPane.getChildren().remove(loadingIndicator);
+                closeWindow();
+                modalUtils.showModal(Modal.SUCCESS, "Success", "Certificate Request has been successfully added.");
+            }
+
+            @Override
+            protected void failed() {
+                loadingIndicator.setVisible(false);
+                rootPane.getChildren().remove(loadingIndicator);
+                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the resident."));
+            }
+        };
+
+        new Thread(addResidentTask).start();
+    }
+
+    private List<Request> createRequestsFromInput() {
+        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, cedulaCheckBox, bankCertificateCheckBox, businessPermitCheckBox, financialCheckBox, barangayIdCheckBox);
+        List<Request> requests = new ArrayList<>();
+
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox.isSelected()) {
+                Request request = new Request();
+                request.setRequestorId(residentIdInput.getText());
+                RequestType requestType = RequestType.fromName(checkBox.getText());
+
+                if (checkBox.getText().equalsIgnoreCase("Certificate of Indigency")) {
+                    request.setPurpose(purposeInput.getText());
+                } else {
+                    request.setPurpose("");
+                }
+                
+                if (requestType != null) {
+                    request.setRequestType(requestType);
+                    requests.add(request);
+                } else {
+                    System.err.println("No matching RequestType found for: " + checkBox.getText());
+                }
+            }
+        }
+
+        return requests;
     }
 
     private void populateInputFields(String residentId) {
@@ -131,6 +208,33 @@ public class CertificateFormController {
         sexInput.clear();
     }
 
+    private void validateData() {
+        if (!formValidator.IS_NOT_EMPTY.test(residentIdInput.getText())) {
+            residentIdInput.requestFocus();
+            modalUtils.showModal(Modal.ERROR, "Empty Resident ID", "Please enter a Resident ID.");
+            return;
+        }
+
+        if (!residentExists) {
+            modalUtils.showModal(Modal.ERROR, "Resident Not Found", "Resident ID does not exist.");
+            return;
+        }
+
+        if (!clearanceCheckBox.isSelected() && !indigencyCheckBox.isSelected() && !cedulaCheckBox.isSelected() && !bankCertificateCheckBox.isSelected() && !businessPermitCheckBox.isSelected() && !financialCheckBox.isSelected() && !barangayIdCheckBox.isSelected()) {
+            modalUtils.showModal(Modal.ERROR, "No Certificate Selected", "Please select at least one certificate to be issued.");
+            return;
+        }
+
+        if (indigencyCheckBox.isSelected()) {
+            if (purposeInput.getText().isEmpty()) {
+                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the indigency certificate.");
+                return;
+            }
+        }
+
+        submitData();
+    }
+
     private void loadProfileImage(String directory, String link) {
         profilePicture.setVisible(false);
         profilePicture.setManaged(false);
@@ -185,18 +289,36 @@ public class CertificateFormController {
     }
 
     private void setupEventListener() {
+        purposeContainer.setManaged(false);
+        purposeContainer.setVisible(false);
+
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
-        confirmBtn.setOnAction(_ -> closeWindow());
+        confirmBtn.setOnAction(_ -> validateData());
         residentIdInput.setOnKeyPressed(_ -> {
             residentIdInput.textProperty().addListener((_, _, newValue) -> {
                 searchDelay.setOnFinished(_ -> populateInputFields(newValue));
                 searchDelay.playFromStart();
             });
         });
+        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID is required.");
+        formValidator.addListeners(purposeInput, formValidator.IS_NOT_EMPTY, "Purpose is required for Indigency Certificate.");
+        indigencyCheckBox.setOnAction(_ -> {
+            if (indigencyCheckBox.isSelected()) {
+                formValidator.addListeners(purposeInput, formValidator.IS_NOT_EMPTY, "Purpose is required for Indigency Certificate.");
+                purposeContainer.setManaged(true);
+                purposeContainer.setVisible(true);
+            } else {
+                formValidator.removeListener(purposeInput);
+                purposeContainer.setManaged(false);
+                purposeContainer.setVisible(false);
+            }
+        });
+
     }
 
     public void closeWindow() {
+        formValidator.removeListeners();
         modalUtils.closeCustomizeModal();
     }
 

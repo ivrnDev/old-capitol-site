@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.util.data;
 
 import com.econnect.barangaymanagementapp.config.deserializer.JacksonFactory;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,9 @@ public class JsonConverter {
                 new JacksonFactory.EnumSerializer<>(EconomicLevelType::getName));
         customModule.addSerializer(MotherTongue.class,
                 new JacksonFactory.EnumSerializer<>(MotherTongue::getName));
+        customModule.addSerializer(RequestType.class,
+                new JacksonFactory.EnumSerializer<>(RequestType::getName));
+
 
         this.objectMapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule())

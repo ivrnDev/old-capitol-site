@@ -19,7 +19,7 @@
 
 <AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.CertificateFormController">
     <children>
-        <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CERTIFICATE REQUEST">
+        <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="REQUEST FORM">
             <font>
                 <Font name="Arial Bold" size="25.0" />
             </font>
@@ -391,6 +391,11 @@
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
                                                         </CheckBox>
+                                          <CheckBox fx:id="barangayIdCheckBox" contentDisplay="CENTER" layoutX="451.0" layoutY="20.0" mnemonicParsing="false" text="Barangay ID" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </CheckBox>
                                                     </children>
                                                 </HBox>
                                             </children>
