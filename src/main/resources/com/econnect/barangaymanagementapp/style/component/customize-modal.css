@@ -1,8 +1,20 @@
 .panel {
     -fx-border-color: #000000;
-    -fx-background-color: #EEFCFF;
+    -fx-background-color: #F8FEFF;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #F8FEFF;
+}
+
+.scroll-pane .content {
+    -fx-background-color: #F8FEFF;
 }
 
 /* Input Container*/
@@ -63,6 +75,17 @@
     -fx-background-radius: 0 0 10px 0;
 }
 
+.text-area {
+    -fx-background-color: #ffffff;
+}
+
+.text-area .content {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #787878;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
 /* File Chooser*/
 
 .file-chooser {
@@ -115,6 +138,15 @@
     -fx-cursor: default;
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 
+}
+
+/* Check Box */
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #2c2b2b;
+    -fx-border-radius: 5px;
+    -fx-background-radius-radius: 5px;
 }
 
 /*  Profile Container*/

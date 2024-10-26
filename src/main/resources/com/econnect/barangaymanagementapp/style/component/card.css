@@ -4,6 +4,7 @@
     -fx-background-color: #FDFFFF;
     -fx-border-color: #787878;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
 }
 
 .card-variant-2:hover {

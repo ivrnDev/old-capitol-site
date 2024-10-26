@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 public class ServiceController {
 
     @FXML
-    private VBox certificateForm, residencyForm, clearanceForm, indigencyForm, censusForm;
+    private VBox certificateForm, applyWorkForm, eventRequestForm, toolsAndMaterialsForm, assistanceForm, complaintForm, healthForm;
 
     private final ModalUtils modalUtils;
 
@@ -23,9 +23,11 @@ public class ServiceController {
 
     private void setupEventListener() {
         certificateForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CERTIFICATE_FORM));
-        residencyForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.RESIDENCY_FORM));
-        clearanceForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CLEARANCE_FORM));
-        indigencyForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.INDIGENCY_FORM));
-        censusForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CENSUS_FORM));
+        applyWorkForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.APPLY_WORK_FORM));
+        eventRequestForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.EVENT_REQUEST_FORM));
+        toolsAndMaterialsForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.TOOL_AND_MATERIALS_FORM));
+        assistanceForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ASSISTANCE_FORM));
+        complaintForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.COMPLAINT_FORM));
+        healthForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.HEALTH_FORM));
     }
 }

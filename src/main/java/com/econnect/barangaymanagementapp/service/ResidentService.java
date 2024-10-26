@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.service;
 
-import com.econnect.barangaymanagementapp.domain.Account;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.AccountRepository;
@@ -43,6 +42,10 @@ public class ResidentService {
 
     public Optional<Resident> findResidentById(String id) {
         return residentRepository.findResidentById(id);
+    }
+
+    public Optional<Resident> findActiveResidentById(String id) {
+        return residentRepository.findResidentById(id).filter(resident -> resident.getStatus().equals(VERIFIED));
     }
 
     public Response updateResidentByStatus(String residentId, StatusType.ResidentStatus status) {

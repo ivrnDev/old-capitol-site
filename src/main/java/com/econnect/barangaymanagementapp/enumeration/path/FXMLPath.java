@@ -25,10 +25,13 @@ public enum FXMLPath {
 
     //Form
     CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),
-    RESIDENCY_FORM("view/barangayoffice/modal/residency-form.fxml"),
-    CLEARANCE_FORM("view/barangayoffice/modal/clearance-form.fxml"),
-    INDIGENCY_FORM("view/barangayoffice/modal/indigency-form.fxml"),
-    CENSUS_FORM("view/barangayoffice/modal/census-form.fxml");
+    APPLY_WORK_FORM("view/barangayoffice/modal/apply-work-form.fxml"),
+    EVENT_REQUEST_FORM("view/barangayoffice/modal/event-request-form.fxml"),
+    TOOL_AND_MATERIALS_FORM("view/barangayoffice/modal/tools-and-materials-form.fxml"),
+    ASSISTANCE_FORM("view/barangayoffice/modal/assistance-form.fxml"),
+    COMPLAINT_FORM("view/barangayoffice/modal/complaint-form.fxml"),
+    HEALTH_FORM("view/barangayoffice/modal/health-form.fxml");
+
 
     private final String fxmlPath;
 
