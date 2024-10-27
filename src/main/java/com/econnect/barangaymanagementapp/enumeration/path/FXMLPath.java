@@ -40,6 +40,6 @@ public enum FXMLPath {
     }
 
     public String getFxmlPath() {
-        return fxmlPath;
+        return fxmlPath.toLowerCase();
     }
 }

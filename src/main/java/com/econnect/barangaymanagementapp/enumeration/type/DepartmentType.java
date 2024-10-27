@@ -35,7 +35,7 @@ public enum DepartmentType {
     }
 
     public String getDirectoryName() {
-        return name.replace(" ", "");
+        return name.replace(" ", "").toLowerCase();
     }
 
     public String getLink() {

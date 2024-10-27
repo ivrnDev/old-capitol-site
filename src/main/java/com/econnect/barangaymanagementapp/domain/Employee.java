@@ -7,10 +7,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.EmploymentType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.ZonedDateTime;
@@ -24,6 +21,7 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Emp
 @ToString(callSuper = true)
 @JsonSerialize(using = GenericSerializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode(callSuper = false)
 public class Employee extends BaseEntity {
     private String firstName;
     private String lastName;

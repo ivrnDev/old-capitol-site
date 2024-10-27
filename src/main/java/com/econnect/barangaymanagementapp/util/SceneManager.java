@@ -39,7 +39,7 @@ public class SceneManager {
     }
 
     public void switchToDefaultScene() {
-        switchScene("View/login.fxml");
+        switchScene("view/login.fxml");
     }
 
 

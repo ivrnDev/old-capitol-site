@@ -4,12 +4,7 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.layout.HBox;
 import javafx.stage.Popup;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -27,6 +22,10 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+//        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+//            handleException("Uncaught Exception", throwable);
+//        });
+        System.out.println("JavaFX Application Started");
         DependencyInjector dependencyInjector = new DependencyInjector(stage);
         stage.initStyle(StageStyle.DECORATED);
         SceneManager sceneManager = dependencyInjector.getSceneManager();
@@ -35,31 +34,74 @@ public class MainApplication extends Application {
 //        checkResourcesInBackground(stage);
     }
 
-//    private void test(DependencyInjector dependencyInjector) {
+    //    private void test(DependencyInjector dependencyInjector) {
 //        var repo = dependencyInjector.getResidentService();
 //        var emp = repo.findAllPendingResidents();
 //        System.out.println(emp);
 //    }
+//    private void showResourceDialog(Stage stage) {
+//        try {
+//            popup = new Popup();
+//            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("View/Component/Modal/resource-error.fxml"));
+//            Parent root = loader.load();
+//
+//            popup.getContent().add(root);
+//            popup.setAutoHide(false);
+//
+//            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+//            double popupWidth = screenBounds.getWidth();
+//
+//            if (root instanceof HBox) {
+//                HBox hBoxRoot = (HBox) root;
+//                hBoxRoot.setPrefWidth(popupWidth);
+//                hBoxRoot.setMaxWidth(popupWidth);
+//            }
+//
+//            popup.setX(0);
+//            popup.setY(screenBounds.getHeight() - screenBounds.getHeight());
+//            popup.setWidth(popupWidth);
+//        } catch (IOException e) {
+//            handleException("Error loading resource dialog", e);
+//        }
+//    }
 
-    private void checkResourcesInBackground(Stage stage) {
-        scheduler = Executors.newScheduledThreadPool(1);
-        Runnable checkTask = () -> {
-            boolean internetAvailable = isInternetAvailable();
-            Platform.runLater(() -> {
-                if (!internetAvailable) {
-                    if (popup == null || !popup.isShowing()) {
-                        showResourceDialog(stage);
-                    }
-                } else {
-                    if (popup != null && popup.isShowing()) {
-                        popup.hide();
-                    }
-                }
-            });
-        };
 
-        scheduler.scheduleAtFixedRate(checkTask, 0, 10, TimeUnit.SECONDS);
-    }
+//    private void handleException(String message, Throwable throwable) {
+//        System.err.println(message);
+//        throwable.printStackTrace();
+//
+//        Platform.runLater(() -> {
+//            showErrorDialog(message, throwable.getMessage());
+//        });
+//    }
+
+//    private void showErrorDialog(String header, String content) {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle("Application Error");
+//        alert.setHeaderText(header);
+//        alert.setContentText(content);
+//        alert.showAndWait();
+//    }
+
+//    private void checkResourcesInBackground(Stage stage) {
+//        scheduler = Executors.newScheduledThreadPool(1);
+//        Runnable checkTask = () -> {
+//            boolean internetAvailable = isInternetAvailable();
+//            Platform.runLater(() -> {
+//                if (!internetAvailable) {
+//                    if (popup == null || !popup.isShowing()) {
+//                        showResourceDialog(stage);
+//                    }
+//                } else {
+//                    if (popup != null && popup.isShowing()) {
+//                        popup.hide();
+//                    }
+//                }
+//            });
+//        };
+//
+//        scheduler.scheduleAtFixedRate(checkTask, 0, 10, TimeUnit.SECONDS);
+//    }
 
     private boolean isInternetAvailable() {
         try {
@@ -75,34 +117,34 @@ public class MainApplication extends Application {
         }
     }
 
-    private void showResourceDialog(Stage stage) {
-//        if (!isInternetAvailable()) {
-        popup = new Popup();
-        FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("View/Component/Modal/resource-error.fxml"));
-        Parent root;
-        try {
-            root = loader.load();
-            popup.getContent().add(root);
-            popup.setAutoHide(false);
-
-
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            double popupWidth = screenBounds.getWidth();
-
-            if (root instanceof HBox) {
-                HBox hBoxRoot = (HBox) root;
-                hBoxRoot.setPrefWidth(popupWidth);
-                hBoxRoot.setMaxWidth(popupWidth);
-            }
-            popup.setX(0);
-            popup.setY(screenBounds.getHeight() - screenBounds.getHeight());
-            popup.setWidth(popupWidth);
-            popup.setWidth(popupWidth);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//    private void showResourceDialog(Stage stage) {
+////        if (!isInternetAvailable()) {
+//        popup = new Popup();
+//        FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("View/Component/Modal/resource-error.fxml"));
+//        Parent root;
+//        try {
+//            root = loader.load();
+//            popup.getContent().add(root);
+//            popup.setAutoHide(false);
+//
+//
+//            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+//            double popupWidth = screenBounds.getWidth();
+//
+//            if (root instanceof HBox) {
+//                HBox hBoxRoot = (HBox) root;
+//                hBoxRoot.setPrefWidth(popupWidth);
+//                hBoxRoot.setMaxWidth(popupWidth);
+//            }
+//            popup.setX(0);
+//            popup.setY(screenBounds.getHeight() - screenBounds.getHeight());
+//            popup.setWidth(popupWidth);
+//            popup.setWidth(popupWidth);
+//        } catch (IOException e) {
+//            e.printStackTrace();
 //        }
-    }
+////        }
+//    }
 
     public void shutdownScheduler() {
         if (scheduler != null && !scheduler.isShutdown()) {
@@ -117,10 +159,10 @@ public class MainApplication extends Application {
         }
     }
 
-    @Override
-    public void stop() {
-        shutdownScheduler();
-    }
+//    @Override
+//    public void stop() {
+//        shutdownScheduler();
+//    }
 
     public static void main(String[] args) {
         launch(args);
