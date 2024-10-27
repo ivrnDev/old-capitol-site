@@ -57,6 +57,12 @@ public class CertificateFormController {
     @FXML
     private CheckBox clearanceCheckBox, indigencyCheckBox, residencyComboBox;
 
+    @FXML
+    private RadioButton studentRadio, seniorRadio, pwdRadio, jobSeekerRadio;
+
+    @FXML
+    private ToggleGroup residentTypeRadio;
+
     private Stage currentStage;
     private final ModalUtils modalUtils;
     private final FormValidator formValidator;
@@ -128,6 +134,7 @@ public class CertificateFormController {
             if (checkBox.isSelected()) {
                 Request request = new Request();
                 request.setRequestorId(residentIdInput.getText());
+                request.setRequestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText());
                 RequestType requestType = RequestType.fromName(checkBox.getText());
 
                 if (checkBox.getText().equalsIgnoreCase("Certificate of Indigency")) {

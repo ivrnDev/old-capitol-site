@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class Request extends BaseEntity {
     private String requestorId;
+    private String requestorType;
     private String controlNumber;
     private RequestType requestType;
     private String purpose;
