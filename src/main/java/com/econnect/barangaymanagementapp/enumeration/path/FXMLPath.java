@@ -26,6 +26,7 @@ public enum FXMLPath {
     //Form
     CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),
     APPLY_WORK_FORM("view/barangayoffice/modal/apply-work-form.fxml"),
+    ID_FORM("view/barangayoffice/modal/id-form.fxml"),
     EVENT_REQUEST_FORM("view/barangayoffice/modal/event-certificate-form.fxml"),
     TOOL_AND_MATERIALS_FORM("view/barangayoffice/modal/tools-and-materials-form.fxml"),
     ASSISTANCE_FORM("view/barangayoffice/modal/assistance-form.fxml"),
