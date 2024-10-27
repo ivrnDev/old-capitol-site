@@ -69,8 +69,6 @@ public class AddResidentController {
     @FXML
     private CheckBox ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox;
     @FXML
-    private RadioButton notAttendedRadio, elementaryLevelRadio, elementaryGraduateRadio, highschoolLevelRadio, highschoolGraduateRadio, vocationalRadio, collegeLevelRadio, collegeGraduateRadio, postGraduateRadio;
-    @FXML
     private ToggleGroup educationalAttainment;
 
     private final ModalUtils modalUtils;
