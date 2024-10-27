@@ -35,7 +35,7 @@ import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 
-public class RequestForm {
+public class CertificateFormController {
     @FXML
     private AnchorPane rootPane;
 
@@ -68,7 +68,7 @@ public class RequestForm {
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private boolean residentExists = false;
 
-    public RequestForm(DependencyInjector dependencyInjector) {
+    public CertificateFormController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.requestService = dependencyInjector.getRequestService();
         this.residentService = dependencyInjector.getResidentService();

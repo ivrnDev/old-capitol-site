@@ -14,7 +14,6 @@ public class FXMLLoaderFactory {
 
     public FXMLLoader createFXMLLoader(String fxmlPath, Object... constructorArgs) {
         FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(fxmlPath));
-        System.out.println("FXML Path: " + fxmlPath);
         if (loader.getLocation() == null) {
             throw new IllegalStateException("FXML file not found: " + fxmlPath);
         }
