@@ -22,10 +22,7 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-//        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-//            handleException("Uncaught Exception", throwable);
-//        });
-        System.out.println("JavaFX Application Started");
+//
         DependencyInjector dependencyInjector = new DependencyInjector(stage);
         stage.initStyle(StageStyle.DECORATED);
         SceneManager sceneManager = dependencyInjector.getSceneManager();
@@ -38,49 +35,6 @@ public class MainApplication extends Application {
 //        var repo = dependencyInjector.getResidentService();
 //        var emp = repo.findAllPendingResidents();
 //        System.out.println(emp);
-//    }
-//    private void showResourceDialog(Stage stage) {
-//        try {
-//            popup = new Popup();
-//            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("View/Component/Modal/resource-error.fxml"));
-//            Parent root = loader.load();
-//
-//            popup.getContent().add(root);
-//            popup.setAutoHide(false);
-//
-//            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-//            double popupWidth = screenBounds.getWidth();
-//
-//            if (root instanceof HBox) {
-//                HBox hBoxRoot = (HBox) root;
-//                hBoxRoot.setPrefWidth(popupWidth);
-//                hBoxRoot.setMaxWidth(popupWidth);
-//            }
-//
-//            popup.setX(0);
-//            popup.setY(screenBounds.getHeight() - screenBounds.getHeight());
-//            popup.setWidth(popupWidth);
-//        } catch (IOException e) {
-//            handleException("Error loading resource dialog", e);
-//        }
-//    }
-
-
-//    private void handleException(String message, Throwable throwable) {
-//        System.err.println(message);
-//        throwable.printStackTrace();
-//
-//        Platform.runLater(() -> {
-//            showErrorDialog(message, throwable.getMessage());
-//        });
-//    }
-
-//    private void showErrorDialog(String header, String content) {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle("Application Error");
-//        alert.setHeaderText(header);
-//        alert.setContentText(content);
-//        alert.showAndWait();
 //    }
 
 //    private void checkResourcesInBackground(Stage stage) {
