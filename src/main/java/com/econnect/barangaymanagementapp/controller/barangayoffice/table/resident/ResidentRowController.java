@@ -182,7 +182,6 @@ public class ResidentRowController extends BaseRowController<Resident> {
     }
 
     protected void reloadTable() {
-        residentController.reloadResidentApplicationTable();
         residentController.reloadResidentTable();
     }
 }
