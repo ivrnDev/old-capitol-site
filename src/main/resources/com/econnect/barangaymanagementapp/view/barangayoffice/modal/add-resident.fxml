@@ -37,7 +37,7 @@
         </ImageView>
         <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="1.0" layoutY="65.0" prefHeight="488.0" prefWidth="1117.0" styleClass="scroll-panel" stylesheets="@../../../style/component/content.css" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="2.0">
             <content>
-                <VBox alignment="CENTER" spacing="20.0" stylesheets="@../../../style/component/customize-modal.css">
+                <VBox alignment="CENTER_LEFT" spacing="20.0" stylesheets="@../../../style/component/customize-modal.css">
                     <children>
                         <HBox spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
@@ -244,6 +244,33 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="121.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Civil Status" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                    <padding>
+                                                        <Insets left="-1.0" />
+                                                    </padding>
+                                                </ComboBox>
+                                            </children>
+                                        </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
@@ -287,11 +314,11 @@
                                 </VBox>
                                 <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Civil Status" textOverrun="CLIP">
+                                                        <Label text="Mother Tounge" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
@@ -308,7 +335,7 @@
                                                         <String fx:value="input-label-first" />
                                                     </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="motherToungeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -325,33 +352,6 @@
                                                 <String fx:value="input-container" />
                                                 <String fx:value="input-container-first" />
                                             </styleClass>
-                                        </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Mother Tounge" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <ComboBox fx:id="motherToungeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                </ComboBox>
-                                            </children>
                                         </HBox>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="121.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                             <children>
@@ -488,11 +488,38 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Telephone Number" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <TextField fx:id="telephoneInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefHeight="35.0" prefWidth="117.0" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Contact Number" textOverrun="CLIP">
+                                                        <Label text="Mobile Number" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
@@ -509,13 +536,31 @@
                                                         <String fx:value="input-label-last" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="contactNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <HBox alignment="CENTER" style="-fx-background-color: white;">
+                                                    <children>
+                                                        <Label text="+63">
+                                                            <font>
+                                                                <Font name="Arial" size="12.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <HBox.margin>
+                                                        <Insets />
+                                                    </HBox.margin>
+                                                    <padding>
+                                                        <Insets left="8.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <TextField fx:id="mobileNumberInput" prefHeight="35.0" prefWidth="114.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT" />
                                                     </cursor>
+                                       <padding>
+                                          <Insets left="-0.5" />
+                                       </padding>
                                                 </TextField>
                                             </children>
                                             <styleClass>
@@ -527,7 +572,7 @@
                                 </VBox>
                             </children>
                             <VBox.margin>
-                                <Insets bottom="20.0" />
+                                <Insets />
                             </VBox.margin>
                         </HBox>
                         <HBox layoutX="40.0" layoutY="383.0" spacing="40.0">
@@ -1058,7 +1103,7 @@
                                 </VBox>
                             </children>
                         </HBox>
-                        <HBox layoutX="40.0" layoutY="386.0" spacing="40.0" VBox.vgrow="ALWAYS">
+                        <HBox layoutX="40.0" layoutY="10.0" spacing="40.0">
                             <children>
                                 <VBox fx:id="spouseInputContainer" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                     <children>
@@ -1246,7 +1291,184 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox layoutX="10.0" layoutY="10.0" maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Emergency First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                    <styleClass>
+                                                        <String fx:value="input-label-first" />
+                                                        <String fx:value="input-label" />
+                                                    </styleClass>
+                                                </HBox>
+                                                <TextField fx:id="emergencyFirstNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                            <styleClass>
+                                                <String fx:value="input-container" />
+                                                <String fx:value="input-container-first" />
+                                            </styleClass>
+                                        </HBox>
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="85.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Emergency Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <TextField fx:id="emergencyLastNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="120.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Emergency Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                </HBox>
+                                                <TextField fx:id="emergencyMiddleNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </HBox>
+                              <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefHeight="35.0" prefWidth="117.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Mobile Number" textOverrun="CLIP">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets left="20.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER" style="-fx-background-color: white;">
+                                       <children>
+                                          <Label text="+63">
+                                             <font>
+                                                <Font name="Arial" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets left="8.0" />
+                                       </padding>
+                                    </HBox>
+                                    <TextField fx:id="emergencyMobileNumberInput" prefHeight="35.0" prefWidth="114.0" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Arial" size="12.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="DEFAULT" />
+                                       </cursor>
+                                       <padding>
+                                          <Insets left="-0.5" />
+                                       </padding>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                                        <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Relationship" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial" size="15.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                    <padding>
+                                                        <Insets left="20.0" />
+                                                    </padding>
+                                                    <styleClass>
+                                                        <String fx:value="input-label-last" />
+                                                        <String fx:value="input-label" />
+                                                    </styleClass>
+                                                </HBox>
+                                                <TextField fx:id="emergencyRelationshipInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                    <font>
+                                                        <Font name="Arial" size="12.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                            <styleClass>
+                                                <String fx:value="input-container-last" />
+                                                <String fx:value="input-container" />
+                                            </styleClass>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox layoutX="40.0" layoutY="386.0" maxWidth="432.0" spacing="40.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <VBox maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
                                             <children>

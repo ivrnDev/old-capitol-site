@@ -51,7 +51,8 @@ public class AddResidentController {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, contactNumberInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput, citizenshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput, tinIdNumberInput;
+    private TextField lastNameInput, firstNameInput, middleNameInput, birthplaceInput, occupationInput, emailInput, addressInput, mobileNumberInput, telephoneInput, fatherFirstNameInput, fatherLastNameInput, fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput, motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
+            citizenshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput, tinIdNumberInput, emergencyFirstNameInput, emergencyLastNameInput, emergencyMiddleNameInput, emergencyMobileNumberInput, emergencyRelationshipInput;
     @FXML
     private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox, residencyStatusComboBox;
     @FXML
@@ -152,7 +153,8 @@ public class AddResidentController {
                 .middleName(middleNameInput.getText())
                 .lastName(lastNameInput.getText())
                 .nameExtension(suffixComboBox.getValue())
-                .contactNumber(contactNumberInput.getText())
+                .mobileNumber("0" + mobileNumberInput.getText())
+                .telephoneNumber(telephoneInput.getText())
                 .email(emailInput.getText())
                 .address(addressInput.getText())
                 .birthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(motherBirthdatePicker.getValue()) : null)
@@ -186,6 +188,12 @@ public class AddResidentController {
                 .spouseSuffixName(spouseSuffixComboBox.getValue())
                 .spouseOccupation(spouseOccupationInput.getText())
                 .spouseBirthdate(spouseBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(spouseBirthdatePicker.getValue()) : null)
+
+                .emergencyFirstName(emergencyFirstNameInput.getText())
+                .emergencyMiddleName(emergencyMiddleNameInput.getText())
+                .emergencyLastName(emergencyLastNameInput.getText())
+                .emergencyMobileNumber("0" + emergencyMobileNumberInput.getText())
+                .emergencyRelationship(emergencyRelationshipInput.getText())
 
                 .status(StatusType.ResidentStatus.VERIFIED)
                 .residencyStatus(ResidencyStatus.fromName(residencyStatusComboBox.getValue()))
@@ -227,7 +235,8 @@ public class AddResidentController {
         formValidator.addListeners(occupationInput, formValidator.IS_NOT_EMPTY, "Occupation cannot be empty.");
         formValidator.addListeners(emailInput, formValidator.IS_EMAIL, "Please enter a valid email address.");
         formValidator.addListeners(addressInput, formValidator.IS_NOT_EMPTY, "Address cannot be empty.");
-        formValidator.addListeners(contactNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
+        formValidator.addListeners(mobileNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
+        formValidator.addListeners(telephoneInput, formValidator.IS_VALID_TELEPHONE, "Please enter a valid phone number.");
         formValidator.addListeners(fatherFirstNameInput, formValidator.IS_NOT_EMPTY, "Father's first name cannot be empty.");
         formValidator.addListeners(fatherLastNameInput, formValidator.IS_NOT_EMPTY, "Father's last name cannot be empty.");
         formValidator.addListeners(fatherMiddleNameInput, formValidator.IS_NOT_EMPTY, "Father's middle name cannot be empty.");
@@ -246,6 +255,12 @@ public class AddResidentController {
         formValidator.addListeners(motherSuffixComboBox, formValidator.IS_NOT_EMPTY, "Mother's suffix cannot be empty.");
         formValidator.addListeners(residencyStatusComboBox, formValidator.IS_NOT_EMPTY, "Residency status cannot be empty.");
         formValidator.addListeners(tinIdNumberInput, formValidator.IS_NUMBER, "TIN ID must be a number.");
+        formValidator.addListeners(emergencyFirstNameInput, formValidator.IS_NOT_EMPTY, "Emergency contact's first name cannot be empty.");
+        formValidator.addListeners(emergencyLastNameInput, formValidator.IS_NOT_EMPTY, "Emergency contact's last name cannot be empty.");
+        formValidator.addListeners(emergencyMiddleNameInput, formValidator.IS_NOT_EMPTY, "Emergency contact's middle name cannot be empty.");
+        formValidator.addListeners(emergencyMobileNumberInput, formValidator.IS_VALID_PHONE, "Please enter a valid phone number.");
+        formValidator.addListeners(emergencyRelationshipInput, formValidator.IS_NOT_EMPTY, "Emergency contact's relationship cannot be empty.");
+
         if (spouseInputContainer.isVisible()) {
             formValidator.addListeners(spouseFirstNameInput, formValidator.IS_NOT_EMPTY, "Spouse's first name cannot be empty.");
             formValidator.addListeners(spouseLastNameInput, formValidator.IS_NOT_EMPTY, "Spouse's last name cannot be empty.");
@@ -306,7 +321,7 @@ public class AddResidentController {
         occupationInput.setText("Software Engineer");
         emailInput.setText("villamora@gmail.com");
         addressInput.setText("1234 Barangay St., Barangay, City");
-        contactNumberInput.setText("09123456789");
+        mobileNumberInput.setText("09123456789");
         fatherFirstNameInput.setText("Juan");
         fatherLastNameInput.setText("Dela Cruz");
         fatherMiddleNameInput.setText("Santos");
@@ -347,10 +362,11 @@ public class AddResidentController {
         List<TextField> textFields = new ArrayList<>(Arrays.asList(
                 lastNameInput, firstNameInput, middleNameInput,
                 birthplaceInput, occupationInput, emailInput, addressInput,
-                contactNumberInput, fatherFirstNameInput, fatherLastNameInput,
+                telephoneInput, mobileNumberInput, fatherFirstNameInput, fatherLastNameInput,
                 fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
                 motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
-                citizenshipInput, tinIdNumberInput
+                citizenshipInput, tinIdNumberInput, emergencyFirstNameInput, emergencyLastNameInput,
+                emergencyMiddleNameInput, emergencyMobileNumberInput, emergencyRelationshipInput
         ));
 
         List<DatePicker> datePickers = new ArrayList<>(Arrays.asList(
@@ -401,9 +417,18 @@ public class AddResidentController {
             }
 
             if (firstFieldError == null) {
-                if (field.equals(contactNumberInput) && !formValidator.IS_VALID_PHONE.test(field.getText())) {
+                if (field.equals(mobileNumberInput) && !formValidator.IS_VALID_PHONE.test(field.getText())) {
                     field.requestFocus();
-                    errorMessage = "Please enter a valid phone number.";
+                    errorMessage = "Please enter a valid mobile number.";
+                    hasError = true;
+                    break;
+                }
+            }
+
+            if (firstFieldError == null) {
+                if (field.equals(telephoneInput) && !formValidator.IS_VALID_TELEPHONE.test(field.getText())) {
+                    field.requestFocus();
+                    errorMessage = "Please enter a valid telephone number.";
                     hasError = true;
                     break;
                 }

@@ -26,7 +26,8 @@ public class Resident extends BaseEntity {
     private String middleName;
     private String lastName;
     private String nameExtension;
-    private String contactNumber;
+    private String mobileNumber;
+    private String telephoneNumber;
     private String email;
     private String address;
     private GenderType sex;
@@ -61,8 +62,13 @@ public class Resident extends BaseEntity {
     private String spouseOccupation;
     private String spouseBirthdate;
 
-    private String sourceOfIncome;
+    private String emergencyFirstName;
+    private String emergencyLastName;
+    private String emergencyMiddleName;
+    private String emergencyMobileNumber;
+    private String emergencyRelationship;
 
+    private String sourceOfIncome;
     private ResidencyStatus residencyStatus;
     private ResidentStatus status;
     private String educationalAttainment;

@@ -29,7 +29,8 @@ public class FormValidator {
     public final Predicate<String> IS_NUMBER = text -> text.matches("\\d+");
     public final Predicate<String> IS_EMAIL = text -> text.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     // To be fixed with + 639
-    public final Predicate<String> IS_VALID_PHONE = text -> text.matches("^\\+?[0-9]{10,15}$");
+    public final Predicate<String> IS_VALID_PHONE = text -> text.matches("[0-9]{10}$");
+    public final Predicate<String> IS_VALID_TELEPHONE = text -> text.matches("^\\+?[0-9]{9}$");
     public final Predicate<String> DATE_VALIDATOR = text -> text.matches("\\d{1,2}/\\d{1,2}/\\d{4}");
 
     public FormValidator(DependencyInjector dependencyInjector) {
