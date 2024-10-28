@@ -75,7 +75,7 @@ public class SearchService<T> {
                     || (resident.getMiddleName() != null && resident.getMiddleName().toLowerCase().contains(searchText))
                     || (resident.getLastName() != null && resident.getLastName().toLowerCase().contains(searchText))
                     || (resident.getNameExtension() != null && resident.getNameExtension().toLowerCase().contains(searchText))
-                    || (resident.getContactNumber() != null && resident.getContactNumber().toLowerCase().contains(searchText))
+                    || (resident.getMobileNumber() != null && resident.getMobileNumber().toLowerCase().contains(searchText))
                     || (resident.getEmail() != null && resident.getEmail().toLowerCase().contains(searchText))
                     || (resident.getAddress() != null && resident.getAddress().toLowerCase().contains(searchText))
                     || (resident.getSex() != null && resident.getSex().getName().toLowerCase().contains(searchText))

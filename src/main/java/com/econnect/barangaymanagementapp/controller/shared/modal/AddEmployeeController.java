@@ -139,7 +139,7 @@ public class AddEmployeeController {
                     addressInput.setText(residentInfo.getAddress());
                     birthdateInput.setText(residentInfo.getBirthdate().toString());
                     emailInput.setText(residentInfo.getEmail());
-                    phoneInput.setText(residentInfo.getContactNumber());
+                    phoneInput.setText(residentInfo.getMobileNumber());
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
                 } else {
                     clearInputFields();

@@ -181,7 +181,7 @@ public class CertificateFormController {
                     addressInput.setText(residentInfo.getAddress());
                     birthdateInput.setText(residentInfo.getBirthdate().toString());
                     emailInput.setText(residentInfo.getEmail());
-                    contactNumberInput.setText(residentInfo.getContactNumber());
+                    contactNumberInput.setText(residentInfo.getMobileNumber());
                     occupationInput.setText(residentInfo.getOccupation());
                     sexInput.setText(residentInfo.getSex().getName());
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
