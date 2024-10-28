@@ -8,6 +8,7 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -59,9 +60,9 @@ public class ResidentService {
     }
 
     public String generateResidentId() {
-        int OTP_LENGTH = 6;
+        int OTP_LENGTH = 5;
         SecureRandom random = new SecureRandom();
         int otp = random.nextInt((int) Math.pow(10, OTP_LENGTH));
-        return String.format("%06d", otp);
+        return String.format("00%05d-%d", otp, Year.now().getValue());
     }
 }
