@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="680.0" prefWidth="964.0" styleClass="panel" stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="680.0" prefWidth="964.0" styleClass="panel" stylesheets="@../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.IdFormController">
     <children>
         <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BARANGAY ID">
             <font>
@@ -81,9 +81,9 @@
                                                     </image>
                                                 </ImageView>
                                             </children>
-                                 <padding>
-                                    <Insets bottom="2.0" top="2.0" />
-                                 </padding>
+                                            <padding>
+                                                <Insets bottom="2.0" top="2.0" />
+                                            </padding>
                                         </HBox>
                                         <HBox opacity="0.8" spacing="20.0" styleClass="body-background" VBox.vgrow="ALWAYS">
                                             <padding>
@@ -110,12 +110,21 @@
                                                                 </VBox>
                                                                 <VBox VBox.vgrow="ALWAYS">
                                                                     <children>
-                                                                        <Label fx:id="addressText" text="38 MASAYA STREET, OLD CAPITOL SITE,">
-                                                                            <font>
-                                                                                <Font name="Arial Bold" size="21.0" />
-                                                                            </font>
-                                                                        </Label>
-                                                                        <Label text="DILIMAN QUEZON CITY 1101">
+                                                                        <HBox spacing="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="addressText" text="38 MASAYA STREET,">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold" size="21.0" />
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label fx:id="addressExtension" layoutX="10.0" layoutY="10.0" text="OLD CAPITOL SITE">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold" size="21.0" />
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                        <Label fx:id="addressExtension1" text="DILIMAN QUEZON CITY 1101">
                                                                             <font>
                                                                                 <Font name="Arial Bold" size="21.0" />
                                                                             </font>
@@ -159,11 +168,15 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="97.0" layoutY="10.0">
                                                                             <children>
-                                                                                <Label text="53KG">
-                                                                                    <font>
-                                                                                        <Font name="Arial Bold" size="21.0" />
-                                                                                    </font>
-                                                                                </Label>
+                                                                                <HBox alignment="CENTER">
+                                                                                    <children>
+                                                                                        <TextField fx:id="weightInput" prefHeight="39.0" prefWidth="90.0" promptText="0 KG">
+                                                                                            <font>
+                                                                                                <Font name="Arial Bold" size="21.0" />
+                                                                                            </font>
+                                                                                        </TextField>
+                                                                                    </children>
+                                                                                </HBox>
                                                                                 <Label text="Weight(kg)">
                                                                                     <font>
                                                                                         <Font name="Arial Italic" size="13.0" />
@@ -173,11 +186,11 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="184.0" layoutY="10.0">
                                                                             <children>
-                                                                                <Label text="5'5 FT">
+                                                                                <TextField fx:id="heightInput" prefHeight="39.0" prefWidth="90.0" promptText="0 FT">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>
-                                                                                </Label>
+                                                                                </TextField>
                                                                                 <Label text="Height(ft)">
                                                                                     <font>
                                                                                         <Font name="Arial Italic" size="13.0" />
@@ -205,7 +218,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
                                                                             <children>
-                                                                                <Label fx:id="residencyStatus" text="OWNER">
+                                                                                <Label fx:id="residencyStatusText" text="OWNER">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>
@@ -270,15 +283,19 @@
                                                         </HBox>
                                                     </children>
                                                 </VBox>
-                                                <VBox layoutX="20.0" layoutY="20.0" spacing="15.0">
+                                                <VBox layoutX="20.0" layoutY="20.0" spacing="15.0" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <HBox prefWidth="219.0" styleClass="primary-background">
+                                                        <HBox styleClass="primary-background" VBox.vgrow="ALWAYS">
                                                             <children>
-                                                                <ImageView fx:id="profileImageView" fitHeight="243.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@../../../images/default-profile.png" />
-                                                                    </image>
-                                                                </ImageView>
+                                                                <HBox fx:id="profileContainer" alignment="CENTER" prefHeight="300.0" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <ImageView fx:id="profilePicture" fitHeight="254.0" fitWidth="258.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                                                            <image>
+                                                                                <Image url="@../../../images/default-profile.png" />
+                                                                            </image>
+                                                                        </ImageView>
+                                                                    </children>
+                                                                </HBox>
                                                             </children>
                                                         </HBox>
                                                         <VBox prefHeight="200.0" prefWidth="100.0" styleClass="secondary-bacground">
@@ -303,13 +320,13 @@
                                                                     </children>
                                                                 </VBox>
                                                                 <HBox alignment="CENTER" styleClass="primary-background" VBox.vgrow="ALWAYS">
-                                                   <children>
-                                                      <TextField fx:id="residentIdTextField" alignment="CENTER" prefHeight="33.0" prefWidth="211.0" promptText="Type Here">
-                                                         <font>
-                                                            <Font name="Arial Black" size="18.0" />
-                                                         </font>
-                                                      </TextField>
-                                                   </children>
+                                                                    <children>
+                                                                        <TextField fx:id="residentIdInput" alignment="CENTER" prefHeight="33.0" prefWidth="211.0" promptText="Type Here">
+                                                                            <font>
+                                                                                <Font name="Arial Black" size="18.0" />
+                                                                            </font>
+                                                                        </TextField>
+                                                                    </children>
                                                                 </HBox>
                                                             </children>
                                                         </VBox>
@@ -405,7 +422,7 @@
                                                                 </VBox>
                                                                 <VBox>
                                                                     <children>
-                                                                        <Label fx:id="emergencyPersonText" text="VILLAMORA, IVAN REN MANGUIAT">
+                                                                        <Label fx:id="emergencyFullNameText" text="VILLAMORA, IVAN REN MANGUIAT">
                                                                             <font>
                                                                                 <Font name="Arial Bold" size="23.0" />
                                                                             </font>

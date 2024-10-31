@@ -2,10 +2,7 @@ package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
-import com.econnect.barangaymanagementapp.repository.AccountRepository;
-import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
-import com.econnect.barangaymanagementapp.repository.RequestRepository;
-import com.econnect.barangaymanagementapp.repository.ResidentRepository;
+import com.econnect.barangaymanagementapp.repository.*;
 import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
 import com.econnect.barangaymanagementapp.util.data.PasswordUtils;
@@ -43,12 +40,14 @@ public class DependencyInjector {
     private final EmployeeRepository employeeRepository;
     private final ResidentRepository residentRepository;
     private final RequestRepository requestRepository;
+    private final BarangayIdRepository barangayIdRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
     private final EmployeeService employeeService;
     private final ResidentService residentService;
     private final RequestService requestService;
+    private final BarangayidService barangayidService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -71,6 +70,7 @@ public class DependencyInjector {
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
         this.requestRepository = new RequestRepository(this);
+        this.barangayIdRepository = new BarangayIdRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
@@ -78,5 +78,6 @@ public class DependencyInjector {
         this.requestService = new RequestService(this);
         this.employeeSearchService = new SearchService<>();
         this.residentSearchService = new SearchService<>();
+        this.barangayidService = new BarangayidService(this);
     }
 }
