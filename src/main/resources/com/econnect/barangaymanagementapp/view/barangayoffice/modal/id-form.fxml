@@ -140,7 +140,7 @@
                                                                     <children>
                                                                         <VBox alignment="CENTER">
                                                                             <children>
-                                                                                <Label fx:id="genderText" text="FEMALE">
+                                                                                <Label fx:id="genderText" prefHeight="40.0" text="FEMALE">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>
@@ -154,7 +154,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
                                                                             <children>
-                                                                                <Label fx:id="birthdateText" text="04/24/2002">
+                                                                                <Label fx:id="birthdateText" prefHeight="40.0" prefWidth="106.0" text="04/24/2002">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>
@@ -168,7 +168,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="97.0" layoutY="10.0">
                                                                             <children>
-                                                                                  <TextField fx:id="weightInput" alignment="CENTER" prefHeight="39.0" prefWidth="130.0" promptText="0 KG">
+                                                                                  <TextField fx:id="weightInput" alignment="CENTER" prefWidth="130.0" promptText="0 KG">
                                                                                       <font>
                                                                                           <Font name="Arial Bold" size="21.0" />
                                                                                       </font>
@@ -182,7 +182,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="184.0" layoutY="10.0">
                                                                             <children>
-                                                                                <TextField fx:id="heightInput" alignment="CENTER" prefHeight="39.0" prefWidth="130.0" promptText="0 FT">
+                                                                                <TextField fx:id="heightInput" alignment="CENTER" prefWidth="130.0" promptText="0 FT">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>

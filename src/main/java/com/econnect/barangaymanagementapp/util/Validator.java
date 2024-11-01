@@ -1,31 +1,67 @@
 package com.econnect.barangaymanagementapp.util;
 
+import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.NumberStringConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.function.Predicate;
 
-@AllArgsConstructor
 public class Validator {
-    @AllArgsConstructor
-    @Getter
-    public enum VALIDATOR_TYPE {
-        IS_EMPTY(input -> input.isEmpty()),
-        IS_NUMBER(input -> input.matches("\\d+")),
-        IS_EMAIL(input -> input.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")),
-        IS_VALID_PHONE(input -> input.matches("\\d{10}")),
-        IS_VALID_TELEPHONE(input -> input.matches("\\d{9}")),
-        DATE_VALIDATOR(input -> input.matches("\\d{1,2}/\\d{1,2}/\\d{4}"));
+    private final ModalUtils modalUtils;
+    private String errorTitle;
+    private String errorMessage;
+    private boolean hasError;
 
-        private final Predicate<String> predicate;
+    public Validator(DependencyInjector dependencyInjector) {
+        this.modalUtils = dependencyInjector.getModalUtils();
     }
 
+    public boolean validate(TextField inputField, VALIDATOR_TYPE validatorType) {
+        return validatorType.getPredicate().test(inputField.getText());
+    }
+
+    public boolean textFields(TextField[] textFields) {
+        for (TextField textField : textFields) {
+            if (textField.getText().isEmpty()) {
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all the fields";
+                }
+                textField.setStyle("-fx-border-color: red");
+            } else {
+                hasError = false;
+                textField.setStyle("");
+            }
+            addTextFieldListener(textField);
+        }
+
+        if (hasError) {
+            triggerError();
+            return true;
+        }
+        return false;
+    }
+
+    private void triggerError() {
+        modalUtils.showModal(Modal.ERROR, errorTitle, errorMessage);
+    }
+
+    private void addTextFieldListener(TextField textField) {
+        textField.setOnKeyTyped(_ -> {
+            if (!textField.getText().isEmpty()) {
+                textField.setStyle("");
+            }
+        });
+    }
+
+
+    // Methods that are separated from the original class functionality
     public void createResidentIdFormatter(TextField inputField) {
         inputField.setTextFormatter(new TextFormatter<>(new DefaultStringConverter(), "", change -> {
             if (change.isContentChange()) {
@@ -85,9 +121,19 @@ public class Validator {
         });
     }
 
-    public boolean validate(TextField inputField, VALIDATOR_TYPE validatorType) {
-        return validatorType.getPredicate().test(inputField.getText());
+    @AllArgsConstructor
+    @Getter
+    public enum VALIDATOR_TYPE {
+        IS_EMPTY(input -> input.isEmpty()),
+        IS_NUMBER(input -> input.matches("\\d+")),
+        IS_EMAIL(input -> input.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")),
+        IS_VALID_PHONE(input -> input.matches("\\d{10}")),
+        IS_VALID_TELEPHONE(input -> input.matches("\\d{9}")),
+        DATE_VALIDATOR(input -> input.matches("\\d{1,2}/\\d{1,2}/\\d{4}"));
+
+        private final Predicate<String> predicate;
     }
+
 }
 
 

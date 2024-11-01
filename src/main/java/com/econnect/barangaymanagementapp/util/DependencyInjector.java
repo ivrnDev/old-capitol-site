@@ -63,7 +63,7 @@ public class DependencyInjector {
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
         this.fileChooserUtils = new FileChooserUtils();
-        this.validator = new Validator();
+        this.validator = new Validator(this);
         this.formValidator = new FormValidator(this);
         this.emailService = new EmailService();
 

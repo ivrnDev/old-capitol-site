@@ -31,6 +31,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -206,26 +208,13 @@ public class IdFormController {
     }
 
     private void validateData() {
-        if (validator.validate(residentIdInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
-            residentIdInput.requestFocus();
-            modalUtils.showModal(Modal.ERROR, "Empty Resident ID", "Please enter a Resident ID.");
-            return;
-        }
+        TextField[] textFields = {residentIdInput, weightInput, heightInput};
+        boolean hasError = validator.textFields(textFields);
+        if (hasError) return;
 
         if (!residentExists) {
+            residentIdInput.setStyle("-fx-border-color: red");
             modalUtils.showModal(Modal.ERROR, "Resident Not Found", "Resident ID does not exist.");
-            return;
-        }
-
-        if (validator.validate(weightInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
-            weightInput.requestFocus();
-            modalUtils.showModal(Modal.ERROR, "Empty Weight", "Please enter a Weight.");
-            return;
-        }
-
-        if (validator.validate(heightInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
-            heightInput.requestFocus();
-            modalUtils.showModal(Modal.ERROR, "Empty Height", "Please enter a Height.");
             return;
         }
 
@@ -277,15 +266,11 @@ public class IdFormController {
     }
 
     private void hideAddress() {
-        addressExtension.setManaged(false);
-        addressExtension1.setManaged(false);
         addressExtension.setVisible(false);
         addressExtension1.setVisible(false);
     }
 
     private void showAddress() {
-        addressExtension.setManaged(true);
-        addressExtension1.setManaged(true);
         addressExtension.setVisible(true);
         addressExtension1.setVisible(true);
     }
