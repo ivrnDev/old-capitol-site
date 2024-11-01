@@ -464,10 +464,15 @@ public class Validator {
 
     public void setUnitFocusedProperty(TextField inputField, String unit) {
         inputField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
+            if (!newValue) { // on focus lost
                 String text = inputField.getText();
                 if (!text.isEmpty() && !text.endsWith(unit)) {
-                    inputField.setText(text + " " + unit);
+                    inputField.setText(text + " " + unit); // add the unit back
+                }
+            } else { // on focus gained
+                String text = inputField.getText();
+                if (text.endsWith(" " + unit)) {
+                    inputField.setText(text.replace(" " + unit, "")); // remove unit on focus
                 }
             }
         });

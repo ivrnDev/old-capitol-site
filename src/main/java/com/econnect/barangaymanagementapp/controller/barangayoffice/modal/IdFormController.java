@@ -256,7 +256,7 @@ public class IdFormController {
                 searchDelay.playFromStart();
             });
         });
-        validator.createUnitNumberFormatter(heightInput, 1, 500);
+        validator.createUnitNumberFormatter(heightInput, 1, 10);
         validator.createUnitNumberFormatter(weightInput, 1, 500);
         validator.setUnitFocusedProperty(heightInput, "FT");
         validator.setUnitFocusedProperty(weightInput, "KG");
