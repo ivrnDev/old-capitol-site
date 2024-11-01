@@ -339,8 +339,6 @@ public class AddResidentController {
         if (validator.hasEmptyCheckBox(checkBoxes, checkBoxContainer)) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Please select at least one source of income.");
             return;
-        } else {
-            checkBoxContainer.setStyle(null);
         }
 
         if (validator.hasEmptyFiles(files, fileContainers)) return;

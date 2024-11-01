@@ -260,7 +260,7 @@ public class IdFormController {
         validator.createUnitNumberFormatter(weightInput, 1, 500);
         validator.setUnitFocusedProperty(heightInput, "FT");
         validator.setUnitFocusedProperty(weightInput, "KG");
-        validator.createResidentIdFormatter(residentIdInput);
+        validator.setupResidentIdInput(residentIdInput);
     }
 
     private void hideAddress() {

@@ -236,28 +236,18 @@ public class CertificateFormController {
         }
 
         if (validator.hasEmptyCheckBox(checkBoxes, certificateContainer)) {
-//            certificateContainer.setStyle("-fx-border-color: red;");
+            modalUtils.showModal(Modal.ERROR, "Failed", "Please select at least one certificate.");
             return;
-        } else {
-            certificateContainer.setStyle(null);
         }
-
-//        if (!clearanceCheckBox.isSelected() && !indigencyCheckBox.isSelected() && !residencyComboBox.isSelected()) {
-//            certificateContainer.setStyle("-fx-border-color: red;");
-//            modalUtils.showModal(Modal.ERROR, "No Certificate Selected", "Please select at least one certificate to be issued.");
-//            return;
-//        } else {
-//            certificateContainer.setStyle(null);
-//        }
 
         if (indigencyCheckBox.isSelected()) {
             if (purposeInput.getText().isEmpty()) {
                 purposeInput.requestFocus();
-                purposeInput.setStyle("-fx-border-color: red;");
+                purposeInput.getStyleClass().add("error");
                 modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the indigency certificate.");
                 return;
             } else {
-                purposeInput.setStyle(null);
+                purposeInput.getStyleClass().remove("error");
             }
         }
 
@@ -324,16 +314,7 @@ public class CertificateFormController {
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> validateData());
-        residentIdInput.setOnKeyPressed(_ -> {
-            residentIdInput.textProperty().addListener((_, _, newValue) -> {
-                searchDelay.setOnFinished(_ -> populateInputFields(newValue));
-                searchDelay.playFromStart();
-            });
-        });
-        validator.createResidentIdFormatter(residentIdInput);
-        validator.addTextFieldListener(residentIdInput);
-//        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID is required.");
-//        formValidator.addListeners(purposeInput, formValidator.IS_NOT_EMPTY, "Purpose is required for Indigency Certificate.");
+
         indigencyCheckBox.setOnAction(_ -> {
             if (indigencyCheckBox.isSelected()) {
 //                formValidator.addListeners(purposeInput, formValidator.IS_NOT_EMPTY, "Purpose is required for Indigency Certificate.");
@@ -345,7 +326,25 @@ public class CertificateFormController {
                 purposeContainer.setVisible(false);
             }
         });
+        residentIdInput.setOnKeyPressed(_ -> {
+            residentIdInput.textProperty().addListener((_, _, newValue) -> {
+                searchDelay.setOnFinished(_ -> populateInputFields(newValue));
+                searchDelay.playFromStart();
+            });
+        });
+        validator.setupResidentIdInput(residentIdInput);
 
+        purposeInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[a-zA-Z ]*")) {
+                purposeInput.setText(newValue.replaceAll("[^a-zA-Z ]", ""));
+            }
+            if (purposeInput.getText().length() > 40) {
+                purposeInput.setText(oldValue);
+            }
+        });
+        purposeInput.setOnKeyTyped(_ -> {
+            purposeInput.getStyleClass().remove("error");
+        });
     }
 
     public void closeWindow() {

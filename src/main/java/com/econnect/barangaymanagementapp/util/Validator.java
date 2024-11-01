@@ -279,18 +279,25 @@ public class Validator {
         return false;
     }
 
-    public boolean hasEmptyFile(File file, HBox buttonContainer) {
+    public void hasEmptyFile(File file, HBox buttonContainer) {
         if (file == null) {
             buttonContainer.setStyle("-fx-border-color: red;");
-            return true;
         } else {
             buttonContainer.setStyle(null);
-            return false;
         }
     }
 
+    public void setupResidentIdInput(TextField inputField) {
+        createResidentIdFormatter(inputField);
+        inputField.setOnKeyTyped(_ -> {
+            if (!inputField.getText().isEmpty()) {
+                inputField.setStyle("");
+            }
+        });
+    }
+
     // Event Listeners
-    private void addTextFieldListener(TextField textField, VALIDATOR_TYPE validatorType, String errorMessage) {
+    private void addTextFieldFormatterListener(TextField textField, VALIDATOR_TYPE validatorType, String errorMessage) {
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 if (!validatorType.getPredicate().test(textField.getText())) {
@@ -337,7 +344,7 @@ public class Validator {
     // Formatters
     public void createMobileNumberFormatter(int maxChar, TextField... textFields) {
         for (TextField textField : textFields) {
-            addTextFieldListener(textField, VALIDATOR_TYPE.IS_VALID_PHONE, "Please enter a valid mobile number");
+            addTextFieldFormatterListener(textField, VALIDATOR_TYPE.IS_VALID_PHONE, "Please enter a valid mobile number");
             textField.setTextFormatter(new TextFormatter<>(change -> {
                 String newText = change.getControlNewText().replaceAll("[^\\d]", "");
                 if (newText.length() > maxChar) {
@@ -372,11 +379,11 @@ public class Validator {
             }
             return change;
         }));
-        addTextFieldListener(inputField, VALIDATOR_TYPE.IS_VALID_TELEPHONE, "Please enter a valid telephone number");
+        addTextFieldFormatterListener(inputField, VALIDATOR_TYPE.IS_VALID_TELEPHONE, "Please enter a valid telephone number");
     }
 
     public void createEmailFormatter(TextField inputField) {
-        addTextFieldListener(inputField, VALIDATOR_TYPE.IS_EMAIL, "Please enter a valid email address");
+        addTextFieldFormatterListener(inputField, VALIDATOR_TYPE.IS_EMAIL, "Please enter a valid email address");
     }
 
     public void createTinIdFormatter(TextField inputField) {
@@ -404,10 +411,10 @@ public class Validator {
             }
             return change;
         }));
-        addTextFieldListener(inputField, VALIDATOR_TYPE.IS_VALID_TIN_ID, "Please enter a valid TIN ID");
+        addTextFieldFormatterListener(inputField, VALIDATOR_TYPE.IS_VALID_TIN_ID, "Please enter a valid TIN ID");
     }
 
-    public void createResidentIdFormatter(TextField inputField) {
+    private void createResidentIdFormatter(TextField inputField) {
         inputField.setTextFormatter(new TextFormatter<>(new DefaultStringConverter(), "", change -> {
             if (change.isContentChange()) {
                 String newText = change.getControlNewText().replaceAll("[^\\d]", "");
