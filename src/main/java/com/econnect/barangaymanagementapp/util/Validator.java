@@ -437,7 +437,8 @@ public class Validator {
         }));
     }
 
-    public void createUnitNumberFormatter(TextField inputField, int minLength, int maxLength) {
+    public void createWeightFormatter(TextField inputField) {
+        setUnitFocusedProperty(inputField, "KG");
         inputField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText().replaceAll("\\s+(KG|FT)$", "");
 
@@ -451,7 +452,7 @@ public class Validator {
 
             try {
                 int value = Integer.parseInt(newText);
-                if (value >= minLength && value <= maxLength) {
+                if (value >= 1 && value <= 200) {
                     return change;
                 }
             } catch (NumberFormatException e) {
@@ -462,14 +463,42 @@ public class Validator {
         }));
     }
 
+    public void createHeightFormatter(TextField inputField) {
+        setUnitFocusedProperty(inputField, "FT");
+        inputField.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("\\s+(FT)$", ""); // Remove "FT" while typing
+
+            if (!newText.matches("\\d*'?(\\d*)")) {
+                return null;
+            }
+
+            if (newText.length() == 2 && !newText.contains("'")) {
+                int feet = Character.getNumericValue(newText.charAt(0));
+                int inches = Character.getNumericValue(newText.charAt(1));
+                if (feet >= 1 && inches >= 0 && inches <= 9) {
+                    change.setText(feet + "'" + inches);
+                    change.setRange(0, change.getControlText().length());
+                    Platform.runLater(() -> inputField.positionCaret(change.getControlNewText().length()));
+                    return change;
+                }
+            }
+
+            if (newText.length() > 4) {
+                return null;
+            }
+
+            return change;
+        }));
+    }
+
     public void setUnitFocusedProperty(TextField inputField, String unit) {
         inputField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) { // on focus lost
+            if (!newValue) {
                 String text = inputField.getText();
                 if (!text.isEmpty() && !text.endsWith(unit)) {
-                    inputField.setText(text + " " + unit); // add the unit back
+                    inputField.setText(text + " " + unit);
                 }
-            } else { // on focus gained
+            } else {
                 String text = inputField.getText();
                 if (text.endsWith(" " + unit)) {
                     inputField.setText(text.replace(" " + unit, "")); // remove unit on focus
