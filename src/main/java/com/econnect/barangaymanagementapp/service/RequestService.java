@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.repository.RequestRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
@@ -24,6 +25,7 @@ public class RequestService {
         request.setId(generateRequestId());
         request.setCreatedAt(ZonedDateTime.now());
         request.setUpdatedAt(ZonedDateTime.now());
+        request.setApplicationType(ApplicationType.WALK_IN);
         request.setStatus(PENDING);
         return requestRepository.createRequest(request);
     }

@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.domain;
 
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,6 +25,7 @@ public class Request extends BaseEntity {
     private RequestType requestType;
     private String purpose;
     private StatusType.RequestStatus status;
+    private ApplicationType applicationType;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

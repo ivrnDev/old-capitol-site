@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.BarangayId;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.repository.BarangayIdRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
@@ -24,6 +25,7 @@ public class BarangayidService {
         request.setId(generateBarangayIdId());
         request.setCreatedAt(ZonedDateTime.now());
         request.setUpdatedAt(ZonedDateTime.now());
+        request.setApplicationType(ApplicationType.WALK_IN);
         request.setStatus(PENDING);
         return requestRepository.createBarangayId(request);
     }

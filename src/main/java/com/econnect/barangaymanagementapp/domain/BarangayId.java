@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.domain;
 
 import com.econnect.barangaymanagementapp.config.deserializer.GenericSerializer;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,6 +24,7 @@ public class BarangayId extends BaseEntity {
     private String height;
     private String weight;
     private String expirationDate;
+    private ApplicationType applicationType;
     private BarangayIdStatus status;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

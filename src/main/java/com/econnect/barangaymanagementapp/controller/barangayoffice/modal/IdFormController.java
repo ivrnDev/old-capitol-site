@@ -31,8 +31,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -119,8 +117,8 @@ public class IdFormController {
     private BarangayId createRequestsFromInput() {
         return BarangayId.builder()
                 .residentId(residentIdInput.getText())
-                .weight(weightInput.getText())
-                .height(heightInput.getText())
+                .weight(weightInput.getText().trim().replace(" KG", ""))
+                .height(heightInput.getText().trim().replace(" FT", ""))
                 .expirationDate(expirationDateText.getText())
                 .build();
     }
@@ -209,7 +207,7 @@ public class IdFormController {
 
     private void validateData() {
         TextField[] textFields = {residentIdInput, weightInput, heightInput};
-        boolean hasError = validator.textFields(textFields);
+        boolean hasError = validator.hasEmptyFields(textFields);
         if (hasError) return;
 
         if (!residentExists) {
