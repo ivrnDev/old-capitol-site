@@ -11,6 +11,7 @@ import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FormValidator;
+import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -21,7 +22,6 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +29,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.util.converter.NumberStringConverter;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -57,6 +56,7 @@ public class IdFormController {
     private final BarangayidService barangayidService;
     private final ResidentService residentService;
     private final ImageService imageService;
+    private final Validator validator;
     private Image validIdImage;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -67,6 +67,7 @@ public class IdFormController {
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
+        this.validator = dependencyInjector.getValidator();
         this.formValidator = dependencyInjector.getFormValidator();
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
@@ -205,7 +206,7 @@ public class IdFormController {
     }
 
     private void validateData() {
-        if (!formValidator.IS_NOT_EMPTY.test(residentIdInput.getText())) {
+        if (validator.validate(residentIdInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             residentIdInput.requestFocus();
             modalUtils.showModal(Modal.ERROR, "Empty Resident ID", "Please enter a Resident ID.");
             return;
@@ -216,13 +217,13 @@ public class IdFormController {
             return;
         }
 
-        if (!formValidator.IS_NOT_EMPTY.test(weightInput.getText())) {
+        if (validator.validate(weightInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             weightInput.requestFocus();
             modalUtils.showModal(Modal.ERROR, "Empty Weight", "Please enter a Weight.");
             return;
         }
 
-        if (!formValidator.IS_NOT_EMPTY.test(heightInput.getText())) {
+        if (validator.validate(heightInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             heightInput.requestFocus();
             modalUtils.showModal(Modal.ERROR, "Empty Height", "Please enter a Height.");
             return;
@@ -268,35 +269,11 @@ public class IdFormController {
                 searchDelay.playFromStart();
             });
         });
-        weightInput.setTextFormatter(new TextFormatter<>(new NumberStringConverter(), null, change -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("\\d*\\s?(KG)?") || newText.isBlank()) {
-                if (newText.isBlank()) {
-                    return change;
-                }
-                String numericText = newText.replaceAll("\\s?KG", "").trim();
-                try {
-                    int value = Integer.parseInt(numericText);
-                    if (value >= 1 && value < 700) {
-                        return change;
-                    }
-                } catch (NumberFormatException e) {
-                }
-            }
-            return null;
-        }));
-
-        weightInput.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                String text = weightInput.getText();
-                if (!text.isEmpty()) {
-                    weightInput.setText(text + " KG");
-                }
-            }
-        });
-
-
-        formValidator.addListeners(residentIdInput, formValidator.IS_NOT_EMPTY, "Resident ID is required.");
+        validator.createUnitNumberFormatter(heightInput, 1, 500);
+        validator.createUnitNumberFormatter(weightInput, 1, 500);
+        validator.setUnitFocusedProperty(heightInput, "FT");
+        validator.setUnitFocusedProperty(weightInput, "KG");
+        validator.createResidentIdFormatter(residentIdInput);
     }
 
     private void hideAddress() {

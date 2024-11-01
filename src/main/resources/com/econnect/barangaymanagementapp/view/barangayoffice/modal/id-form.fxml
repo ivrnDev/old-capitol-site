@@ -136,7 +136,7 @@
                                                                         </Label>
                                                                     </children>
                                                                 </VBox>
-                                                                <HBox spacing="50.0" VBox.vgrow="ALWAYS">
+                                                                <HBox spacing="40.0" VBox.vgrow="ALWAYS">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
                                                                             <children>
@@ -168,15 +168,11 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="97.0" layoutY="10.0">
                                                                             <children>
-                                                                                <HBox alignment="CENTER">
-                                                                                    <children>
-                                                                                        <TextField fx:id="weightInput" prefHeight="39.0" prefWidth="90.0" promptText="0 KG">
-                                                                                            <font>
-                                                                                                <Font name="Arial Bold" size="21.0" />
-                                                                                            </font>
-                                                                                        </TextField>
-                                                                                    </children>
-                                                                                </HBox>
+                                                                                  <TextField fx:id="weightInput" alignment="CENTER" prefHeight="39.0" prefWidth="130.0" promptText="0 KG">
+                                                                                      <font>
+                                                                                          <Font name="Arial Bold" size="21.0" />
+                                                                                      </font>
+                                                                                  </TextField>
                                                                                 <Label text="Weight(kg)">
                                                                                     <font>
                                                                                         <Font name="Arial Italic" size="13.0" />
@@ -186,7 +182,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="184.0" layoutY="10.0">
                                                                             <children>
-                                                                                <TextField fx:id="heightInput" prefHeight="39.0" prefWidth="90.0" promptText="0 FT">
+                                                                                <TextField fx:id="heightInput" alignment="CENTER" prefHeight="39.0" prefWidth="130.0" promptText="0 FT">
                                                                                     <font>
                                                                                         <Font name="Arial Bold" size="21.0" />
                                                                                     </font>
