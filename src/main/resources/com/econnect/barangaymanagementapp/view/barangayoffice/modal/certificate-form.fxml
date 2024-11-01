@@ -351,7 +351,7 @@
                                         </Label>
                                         <VBox spacing="20.0" styleClass="input-container">
                                             <children>
-                                                <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="42.0" spacing="40.0">
+                                                <HBox fx:id="certificateContainer" alignment="CENTER" minHeight="-Infinity" prefHeight="42.0" spacing="40.0">
                                                     <children>
                                                         <CheckBox fx:id="clearanceCheckBox" mnemonicParsing="false" text="Barangay Clearance" HBox.hgrow="ALWAYS">
                                                             <font>
