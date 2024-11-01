@@ -34,7 +34,7 @@ public class DependencyInjector {
     private final FileChooserUtils fileChooserUtils;
     private final SearchService<Employee> employeeSearchService;
     private final SearchService<Resident> residentSearchService;
-
+    private final Validator validator;
 
     private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
@@ -63,6 +63,7 @@ public class DependencyInjector {
         this.passwordUtils = new PasswordUtils();
         this.imageService = new ImageService(this);
         this.fileChooserUtils = new FileChooserUtils();
+        this.validator = new Validator();
         this.formValidator = new FormValidator(this);
         this.emailService = new EmailService();
 
