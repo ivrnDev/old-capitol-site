@@ -5,7 +5,6 @@ import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.RequestService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -29,7 +28,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -98,15 +96,8 @@ public class CertificateFormController {
         Task<Void> addResidentTask = new Task<>() {
             @Override
             protected Void call() {
-                try {
-                    List<Request> requests = createRequestsFromInput();
-                    for (Request request : requests) {
-                        requestService.createRequest(request);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("Error during request creation", e);
-                }
+                Request request = createRequestsFromInput();
+                requestService.createRequest(request);
                 return null;
             }
 
@@ -129,32 +120,26 @@ public class CertificateFormController {
         new Thread(addResidentTask).start();
     }
 
-    private List<Request> createRequestsFromInput() {
+    private Request createRequestsFromInput() {
         List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
-        List<Request> requests = new ArrayList<>();
 
+        StringBuilder requests = new StringBuilder();
         for (CheckBox checkBox : checkBoxes) {
             if (checkBox.isSelected()) {
-                Request request = new Request();
-                request.setRequestorId(residentIdInput.getText());
-                request.setRequestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText());
-                RequestType requestType = RequestType.fromName(checkBox.getText());
-
-                if (checkBox.getText().equalsIgnoreCase("Certificate of Indigency")) {
-                    request.setPurpose(purposeInput.getText());
-                } else {
-                    request.setPurpose("");
-                }
-                if (requestType != null) {
-                    request.setRequestType(requestType);
-                    requests.add(request);
-                } else {
-                    System.err.println("No matching RequestType found for: " + checkBox.getText());
-                }
+                requests.append(checkBox.getText()).append(", ");
             }
         }
 
-        return requests;
+        if (requests.length() > 0) {
+            requests.setLength(requests.length() - 2);
+        }
+
+        return Request.builder()
+                .id(residentIdInput.getText())
+                .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
+                .request(String.valueOf(requests))
+                .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
+                .build();
     }
 
     private void populateInputFields(String residentId) {

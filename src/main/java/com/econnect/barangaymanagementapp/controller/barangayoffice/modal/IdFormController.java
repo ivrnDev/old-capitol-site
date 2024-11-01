@@ -116,7 +116,7 @@ public class IdFormController {
 
     private BarangayId createRequestsFromInput() {
         return BarangayId.builder()
-                .residentId(residentIdInput.getText())
+                .id(residentIdInput.getText())
                 .weight(weightInput.getText().trim().replace(" KG", ""))
                 .height(heightInput.getText().trim().replace(" FT", ""))
                 .expirationDate(expirationDateText.getText())

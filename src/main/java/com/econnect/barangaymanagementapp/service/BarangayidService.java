@@ -15,42 +15,51 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Bar
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus.PENDING;
 
 public class BarangayidService {
-    private final BarangayIdRepository requestRepository;
+    private final BarangayIdRepository barangayIdRepository;
 
     public BarangayidService(DependencyInjector dependencyInjector) {
-        this.requestRepository = dependencyInjector.getBarangayIdRepository();
+        this.barangayIdRepository = dependencyInjector.getBarangayIdRepository();
     }
 
     public Response createBarangayId(BarangayId request) {
-        request.setId(generateBarangayIdId());
+        int baseId = 1000;
+        String residentId = request.getId();
+        int countOfRequests = findCountOfRequestsByResidentId(residentId);
+        int autoIncrementId = countOfRequests > 0 ? baseId + countOfRequests : baseId;
+        request.setId(request.getId() + "-" + autoIncrementId);
+        request.setReferenceNumber(generateReferenceNumber());
         request.setCreatedAt(ZonedDateTime.now());
         request.setUpdatedAt(ZonedDateTime.now());
         request.setApplicationType(ApplicationType.WALK_IN);
         request.setStatus(PENDING);
-        return requestRepository.createBarangayId(request);
+        return barangayIdRepository.createBarangayId(request);
+    }
+
+    private int findCountOfRequestsByResidentId(String residentId) {
+        return (int) barangayIdRepository.findBarangayIdByFilter(request -> request.getId().contains(residentId)).stream().count();
     }
 
     public List<BarangayId> findAllBarangayIds() {
-        return requestRepository.findAllBarangayIds();
+        return barangayIdRepository.findAllBarangayIds();
     }
 
     public List<BarangayId> findAllPendingBarangayIds() {
-        return requestRepository.findBarangayIdByFilter(request -> request.getStatus().equals(PENDING));
+        return barangayIdRepository.findBarangayIdByFilter(request -> request.getStatus().equals(PENDING));
     }
 
     public Optional<BarangayId> findBarangayIdById(String id) {
-        return requestRepository.findBarangayIdById(id);
+        return barangayIdRepository.findBarangayIdById(id);
     }
 
     public Optional<BarangayId> findCompletedBarangayId(String id) {
-        return requestRepository.findBarangayIdById(id).filter(request -> request.getStatus().equals(BarangayIdStatus.COMPLETED));
+        return barangayIdRepository.findBarangayIdById(id).filter(request -> request.getStatus().equals(BarangayIdStatus.COMPLETED));
     }
 
     public Response updateBarangayIdByStatus(String requestId, BarangayIdStatus status) {
-        return requestRepository.updateBarangayIdByStatus(requestId, status);
+        return barangayIdRepository.updateBarangayIdByStatus(requestId, status);
     }
 
-    private String generateBarangayIdId() {
+    private String generateReferenceNumber() {
         int OTP_LENGTH = 12;
         SecureRandom random = new SecureRandom();
         long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));

@@ -22,7 +22,12 @@ public class RequestService {
     }
 
     public Response createRequest(Request request) {
-        request.setId(generateRequestId());
+        int baseId = 1000;
+        String residentId = request.getId();
+        int countOfRequests = findCountOfRequestsByResidentId(residentId);
+        int autoIncrementId = countOfRequests > 0 ? baseId + countOfRequests : baseId;
+        request.setId(request.getId() + "-" + autoIncrementId);
+        request.setReferenceNumber(generateReferenceNumber());
         request.setCreatedAt(ZonedDateTime.now());
         request.setUpdatedAt(ZonedDateTime.now());
         request.setApplicationType(ApplicationType.WALK_IN);
@@ -42,6 +47,10 @@ public class RequestService {
         return requestRepository.findRequestById(id);
     }
 
+    private int findCountOfRequestsByResidentId(String residentId) {
+        return (int) requestRepository.findRequestByFilter(request -> request.getId().contains(residentId)).stream().count();
+    }
+
     public Optional<Request> findCompletedRequest(String id) {
         return requestRepository.findRequestById(id).filter(request -> request.getStatus().equals(RequestStatus.COMPLETED));
     }
@@ -50,10 +59,10 @@ public class RequestService {
         return requestRepository.updateRequestByStatus(requestId, status);
     }
 
-    private String generateRequestId() {
-        int OTP_LENGTH = 8;
+    private String generateReferenceNumber() {
+        int OTP_LENGTH = 12;
         SecureRandom random = new SecureRandom();
-        int otp = random.nextInt((int) Math.pow(10, OTP_LENGTH));
-        return String.format("%06d", otp);
+        long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));
+        return String.format("%012d", otp);
     }
 }

@@ -2,7 +2,6 @@ package com.econnect.barangaymanagementapp.domain;
 
 import com.econnect.barangaymanagementapp.config.deserializer.GenericSerializer;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
@@ -20,12 +19,12 @@ import java.time.ZonedDateTime;
 @JsonSerialize(using = GenericSerializer.class)
 @EqualsAndHashCode(callSuper = false)
 public class BarangayId extends BaseEntity {
-    private String residentId;
     private String height;
     private String weight;
     private String expirationDate;
     private ApplicationType applicationType;
     private BarangayIdStatus status;
+    private String referenceNumber;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }
