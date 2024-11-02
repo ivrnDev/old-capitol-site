@@ -15,6 +15,7 @@ public enum FXMLPath {
 
     RESOURCE_ERROR_MODAL("view/component/modal/resource-error.fxml"),
     DEFAULT_PROFILE("images/default-profile.png"),
+    DEFAULT_DOCUMENT("icon/document-icon.png"),
 
     //Modal
     ADD_EMPLOYEE("view/shared/modal/add-employee.fxml"),
