@@ -9,7 +9,6 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.RequestService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_DOCUMENT;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 
 public class CertificateFormController {
@@ -39,13 +39,13 @@ public class CertificateFormController {
     private AnchorPane rootPane;
 
     @FXML
-    private ImageView closeBtn, profilePicture;
+    private ImageView closeBtn, profilePicture, governmentIdPreview;
 
     @FXML
     private Button cancelBtn, confirmBtn;
 
     @FXML
-    private HBox viewGovernmentID, profileContainer, purposeContainer, certificateContainer;
+    private HBox viewGovernmentID, profileContainer, purposeContainer, certificateContainer, governmentIdPreviewContainer;
 
     @FXML
     private TextField residentIdInput, nameInput, addressInput, emailInput, contactNumberInput, birthdateInput, occupationInput, sexInput;
@@ -68,7 +68,8 @@ public class CertificateFormController {
     private final RequestService requestService;
     private final ResidentService residentService;
     private final ImageService imageService;
-    private Image validIdImage;
+    private Image governmentIdImage;
+    private Image profilePictureImage;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private boolean residentExists = false;
@@ -189,9 +190,13 @@ public class CertificateFormController {
         profilePicture.setOnMouseClicked(null);
         profilePicture.setCursor(Cursor.DEFAULT);
         profilePicture.setImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
-        validIdImage = null;
+        profilePictureImage = null;
+
         viewGovernmentID.setOnMouseClicked(null);
         viewGovernmentID.setCursor(Cursor.DEFAULT);
+        governmentIdPreview.setImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_DOCUMENT.getFxmlPath()))));
+        governmentIdImage = null;
+
         nameInput.clear();
         addressInput.clear();
         birthdateInput.clear();
@@ -246,10 +251,10 @@ public class CertificateFormController {
         Platform.runLater(() -> profileContainer.getChildren().add(loadingIndicator));
 
         Runnable call = () -> {
-            validIdImage = imageService.getImage(directory, link);
+            profilePictureImage = imageService.getImage(directory, link);
             Platform.runLater(() -> {
                 profileContainer.getChildren().remove(loadingIndicator);
-                profilePicture.setImage(validIdImage);
+                profilePicture.setImage(profilePictureImage);
                 profilePicture.setVisible(true);
                 profilePicture.setManaged(true);
             });
@@ -265,29 +270,42 @@ public class CertificateFormController {
     }
 
     private void loadValidId(String directory, String link) {
-        Task<Image> task = new Task<>() {
-            @Override
-            protected Image call() {
-                return imageService.getImage(directory, link);
+        viewGovernmentID.setOnMouseClicked(_ -> {
+            if (governmentIdImage != null) {
+                modalUtils.showImageView(governmentIdImage, currentStage);
             }
-
-            @Override
-            protected void succeeded() {
+        });
+        governmentIdPreview.setVisible(false);
+        governmentIdPreview.setManaged(false);
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(governmentIdPreviewContainer.getWidth(), governmentIdPreviewContainer.getHeight());
+        Platform.runLater(() -> governmentIdPreviewContainer.getChildren().add(loadingIndicator));
+        Runnable call = () -> {
+            governmentIdImage = imageService.getImage(directory, link);
+            Platform.runLater(() -> {
+                governmentIdPreviewContainer.getChildren().remove(loadingIndicator);
+                governmentIdPreview.setImage(governmentIdImage);
                 viewGovernmentID.setCursor(Cursor.HAND);
-                viewGovernmentID.setOnMouseClicked(_ -> modalUtils.showImageView(getValue(), currentStage));
-            }
-
-            @Override
-            protected void failed() {
-                viewGovernmentID.setCursor(Cursor.DEFAULT);
-                System.err.println("Error loading valid ID");
-            }
+                governmentIdPreview.setVisible(true);
+                governmentIdPreview.setManaged(true);
+            });
         };
-        new Thread(task).start();
+
+        Runnable onFailed = () -> {
+            Platform.runLater(() -> {
+                governmentIdPreviewContainer.getChildren().remove(loadingIndicator);
+
+            });
+            governmentIdPreview.setVisible(true);
+            governmentIdPreview.setManaged(true);
+
+            System.err.println("Error loading image");
+        };
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
+
     private void setupViewImage() {
-        ImageUtils.setCircleClip(profilePicture);
+        ImageUtils.setRoundedClip(profilePicture, 25, 25);
     }
 
     private void setupEventListener() {
@@ -300,11 +318,9 @@ public class CertificateFormController {
 
         indigencyCheckBox.setOnAction(_ -> {
             if (indigencyCheckBox.isSelected()) {
-//                formValidator.addListeners(purposeInput, formValidator.IS_NOT_EMPTY, "Purpose is required for Indigency Certificate.");
                 purposeContainer.setManaged(true);
                 purposeContainer.setVisible(true);
             } else {
-//                formValidator.removeListener(purposeInput);
                 purposeContainer.setManaged(false);
                 purposeContainer.setVisible(false);
             }
