@@ -78,24 +78,26 @@ public class Validator {
 
     public boolean hasEmptyFields(TextField[] textFields, DatePicker[] datePickers, ComboBox<String>[] comboBox) {
         boolean hasError = false;
-        for (TextField textField : textFields) {
-            if (textField.getText().isEmpty()) {
-                if (!hasError) {
-                    hasError = true;
-                    errorTitle = "Failed";
-                    errorMessage = "Please fill out all required fields";
+        if (textFields != null) {
+            for (TextField textField : textFields) {
+                if (textField.getText().isEmpty()) {
+                    if (!hasError) {
+                        hasError = true;
+                        errorTitle = "Failed";
+                        errorMessage = "Please fill out all required fields";
+                    }
+                    textField.setStyle("-fx-border-color: red");
+                } else if (textField.getText().length() < 3) {
+                    if (!hasError) {
+                        hasError = true;
+                        errorTitle = "Invalid";
+                        errorMessage = "Input must be at least 2 characters";
+                    }
+                } else {
+                    textField.setStyle("");
                 }
-                textField.setStyle("-fx-border-color: red");
-            } else if (textField.getText().length() < 3) {
-                if (!hasError) {
-                    hasError = true;
-                    errorTitle = "Invalid";
-                    errorMessage = "Input must be at least 2 characters";
-                }
-            } else {
-                textField.setStyle("");
+                addTextFieldListener(textField);
             }
-            addTextFieldListener(textField);
         }
 
         for (DatePicker datePicker : datePickers) {
@@ -243,6 +245,16 @@ public class Validator {
         });
     }
 
+    public void setupComboBox(ComboBox<String> comboBox) {
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                comboBox.setStyle(null);
+            } else if (comboBox.getValue() == null) {
+                comboBox.setStyle("-fx-border-color: red;");
+            }
+        });
+    }
+
     public void setupComboBox(List<ComboBox<String>> comboBox) {
         for (ComboBox<String> box : comboBox) {
             box.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -254,6 +266,7 @@ public class Validator {
             });
         }
     }
+
 
     public boolean hasEmptyFiles(File[] files, HBox[] fileContainers) {
         boolean hasError = false;
