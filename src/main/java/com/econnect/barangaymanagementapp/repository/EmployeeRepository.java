@@ -54,8 +54,12 @@ public class EmployeeRepository extends BaseRepository<Employee> {
         }, employee -> employee.setStatus(status));
     }
 
-    public void listenToUpdates(Consumer<String> handleDataUpdates) {
-        listenToUpdates(apiKey, handleDataUpdates);
+    public void startListeningToUpdates(Consumer<String> handleDataUpdates) {
+        startListeningToUpdates(apiKey, handleDataUpdates);
+    }
+
+    public void stopListeningToUpdates() {
+        stopListeningToUpdates();
     }
 
 }

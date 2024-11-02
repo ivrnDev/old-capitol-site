@@ -164,7 +164,7 @@ public abstract class BaseRepository<T> {
                 .collect(Collectors.toList());
     }
 
-    public void listenToUpdates(String apiKey, Consumer<String> handleDataUpdate) {
+    public void startListeningToUpdates(String apiKey, Consumer<String> handleDataUpdate) {
         Request request = new Request.Builder()
                 .url(apiKey + ".json")
                 .addHeader("Accept", "text/event-stream")
@@ -251,10 +251,10 @@ public abstract class BaseRepository<T> {
             Thread.currentThread().interrupt();
             System.err.println("Retry interrupted: " + e.getMessage());
         }
-        listenToUpdates(apiKey, handleDataUpdate);
+        startListeningToUpdates(apiKey, handleDataUpdate);
     }
 
-    public void closeConnection() {
+    public void stopListeningToUpdates() {
         if (sseCall != null) {
             sseCall.cancel();
             System.out.println("SSE connection closed.");

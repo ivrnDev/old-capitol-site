@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
+import com.econnect.barangaymanagementapp.controller.shared.base.ControllerInterface;
 import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.SoundType;
@@ -27,7 +28,7 @@ import java.util.Set;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
-public class ApplicationController {
+public class ApplicationController implements ControllerInterface {
     @FXML
     private TextField searchField;
 
@@ -140,5 +141,11 @@ public class ApplicationController {
                 tableController.updateRow(employee);
             }
         }, () -> tableController.deleteRow(id));
+    }
+
+    @Override
+    public void onExit() {
+        System.out.println("Triggered on exit");
+        employeeService.stopListeningToUpdates();
     }
 }

@@ -200,10 +200,6 @@ public class EmployeeService {
         return response;
     }
 
-    public void listenToUpdates(Consumer<String> handleDataUpdate) {
-        employeeRepository.listenToUpdates(handleDataUpdate);
-    }
-
     private Response updateEmployeeByStatusDepartmentRole(String employeeId, StatusType.EmployeeStatus status, DepartmentType department, RoleType role) {
         Optional<Employee> response = findEmployeeById(employeeId);
 
@@ -238,6 +234,15 @@ public class EmployeeService {
     private int generate6DigitPin() {
         Random random = new Random();
         return 100000 + random.nextInt(900000);
+    }
+
+    //Update Listener
+    public void listenToUpdates(Consumer<String> handleDataUpdate) {
+        employeeRepository.startListeningToUpdates(handleDataUpdate);
+    }
+
+    public void stopListeningToUpdates() {
+        employeeRepository.stopListeningToUpdates();
     }
 
 }
