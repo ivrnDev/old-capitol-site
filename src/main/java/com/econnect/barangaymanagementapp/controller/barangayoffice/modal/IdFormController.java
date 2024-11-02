@@ -53,7 +53,6 @@ public class IdFormController {
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
-    private final FormValidator formValidator;
     private final BarangayidService barangayidService;
     private final ResidentService residentService;
     private final ImageService imageService;
@@ -69,7 +68,6 @@ public class IdFormController {
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
         this.validator = dependencyInjector.getValidator();
-        this.formValidator = dependencyInjector.getFormValidator();
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
@@ -273,7 +271,6 @@ public class IdFormController {
     }
 
     public void closeWindow() {
-        formValidator.removeListeners();
         modalUtils.closeCustomizeModal();
     }
 

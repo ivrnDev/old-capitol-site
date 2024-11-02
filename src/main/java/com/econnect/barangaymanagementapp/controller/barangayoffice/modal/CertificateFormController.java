@@ -64,7 +64,6 @@ public class CertificateFormController {
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
-    private final FormValidator formValidator;
     private final Validator validator;
     private final RequestService requestService;
     private final ResidentService residentService;
@@ -79,7 +78,6 @@ public class CertificateFormController {
         this.requestService = dependencyInjector.getRequestService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
-        this.formValidator = dependencyInjector.getFormValidator();
         this.validator = dependencyInjector.getValidator();
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
@@ -333,7 +331,6 @@ public class CertificateFormController {
     }
 
     public void closeWindow() {
-        formValidator.removeListeners();
         modalUtils.closeCustomizeModal();
     }
 
