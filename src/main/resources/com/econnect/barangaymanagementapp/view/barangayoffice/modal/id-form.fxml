@@ -283,9 +283,9 @@
                                                     <children>
                                                         <HBox styleClass="primary-background" VBox.vgrow="ALWAYS">
                                                             <children>
-                                                                <HBox fx:id="profileContainer" alignment="CENTER" prefHeight="300.0" HBox.hgrow="ALWAYS">
+                                                                <HBox fx:id="profileContainer" alignment="CENTER" maxWidth="-Infinity" HBox.hgrow="ALWAYS">
                                                                     <children>
-                                                                        <ImageView fx:id="profilePicture" fitHeight="254.0" fitWidth="258.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                                                        <ImageView fx:id="profilePicture" fitHeight="254.0" fitWidth="258.0" pickOnBounds="true" HBox.hgrow="ALWAYS">
                                                                             <image>
                                                                                 <Image url="@../../../images/default-profile.png" />
                                                                             </image>
