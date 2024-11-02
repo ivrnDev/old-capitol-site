@@ -1,10 +1,10 @@
 package com.econnect.barangaymanagementapp.controller.shared.table.application;
 
 import com.econnect.barangaymanagementapp.controller.shared.ApplicationController;
-import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupAccountController;
 import com.econnect.barangaymanagementapp.controller.shared.SetupRequirementsController;
 import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -17,6 +17,7 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
+import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -26,11 +27,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.Getter;
 import okhttp3.Response;
-
-import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
@@ -184,6 +184,14 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     private void updateEmployeeStatus(StatusType.EmployeeStatus status) {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
+        // Add loading indicator on the row
+        tableRow.getChildren().forEach(node -> {
+            node.setVisible(false);
+            node.setManaged(false);
+        });
+        tableRow.getChildren().add(loadingIndicator);
+
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -198,6 +206,11 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
             @Override
             protected void succeeded() {
+                tableRow.getChildren().remove(loadingIndicator);
+                tableRow.getChildren().forEach(node -> {
+                    node.setVisible(true);
+                    node.setManaged(true);
+                });
                 Response response = getValue();
                 if (response == null) {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while updating employee application.");
@@ -219,6 +232,11 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
             @Override
             protected void failed() {
+                tableRow.getChildren().remove(loadingIndicator);
+                tableRow.getChildren().forEach(node -> {
+                    node.setVisible(true);
+                    node.setManaged(true);
+                });
                 modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred while updating employee application.");
             }
         };
