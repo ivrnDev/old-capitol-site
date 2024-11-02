@@ -37,7 +37,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="466.0" prefWidth="362.0" spacing="50.0" styleClass="profile-container">
                      <children>
-                        <HBox fx:id="profileContainer" alignment="CENTER" maxWidth="-Infinity" styleClass="profile-container">
+                        <HBox fx:id="profileContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="profile-container">
                            <children>
                               <ImageView fx:id="profilePicture" fitHeight="190.0" fitWidth="190.0" pickOnBounds="true">
                                  <image>
