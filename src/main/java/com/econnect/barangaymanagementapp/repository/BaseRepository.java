@@ -7,6 +7,8 @@ import com.econnect.barangaymanagementapp.util.HTTPClient;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
 import java.io.BufferedReader;
@@ -162,19 +164,19 @@ public abstract class BaseRepository<T> {
                 .collect(Collectors.toList());
     }
 
-    public void listenToUpdates(String apiKey, Consumer<Boolean> handleDataUpdate) {
+    public void listenToUpdates(String apiKey, Consumer<String> handleDataUpdate) {
         Request request = new Request.Builder()
                 .url(apiKey + ".json")
                 .addHeader("Accept", "text/event-stream")
-                .get()
-                .build();
+                .get().build();
+
 
         Call sseCall;
         try {
             sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).pingInterval(15, TimeUnit.SECONDS).build().newCall(request);
         } catch (IllegalArgumentException e) {
             System.err.println("Failed to create call for SSE: " + e.getMessage());
-            return; // Exit if unable to create the call
+            return;
         }
 
 
@@ -197,16 +199,35 @@ public abstract class BaseRepository<T> {
                     return;
                 }
 
-                System.out.println("Successfully connected to SSE updates.");
-
-                System.out.println("Current response" + new BufferedReader(new InputStreamReader(response.body().byteStream())).readLine());
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
                     String line;
+                    ObjectMapper objectMapper = new ObjectMapper();
                     while ((line = reader.readLine()) != null) {
-                        if (line.startsWith("event: ")) {
-                            String eventType = line.substring(7).trim();
-                            handleDataUpdate.accept(true);
-                            System.out.println("Event received: " + eventType);
+                        if (line.startsWith("data: ")) {
+                            String jsonData = line.substring("data: ".length()).trim();
+
+                            try {
+                                JsonNode jsonNode = objectMapper.readTree(jsonData);
+
+                                JsonNode pathNode = jsonNode.get("path");
+                                if (pathNode != null) {
+                                    String path = pathNode.asText();
+
+                                    if (path.contains("/")) {
+                                        String id = path.split("/")[1];
+                                        System.out.println("Data update received: " + id);
+
+                                        handleDataUpdate.accept(id);
+                                    } else {
+                                        System.err.println("Path format unexpected: " + path);
+                                    }
+                                } else {
+                                    System.err.println("Missing 'path' field in JSON data: " + jsonData);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                System.err.println("Error parsing JSON data: " + jsonData);
+                            }
                         }
                     }
                 } catch (SocketTimeoutException e) {
@@ -222,7 +243,7 @@ public abstract class BaseRepository<T> {
         });
     }
 
-    private void retryConnection(String apiKey, Consumer<Boolean> handleDataUpdate) {
+    private void retryConnection(String apiKey, Consumer<String> handleDataUpdate) {
         System.out.println("Retrying connection in 5 seconds...");
         try {
             Thread.sleep(5000);

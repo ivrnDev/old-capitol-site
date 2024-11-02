@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.shared;
 
 import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.enumeration.type.SoundType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -19,6 +20,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
 
@@ -49,7 +51,8 @@ public class ApplicationController {
     public void initialize() {
         loadApplicationTable();
         populateApplicationRows();
-//        initializeListener();
+        initializeListener();
+
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
@@ -57,8 +60,7 @@ public class ApplicationController {
     }
 
     private void initializeListener() {
-        employeeService.listenToUpdates(result ->
-                Platform.runLater(() -> reloadTable()));
+        employeeService.listenToUpdates(result -> Platform.runLater(() -> updateEmployeeRow(result)));
     }
 
     private void loadApplicationTable() {
@@ -84,7 +86,7 @@ public class ApplicationController {
                     tableController.clearRow();
                     tableController.showNoData();
                 } else {
-                    updateEmployeeTable(allApplications);
+                    populateEmployeeApplicationTable(allApplications);
                 }
             });
         };
@@ -103,7 +105,7 @@ public class ApplicationController {
                 searchText,
                 allApplications,
                 searchService.createEmployeeApplicationFilter(searchText),
-                (filteredApplications) -> updateEmployeeTable(filteredApplications));
+                (filteredApplications) -> populateEmployeeApplicationTable(filteredApplications));
     }
 
     public void addLoadingIndicator() {
@@ -123,7 +125,7 @@ public class ApplicationController {
         tableController.clearRow();
     }
 
-    private void updateEmployeeTable(List<Employee> employees) {
+    private void populateEmployeeApplicationTable(List<Employee> employees) {
         tableController.clearRow();
 
         if (employees.isEmpty()) {
@@ -131,5 +133,16 @@ public class ApplicationController {
             return;
         }
         employees.forEach(employee -> tableController.addRow(employee));
+    }
+
+    public void updateEmployeeRow(String id) {
+        Optional<Employee> updatedEmployee = employeeService.findEmployeeById(id);
+        if (updatedEmployee.isPresent()) {
+            // Employee exists, update row
+            tableController.updateRow(updatedEmployee.get());
+        } else {
+            // Employee does not exist, delete row
+            tableController.deleteRow(id);
+        }
     }
 }

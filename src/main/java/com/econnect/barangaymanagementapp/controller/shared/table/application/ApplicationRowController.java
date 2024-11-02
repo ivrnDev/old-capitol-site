@@ -27,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import lombok.Getter;
 import okhttp3.Response;
 
 import java.util.Optional;
@@ -34,22 +35,21 @@ import java.util.Optional;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
 public class ApplicationRowController extends BaseRowController<Employee> {
+    @FXML
+    private HBox tableRow, buttonContainer;
+    @FXML
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
+    @FXML
+    private ImageView profilePicture;
+
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
     private final ApplicationController applicationController;
     private final DependencyInjector dependencyInjector;
     private final UserSession userSession;
+    @Getter
     private String residentId;
-
-    @FXML
-    private HBox tableRow, buttonContainer;
-
-    @FXML
-    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, typeLabel, dateLabel, timeLabel;
-
-    @FXML
-    private ImageView profilePicture;
 
     public ApplicationRowController(DependencyInjector dependencyInjector, ApplicationController applicationController) {
         super(dependencyInjector);
@@ -234,4 +234,5 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     protected void reloadTable() {
         applicationController.reloadTable();
     }
+
 }

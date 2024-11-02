@@ -54,7 +54,7 @@ public class EmployeeRepository extends BaseRepository<Employee> {
         }, employee -> employee.setStatus(status));
     }
 
-    public void listenToUpdates(Consumer<Boolean> handleDataUpdates) {
+    public void listenToUpdates(Consumer<String> handleDataUpdates) {
         listenToUpdates(apiKey, handleDataUpdates);
     }
 

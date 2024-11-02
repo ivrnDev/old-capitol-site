@@ -59,6 +59,4 @@ public abstract class BaseRowController<T> {
     }
 
     protected abstract void setupButtonContainer();
-
-    protected abstract void reloadTable();
 }

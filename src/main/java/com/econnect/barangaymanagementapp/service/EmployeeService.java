@@ -200,7 +200,7 @@ public class EmployeeService {
         return response;
     }
 
-    public void listenToUpdates(Consumer<Boolean> handleDataUpdate) {
+    public void listenToUpdates(Consumer<String> handleDataUpdate) {
         employeeRepository.listenToUpdates(handleDataUpdate);
     }
 

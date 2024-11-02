@@ -11,7 +11,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -31,10 +30,11 @@ public class MainApplication extends Application {
 //        checkResourcesInBackground(stage);
     }
 
-    //    private void test(DependencyInjector dependencyInjector) {
-//        var repo = dependencyInjector.getResidentService();
-//        var emp = repo.findAllPendingResidents();
-//        System.out.println(emp);
+//    private void test(DependencyInjector dependencyInjector) {
+//        var employeeService = dependencyInjector.getEmployeeService();
+//        employeeService.listenToUpdates(result -> {
+//        });
+////                Platform.runLater(() -> System.out.println("Employee data updated: " + result)));
 //    }
 
 //    private void checkResourcesInBackground(Stage stage) {

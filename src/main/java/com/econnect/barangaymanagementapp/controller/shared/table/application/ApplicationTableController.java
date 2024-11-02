@@ -7,6 +7,7 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,6 +37,7 @@ public class ApplicationTableController extends BaseTableController<Employee> {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(EMPLOYEE_APPLICATION_ROW.getFxmlPath(), dependencyInjector, applicationController);
             HBox applicationRow = loader.load();
             ApplicationRowController applicationRowController = loader.getController();
+            applicationRow.setUserData(applicationRowController);
             Image defaultImage = super.getImageOrDefault(employeeData.getId());
             applicationRowController.setImage(defaultImage);
             applicationRowController.setData(employeeData);
@@ -44,6 +46,36 @@ public class ApplicationTableController extends BaseTableController<Employee> {
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Error adding employee row: " + e.getMessage(), e);
+        }
+    }
+
+    public void updateRow(Employee updatedEmployee) {
+        boolean rowExists = false;
+        for (Node node : tableContent.getChildren()) {
+            if (node instanceof HBox applicationRow) {
+                ApplicationRowController rowController = (ApplicationRowController) applicationRow.getUserData();
+                if (rowController.getResidentId().equals(updatedEmployee.getId())) {
+                    rowController.setData(updatedEmployee);
+                    rowExists = true;
+                    break;
+                }
+            }
+        }
+
+        if (!rowExists) {
+            addRow(updatedEmployee);
+        }
+    }
+
+    public void deleteRow(String employeeId) {
+        for (Node node : tableContent.getChildren()) {
+            if (node instanceof HBox applicationRow) {
+                ApplicationRowController rowController = (ApplicationRowController) applicationRow.getUserData();
+                if (rowController.getResidentId().equals(employeeId)) {
+                    tableContent.getChildren().remove(applicationRow);
+                    break;
+                }
+            }
         }
     }
 }
