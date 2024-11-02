@@ -27,11 +27,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class SetupRequirementsController<T extends ApplicationController> implements BaseViewController {
+public class SetupRequirementsController implements BaseViewController {
     private final ModalUtils modalUtils;
     private final ImageService imageService;
     private final EmployeeService employeeService;
-    private final T applicationsController;
     private final FileChooserUtils fileChooserUtils;
     private Stage currentStage;
     private String employeeId;
@@ -52,12 +51,11 @@ public class SetupRequirementsController<T extends ApplicationController> implem
     @FXML
     private Button confirmBtn, cancelBtn;
 
-    public SetupRequirementsController(DependencyInjector dependencyInjector, T applicationsController) {
+    public SetupRequirementsController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
         this.imageService = dependencyInjector.getImageService();
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
-        this.applicationsController = applicationsController;
         Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
     }
 
@@ -77,7 +75,6 @@ public class SetupRequirementsController<T extends ApplicationController> implem
                 Platform.runLater(() -> {
                     rootContainer.getChildren().remove(loadingIndicator);
                     if (response.isSuccessful()) {
-                        reloadTable();
                         closeWindow();
                         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee " + employeeId + " has been successfully evaluated.");
                     } else {
@@ -179,10 +176,6 @@ public class SetupRequirementsController<T extends ApplicationController> implem
 
     public void closeWindow() {
         modalUtils.closeCustomizeModal();
-    }
-
-    private void reloadTable() {
-        applicationsController.reloadTable();
     }
 
     @FXML

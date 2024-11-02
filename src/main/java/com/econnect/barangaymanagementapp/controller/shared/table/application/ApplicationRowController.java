@@ -45,7 +45,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
-    private final ApplicationController applicationController;
+    //    private final ApplicationController applicationController;
     private final DependencyInjector dependencyInjector;
     private final UserSession userSession;
     @Getter
@@ -57,18 +57,17 @@ public class ApplicationRowController extends BaseRowController<Employee> {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
-        this.applicationController = applicationController;
         this.userSession = UserSession.getInstance();
     }
 
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
-        Platform.runLater(() -> setupButtonContainer());
     }
 
     @Override
     protected void setData(Employee employeeData) {
+        Platform.runLater(() -> setupButtonContainer());
         residentId = employeeData.getId();
         residentIdLabel.setText(employeeData.getId());
         lastNameLabel.setText(employeeData.getLastName());
@@ -107,6 +106,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     protected void setupButtonContainer() {
+        buttonContainer.getChildren().clear();
         String currentStatus = statusLabel.getText();
         setupViewButton();
         switch (fromName(currentStatus)) {
@@ -121,6 +121,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                 break;
         }
         setupRejectButton();
+
     }
 
     private void setupPendingButtons() {
@@ -139,8 +140,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                         FXMLPath.SETUP_REQUIREMENTS,
                         SetupRequirementsController.class,
                         controller -> controller.setId(residentIdLabel.getText()),
-                        dependencyInjector,
-                        applicationController
+                        dependencyInjector
                 );
             } else {
                 modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
@@ -166,8 +166,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                     FXMLPath.SETUP_ACCOUNT,
                     SetupAccountController.class,
                     controller -> controller.setId(residentIdLabel.getText()),
-                    dependencyInjector,
-                    applicationController
+                    dependencyInjector
             );
         });
         buttonContainer.getChildren().addAll(acceptBtn);
@@ -185,7 +184,6 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     private void updateEmployeeStatus(StatusType.EmployeeStatus status) {
-        applicationController.addLoadingIndicator();
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -206,8 +204,6 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                     return;
                 }
                 if (response.isSuccessful()) {
-                    applicationController.removeLoadingIndicator();
-                    reloadTable();
                     switch (status) {
                         case UNDER_REVIEW ->
                                 modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentId + " has been notified successfully.");
@@ -217,22 +213,15 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                                 modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee + " + residentId + " has been rejected successfully.");
                     }
                 } else {
-                    applicationController.removeLoadingIndicator();
                     modalUtils.showModal(Modal.ERROR, "Failed", "An error occurred while updating employee application.");
                 }
             }
 
             @Override
             protected void failed() {
-                applicationController.removeLoadingIndicator();
                 modalUtils.showModal(Modal.ERROR, "Error", "An exception occurred while updating employee application.");
             }
         };
         new Thread(task).start();
     }
-
-    protected void reloadTable() {
-        applicationController.reloadTable();
-    }
-
 }

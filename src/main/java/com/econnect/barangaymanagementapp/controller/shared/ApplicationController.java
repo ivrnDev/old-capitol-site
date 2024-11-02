@@ -3,6 +3,7 @@ package com.econnect.barangaymanagementapp.controller.shared;
 import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.type.SoundType;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -21,8 +22,10 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
 public class ApplicationController {
     @FXML
@@ -117,14 +120,6 @@ public class ApplicationController {
         contentPane.getChildren().remove(loadingIndicator);
     }
 
-    public void reloadTable() {
-        populateApplicationRows();
-    }
-
-    public void clearRow() {
-        tableController.clearRow();
-    }
-
     private void populateEmployeeApplicationTable(List<Employee> employees) {
         tableController.clearRow();
 
@@ -136,13 +131,14 @@ public class ApplicationController {
     }
 
     public void updateEmployeeRow(String id) {
+        Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
         Optional<Employee> updatedEmployee = employeeService.findEmployeeById(id);
-        if (updatedEmployee.isPresent()) {
-            // Employee exists, update row
-            tableController.updateRow(updatedEmployee.get());
-        } else {
-            // Employee does not exist, delete row
-            tableController.deleteRow(id);
-        }
+        updatedEmployee.ifPresentOrElse(employee -> {
+            if (!APPLICANTS_STATUSES.contains(employee.getStatus())) {
+                tableController.deleteRow(employee.getId());
+            } else {
+                tableController.updateRow(employee);
+            }
+        }, () -> tableController.deleteRow(id));
     }
 }

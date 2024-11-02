@@ -20,10 +20,9 @@ import okhttp3.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SetupAccountController<T extends ApplicationController> implements BaseViewController {
+public class SetupAccountController implements BaseViewController {
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
-    private T applicationsController;
     private DepartmentType selectedDepartment;
     private String employeeId;
 
@@ -36,10 +35,9 @@ public class SetupAccountController<T extends ApplicationController> implements 
     @FXML
     private ComboBox<String> departmentComboBox, roleComboBox;
 
-    public SetupAccountController(DependencyInjector dependencyInjector, T applicationsController) {
+    public SetupAccountController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.employeeService = dependencyInjector.getEmployeeService();
-        this.applicationsController = applicationsController;
     }
 
     public void initialize() {
@@ -76,7 +74,6 @@ public class SetupAccountController<T extends ApplicationController> implements 
                 Platform.runLater(() -> {
                     rootContainer.getChildren().remove(loadingIndicator);
                     if (response.isSuccessful()) {
-                        reloadTable();
                         closeWindow();
                         modalUtils.showModal(Modal.SUCCESS, "Success", "Employee + " + employeeId + " has been successfully evaluated.");
                     } else {
@@ -140,10 +137,6 @@ public class SetupAccountController<T extends ApplicationController> implements 
 
     public void closeWindow() {
         modalUtils.closeCustomizeModal();
-    }
-
-    private void reloadTable() {
-        applicationsController.reloadTable();
     }
 
     @FXML

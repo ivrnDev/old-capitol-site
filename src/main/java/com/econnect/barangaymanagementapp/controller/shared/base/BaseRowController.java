@@ -14,7 +14,6 @@ public abstract class BaseRowController<T> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
 
-
     @FXML
     private HBox tableRow, buttonContainer;
 
