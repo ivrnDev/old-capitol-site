@@ -133,6 +133,28 @@ public class Validator {
         return false;
     }
 
+    public boolean hasEmptyComboBox(ComboBox<String>[] comboBoxes) {
+        boolean hasError = false;
+        for (ComboBox<String> comboBox : comboBoxes) {
+            if (comboBox.getValue() == null) {
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please select on all required fields";
+                }
+                comboBox.setStyle("-fx-border-color: red");
+            } else {
+                comboBox.setStyle("");
+            }
+        }
+
+        if (hasError) {
+            triggerError();
+            return true;
+        }
+        return false;
+    }
+
     public void setupDatePicker(LocalDate minDate, LocalDate maxDate, DatePicker... datePickers) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
