@@ -125,8 +125,8 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     private void setupPendingButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Notify", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
+        Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Accept", "The resident with ID" + residentId + " will be emailed for an interview.", isConfirmed -> {
                 if (isConfirmed) updateEmployeeStatus(UNDER_REVIEW);
             });
         });
@@ -135,18 +135,9 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
     private void setupUnderReviewButtons() {
         Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
-            if (typeLabel.getText().equalsIgnoreCase(ApplicationType.ONLINE.getName())) {
-                modalUtils.customizeModalWithCallback(
-                        FXMLPath.SETUP_REQUIREMENTS,
-                        SetupRequirementsController.class,
-                        controller -> controller.setId(residentIdLabel.getText()),
-                        dependencyInjector
-                );
-            } else {
-                modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-                    if (isConfirmed) updateEmployeeStatus(EVALUATION);
-                });
-            }
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "The applicant will be evaluated and now waiting for appointment", isConfirmed -> {
+                if (isConfirmed) updateEmployeeStatus(EVALUATION);
+            });
         });
         buttonContainer.getChildren().add(acceptBtn);
     }
@@ -161,7 +152,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     private void setupEvaluationButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Hire", ButtonStyle.ACCEPT, () -> {
+        Button acceptBtn = ButtonUtils.createButton("Appoint", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.SETUP_ACCOUNT,
                     SetupAccountController.class,
