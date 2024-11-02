@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.shared.modal;
 
+import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
@@ -14,7 +15,6 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
@@ -24,6 +24,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,8 +41,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_DOCUMENT;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
 import static com.econnect.barangaymanagementapp.enumeration.type.FileType.NBI_CLEARANCE;
@@ -51,19 +55,17 @@ public class AddEmployeeController {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private ImageView closeBtn, profilePreview, resumePreview, clearancePreview;
+    private ImageView closeBtn, profilePicture, governmentIdPreview, clearancePreview, resumePreview;
     @FXML
-    private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, addressInput, birthdateInput, emailInput, phoneInput;
+    private TextField residentIdInput, firstNameInput, lastNameInput, middleNameInput, addressInput, birthdateInput, emailInput, contactNumberInput;
     @FXML
-    private ComboBox<String> employmentComboBox;
+    private ComboBox<String> employmentTypeComboBox;
     @FXML
-    private HBox uploadResume, viewResumeBtn, uploadClearance, viewClearanceBtn;
+    private HBox uploadResume, uploadClearance, profileContainer, viewGovernmentID, viewClearance, viewResume, governmentIdPreviewContainer;
     @FXML
     private Label resumeLabel, clearanceLabel;
     @FXML
-    private DatePicker nbiExpirationInput;
-    @FXML
-    private StackPane profileContainer;
+    private DatePicker nbiExpirationPicker;
     @FXML
     private Button cancelBtn, confirmBtn;
 
@@ -76,6 +78,8 @@ public class AddEmployeeController {
     private Stage currentStage;
     private File resumeFile;
     private File clearanceFile;
+    private Image profilePictureImage;
+    private Image governmentIdImage;
     private String profileLink;
     private Boolean residentExists = false;
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -129,8 +133,9 @@ public class AddEmployeeController {
                     addressInput.setText(residentInfo.getAddress());
                     birthdateInput.setText(residentInfo.getBirthdate().toString());
                     emailInput.setText(residentInfo.getEmail());
-                    phoneInput.setText(residentInfo.getMobileNumber());
+                    contactNumberInput.setText(residentInfo.getMobileNumber());
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
+                    loadGovernmentIdImage(Firestore.VALID_ID.getPath(), residentInfo.getValidIdUrl());
                 } else {
                     clearInputFields();
                 }
@@ -145,15 +150,24 @@ public class AddEmployeeController {
     }
 
     private void clearInputFields() {
-        profilePreview.setVisible(false);
-        profilePreview.setImage(null);
+        profilePicture.setOnMouseClicked(null);
+        profilePicture.setCursor(Cursor.DEFAULT);
+        profilePicture.setImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
+        profilePictureImage = null;
+
+        viewGovernmentID.setOnMouseClicked(null);
+        viewGovernmentID.setCursor(Cursor.DEFAULT);
+        governmentIdPreview.setImage(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_DOCUMENT.getFxmlPath()))));
+        governmentIdImage = null;
+
+        residentExists = false;
         firstNameInput.clear();
         lastNameInput.clear();
         middleNameInput.clear();
         addressInput.clear();
         birthdateInput.clear();
         emailInput.clear();
-        phoneInput.clear();
+        contactNumberInput.clear();
     }
 
     private void addEmployee() {
@@ -194,15 +208,15 @@ public class AddEmployeeController {
                 .middleName(middleNameInput.getText())
                 .address(addressInput.getText())
                 .email(emailInput.getText())
-                .contactNumber(phoneInput.getText())
+                .contactNumber(contactNumberInput.getText())
                 .createdAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
                 .updatedAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
                 .status(EmployeeStatus.UNDER_REVIEW)
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)
-                .employment(employmentComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
-                .nbiClearanceExpiration(String.valueOf(nbiExpirationInput.getValue()))
+                .employment(employmentTypeComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
+                .nbiClearanceExpiration(String.valueOf(nbiExpirationPicker.getValue()))
                 .build();
     }
 
@@ -228,8 +242,8 @@ public class AddEmployeeController {
     private void validateFields() {
         File[] files = {resumeFile, clearanceFile};
         HBox[] uploadBtns = {uploadResume, uploadClearance};
-        DatePicker[] datePickers = {nbiExpirationInput};
-        ComboBox[] comboBoxes = {employmentComboBox};
+        DatePicker[] datePickers = {nbiExpirationPicker};
+        ComboBox[] comboBoxes = {employmentTypeComboBox};
 
         if (validator.validate(residentIdInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             residentIdInput.requestFocus();
@@ -260,9 +274,11 @@ public class AddEmployeeController {
             try {
                 if (fileType.equals(RESUME)) {
                     resumeFile = file;
+                    viewResume.setCursor(Cursor.HAND);
                     validator.hasEmptyFile(resumeFile, uploadResume);
                 } else if (fileType.equals(NBI_CLEARANCE)) {
                     clearanceFile = file;
+                    viewClearance.setCursor(Cursor.HAND);
                     validator.hasEmptyFile(clearanceFile, uploadClearance);
                 }
 
@@ -275,38 +291,73 @@ public class AddEmployeeController {
                 e.printStackTrace();
             }
         } else {
+            viewClearance.setCursor(Cursor.HAND);
+            viewResume.setCursor(Cursor.HAND);
             Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "No File Selected", "Please select a valid file."));
         }
     }
 
     private void loadProfileImage(String directory, String link) {
-        ProgressIndicator loadingIndicator = new ProgressIndicator();
-        loadingIndicator.setVisible(true);
-        profileContainer.getChildren().add(loadingIndicator);
+        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), currentStage));
+        profilePicture.setCursor(Cursor.HAND);
+        profilePicture.setVisible(false);
+        profilePicture.setManaged(false);
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(profileContainer.getWidth(), profileContainer.getHeight());
+        Platform.runLater(() -> profileContainer.getChildren().add(loadingIndicator));
 
-        Task<Image> imageTask = new Task<>() {
-            @Override
-            protected Image call() {
-                return imageService.getImage(directory, link);
-            }
-
-            @Override
-            protected void succeeded() {
-                Image image = getValue();
-                loadingIndicator.setVisible(false);
-                profilePreview.setVisible(true);
-                profilePreview.setImage(image);
-            }
-
-            @Override
-            protected void failed() {
-                loadingIndicator.setVisible(false);
-                profilePreview.setVisible(false);
-                System.out.println("Image loading failed: " + getException().getMessage());
-            }
+        Runnable call = () -> {
+            profilePictureImage = imageService.getImage(directory, link);
+            Platform.runLater(() -> {
+                profileContainer.getChildren().remove(loadingIndicator);
+                profilePicture.setImage(profilePictureImage);
+                profilePicture.setVisible(true);
+                profilePicture.setManaged(true);
+            });
         };
 
-        new Thread(imageTask).start();
+        Runnable onFailed = () -> {
+            Platform.runLater(() -> {
+                profileContainer.getChildren().remove(loadingIndicator);
+                profilePicture.setVisible(true);
+                profilePicture.setManaged(true);
+            });
+            System.err.println("Error loading profile image");
+        };
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+    }
+
+    private void loadGovernmentIdImage(String directory, String link) {
+        viewGovernmentID.setOnMouseClicked(_ -> {
+            if (governmentIdImage != null) {
+                modalUtils.showImageView(governmentIdImage, currentStage);
+            }
+        });
+        governmentIdPreview.setVisible(false);
+        governmentIdPreview.setManaged(false);
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(governmentIdPreviewContainer.getWidth(), governmentIdPreviewContainer.getHeight());
+        Platform.runLater(() -> governmentIdPreviewContainer.getChildren().add(loadingIndicator));
+        Runnable call = () -> {
+            governmentIdImage = imageService.getImage(directory, link);
+            Platform.runLater(() -> {
+                governmentIdPreviewContainer.getChildren().remove(loadingIndicator);
+                governmentIdPreview.setImage(governmentIdImage);
+                viewGovernmentID.setCursor(Cursor.HAND);
+                governmentIdPreview.setVisible(true);
+                governmentIdPreview.setManaged(true);
+            });
+        };
+
+        Runnable onFailed = () -> {
+            Platform.runLater(() -> {
+                governmentIdPreviewContainer.getChildren().remove(loadingIndicator);
+
+            });
+            governmentIdPreview.setVisible(true);
+            governmentIdPreview.setManaged(true);
+
+            System.err.println("Error loading image");
+        };
+        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
     private void showImageView(Image image) {
@@ -320,23 +371,29 @@ public class AddEmployeeController {
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> validateFields());
-        employmentComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
+        employmentTypeComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
 
-        profilePreview.setOnMouseClicked(_ -> showImageView(profilePreview.getImage()));
-        viewResumeBtn.setOnMouseClicked(_ -> showImageView(resumePreview.getImage()));
-        viewClearanceBtn.setOnMouseClicked(_ -> showImageView(clearancePreview.getImage()));
+        viewResume.setOnMouseClicked(_ -> {
+            if (resumeFile != null) showImageView(resumePreview.getImage());
+        });
 
-        uploadResume.setOnMouseClicked(_ -> uploadImage(viewResumeBtn, resumePreview, resumeLabel, RESUME));
-        uploadClearance.setOnMouseClicked(_ -> uploadImage(viewClearanceBtn, clearancePreview, clearanceLabel, NBI_CLEARANCE));
+        viewClearance.setOnMouseClicked(_ -> {
+            if (clearanceFile != null) showImageView(clearancePreview.getImage());
+        });
 
-        validator.setupDatePicker(minDate, maxDate, nbiExpirationInput);
+        uploadResume.setOnMouseClicked(_ -> uploadImage(viewResume, resumePreview, resumeLabel, RESUME));
+        uploadClearance.setOnMouseClicked(_ -> uploadImage(viewClearance, clearancePreview, clearanceLabel, NBI_CLEARANCE));
+
+        validator.setupDatePicker(minDate, maxDate, nbiExpirationPicker);
         validator.setupResidentIdInput(residentIdInput);
-        validator.setupComboBox(employmentComboBox);
+        validator.setupComboBox(employmentTypeComboBox);
     }
 
     private void setupPreviewRounded() {
-        ImageUtils.setRoundedClip(profilePreview, 20, 20);
+        ImageUtils.setRoundedClip(profilePicture, 25, 25);
         ImageUtils.setRoundedClip(resumePreview, 10, 10);
+        ImageUtils.setRoundedClip(clearancePreview, 10, 10);
+        ImageUtils.setRoundedClip(governmentIdPreview, 10, 10);
     }
 
     public void closeWindow() {
