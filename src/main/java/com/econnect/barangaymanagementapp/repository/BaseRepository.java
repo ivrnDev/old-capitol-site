@@ -164,46 +164,48 @@ public abstract class BaseRepository<T> {
                 .collect(Collectors.toList());
     }
 
-    public void startListeningToUpdates(String apiKey, Consumer<String> handleDataUpdate) {
+    public void startListeningToUpdates(String apiKey, Consumer<String> handleDataUpdate, String context) {
         Request request = new Request.Builder()
                 .url(apiKey + ".json")
                 .addHeader("Accept", "text/event-stream")
                 .get().build();
 
 
-        Call sseCall;
         try {
-            sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).pingInterval(15, TimeUnit.SECONDS).build().newCall(request);
+            sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build().newCall(request);
         } catch (IllegalArgumentException e) {
-            System.err.println("Failed to create call for SSE: " + e.getMessage());
+            System.err.println(context + " Failed to create call for SSE: " + e.getMessage());
             return;
         }
 
+        System.out.println(context + " Initializing SSE connection...");
 
         sseCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (!call.isCanceled()) {
-                    System.err.println("Connection failed for SSE: " + e.getMessage());
-                    retryConnection(apiKey, handleDataUpdate);
+                    System.err.println(context + " SSE Connection failed" + e.getMessage());
+                    retryConnection(apiKey, handleDataUpdate, context);
                 } else {
-                    System.out.println("SSE connection closed by user.");
+                    System.out.println(context + " SSE connection has been closed");
                 }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    System.err.println("Failed to receive SSE updates: " + response.message());
-                    retryConnection(apiKey, handleDataUpdate);
+                    System.err.println(context + " Failed to receive SSE updates" + response.message());
+                    retryConnection(apiKey, handleDataUpdate, context);
                     return;
                 }
+
+                System.out.println(context + " Live connection has established successfully!");
 
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
                     String line;
                     ObjectMapper objectMapper = new ObjectMapper();
-
                     while ((line = reader.readLine()) != null) {
+                        if (line.equals("event: keep-alive")) printSSEStatus(context);
                         if (!line.startsWith("data: ")) continue;
                         String jsonData = line.substring("data: ".length()).trim();
                         if (jsonData.equals("null")) continue;
@@ -217,38 +219,51 @@ public abstract class BaseRepository<T> {
                             String path = pathNode.asText();
                             if (!path.contains("/")) return;
                             String id = path.split("/")[1];
-                            System.out.println("Syncing Data for ID: " + id);
+                            System.out.println(context + " Syncing Data for ID: " + id + " in ");
                             handleDataUpdate.accept(id);
                         } catch (Exception e) {
-                            System.err.println("Error parsing JSON data:");
+                            System.err.println(context + " Error parsing JSON data:");
                         }
                     }
                 } catch (SocketTimeoutException e) {
-                    retryConnection(apiKey, handleDataUpdate);
-                    System.err.println("SocketTimeoutException: " + e.getMessage());
+                    retryConnection(apiKey, handleDataUpdate, context);
+                    System.err.println(context + " SocketTimeoutException: " + e.getMessage());
                 } catch (IOException e) {
-                    retryConnection(apiKey, handleDataUpdate);
-                    System.err.println("Error reading SSE updates: " + e.getMessage());
+                    retryConnection(apiKey, handleDataUpdate, context);
+                    System.err.println(context + " Error reading SSE updates: " + e.getMessage());
                 }
             }
         });
     }
 
-    private void retryConnection(String apiKey, Consumer<String> handleDataUpdate) {
-        System.out.println("Retrying connection in 5 seconds...");
+    private void retryConnection(String apiKey, Consumer<String> handleDataUpdate, String context) {
+        System.out.println(context + " Retrying connection in 5 seconds...");
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.err.println("Retry interrupted: " + e.getMessage());
+            System.err.println(context + " Retry interrupted" + e.getMessage());
         }
-        startListeningToUpdates(apiKey, handleDataUpdate);
+        startListeningToUpdates(apiKey, handleDataUpdate, context);
     }
 
-    public void stopListeningToUpdates() {
+    public void stopListeningToUpdates(String context) {
         if (sseCall != null) {
             sseCall.cancel();
-            System.out.println("SSE connection closed.");
+            System.out.println(context + "SSE connection closed");
         }
     }
+
+    public void printSSEStatus(String context) {
+        if (sseCall == null) {
+            System.out.println(context + " connection has not been initialized");
+        } else if (sseCall.isExecuted() && !sseCall.isCanceled()) {
+            System.out.println(context + " connection is running");
+        } else if (sseCall.isCanceled()) {
+            System.out.println(context + " connection is canceled.");
+        } else {
+            System.out.println(context + " connection is not running.");
+        }
+    }
+
 }

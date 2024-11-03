@@ -55,11 +55,11 @@ public class EmployeeRepository extends BaseRepository<Employee> {
     }
 
     public void startListeningToUpdates(Consumer<String> handleDataUpdates) {
-        startListeningToUpdates(apiKey, handleDataUpdates);
+        startListeningToUpdates(apiKey, handleDataUpdates, "EMPLOYEE:");
     }
 
     public void stopListeningToUpdates() {
-        stopListeningToUpdates();
+        stopListeningToUpdates("EMPLOYEE:");
     }
 
 }

@@ -54,11 +54,11 @@ public class ResidentRepository extends BaseRepository<Resident> {
     }
 
     public void startListeningToUpdates(Consumer<String> handleDataUpdates) {
-        startListeningToUpdates(apiKey, handleDataUpdates);
+        startListeningToUpdates(apiKey, handleDataUpdates, "RESIDENT:");
     }
 
     public void stopListeningToUpdates() {
-        stopListeningToUpdates();
+        stopListeningToUpdates("RESIDENT:");
     }
 
 }
