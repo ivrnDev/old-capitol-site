@@ -10,7 +10,6 @@
     -fx-alignment: center-left;
     -fx-spacing: 10.0;
     -fx-padding: 5 10 5 10;
-    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 3, 0);*/
 }
 
 .nav-bar:hover {
