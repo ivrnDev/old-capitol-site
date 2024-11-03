@@ -4,19 +4,17 @@ import com.econnect.barangaymanagementapp.domain.BaseEntity;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.HTTPClient;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.SocketTimeoutException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,12 +23,13 @@ public abstract class BaseRepository<T> {
     protected final HTTPClient client;
     protected final JsonConverter jsonConverter;
     private final ModalUtils modalUtils;
-    private Call sseCall;
+    private final LiveReloadUtils liveReloadUtils;
 
     public BaseRepository(DependencyInjector dependencyInjector) {
         this.client = dependencyInjector.getHttpClient();
         this.jsonConverter = dependencyInjector.getJsonConverter();
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     protected <T extends BaseEntity> Response create(String apiUrl, T object) {
@@ -164,106 +163,138 @@ public abstract class BaseRepository<T> {
                 .collect(Collectors.toList());
     }
 
-    public void startListeningToUpdates(String apiKey, Consumer<String> handleDataUpdate, String context) {
-        Request request = new Request.Builder()
-                .url(apiKey + ".json")
-                .addHeader("Accept", "text/event-stream")
-                .get().build();
-
-
-        try {
-            sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build().newCall(request);
-        } catch (IllegalArgumentException e) {
-            System.err.println(context + " Failed to create call for SSE: " + e.getMessage());
-            return;
-        }
-
-        System.out.println(context + " Initializing SSE connection...");
-
-        sseCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (!call.isCanceled()) {
-                    System.err.println(context + " SSE Connection failed" + e.getMessage());
-                    retryConnection(apiKey, handleDataUpdate, context);
-                } else {
-                    System.out.println(context + " SSE connection has been closed");
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    System.err.println(context + " Failed to receive SSE updates" + response.message());
-                    retryConnection(apiKey, handleDataUpdate, context);
-                    return;
-                }
-
-                System.out.println(context + " Live connection has established successfully!");
-
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
-                    String line;
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    while ((line = reader.readLine()) != null) {
-                        if (line.equals("event: keep-alive")) printSSEStatus(context);
-                        if (!line.startsWith("data: ")) continue;
-                        String jsonData = line.substring("data: ".length()).trim();
-                        if (jsonData.equals("null")) continue;
-                        if (jsonData.contains("\"path\":\"/\"")) {
-                            continue;
-                        }
-                        try {
-                            JsonNode jsonNode = objectMapper.readTree(jsonData);
-                            JsonNode pathNode = jsonNode.get("path");
-                            if (pathNode == null) return;
-                            String path = pathNode.asText();
-                            if (!path.contains("/")) return;
-                            String id = path.split("/")[1];
-                            System.out.println(context + " Syncing Data for ID: " + id + " in ");
-                            handleDataUpdate.accept(id);
-                        } catch (Exception e) {
-                            System.err.println(context + " Error parsing JSON data:");
-                        }
-                    }
-                } catch (SocketTimeoutException e) {
-                    retryConnection(apiKey, handleDataUpdate, context);
-                    System.err.println(context + " SocketTimeoutException: " + e.getMessage());
-                } catch (IOException e) {
-                    retryConnection(apiKey, handleDataUpdate, context);
-                    System.err.println(context + " Error reading SSE updates: " + e.getMessage());
-                }
-            }
-        });
+    // You can also provide a method to start listening for updates
+    public void enableLiveReload(String apiKey, Consumer<String> handleDataUpdate, String context) {
+        liveReloadUtils.startListeningToUpdates(apiKey, handleDataUpdate, context);
     }
 
-    private void retryConnection(String apiKey, Consumer<String> handleDataUpdate, String context) {
-        System.out.println(context + " Retrying connection in 5 seconds...");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println(context + " Retry interrupted" + e.getMessage());
-        }
-        startListeningToUpdates(apiKey, handleDataUpdate, context);
-    }
-
-    public void stopListeningToUpdates(String context) {
-        if (sseCall != null) {
-            sseCall.cancel();
-            System.out.println(context + "SSE connection closed");
-        }
-    }
-
-    public void printSSEStatus(String context) {
-        if (sseCall == null) {
-            System.out.println(context + " connection has not been initialized");
-        } else if (sseCall.isExecuted() && !sseCall.isCanceled()) {
-            System.out.println(context + " connection is running");
-        } else if (sseCall.isCanceled()) {
-            System.out.println(context + " connection is canceled.");
-        } else {
-            System.out.println(context + " connection is not running.");
-        }
-    }
+//    public void startListeningToUpdates(String apiKey, Consumer<String> handleDataUpdate, String context) {
+//        Request request = new Request.Builder()
+//                .url(apiKey + ".json")
+//                .addHeader("Accept", "text/event-stream")
+//                .get().build();
+//
+//
+//        try {
+//            Call sseCall = new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build().newCall(request);
+//            sseCalls.put(context, sseCall);
+//        } catch (IllegalArgumentException e) {
+//            System.err.println(context + " Failed to create call for SSE: " + e.getMessage());
+//            return;
+//        }
+//
+//        System.out.println(context + " Initializing SSE connection...");
+//
+//        sseCalls.get(context).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                if (!call.isCanceled()) {
+//                    System.err.println(context + " SSE Connection failed" + e.getMessage());
+//                    retryConnection(apiKey, handleDataUpdate, context);
+//                } else {
+//                    System.out.println(context + " SSE connection has been closed");
+//                }
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (!response.isSuccessful()) {
+//                    if (!call.isCanceled()) {
+//                        System.err.println(context + " Failed to receive SSE updates" + response.message());
+//                        retryConnection(apiKey, handleDataUpdate, context);
+//                    } else {
+//                        System.out.println(context + " SSE connection has been closed");
+//                    }
+//                    return;
+//                }
+//
+//                System.out.println(context + " Live connection has established successfully!");
+//
+//                try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
+//                    String line;
+//                    ObjectMapper objectMapper = new ObjectMapper();
+//                    while ((line = reader.readLine()) != null) {
+//                        if (line.equals("event: keep-alive")) printSSEStatus(context);
+//                        if (!line.startsWith("data: ")) continue;
+//                        String jsonData = line.substring("data: ".length()).trim();
+//                        if (jsonData.equals("null")) continue;
+//                        if (jsonData.contains("\"path\":\"/\"")) {
+//                            continue;
+//                        }
+//                        try {
+//                            JsonNode jsonNode = objectMapper.readTree(jsonData);
+//                            JsonNode pathNode = jsonNode.get("path");
+//                            if (pathNode == null) return;
+//                            String path = pathNode.asText();
+//                            if (!path.contains("/")) return;
+//                            String id = path.split("/")[1];
+//                            System.out.println(context + " Syncing Data for ID: " + id);
+//                            handleDataUpdate.accept(id);
+//                        } catch (Exception e) {
+//                            System.err.println(context + " Error parsing JSON data:");
+//                        }
+//                    }
+//                } catch (SocketTimeoutException e) {
+//                    if (!call.isCanceled()) {
+//                        retryConnection(apiKey, handleDataUpdate, context);
+//                    } else {
+//                        System.out.println(context + " SSE connection has been closed");
+//                    }
+//                    System.err.println(context + " SocketTimeoutException: " + e.getMessage());
+//                } catch (IOException e) {
+//                    if (!call.isCanceled()) {
+//                        retryConnection(apiKey, handleDataUpdate, context);
+//                    } else {
+//                        System.out.println(context + " SSE connection has been closed");
+//                    }
+//                    System.err.println(context + " Error reading SSE updates: " + e.getMessage());
+//                }
+//            }
+//        });
+//    }
+//
+//    private void retryConnection(String apiKey, Consumer<String> handleDataUpdate, String context) {
+//        System.out.println(context + " Retrying connection in 5 seconds...");
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            System.err.println(context + " Retry interrupted" + e.getMessage());
+//        }
+//        startListeningToUpdates(apiKey, handleDataUpdate, context);
+//    }
+//
+////    private void stopListeningToUpdates(String context) {
+////        Call sseCall = sseCalls.remove(context);
+////        if (sseCall != null) {
+////            sseCall.cancel();
+////            System.out.println(context + " SSE connection closed");
+////        } else {
+////            System.out.println(context + " SSE connection was not found");
+////        }
+////    }
+//
+//    public void stopListeningToUpdates() {
+//        sseCalls.forEach((context, call) -> {
+//            if (call != null) {
+//                call.cancel();
+//                System.out.println(context + " SSE connection closed");
+//            }
+//        });
+//        sseCalls.clear();
+//    }
+//
+//    public void printSSEStatus(String context) {
+//        Call call = sseCalls.get(context); // Get the call by context
+//        if (call == null) {
+//            System.out.println(context + " connection has not been initialized");
+//        } else if (call.isExecuted() && !call.isCanceled()) {
+//            System.out.println(context + " connection is running for call: " + call.hashCode());
+//        } else if (call.isCanceled()) {
+//            System.out.println(context + " connection is canceled for call: " + call.hashCode());
+//        } else {
+//            System.out.println(context + " connection is not running for call: " + call.hashCode());
+//        }
+//    }
 
 }

@@ -34,6 +34,7 @@ public class DependencyInjector {
     private final SearchService<Employee> employeeSearchService;
     private final SearchService<Resident> residentSearchService;
     private final Validator validator;
+    private final LiveReloadUtils liveReloadUtils;
 
     private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
@@ -64,6 +65,7 @@ public class DependencyInjector {
         this.fileChooserUtils = new FileChooserUtils();
         this.validator = new Validator(this);
         this.emailService = new EmailService();
+        this.liveReloadUtils = new LiveReloadUtils();
 
         this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);
