@@ -237,12 +237,8 @@ public class EmployeeService {
     }
 
     //Update Listener
-    public void listenToUpdates(Consumer<String> handleDataUpdate) {
-        employeeRepository.startListeningToUpdates(handleDataUpdate);
-    }
-
-    public void stopListeningToUpdates() {
-        employeeRepository.stopListeningToUpdates();
+    public void enableLiveReload(Consumer<String> handleDataUpdate) {
+        employeeRepository.enableLiveReload(handleDataUpdate);
     }
 
 }

@@ -1,14 +1,13 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
-import com.econnect.barangaymanagementapp.controller.shared.base.ControllerInterface;
 import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
-import com.econnect.barangaymanagementapp.enumeration.type.SoundType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -28,7 +27,7 @@ import java.util.Set;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
-public class ApplicationController implements ControllerInterface {
+public class ApplicationController {
     @FXML
     private TextField searchField;
 
@@ -39,6 +38,7 @@ public class ApplicationController implements ControllerInterface {
     private final SearchService<Employee> searchService;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
+    private final LiveReloadUtils liveReloadUtils;
     private ApplicationTableController tableController;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -50,21 +50,19 @@ public class ApplicationController implements ControllerInterface {
         this.employeeService = dependencyInjector.getEmployeeService();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.searchService = dependencyInjector.getEmployeeSearchService();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     public void initialize() {
+        resetLiveReload();
+        initializeSSEListener();
         loadApplicationTable();
         populateApplicationRows();
-        initializeListener();
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
         });
-    }
-
-    private void initializeListener() {
-        employeeService.listenToUpdates(result -> Platform.runLater(() -> updateEmployeeRow(result)));
     }
 
     private void loadApplicationTable() {
@@ -143,9 +141,11 @@ public class ApplicationController implements ControllerInterface {
         }, () -> tableController.deleteRow(id));
     }
 
-    @Override
-    public void onExit() {
-        System.out.println("Triggered on exit");
-        employeeService.stopListeningToUpdates();
+    private void initializeSSEListener() {
+        employeeService.enableLiveReload(result -> Platform.runLater(() -> updateEmployeeRow(result)));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
     }
 }

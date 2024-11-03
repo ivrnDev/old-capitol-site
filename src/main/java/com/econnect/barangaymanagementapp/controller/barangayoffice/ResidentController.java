@@ -2,14 +2,13 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
-import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -26,27 +25,19 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_TABLE;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.REJECTED;
 import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESIDENT;
 
 public class ResidentController {
-
     @FXML
     private VBox contentPane;
-
     @FXML
     private VBox residentApplicationContent, residentListContent;
-
     @FXML
     private TextField residentApplicationSearchField, residentListSearchField;
-
     @FXML
     public Button addResidentBtn;
 
@@ -56,6 +47,7 @@ public class ResidentController {
     private ResidentTableController residentTableController;
     private ResidentApplicationTableController residentApplicationTableController;
     private final SearchService<Resident> searchService;
+    private final LiveReloadUtils liveReloadUtils;
     private final DependencyInjector dependencyInjector;
 
     private List<Resident> allResidents;
@@ -70,9 +62,11 @@ public class ResidentController {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.searchService = dependencyInjector.getResidentSearchService();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     public void initialize() {
+        resetLiveReload();
         loadResidentTable();
         loadResidentApplicationTable();
         populateResidentRows();
@@ -202,12 +196,12 @@ public class ResidentController {
     }
 
     public void addResidentLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentListContent.getWidth(), residentListContent.getHeight());
         residentListContent.getChildren().add(loadingIndicator);
     }
 
     public void addResidentApplicationLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentApplicationContent.getWidth(), residentApplicationContent.getHeight());
         residentApplicationContent.getChildren().add(loadingIndicator);
     }
 
@@ -228,6 +222,10 @@ public class ResidentController {
             updateResidentRow(result);
             updateApplicationResidentRow(result);
         }));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
     }
 
     public void updateResidentRow(String id) {

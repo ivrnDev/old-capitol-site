@@ -53,12 +53,7 @@ public class ResidentRepository extends BaseRepository<Resident> {
         }, resident -> resident.setStatus(status));
     }
 
-    public void startListeningToUpdates(Consumer<String> handleDataUpdates) {
-        startListeningToUpdates(apiKey, handleDataUpdates, "RESIDENT:");
+    public void enableLiveReload(Consumer<String> handleDataUpdates) {
+        enableLiveReload(apiKey, handleDataUpdates, "RESIDENT:");
     }
-
-    public void stopListeningToUpdates() {
-        stopListeningToUpdates("RESIDENT:");
-    }
-
 }
