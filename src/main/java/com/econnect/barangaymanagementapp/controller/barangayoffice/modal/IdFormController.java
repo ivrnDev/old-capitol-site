@@ -10,7 +10,6 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.FormValidator;
 import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -131,7 +130,7 @@ public class IdFormController {
         Task<Optional<Resident>> residentTask = new Task<>() {
             @Override
             protected Optional<Resident> call() {
-                return residentService.findActiveResidentById(residentId);
+                return residentService.findAllVerifiedResidents(residentId);
             }
 
             @Override
