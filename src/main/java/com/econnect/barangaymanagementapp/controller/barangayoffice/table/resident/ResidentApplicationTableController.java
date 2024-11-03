@@ -74,6 +74,10 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
                 }
             }
         }
+        
+        if (tableContent.getChildren().isEmpty()) {
+            super.showNoData();
+        }
     }
 
 }

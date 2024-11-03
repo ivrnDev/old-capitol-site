@@ -77,5 +77,9 @@ public class ApplicationTableController extends BaseTableController<Employee> {
                 }
             }
         }
+
+        if (tableContent.getChildren().isEmpty()) {
+            super.showNoData();
+        }
     }
 }
