@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.Objects;
@@ -58,8 +59,8 @@ public class SidebarController {
         ImageView navIcon = new ImageView();
         Text navText = new Text(item.getName());
         navButton.getStyleClass().add("nav-bar");
-        navIcon.setFitWidth(50);
-        navIcon.setFitHeight(50);
+        navIcon.setFitWidth(35);
+        navIcon.setFitHeight(35);
 
         if (item == navigationState.getActiveItem()) {
             navButton.getStyleClass().add("active");

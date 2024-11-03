@@ -1,5 +1,6 @@
 .background {
-    -fx-background-color: linear-gradient(to right, #FFFF98, #9EEDFF);
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
 }
 
 .separator {
@@ -10,5 +11,5 @@
 }
 
 .separator .line {
-    -fx-background-color: black; /* Set the inner line to black */
+    -fx-background-color: white;
 }

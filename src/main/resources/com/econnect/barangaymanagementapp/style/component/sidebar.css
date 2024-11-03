@@ -1,5 +1,5 @@
 .background {
-    -fx-background-color: #697565;
+    -fx-background-color: #FFFFFF;
 }
 
 .nav-bar {
@@ -7,7 +7,8 @@
     -fx-background-radius: 30px;
     -fx-alignment: center-left;
     -fx-spacing: 10.0;
-    -fx-padding: 10 20 10 20;
+    -fx-padding: 5 10 5 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 2, 0);
 }
 
 .nav-bar:hover {
@@ -23,9 +24,9 @@
 }
 
 .nav-bar Text {
-    -fx-fill: white;
+    -fx-fill: black;
     -fx-font-family: Arial;
-    -fx-font-size: 18.0;
+    -fx-font-size: 16.0;
 }
 
 .nav-bar.active {
