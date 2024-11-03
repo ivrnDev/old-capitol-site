@@ -27,7 +27,7 @@
                 <Insets />
             </BorderPane.margin>
             <content>
-                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                     <children>
                         <AnchorPane prefWidth="938.0">
                             <children>
