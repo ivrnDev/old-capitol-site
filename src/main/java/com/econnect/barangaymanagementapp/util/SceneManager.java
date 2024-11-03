@@ -27,8 +27,11 @@ public class SceneManager {
                 scene.setRoot(root);
             }
             stage.setScene(scene);
-            stage.setFullScreen(true);
-            stage.setFullScreenExitHint("");
+            
+            stage.setWidth(1366);
+            stage.setHeight(768);
+//            stage.setFullScreen(true);
+//            stage.setFullScreenExitHint("");
             stage.show();
 
         } catch (IOException e) {
