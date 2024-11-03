@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="no-data-row"
+<HBox fx:id="noData" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="no-data-row"
       stylesheets="@../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1">
     <padding>

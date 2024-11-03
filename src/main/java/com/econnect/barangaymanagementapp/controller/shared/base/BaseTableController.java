@@ -42,6 +42,10 @@ public abstract class BaseTableController<T> {
         }
     }
 
+    public void removeNoDataRow() {
+        tableContent.getChildren().removeIf(node -> node.getId().equals("noData"));
+    }
+
     protected Image getImageOrDefault(String employeeId) {
         return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
     }

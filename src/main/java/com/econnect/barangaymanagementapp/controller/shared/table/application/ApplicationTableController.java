@@ -50,19 +50,20 @@ public class ApplicationTableController extends BaseTableController<Employee> {
     }
 
     public void updateRow(Employee updatedEmployee) {
-        boolean rowExists = false;
+        boolean rowExist = false;
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox applicationRow) {
                 ApplicationRowController rowController = (ApplicationRowController) applicationRow.getUserData();
-                if (rowController.getResidentId().equals(updatedEmployee.getId())) {
+                if (rowController != null && rowController.getResidentId().equals(updatedEmployee.getId())) {
                     rowController.setData(updatedEmployee);
-                    rowExists = true;
+                    rowExist = true;
                     break;
                 }
             }
         }
 
-        if (!rowExists) {
+        if (!rowExist) {
+            super.removeNoDataRow();
             addRow(updatedEmployee);
         }
     }

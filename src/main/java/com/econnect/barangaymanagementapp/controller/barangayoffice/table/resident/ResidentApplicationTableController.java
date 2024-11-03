@@ -51,7 +51,7 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentApplicationRow) {
                 ResidentApplicationRowController rowController = (ResidentApplicationRowController) residentApplicationRow.getUserData();
-                if (rowController.getResidentId().equals(updatedResident.getId())) {
+                if (rowController != null && rowController.getResidentId().equals(updatedResident.getId())) {
                     rowController.setData(updatedResident);
                     rowExists = true;
                     break;
@@ -60,6 +60,7 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
         }
 
         if (!rowExists) {
+            super.removeNoDataRow();
             addRow(updatedResident);
         }
     }
@@ -68,13 +69,13 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentApplicationRow) {
                 ResidentApplicationRowController rowController = (ResidentApplicationRowController) residentApplicationRow.getUserData();
-                if (rowController.getResidentId().equals(employeeId)) {
+                if (rowController != null && rowController.getResidentId().equals(employeeId)) {
                     tableContent.getChildren().remove(residentApplicationRow);
                     break;
                 }
             }
         }
-        
+
         if (tableContent.getChildren().isEmpty()) {
             super.showNoData();
         }

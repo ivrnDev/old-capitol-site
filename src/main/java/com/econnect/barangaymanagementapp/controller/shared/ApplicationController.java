@@ -133,10 +133,11 @@ public class ApplicationController {
         Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
         Optional<Employee> updatedEmployee = employeeService.findEmployeeById(id);
         updatedEmployee.ifPresentOrElse(employee -> {
-            if (!APPLICANTS_STATUSES.contains(employee.getStatus())) {
-                tableController.deleteRow(employee.getId());
-            } else {
+            if (APPLICANTS_STATUSES.contains(employee.getStatus())) {
                 tableController.updateRow(employee);
+            } else {
+                tableController.deleteRow(employee.getId());
+
             }
         }, () -> tableController.deleteRow(id));
     }
