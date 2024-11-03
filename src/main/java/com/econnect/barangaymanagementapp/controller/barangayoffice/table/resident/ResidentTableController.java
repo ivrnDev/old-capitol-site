@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ResidentController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -23,7 +22,7 @@ public class ResidentTableController extends BaseTableController<Resident> {
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
 
-    public ResidentTableController(DependencyInjector dependencyInjector, ResidentController residentController) {
+    public ResidentTableController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;

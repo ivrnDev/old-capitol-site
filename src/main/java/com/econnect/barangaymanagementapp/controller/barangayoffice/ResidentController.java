@@ -77,7 +77,7 @@ public class ResidentController {
 
     private void loadResidentTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_TABLE.getFxmlPath(), dependencyInjector, this);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentTable = loader.load();
             residentTableController = loader.getController();
             residentListContent.getChildren().add(residentTable);
@@ -88,7 +88,7 @@ public class ResidentController {
 
     private void loadResidentApplicationTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_TABLE.getFxmlPath(), dependencyInjector, this);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentTable = loader.load();
             residentApplicationTableController = loader.getController();
             residentApplicationContent.getChildren().add(residentTable);
@@ -247,7 +247,6 @@ public class ResidentController {
                 residentApplicationTableController.updateRow(resident);
             } else {
                 residentApplicationTableController.deleteRow(resident.getId());
-
             }
         }, () -> residentApplicationTableController.deleteRow(id));
     }

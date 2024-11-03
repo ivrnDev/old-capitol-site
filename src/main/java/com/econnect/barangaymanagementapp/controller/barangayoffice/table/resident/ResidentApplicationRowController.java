@@ -1,6 +1,5 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ResidentController;
 import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Resident;
@@ -44,7 +43,7 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     @Getter
     private String residentId;
 
-    public ResidentApplicationRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
+    public ResidentApplicationRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
