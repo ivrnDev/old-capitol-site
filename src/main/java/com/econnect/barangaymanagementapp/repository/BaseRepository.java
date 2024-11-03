@@ -202,40 +202,31 @@ public abstract class BaseRepository<T> {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()))) {
                     String line;
                     ObjectMapper objectMapper = new ObjectMapper();
+
                     while ((line = reader.readLine()) != null) {
-                        if (line.startsWith("data: ")) {
-                            String jsonData = line.substring("data: ".length()).trim();
-
-                            try {
-                                JsonNode jsonNode = objectMapper.readTree(jsonData);
-
-                                JsonNode pathNode = jsonNode.get("path");
-                                if (pathNode != null) {
-                                    String path = pathNode.asText();
-
-                                    if (path.contains("/")) {
-                                        String id = path.split("/")[1];
-                                        System.out.println("Data update received: " + id);
-
-                                        handleDataUpdate.accept(id);
-                                    } else {
-                                        System.err.println("Path format unexpected: " + path);
-                                    }
-                                } else {
-                                    System.err.println("Missing 'path' field in JSON data: " + jsonData);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                System.err.println("Error parsing JSON data: " + jsonData);
-                            }
+                        if (!line.startsWith("data: ")) continue;
+                        String jsonData = line.substring("data: ".length()).trim();
+                        if (jsonData.equals("null")) continue;
+                        if (jsonData.contains("\"path\":\"/\"")) {
+                            continue;
+                        }
+                        try {
+                            JsonNode jsonNode = objectMapper.readTree(jsonData);
+                            JsonNode pathNode = jsonNode.get("path");
+                            if (pathNode == null) return;
+                            String path = pathNode.asText();
+                            if (!path.contains("/")) return;
+                            String id = path.split("/")[1];
+                            System.out.println("Syncing Data for ID: " + id);
+                            handleDataUpdate.accept(id);
+                        } catch (Exception e) {
+                            System.err.println("Error parsing JSON data:");
                         }
                     }
                 } catch (SocketTimeoutException e) {
-                    e.printStackTrace();
                     retryConnection(apiKey, handleDataUpdate);
                     System.err.println("SocketTimeoutException: " + e.getMessage());
                 } catch (IOException e) {
-                    e.printStackTrace();
                     retryConnection(apiKey, handleDataUpdate);
                     System.err.println("Error reading SSE updates: " + e.getMessage());
                 }
