@@ -1,18 +1,20 @@
 .background {
     -fx-background-color: #FFFFFF;
+    -fx-border-width: 0 0.2;
+    -fx-border-color: black;
 }
 
 .nav-bar {
     -fx-cursor: hand;
-    -fx-background-radius: 30px;
+    -fx-background-radius: 15px;
     -fx-alignment: center-left;
     -fx-spacing: 10.0;
     -fx-padding: 5 10 5 10;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 2, 0);
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 3, 0);*/
 }
 
 .nav-bar:hover {
-    -fx-background-color: rgba(217, 217, 217, 0.5);
+    -fx-background-color: rgba(172, 206, 246, 0.3);
     -fx-translate-x: 2px;
 }
 
@@ -30,7 +32,7 @@
 }
 
 .nav-bar.active {
-    -fx-background-color: rgba(217, 217, 217, 0.5);
+    -fx-background-color: #ACCEF6;
     -fx-translate-x: 2px;
 }
 
