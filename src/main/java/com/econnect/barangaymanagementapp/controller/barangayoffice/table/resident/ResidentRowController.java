@@ -70,8 +70,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
         lastNameLabel.setText(residentData.getLastName());
         firstNameLabel.setText(residentData.getFirstName());
         statusLabel.setText(residentData.getStatus().getName());
-        contactNumberLabel.setText(residentData.getMobileNumber());
-        emailLabel.setText(residentData.getEmail());
+//        contactNumberLabel.setText(residentData.getMobileNumber());
+//        emailLabel.setText(residentData.getEmail());
         dateLabel.setText(DateFormatter.extractDateAndFormat(residentData.getCreatedAt()));
         timeLabel.setText(DateFormatter.extractTimeAndFormat(residentData.getCreatedAt()));
     }

@@ -74,7 +74,7 @@
                                 </HBox>
                             </children>
                         </AnchorPane>
-                        <VBox fx:id="residentApplicationContent" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="500.0" prefWidth="1038.0" spacing="30.0">
+                        <VBox fx:id="residentApplicationContent" prefHeight="300.0" prefWidth="1038.0" spacing="30.0">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </padding>
@@ -123,7 +123,7 @@
                                 </HBox>
                             </children>
                         </AnchorPane>
-                        <VBox fx:id="residentListContent" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="500.0" prefWidth="1038.0" spacing="30.0">
+                        <VBox fx:id="residentListContent" prefHeight="300.0" prefWidth="1038.0" spacing="30.0">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </padding>

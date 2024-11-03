@@ -33,7 +33,7 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     @FXML
     private HBox tableRow, buttonContainer;
     @FXML
-    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, contactNumberLabel, emailLabel, dateLabel, timeLabel;
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, dateLabel, timeLabel, contactNumberLabel;
     @FXML
     private ImageView profilePicture;
 
@@ -64,8 +64,8 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         lastNameLabel.setText(residentData.getLastName());
         firstNameLabel.setText(residentData.getFirstName());
         statusLabel.setText(residentData.getStatus().getName());
-        contactNumberLabel.setText(residentData.getMobileNumber());
-        emailLabel.setText(residentData.getEmail());
+//        contactNumberLabel.setText(residentData.getMobileNumber());
+//        emailLabel.setText(residentData.getEmail());
         dateLabel.setText(DateFormatter.extractDateAndFormat(residentData.getCreatedAt()));
         timeLabel.setText(DateFormatter.extractTimeAndFormat(residentData.getCreatedAt()));
     }
