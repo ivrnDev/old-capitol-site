@@ -1,5 +1,7 @@
 package com.econnect.barangaymanagementapp.enumeration.type;
 
+import lombok.Getter;
+
 import java.util.List;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.NavigationType.*;
@@ -18,9 +20,12 @@ public enum DepartmentType {
             List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, RESIDENTS, SERVICES, HISTORY),
             List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK));
 
+    @Getter
     private final String name;
+    @Getter
     private final String link;
     private final List<NavigationType> navigationItemsList;
+    @Getter
     private final List<RoleType> roles;
 
     DepartmentType(String name, String link, List<NavigationType> navigationItemsList, List<RoleType> roles) {
@@ -30,24 +35,13 @@ public enum DepartmentType {
         this.roles = roles;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getDirectoryName() {
         return name.replace(" ", "").toLowerCase();
-    }
-
-    public String getLink() {
-        return link;
     }
 
     public List<NavigationType> getNavigationItems() {
         return navigationItemsList;
     }
 
-    public List<RoleType> getRoles() {
-        return roles;
-    }
 }
 
