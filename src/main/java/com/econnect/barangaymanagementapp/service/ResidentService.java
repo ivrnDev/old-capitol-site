@@ -69,10 +69,6 @@ public class ResidentService {
 
     //Update Listener
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
-        residentRepository.startListeningToUpdates(handleDataUpdate);
-    }
-
-    public void stopListeningToUpdates() {
-        residentRepository.stopListeningToUpdates();
+        residentRepository.enableLiveReload(handleDataUpdate);
     }
 }
