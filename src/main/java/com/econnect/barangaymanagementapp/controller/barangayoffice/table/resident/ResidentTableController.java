@@ -20,7 +20,6 @@ public class ResidentTableController extends BaseTableController<Resident> {
     @FXML
     private VBox tableContent;
 
-    private final ResidentController residentController;
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
 
@@ -28,13 +27,12 @@ public class ResidentTableController extends BaseTableController<Resident> {
         super(dependencyInjector);
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;
-        this.residentController = residentController;
     }
 
     @Override
     public void addRow(Resident residentData) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_ROW.getFxmlPath(), dependencyInjector, residentController);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_ROW.getFxmlPath(), dependencyInjector);
             HBox residentRow = loader.load();
             ResidentRowController residentRowController = loader.getController();
             residentRow.setUserData(residentRowController);

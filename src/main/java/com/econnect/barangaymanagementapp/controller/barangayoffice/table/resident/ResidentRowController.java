@@ -35,7 +35,6 @@ public class ResidentRowController extends BaseRowController<Resident> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
-    private final ResidentController residentController;
     private final DependencyInjector dependencyInjector;
     @Getter
     private String residentId;
@@ -49,13 +48,12 @@ public class ResidentRowController extends BaseRowController<Resident> {
     @FXML
     private ImageView profilePicture;
 
-    public ResidentRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
+    public ResidentRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.residentService = dependencyInjector.getResidentService();
-        this.residentController = residentController;
     }
 
     public void initialize() {

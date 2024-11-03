@@ -41,7 +41,6 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
-    private final ResidentController residentController;
     @Getter
     private String residentId;
 
@@ -50,7 +49,6 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.residentService = dependencyInjector.getResidentService();
-        this.residentController = residentController;
     }
 
     public void initialize() {
@@ -185,5 +183,4 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         };
         new Thread(task).start();
     }
-
 }
