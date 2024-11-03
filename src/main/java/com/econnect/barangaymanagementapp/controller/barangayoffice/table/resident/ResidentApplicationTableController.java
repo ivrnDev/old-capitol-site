@@ -7,6 +7,7 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -34,16 +35,48 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
     public void addRow(Resident residentData) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_ROW.getFxmlPath(), dependencyInjector, residentController);
-            HBox residentRow = loader.load();
+            HBox residentApplicationRow = loader.load();
             ResidentApplicationRowController residentApplicationRowController = loader.getController();
+            residentApplicationRow.setUserData(residentApplicationRowController);
             Image defaultImage = super.getImageOrDefault(residentData.getId());
             residentApplicationRowController.setImage(defaultImage);
             residentApplicationRowController.setData(residentData);
             super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentApplicationRowController);
-            tableContent.getChildren().add(residentRow);
+            tableContent.getChildren().add(residentApplicationRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Error adding employee row: " + e.getMessage(), e);
         }
     }
+
+    public void updateRow(Resident updatedResident) {
+        boolean rowExists = false;
+        for (Node node : tableContent.getChildren()) {
+            if (node instanceof HBox residentApplicationRow) {
+                ResidentApplicationRowController rowController = (ResidentApplicationRowController) residentApplicationRow.getUserData();
+                if (rowController.getResidentId().equals(updatedResident.getId())) {
+                    rowController.setData(updatedResident);
+                    rowExists = true;
+                    break;
+                }
+            }
+        }
+
+        if (!rowExists) {
+            addRow(updatedResident);
+        }
+    }
+
+    public void deleteRow(String employeeId) {
+        for (Node node : tableContent.getChildren()) {
+            if (node instanceof HBox residentApplicationRow) {
+                ResidentApplicationRowController rowController = (ResidentApplicationRowController) residentApplicationRow.getUserData();
+                if (rowController.getResidentId().equals(employeeId)) {
+                    tableContent.getChildren().remove(residentApplicationRow);
+                    break;
+                }
+            }
+        }
+    }
+
 }

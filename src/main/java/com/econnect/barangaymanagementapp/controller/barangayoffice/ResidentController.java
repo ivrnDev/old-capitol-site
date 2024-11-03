@@ -2,8 +2,10 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -23,9 +25,16 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_APPLICATION_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.REJECTED;
+import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESIDENT;
 
 public class ResidentController {
 
@@ -69,6 +78,7 @@ public class ResidentController {
         populateResidentRows();
         populateResidentApplicationRows();
         setupListener();
+        initializeSSEListener();
     }
 
     private void loadResidentTable() {
@@ -96,7 +106,7 @@ public class ResidentController {
     public void populateResidentRows() {
         addResidentLoadingIndicator();
         Runnable call = () -> {
-            allResidents = residentService.findAllNonDeletedAndPendingResidents();
+            allResidents = residentService.findAllActiveResidents();
             Platform.runLater(() -> {
                 removeResidentLoadingIndicator();
                 if (allResidents.isEmpty()) {
@@ -209,15 +219,38 @@ public class ResidentController {
         residentApplicationContent.getChildren().remove(loadingIndicator);
     }
 
-    public void reloadResidentTable() {
-        populateResidentRows();
-    }
-
-    public void reloadResidentApplicationTable() {
-        populateResidentApplicationRows();
-    }
-
     private void showAddResident() {
         modalUtils.customizeModal(FXMLPath.ADD_RESIDENT);
+    }
+
+    private void initializeSSEListener() {
+        residentService.listenToUpdates(result -> Platform.runLater(() -> {
+            updateResidentRow(result);
+            updateApplicationResidentRow(result);
+        }));
+    }
+
+    public void updateResidentRow(String id) {
+        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
+        updatedEmployee.ifPresentOrElse(resident -> {
+            if (!INACTIVE_RESIDENT.contains(resident.getStatus())) {
+                residentTableController.updateRow(resident);
+            } else {
+                residentTableController.deleteRow(resident.getId());
+
+            }
+        }, () -> residentTableController.deleteRow(id));
+    }
+
+    public void updateApplicationResidentRow(String id) {
+        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
+        updatedEmployee.ifPresentOrElse(resident -> {
+            if (resident.getStatus().equals(PENDING)) {
+                residentApplicationTableController.updateRow(resident);
+            } else {
+                residentApplicationTableController.deleteRow(resident.getId());
+
+            }
+        }, () -> residentApplicationTableController.deleteRow(id));
     }
 }

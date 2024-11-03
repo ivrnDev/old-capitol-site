@@ -11,14 +11,15 @@ import java.security.SecureRandom;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.function.Consumer;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.VERIFIED;
+import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESIDENT;
 
 public class ResidentService {
     private final ResidentRepository residentRepository;
     private final AccountRepository accountRepository;
-    private final Set<StatusType.ResidentStatus> INACTIVE_RESIDENT = Set.of(DECEASED, MIGRATED, SUSPENDED);
 
     public ResidentService(DependencyInjector dependencyInjector) {
         this.residentRepository = dependencyInjector.getResidentRepository();
@@ -33,8 +34,8 @@ public class ResidentService {
         return residentRepository.findAllResidents();
     }
 
-    public List<Resident> findAllNonDeletedAndPendingResidents() {
-        return residentRepository.findResidentByFilter(resident -> !resident.getStatus().equals(REMOVED) && !resident.getStatus().equals(PENDING));
+    public List<Resident> findAllActiveResidents() {
+        return residentRepository.findResidentByFilter(resident -> !INACTIVE_RESIDENT.contains(resident.getStatus()));
     }
 
     public List<Resident> findAllPendingResidents() {
@@ -45,7 +46,7 @@ public class ResidentService {
         return residentRepository.findResidentById(id);
     }
 
-    public Optional<Resident> findActiveResidentById(String id) {
+    public Optional<Resident> findAllVerifiedResidents(String id) {
         return residentRepository.findResidentById(id).filter(resident -> resident.getStatus().equals(VERIFIED));
     }
 
@@ -64,5 +65,14 @@ public class ResidentService {
         SecureRandom random = new SecureRandom();
         int otp = random.nextInt((int) Math.pow(10, OTP_LENGTH));
         return String.format("00%05d-%d", otp, Year.now().getValue());
+    }
+
+    //Update Listener
+    public void listenToUpdates(Consumer<String> handleDataUpdate) {
+        residentRepository.startListeningToUpdates(handleDataUpdate);
+    }
+
+    public void stopListeningToUpdates() {
+        residentRepository.stopListeningToUpdates();
     }
 }

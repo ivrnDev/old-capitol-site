@@ -11,6 +11,7 @@ import okhttp3.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ResidentRepository extends BaseRepository<Resident> {
@@ -52,5 +53,12 @@ public class ResidentRepository extends BaseRepository<Resident> {
         }, resident -> resident.setStatus(status));
     }
 
+    public void startListeningToUpdates(Consumer<String> handleDataUpdates) {
+        startListeningToUpdates(apiKey, handleDataUpdates);
+    }
+
+    public void stopListeningToUpdates() {
+        stopListeningToUpdates();
+    }
 
 }

@@ -13,6 +13,7 @@ import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
+import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -22,25 +23,27 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import lombok.Getter;
 import okhttp3.Response;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 
 public class ResidentApplicationRowController extends BaseRowController<Resident> {
+    @FXML
+    private HBox tableRow, buttonContainer;
+    @FXML
+    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, contactNumberLabel, emailLabel, dateLabel, timeLabel;
+    @FXML
+    private ImageView profilePicture;
+
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
     private final ResidentController residentController;
-
-    @FXML
-    private HBox tableRow, buttonContainer;
-
-    @FXML
-    private Label residentIdLabel, lastNameLabel, firstNameLabel, statusLabel, contactNumberLabel, emailLabel, dateLabel, timeLabel;
-
-    @FXML
-    private ImageView profilePicture;
+    @Getter
+    private String residentId;
 
     public ResidentApplicationRowController(DependencyInjector dependencyInjector, ResidentController residentController) {
         super(dependencyInjector);
@@ -53,11 +56,13 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
-        Platform.runLater(() -> setupButtonContainer());
     }
 
     @Override
     protected void setData(Resident residentData) {
+        Platform.runLater(() -> setupButtonContainer());
+        residentId = residentData.getId();
+
         residentIdLabel.setText(residentData.getId());
         lastNameLabel.setText(residentData.getLastName());
         firstNameLabel.setText(residentData.getFirstName());
@@ -96,6 +101,8 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     }
 
     protected void setupButtonContainer() {
+        buttonContainer.getChildren().clear();
+
         setupViewButton();
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
@@ -133,7 +140,13 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     }
 
     private void updateResidentStatus(StatusType.ResidentStatus status) {
-        residentController.addResidentApplicationLoadingIndicator();
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
+        tableRow.getChildren().forEach(node -> {
+            node.setVisible(false);
+            node.setManaged(false);
+        });
+        tableRow.getChildren().add(loadingIndicator);
+
         Task<Response> task = new Task<>() {
             @Override
             protected Response call() {
@@ -142,10 +155,14 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
 
             @Override
             protected void succeeded() {
+                tableRow.getChildren().remove(loadingIndicator);
+                tableRow.getChildren().forEach(node -> {
+                    node.setVisible(true);
+                    node.setManaged(true);
+                });
+                initialize();
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    residentController.removeResidentApplicationLoadingIndicator();
-                    reloadTable();
                     if (status == VERIFIED) {
                         modalUtils.showModal(Modal.SUCCESS, "Verified", "Resident #" + residentIdLabel.getText() + "appplication has been verified successfully.");
                     } else {
@@ -155,11 +172,18 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
                 }
             }
+
+            @Override
+            protected void failed() {
+                tableRow.getChildren().remove(loadingIndicator);
+                tableRow.getChildren().forEach(node -> {
+                    node.setVisible(true);
+                    node.setManaged(true);
+                });
+                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while evaluating employee application.");
+            }
         };
         new Thread(task).start();
     }
 
-    protected void reloadTable() {
-        residentController.reloadResidentApplicationTable();
-    }
 }
