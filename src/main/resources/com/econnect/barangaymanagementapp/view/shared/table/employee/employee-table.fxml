@@ -85,7 +85,7 @@
         </HBox>
         <ScrollPane fitToWidth="true">
             <content>
-                <VBox fx:id="tableContent" spacing="20.0">
+                <VBox fx:id="tableContent" spacing="20.0" styleClass="table-content">
                     <padding>
                         <Insets bottom="20.0" />
                     </padding>
