@@ -27,7 +27,7 @@
                 <Insets />
             </BorderPane.margin>
             <content>
-                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="938.0">
                             <children>
@@ -74,7 +74,7 @@
                                 </HBox>
                             </children>
                         </AnchorPane>
-                        <VBox fx:id="residentApplicationContent" prefHeight="300.0" prefWidth="1038.0" spacing="30.0">
+                        <VBox fx:id="residentApplicationContent" minHeight="-Infinity" prefHeight="600.0" prefWidth="1038.0" spacing="30.0">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </padding>
@@ -123,7 +123,7 @@
                                 </HBox>
                             </children>
                         </AnchorPane>
-                        <VBox fx:id="residentListContent" prefHeight="300.0" prefWidth="1038.0" spacing="30.0">
+                        <VBox fx:id="residentListContent" minHeight="-Infinity" prefHeight="600.0" prefWidth="1038.0" spacing="30.0">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </padding>
