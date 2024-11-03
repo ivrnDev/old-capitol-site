@@ -70,7 +70,7 @@
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
-                                                <Image url="@../../icon/request/id.png" />
+                                                <Image url="@../../icon/request/apply-for-work.png" />
                                             </image>
                                         </ImageView>
                                         <Label text="Apply For Work" textAlignment="CENTER" wrapText="true">
@@ -110,7 +110,7 @@
                                     <children>
                                         <ImageView fx:id="indigencyForm1" fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
-                                                <Image url="@../../icon/request/indigency.png" />
+                                                <Image url="@../../icon/request/tools.png" />
                                             </image>
                                         </ImageView>
                                         <Label text="Tools and Materials" textAlignment="CENTER" wrapText="true">
@@ -130,7 +130,7 @@
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
-                                                <Image url="@../../icon/document-icon.png" />
+                                                <Image url="@../../icon/request/financial-assistance.png" />
                                             </image>
                                         </ImageView>
                                         <Label text="DSWD Financial Assistance" textAlignment="CENTER" wrapText="true">
@@ -150,7 +150,7 @@
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
-                                                <Image url="@../../icon/document-icon.png" />
+                                                <Image url="@../../icon/request/complaint.png" />
                                             </image>
                                         </ImageView>
                                         <Label text="File A Complaint" textAlignment="CENTER" wrapText="true">
@@ -170,7 +170,7 @@
                                     <children>
                                         <ImageView fitHeight="87.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                             <image>
-                                                <Image url="@../../icon/document-icon.png" />
+                                                <Image url="@../../icon/request/health-service.png" />
                                             </image>
                                         </ImageView>
                                         <Label text="Health Service" textAlignment="CENTER" wrapText="true">
