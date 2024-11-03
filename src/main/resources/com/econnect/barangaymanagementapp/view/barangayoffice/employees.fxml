@@ -21,7 +21,7 @@
         <fx:include fx:id="sidebar" source="../component/sidebar.fxml" />
     </left>
     <center>
-        <VBox fx:id="contentPane" prefHeight="600.0" prefWidth="1080.0" spacing="30.0" styleClass="scroll-panel" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
+        <VBox fx:id="contentPane" prefHeight="600.0" prefWidth="1080.0" spacing="30.0" styleClass="root-pane" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
             <children>
                 <AnchorPane>
                     <children>
