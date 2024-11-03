@@ -1617,7 +1617,7 @@
                                                 <Image url="@../../../icon/upload-image.png" />
                                             </image>
                                         </ImageView>
-                                        <Label text="View Government ID" textFill="#686464">
+                                        <Label text="View ID" textFill="#686464">
                                             <font>
                                                 <Font name="Arial" size="15.0" />
                                             </font>
@@ -1661,7 +1661,7 @@
                                                 <Image url="@../../../icon/upload-image.png" />
                                             </image>
                                         </ImageView>
-                                        <Label text="View Government ID" textFill="#686464">
+                                        <Label text="View Tin ID" textFill="#686464">
                                             <font>
                                                 <Font name="Arial" size="15.0" />
                                             </font>
