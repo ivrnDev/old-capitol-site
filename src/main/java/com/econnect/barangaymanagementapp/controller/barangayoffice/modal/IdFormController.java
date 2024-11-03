@@ -66,7 +66,7 @@ public class IdFormController {
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
         this.validator = dependencyInjector.getValidator();
-        Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
+        this.currentStage = dependencyInjector.getStage();
     }
 
     public void initialize() {

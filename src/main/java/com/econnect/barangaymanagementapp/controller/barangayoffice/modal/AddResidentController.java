@@ -84,7 +84,7 @@ public class AddResidentController {
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
         this.residentService = dependencyInjector.getResidentService();
-        Platform.runLater(() -> this.currentStage = (Stage) confirmBtn.getScene().getWindow());
+        this.currentStage = dependencyInjector.getStage();
     }
 
     public void initialize() {
