@@ -8,6 +8,7 @@ public enum NavigationType {
     HISTORY("History", "icon/sidebar/history.png", "icon/sidebar/selected/history-selected.png"),
     SERVICES("Services", "icon/sidebar/services.png", "icon/sidebar/selected/services-selected.png"),
     APPLICATIONS("Applications", "icon/sidebar/applications.png", "icon/sidebar/selected/applications-selected.png"),
+    REQUESTS("Request", "icon/sidebar/request.png", "icon/sidebar/selected/request-selected.png"),
     ;
 
     private final String displayName;
