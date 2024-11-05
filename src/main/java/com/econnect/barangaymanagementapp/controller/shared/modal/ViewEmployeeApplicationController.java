@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.shared;
+package com.econnect.barangaymanagementapp.controller.shared.modal;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -13,26 +13,23 @@ import javafx.stage.Stage;
 
 public class ViewEmployeeApplicationController implements BaseViewController {
     private final ModalUtils modalUtils;
-    private Stage currentStage;
     private String employeeId;
     private final ResidentService residentService;
 
     @FXML
-    private HBox viewResume;
-
+    private ImageView closeBtn;
     @FXML
     private ImageView profilePicture;
-
     @FXML
     private TextField firstName;
 
     public ViewEmployeeApplicationController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.residentService = dependencyInjector.getResidentService();
-        Platform.runLater(() -> this.currentStage = (Stage) viewResume.getScene().getWindow());
     }
 
     public void initialize() {
+        closeBtn.setOnMouseClicked(_ -> closeView());
         profilePicture.setOnMouseClicked(_ -> handleClickProfile());
         Platform.runLater(() -> {
             firstName.setText(employeeId);

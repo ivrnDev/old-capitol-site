@@ -3,7 +3,7 @@ package com.econnect.barangaymanagementapp.controller.shared.table.employee;
 
 import com.econnect.barangaymanagementapp.controller.shared.EmployeeController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
-import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.controller.shared.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
