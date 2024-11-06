@@ -829,37 +829,6 @@
                                                 </ComboBox>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Father Birthdate" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <DatePicker fx:id="fatherBirthdatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                    </styleClass>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                </DatePicker>
-                                            </children>
-                                        </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
@@ -1013,37 +982,6 @@
                                                         <Insets left="-1.0" />
                                                     </padding>
                                                 </ComboBox>
-                                            </children>
-                                        </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="158.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Mother Birthdate" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <DatePicker fx:id="motherBirthdatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                    </styleClass>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                </DatePicker>
                                             </children>
                                         </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
@@ -1203,37 +1141,6 @@
                                                         <Insets left="-1.0" />
                                                     </padding>
                                                 </ComboBox>
-                                            </children>
-                                        </HBox>
-                                        <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                                    <children>
-                                                        <Label text="Spouse Birthdate" textOverrun="CLIP">
-                                                            <font>
-                                                                <Font name="Arial" size="15.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                    <padding>
-                                                        <Insets left="20.0" />
-                                                    </padding>
-                                                </HBox>
-                                                <DatePicker fx:id="spouseBirthdatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                    </styleClass>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                </DatePicker>
                                             </children>
                                         </HBox>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
