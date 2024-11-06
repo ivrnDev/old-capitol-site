@@ -100,16 +100,18 @@ public class Validator {
             }
         }
 
-        for (DatePicker datePicker : datePickers) {
-            if (datePicker.getEditor().getText().isEmpty()) {
-                if (!hasError) {
-                    hasError = true;
-                    errorTitle = "Failed";
-                    errorMessage = "Please fill out all required fields";
+        if (datePickers != null) {
+            for (DatePicker datePicker : datePickers) {
+                if (datePicker.getEditor().getText().isEmpty()) {
+                    if (!hasError) {
+                        hasError = true;
+                        errorTitle = "Failed";
+                        errorMessage = "Please fill out all required fields";
+                    }
+                    datePicker.setStyle("-fx-border-color: red");
+                } else {
+                    datePicker.setStyle("");
                 }
-                datePicker.setStyle("-fx-border-color: red");
-            } else {
-                datePicker.setStyle("");
             }
         }
 
@@ -125,7 +127,6 @@ public class Validator {
                 comboBox1.setStyle("");
             }
         }
-
         if (hasError) {
             triggerError();
             return true;

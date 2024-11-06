@@ -1,8 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.ResidentController;
-import com.econnect.barangaymanagementapp.controller.shared.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
+import com.econnect.barangaymanagementapp.controller.shared.modal.ViewResidentController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -20,7 +19,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -153,8 +151,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
     private void setupViewButton() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    FXMLPath.VIEW_APPLICATION_EMPLOYEE,
-                    ViewEmployeeApplicationController.class,
+                    FXMLPath.VIEW_RESIDENT,
+                    ViewResidentController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
         });

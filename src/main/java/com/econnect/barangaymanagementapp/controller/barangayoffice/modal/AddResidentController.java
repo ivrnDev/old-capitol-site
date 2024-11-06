@@ -54,7 +54,7 @@ public class AddResidentController {
     @FXML
     private ComboBox<String> suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox, religionComboBox, bloodTypeComboBox, fatherSuffixComboBox, motherSuffixComboBox, spouseSuffixComboBox, residencyStatusComboBox;
     @FXML
-    private DatePicker birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker, validIdExpirationDatePicker;
+    private DatePicker birthdatePicker, validIdExpirationDatePicker;
     @FXML
     private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId, checkBoxContainer;
     @FXML
@@ -155,7 +155,7 @@ public class AddResidentController {
                 .telephoneNumber(telephoneInput.getText())
                 .email(emailInput.getText())
                 .address(addressInput.getText())
-                .birthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(motherBirthdatePicker.getValue()) : null)
+                .birthdate(birthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(birthdatePicker.getValue()) : null)
                 .birthplace(birthplaceInput.getText())
                 .citizenship(citizenshipInput.getText())
                 .civilStatus(CivilStatus.fromName(civilStatusComboBox.getValue()))
@@ -171,21 +171,18 @@ public class AddResidentController {
                 .fatherLastName(fatherLastNameInput.getText())
                 .fatherSuffixName(fatherSuffixComboBox.getValue())
                 .fatherOccupation(fatherOccupationInput.getText())
-                .fatherBirthdate(fatherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(fatherBirthdatePicker.getValue()) : null)
 
                 .motherFirstName(motherFirstNameInput.getText())
                 .motherMiddleName(motherMiddleNameInput.getText())
                 .motherLastName(motherLastNameInput.getText())
                 .motherSuffixName(motherSuffixComboBox.getValue())
                 .motherOccupation(motherOccupationInput.getText())
-                .motherBirthdate(motherBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(motherBirthdatePicker.getValue()) : null)
 
                 .spouseFirstName(spouseFirstNameInput.getText())
                 .spouseMiddleName(spouseMiddleNameInput.getText())
                 .spouseLastName(spouseLastNameInput.getText())
                 .spouseSuffixName(spouseSuffixComboBox.getValue())
                 .spouseOccupation(spouseOccupationInput.getText())
-                .spouseBirthdate(spouseBirthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(spouseBirthdatePicker.getValue()) : null)
 
                 .emergencyFirstName(emergencyFirstNameInput.getText())
                 .emergencyMiddleName(emergencyMiddleNameInput.getText())
@@ -212,7 +209,7 @@ public class AddResidentController {
     private void setupInputFields() {
         LocalDate birthMinDate = LocalDate.now().minusYears(120);
         LocalDate birthMaxDate = LocalDate.now().minusYears(12);
-        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, spouseBirthdatePicker};
+        DatePicker[] datePickers = {birthdatePicker};
         TextField[] letterOnlyFields = {
                 lastNameInput, firstNameInput, middleNameInput,
                 birthplaceInput, occupationInput, addressInput,
@@ -294,14 +291,11 @@ public class AddResidentController {
         fatherSuffixComboBox.setValue("Sr.");
         motherSuffixComboBox.setValue("Jr.");
         residencyStatusComboBox.setValue("Owner");
-        fatherBirthdatePicker.setValue(LocalDate.now().minusYears(50));
-        motherBirthdatePicker.setValue(LocalDate.now().minusYears(50));
         spouseFirstNameInput.setText("Maria");
         spouseLastNameInput.setText("Dela Cruz");
         spouseMiddleNameInput.setText("Santos");
         spouseSuffixComboBox.setValue("Jr.");
         spouseOccupationInput.setText("Software Engineer");
-        spouseBirthdatePicker.setValue(LocalDate.now().minusYears(50));
         emergencyFirstNameInput.setText("Maria");
         emergencyLastNameInput.setText("Dela Cruz");
         emergencyMiddleNameInput.setText("Santos");
@@ -321,19 +315,18 @@ public class AddResidentController {
                 citizenshipInput, tinIdNumberInput, emergencyFirstNameInput, emergencyLastNameInput,
                 emergencyMiddleNameInput, emergencyMobileNumberInput, emergencyRelationshipInput};
         TextField[] spouseTextField = {spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput};
-        DatePicker[] datePickers = {birthdatePicker, fatherBirthdatePicker, motherBirthdatePicker, validIdExpirationDatePicker};
+        DatePicker[] datePickers = {birthdatePicker, validIdExpirationDatePicker};
         ComboBox[] comboBoxes = {suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox,
                 religionComboBox, bloodTypeComboBox, fatherSuffixComboBox,
                 motherSuffixComboBox, residencyStatusComboBox};
         CheckBox[] checkBoxes = {ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox};
         ComboBox[] spouseComboBox = {spouseSuffixComboBox};
-        DatePicker[] spouseDatePicker = {spouseBirthdatePicker};
         File[] files = {profileFile, governmentIdFile, tidIdFile};
         HBox[] fileContainers = {uploadProfile, uploadGovernmentId, uploadTinId};
 
         if (validator.hasEmptyFields(textFields, datePickers, comboBoxes)) return;
 
-        if (civilStatusComboBox.getValue().equals(CivilStatus.MARRIED.getName()) && validator.hasEmptyFields(spouseTextField, spouseDatePicker, spouseComboBox))
+        if (civilStatusComboBox.getValue().equals(CivilStatus.MARRIED.getName()) && validator.hasEmptyFields(spouseTextField, null, spouseComboBox))
             return;
 
         if (validator.hasEmptyCheckBox(checkBoxes, checkBoxContainer)) {
