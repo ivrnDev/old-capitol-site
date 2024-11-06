@@ -31,6 +31,18 @@ public class DateFormatter {
         }
     }
 
+    public static String toNamedFormat(String inputDate) {
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+            LocalDate date = LocalDate.parse(inputDate, inputFormatter);
+            return date.format(outputFormatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public static LocalDate toLocalDateFormat(String inputDate) {
         try {
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
