@@ -209,14 +209,14 @@ public class AddEmployeeController {
                 .address(addressInput.getText())
                 .email(emailInput.getText())
                 .contactNumber(contactNumberInput.getText())
-                .createdAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
-                .updatedAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
+                .createdAt(DateFormatter.convertToUtc(ZonedDateTime.now()))
+                .updatedAt(DateFormatter.convertToUtc(ZonedDateTime.now()))
                 .status(EmployeeStatus.UNDER_REVIEW)
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)
                 .employment(employmentTypeComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
-                .nbiClearanceExpiration(String.valueOf(nbiExpirationPicker.getValue()))
+                .nbiClearanceExpiration(DateFormatter.formatLocalDateToUsShortDate(nbiExpirationPicker.getValue()))
                 .build();
     }
 

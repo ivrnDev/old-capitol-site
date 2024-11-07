@@ -148,7 +148,7 @@ public class IdFormController {
                     birthdateText.setText(residentInfo.getBirthdate());
                     civilStatusText.setText(residentInfo.getCivilStatus().getName());
                     residencyStatusText.setText(residentInfo.getResidencyStatus().getName());
-                    expirationDateText.setText(DateFormatter.toStringLocaleDateFormat(LocalDate.now().plusYears(1)));
+                    expirationDateText.setText(DateFormatter.formatLocalDateToUsShortDate(LocalDate.now().plusYears(1)));
                     emergencyFullNameText.setText(emergencyFullName);
                     emergencyContactText.setText(residentInfo.getEmergencyMobileNumber());
                     emergencyRelationshipText.setText(residentInfo.getEmergencyRelationship());

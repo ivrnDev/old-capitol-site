@@ -111,7 +111,7 @@ public class ViewResidentController implements BaseViewController {
         middleNameInput.setText(resident.getMiddleName());
         nameExtensionInput.setText(!resident.getNameExtension().isEmpty() ? resident.getNameExtension() : ResidentInfomationType.SuffixName.NONE.getName());
         addressInput.setText(resident.getAddress());
-        birthdateInput.setText(resident.getBirthdate().toString());
+        birthdateInput.setText(DateFormatter.formatToLongDate(resident.getBirthdate()));
         birthPlaceInput.setText(resident.getBirthplace());
         emailInput.setText(resident.getEmail());
         contactNumberInput.setText(resident.getMobileNumber());
@@ -139,7 +139,7 @@ public class ViewResidentController implements BaseViewController {
         motherMiddleNameInput.setText(resident.getMotherMiddleName());
         motherNameExtensionInput.setText(!resident.getMotherSuffixName().isEmpty() ? resident.getMotherSuffixName() : ResidentInfomationType.SuffixName.NONE.getName());
         motherOccupationInput.setText(resident.getMotherOccupation());
-        validIdExpiryDateText.setText(DateFormatter.toNamedFormat(resident.getValidIdExpiration()));
+        validIdExpiryDateText.setText(DateFormatter.formatShortToLongDate(resident.getValidIdExpiration()));
         setupSpouseContainer(resident.getCivilStatus());
     }
 

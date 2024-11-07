@@ -66,8 +66,8 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         statusLabel.setText(residentData.getStatus().getName());
 //        contactNumberLabel.setText(residentData.getMobileNumber());
 //        emailLabel.setText(residentData.getEmail());
-        dateLabel.setText(DateFormatter.extractDateAndFormat(residentData.getCreatedAt()));
-        timeLabel.setText(DateFormatter.extractTimeAndFormat(residentData.getCreatedAt()));
+        dateLabel.setText(DateFormatter.formatDateToLongStyle(residentData.getCreatedAt()));
+        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(residentData.getCreatedAt()));
     }
 
     @Override
