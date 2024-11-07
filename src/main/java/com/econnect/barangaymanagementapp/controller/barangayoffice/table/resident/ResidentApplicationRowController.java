@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resid
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.modal.ViewEmployeeApplicationController;
+import com.econnect.barangaymanagementapp.controller.shared.modal.ViewResidentController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -128,8 +129,8 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     private void setupViewButton() {
         Button viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    FXMLPath.VIEW_APPLICATION_EMPLOYEE,
-                    ViewEmployeeApplicationController.class,
+                    FXMLPath.VIEW_RESIDENT,
+                    ViewResidentController.class,
                     controller -> controller.setId(residentIdLabel.getText())
             );
         });
