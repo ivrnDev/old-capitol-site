@@ -1,12 +1,15 @@
 package com.econnect.barangaymanagementapp.controller.shared;
 
+import com.econnect.barangaymanagementapp.controller.shared.table.application.ApplicationTableController;
 import com.econnect.barangaymanagementapp.controller.shared.table.employee.EmployeeTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -21,8 +24,11 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.EMPLOYEE_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
 
 public class EmployeeController {
 
@@ -37,10 +43,10 @@ public class EmployeeController {
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private EmployeeTableController employeeTableController;
     private final SearchService<Employee> searchService;
+    private final LiveReloadUtils liveReloadUtils;
     private final DependencyInjector dependencyInjector;
-
     private List<Employee> allEmployees;
-    private StackPane loadingIndicator;
+
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
@@ -50,12 +56,14 @@ public class EmployeeController {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.searchService = dependencyInjector.getEmployeeSearchService();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     public void initialize() {
+        resetLiveReload();
+        initializeSSEListener();
         loadEmployeeTable();
         populateEmployeeRows();
-
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
@@ -107,19 +115,6 @@ public class EmployeeController {
                 (filteredEmployees) -> updateEmployeeTable(filteredEmployees));
     }
 
-    public void addLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(contentPane.getWidth(), contentPane.getHeight());
-        contentPane.getChildren().add(loadingIndicator);
-    }
-
-    public void removeLoadingIndicator() {
-        contentPane.getChildren().remove(loadingIndicator);
-    }
-
-    public void reloadTable() {
-        populateEmployeeRows();
-    }
-
     private void updateEmployeeTable(List<Employee> employees) {
         employeeTableController.clearRow();
 
@@ -128,6 +123,27 @@ public class EmployeeController {
             return;
         }
         employees.forEach(employee -> employeeTableController.addRow(employee));
+    }
+
+    public void updateEmployeeRow(String id) {
+        Set<StatusType.EmployeeStatus> EMPLOYEE_STATUS = Set.of(ACTIVE);
+        Optional<Employee> updatedEmployee = employeeService.findEmployeeById(id);
+        updatedEmployee.ifPresentOrElse(employee -> {
+            if (EMPLOYEE_STATUS.contains(employee.getStatus())) {
+                employeeTableController.updateRow(employee);
+            } else {
+                employeeTableController.deleteRow(employee.getId());
+
+            }
+        }, () -> employeeTableController.deleteRow(id));
+    }
+
+    private void initializeSSEListener() {
+        employeeService.enableLiveReload(result -> Platform.runLater(() -> updateEmployeeRow(result)));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
     }
 
     @FXML

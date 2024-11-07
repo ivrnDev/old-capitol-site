@@ -176,6 +176,9 @@ public class EmployeeService {
     }
 
     public Response terminateEmployee(String employeeId) {
+        System.out.println(employeeId);
+        Optional<Employee> findEmployee = findEmployeeById(employeeId);
+        if (!findEmployee.isPresent()) return null;
         return updateEmployeeByStatus(employeeId, TERMINATED);
     }
 
@@ -214,10 +217,7 @@ public class EmployeeService {
     }
 
     public Response updateEmployeeByStatus(String employeeId, StatusType.EmployeeStatus status) {
-        if (!status.equals(ACTIVE)) {
-            return employeeRepository.updateEmployeeByStatus(employeeId, status);
-        }
-        return null;
+        return employeeRepository.updateEmployeeByStatus(employeeId, status);
     }
 
     private Employee generateEmployeeUsernameAndPassword(Employee employee) {
