@@ -63,7 +63,7 @@ public class DateFormatter {
     // Converts a LocalDate to "MM/dd/yyyy" string format.
     public static String formatLocalDateToUsShortDate(LocalDate inputDate) {
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
             return inputDate.format(dateFormatter);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class DateFormatter {
     // Calculates age based on a given birthdate.
     public static String calculateAgeFromBirthdate(String birthdate) {
         try {
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("M/d/yyyy");
             LocalDate birthDateLocal = LocalDate.parse(birthdate, inputFormatter);
             LocalDate currentDate = LocalDate.now();
 
