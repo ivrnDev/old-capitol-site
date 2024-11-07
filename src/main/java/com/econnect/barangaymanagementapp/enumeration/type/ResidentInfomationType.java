@@ -90,6 +90,7 @@ public class ResidentInfomationType {
     @AllArgsConstructor
     public enum MotherTongue {
         TAGALOG("Tagalog"),
+        ENGLISH("English"),
         CEBUANO("Cebuano"),
         ILOCANO("Ilocano"),
         HILIGAYNON("Hiligaynon"),
