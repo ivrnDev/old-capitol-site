@@ -56,8 +56,8 @@ public class ViewResidentController implements BaseViewController {
     public ViewResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.residentService = dependencyInjector.getResidentService();
-        this.currentStage = dependencyInjector.getStage();
         this.imageService = dependencyInjector.getImageService();
+        Platform.runLater(() -> currentStage = (Stage) closeBtn.getScene().getWindow());
     }
 
     public void initialize() {
