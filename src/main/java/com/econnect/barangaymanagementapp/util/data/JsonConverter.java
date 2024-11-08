@@ -1,7 +1,6 @@
 package com.econnect.barangaymanagementapp.util.data;
 
 import com.econnect.barangaymanagementapp.config.deserializer.JacksonFactory;
-import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;

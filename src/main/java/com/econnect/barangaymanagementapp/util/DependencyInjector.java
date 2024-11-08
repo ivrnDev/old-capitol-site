@@ -39,14 +39,14 @@ public class DependencyInjector {
     private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
     private final ResidentRepository residentRepository;
-    private final RequestRepository requestRepository;
+    private final CertificateRepository certificateRepository;
     private final BarangayIdRepository barangayIdRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
     private final EmployeeService employeeService;
     private final ResidentService residentService;
-    private final RequestService requestService;
+    private final CertificateService certificateService;
     private final BarangayidService barangayidService;
 
     public DependencyInjector(Stage stage) {
@@ -70,13 +70,13 @@ public class DependencyInjector {
         this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
-        this.requestRepository = new RequestRepository(this);
+        this.certificateRepository = new CertificateRepository(this);
         this.barangayIdRepository = new BarangayIdRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
         this.loginService = new LoginService(this);
-        this.requestService = new RequestService(this);
+        this.certificateService = new CertificateService(this);
         this.employeeSearchService = new SearchService<>();
         this.residentSearchService = new SearchService<>();
         this.barangayidService = new BarangayidService(this);

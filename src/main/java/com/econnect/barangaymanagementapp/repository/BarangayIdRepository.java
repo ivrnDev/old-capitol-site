@@ -25,7 +25,6 @@ public class BarangayIdRepository extends BaseRepository<BarangayId> {
 
     public Response updateBarangayId(BarangayId request) {
         return create(apiKey + "/" + request.getId(), request);
-
     }
 
     public Boolean deleteBarangayIdById(String id) {

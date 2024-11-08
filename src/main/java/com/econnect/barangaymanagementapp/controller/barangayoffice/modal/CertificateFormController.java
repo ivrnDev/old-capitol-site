@@ -6,7 +6,7 @@ import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.service.ImageService;
-import com.econnect.barangaymanagementapp.service.RequestService;
+import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.Validator;
@@ -65,7 +65,7 @@ public class CertificateFormController {
     private Stage currentStage;
     private final ModalUtils modalUtils;
     private final Validator validator;
-    private final RequestService requestService;
+    private final CertificateService certificateService;
     private final ResidentService residentService;
     private final ImageService imageService;
     private Image governmentIdImage;
@@ -76,7 +76,7 @@ public class CertificateFormController {
 
     public CertificateFormController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
-        this.requestService = dependencyInjector.getRequestService();
+        this.certificateService = dependencyInjector.getCertificateService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
         this.validator = dependencyInjector.getValidator();
@@ -96,7 +96,7 @@ public class CertificateFormController {
             @Override
             protected Void call() {
                 Request request = createRequestsFromInput();
-                requestService.createRequest(request);
+                certificateService.createCertificate(request);
                 return null;
             }
 
