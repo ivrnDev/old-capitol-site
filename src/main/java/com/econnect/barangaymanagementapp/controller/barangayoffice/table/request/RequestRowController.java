@@ -2,8 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.reque
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.modal.ViewResidentController;
-import com.econnect.barangaymanagementapp.domain.RequestTable;
-import com.econnect.barangaymanagementapp.domain.Resident;
+import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
@@ -11,11 +10,9 @@ import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +27,7 @@ import okhttp3.Response;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 
-public class RequestRowController extends BaseRowController<RequestTable> {
+public class RequestRowController extends BaseRowController<Request> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
@@ -60,16 +57,16 @@ public class RequestRowController extends BaseRowController<RequestTable> {
     }
 
     @Override
-    protected void setData(RequestTable requestData) {
-        this.requestId = requestData.getRequestId();
+    protected void setData(Request requestData) {
+        this.requestId = requestData.getId();
 //        Platform.runLater(() -> setupButtonContainer());
 
-        requestIdLabel.setText(requestData.getRequestId());
+        requestIdLabel.setText(requestData.getId());
         requestLabel.setText(requestData.getRequest());
-        requestTypeLabel.setText(requestData.getRequestType());
-        statusLabel.setText(requestData.getStatus());
-        dateLabel.setText(requestData.getDate());
-        timeLabel.setText(requestData.getTime());
+        requestTypeLabel.setText(requestData.getRequestType() != null ? requestData.getRequestType().getName() : "");
+        statusLabel.setText(requestData.getStatus().getName());
+        dateLabel.setText(DateFormatter.formatDateToLongStyle(requestData.getCreatedAt()));
+        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(requestData.getCreatedAt()));
     }
 
     @Override

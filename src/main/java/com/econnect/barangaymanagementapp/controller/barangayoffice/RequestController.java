@@ -1,10 +1,10 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
-import com.econnect.barangaymanagementapp.domain.Resident;
-import com.econnect.barangaymanagementapp.enumeration.filter.ResidentRequestFilter;
-import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.table.request.RequestTableController;
+import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.service.BarangayidService;
+import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -24,14 +24,12 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static com.econnect.barangaymanagementapp.enumeration.filter.ResidentRequestFilter.*;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_TABLE;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
-import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESIDENT;
+import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestController {
     @FXML
@@ -43,16 +41,17 @@ public class RequestController {
     @FXML
     private ComboBox<String> residentRequestComboBox;
 
-    private final ResidentService residentService;
+    private final DependencyInjector dependencyInjector;
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
-    private ResidentTableController requestTableController;
-    private ResidentApplicationTableController residentApplicationTableController;
-    private final SearchService<Resident> searchService;
+    private RequestTableController requestTableController;
     private final LiveReloadUtils liveReloadUtils;
-    private final DependencyInjector dependencyInjector;
+    private final SearchService<Request> searchService;
+    private final ResidentService residentService;
+    private final CertificateService certificateService;
+    private final BarangayidService barangayidService;
 
-    private List<Resident> allResidents;
+    private List<Request> allRequest = new ArrayList<>();
     private StackPane loadingIndicator;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -62,17 +61,19 @@ public class RequestController {
         this.residentService = dependencyInjector.getResidentService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
-        this.searchService = dependencyInjector.getResidentSearchService();
         this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
+        this.searchService = dependencyInjector.getRequestSearchService();
+        this.certificateService = dependencyInjector.getCertificateService();
+        this.barangayidService = dependencyInjector.getBarangayidService();
     }
 
     public void initialize() {
-        resetLiveReload();
-        initializeSSEListener();
+//        resetLiveReload();
+//        initializeSSEListener();
 
         setupListener();
         loadRequestTable();
-        populateRows();
+        fetchData();
     }
 
     private void loadRequestTable() {
@@ -86,24 +87,55 @@ public class RequestController {
         }
     }
 
-    private void populateRows() {
+    private void fetchData() {
+        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
+        populateRows(selectedType);
+    }
+
+    private void populateRows(RequestType type) {
         addTableLoadingIndicator();
         Runnable call = () -> {
-            allResidents = residentService.findAllActiveResidents();
+            List<Request> fetchedRequests;
+
+            switch (type) {
+                case CERTIFICATES -> {
+                    fetchedRequests = certificateService.findAllCertificates();
+                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.CERTIFICATES));
+                }
+//                case EVENTS -> {
+//                    fetchedRequests = barangayidService.findAllEvents();
+//                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.EVENTS));
+//                }
+//                case BARANGAY_ID -> {
+//                    fetchedRequests = barangayidService.findAllBarangayIds();
+//                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.BARANGAY_ID));
+//                }
+
+                case ALL -> {
+                    fetchedRequests = new ArrayList<>();
+                    fetchedRequests.addAll(certificateService.findAllCertificates());
+//                    fetchedRequests.addAll(barangayidService.findAllEvents());
+                }
+                default -> fetchedRequests = new ArrayList<>(); // Handle other cases if needed
+            }
+
+            allRequest.clear();
+            allRequest.addAll(fetchedRequests);
+
             Platform.runLater(() -> {
                 removeTableLoadingIndicator();
-                if (allResidents.isEmpty()) {
+                if (allRequest.isEmpty()) {
                     requestTableController.clearRow();
                     requestTableController.showNoData();
                 } else {
-                    updateResidentRow(allResidents);
+                    updateRequestRow(allRequest);
                 }
             });
         };
 
         Runnable onFailed = () -> {
             removeTableLoadingIndicator();
-            System.err.println("Error loading residents");
+            System.err.println("Error loading request");
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
@@ -113,61 +145,49 @@ public class RequestController {
         String searchText = residentRequestSearchField.getText().trim().toLowerCase();
         searchService.performSearch(
                 searchText,
-                allResidents,
-                searchService.createResidentFilter(searchText),
-                (filteredResidents) -> updateResidentRow(filteredResidents));
+                allRequest,
+                searchService.createRequestFilter(searchText),
+                (filteredResidents) -> updateRequestRow(filteredResidents));
     }
 
-
-    private void updateResidentRow(List<Resident> residents) {
+    private void updateRequestRow(List<Request> requests) {
         requestTableController.clearRow();
 
-        if (residents.isEmpty()) {
+        if (requests.isEmpty()) {
             requestTableController.showNoData();
             return;
         }
-        residents.forEach(resident -> requestTableController.addRow(resident));
+        requests.forEach(request -> requestTableController.addRow(request));
     }
 
-    public void updateResidentRow(String id) {
-        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
-        updatedEmployee.ifPresentOrElse(resident -> {
-            if (!INACTIVE_RESIDENT.contains(resident.getStatus())) {
-                requestTableController.updateRow(resident);
-            } else {
-                requestTableController.deleteRow(resident.getId());
-
-            }
-        }, () -> requestTableController.deleteRow(id));
-    }
-
-    public void updateApplicationResidentRow(String id) {
-        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
-        updatedEmployee.ifPresentOrElse(resident -> {
-            if (resident.getStatus().equals(PENDING)) {
-                residentApplicationTableController.updateRow(resident);
-            } else {
-                residentApplicationTableController.deleteRow(resident.getId());
-            }
-        }, () -> residentApplicationTableController.deleteRow(id));
-    }
-
+//    public void updateRequestRow(String id) {
+//        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
+//        updatedEmployee.ifPresentOrElse(request -> {
+//            if (!INACTIVE_RESIDENT.contains(request.getStatus())) {
+//                requestTableController.updateRow(request);
+//            } else {
+//                requestTableController.deleteRow(request.getId());
+//
+//            }
+//        }, () -> requestTableController.deleteRow(id));
+//    }
 
     private void setupListener() {
         residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
         });
-        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(ResidentRequestFilter::getName).toList());
+        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(RequestType::getName).toList());
+        residentRequestComboBox.setValue(RequestType.ALL.getName());
         residentRequestComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            populateRows(fromName(newValue));
         });
     }
 
     //Live Reload
     private void initializeSSEListener() {
         residentService.listenToUpdates(result -> Platform.runLater(() -> {
-            updateResidentRow(result);
-            updateApplicationResidentRow(result);
+//            updateRequestRow(result);
         }));
     }
 

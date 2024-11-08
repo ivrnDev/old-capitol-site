@@ -8,7 +8,7 @@
 <HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row"
       stylesheets="@../../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentRowController">
+      fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.table.request.RequestRowController">
     <children>
         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0">
             <children>
@@ -32,7 +32,7 @@
         </HBox>
         <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
-                <Label fx:id="lastNameLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
+                <Label fx:id="requestLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
                        text="Request" textAlignment="CENTER" wrapText="true">
                     <font>
                         <Font name="Arial Bold" size="14.0"/>

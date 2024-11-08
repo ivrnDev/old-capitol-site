@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum RequestType {
     ALL("All"),
     CERTIFICATES("Certificates"),
+    BARANGAY_ID("Barangay ID"),
     EVENTS("Events");
 
     private final String name;

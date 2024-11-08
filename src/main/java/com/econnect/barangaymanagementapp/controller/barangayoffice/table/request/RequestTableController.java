@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
-import com.econnect.barangaymanagementapp.domain.RequestTable;
+import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.fxml.FXML;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_ROW;
 
-public class RequestTableController extends BaseTableController<RequestTable> {
+public class RequestTableController extends BaseTableController<Request> {
     @FXML
     private VBox tableContent;
 
@@ -28,13 +28,13 @@ public class RequestTableController extends BaseTableController<RequestTable> {
     }
 
     @Override
-    public void addRow(RequestTable requestData) {
+    public void addRow(Request requestData) {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_ROW.getFxmlPath(), dependencyInjector);
             HBox residentRow = loader.load();
-            RequestRowController residentRowController = loader.getController();
-            residentRow.setUserData(residentRowController);
-            residentRowController.setData(requestData);
+            RequestRowController requestRowController = loader.getController();
+            residentRow.setUserData(requestRowController);
+            requestRowController.setData(requestData);
             tableContent.getChildren().add(residentRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -42,12 +42,12 @@ public class RequestTableController extends BaseTableController<RequestTable> {
         }
     }
 
-    public void updateRow(RequestTable updatedRequest) {
+    public void updateRow(Request updatedRequest) {
         boolean rowExists = false;
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
                 RequestRowController rowController = (RequestRowController) residentRow.getUserData();
-                if (rowController != null && rowController.getRequestId().equals(updatedRequest.getRequestId())) {
+                if (rowController != null && rowController.getRequestId().equals(updatedRequest.getId())) {
                     rowController.setData(updatedRequest);
                     rowExists = true;
                     break;
