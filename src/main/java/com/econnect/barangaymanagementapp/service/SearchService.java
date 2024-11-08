@@ -5,7 +5,6 @@ import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import javafx.concurrent.Task;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -55,8 +54,8 @@ public class SearchService<T> {
                 || employee.getStatus().getName().toLowerCase().contains(searchText)
                 || employee.getApplicationType().getName().toLowerCase().contains(searchText)
                 || employee.getCreatedAt().toString().contains(searchText)
-                || DateFormatter.extractDateAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText)
-                || DateFormatter.extractTimeAndFormat(employee.getCreatedAt()).toLowerCase().contains(searchText);
+                || DateFormatter.formatDateToLongStyle(employee.getCreatedAt()).toLowerCase().contains(searchText)
+                || DateFormatter.formatTimeTo12HourStyle(employee.getCreatedAt()).toLowerCase().contains(searchText);
     }
 
     public Predicate<Employee> createEmployeeFilter(String searchText) {
@@ -80,7 +79,7 @@ public class SearchService<T> {
                     || (resident.getAddress() != null && resident.getAddress().toLowerCase().contains(searchText))
                     || (resident.getSex() != null && resident.getSex().getName().toLowerCase().contains(searchText))
                     || (resident.getBirthdate() != null && resident.getBirthdate().toLowerCase().contains(searchText))
-                    || (resident.getBirthdate() != null && DateFormatter.calculateAge(DateFormatter.toLocalDateFormat(resident.getBirthdate())).contains(searchText))
+                    || (resident.getBirthdate() != null && DateFormatter.calculateAgeFromBirthdate(resident.getBirthdate()).contains(searchText))
                     || (resident.getBirthplace() != null && resident.getBirthplace().toLowerCase().contains(searchText))
                     || (resident.getCitizenship() != null && resident.getCitizenship().toLowerCase().contains(searchText))
                     || (resident.getOccupation() != null && resident.getOccupation().toLowerCase().contains(searchText))
@@ -107,10 +106,10 @@ public class SearchService<T> {
                     || (resident.getStatus() != null && resident.getStatus().getName() != null && resident.getStatus().getName().toLowerCase().contains(searchText))
                     || (resident.getEducationalAttainment() != null && resident.getEducationalAttainment().toLowerCase().contains(searchText))
                     || (resident.getSourceOfIncome() != null && resident.getSourceOfIncome().toLowerCase().contains(searchText))
-                    || (resident.getCreatedAt() != null && DateFormatter.extractDateAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText))
-                    || (resident.getCreatedAt() != null && DateFormatter.extractTimeAndFormat(resident.getCreatedAt()).toLowerCase().contains(searchText))
-                    || (resident.getUpdatedAt() != null && DateFormatter.extractDateAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText))
-                    || (resident.getUpdatedAt() != null && DateFormatter.extractTimeAndFormat(resident.getUpdatedAt()).toLowerCase().contains(searchText));
+                    || (resident.getCreatedAt() != null && DateFormatter.formatDateToLongStyle(resident.getCreatedAt()).toLowerCase().contains(searchText))
+                    || (resident.getCreatedAt() != null && DateFormatter.formatTimeTo12HourStyle(resident.getCreatedAt()).toLowerCase().contains(searchText))
+                    || (resident.getUpdatedAt() != null && DateFormatter.formatDateToLongStyle(resident.getUpdatedAt()).toLowerCase().contains(searchText))
+                    || (resident.getUpdatedAt() != null && DateFormatter.formatTimeTo12HourStyle(resident.getUpdatedAt()).toLowerCase().contains(searchText));
 
         };
     }

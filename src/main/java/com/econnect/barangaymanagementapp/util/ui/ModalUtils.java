@@ -64,8 +64,13 @@ public class ModalUtils {
             modalStage.setScene(scene);
 
             if (modal.getModalType().equals(ModalType.NOTIFICATION)) {
-                centerTop(modalStage);
-                modalStage.initOwner(parentStage);
+                if (customizeStage != null) {
+                    centerTop(modalStage, customizeStage);
+                    modalStage.initOwner(customizeStage);
+                } else {
+                    centerTop(modalStage, parentStage);
+                    modalStage.initOwner(parentStage);
+                }
             }
 
             if (modal.getModalType().equals(ModalType.MODAL)) {
@@ -192,10 +197,10 @@ public class ModalUtils {
         });
     }
 
-    private void centerTop(Stage modalStage) {
+    private void centerTop(Stage modalStage, Stage ownerStage) {
         modalStage.setOnShown(_ -> {
-            double centerX = parentStage.getX() + parentStage.getWidth() / 2 - modalStage.getWidth() / 2;
-            double topY = parentStage.getY() + 100;
+            double centerX = ownerStage.getX() + ownerStage.getWidth() / 2 - modalStage.getWidth() / 2;
+            double topY = ownerStage.getY() + 70;
             modalStage.setX(centerX);
             modalStage.setY(topY);
         });

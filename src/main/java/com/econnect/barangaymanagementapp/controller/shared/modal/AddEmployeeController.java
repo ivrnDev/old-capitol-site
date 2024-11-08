@@ -69,13 +69,13 @@ public class AddEmployeeController {
     @FXML
     private Button cancelBtn, confirmBtn;
 
+    private Stage currentStage;
     private final ModalUtils modalUtils;
     private final EmployeeService employeeService;
     private final ResidentService residentService;
     private final ImageService imageService;
     private final FileChooserUtils fileChooserUtils;
     private final Validator validator;
-    private Stage currentStage;
     private File resumeFile;
     private File clearanceFile;
     private Image profilePictureImage;
@@ -91,7 +91,7 @@ public class AddEmployeeController {
         this.imageService = dependencyInjector.getImageService();
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
-        this.currentStage = dependencyInjector.getStage();
+        Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
 
     public void initialize() {
@@ -209,14 +209,14 @@ public class AddEmployeeController {
                 .address(addressInput.getText())
                 .email(emailInput.getText())
                 .contactNumber(contactNumberInput.getText())
-                .createdAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
-                .updatedAt(DateFormatter.getFormattedZonedDateTime(ZonedDateTime.now()))
+                .createdAt(DateFormatter.convertToUtc(ZonedDateTime.now()))
+                .updatedAt(DateFormatter.convertToUtc(ZonedDateTime.now()))
                 .status(EmployeeStatus.UNDER_REVIEW)
                 .department(DepartmentType.NONE)
                 .role(RoleType.NONE)
                 .applicationType(ApplicationType.WALK_IN)
                 .employment(employmentTypeComboBox.getValue().equals(VOLUNTEER.getName()) ? VOLUNTEER : FULL_TIME)
-                .nbiClearanceExpiration(String.valueOf(nbiExpirationPicker.getValue()))
+                .nbiClearanceExpiration(DateFormatter.formatLocalDateToUsShortDate(nbiExpirationPicker.getValue()))
                 .build();
     }
 

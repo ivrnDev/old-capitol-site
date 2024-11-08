@@ -3,6 +3,8 @@ package com.econnect.barangaymanagementapp.controller.shared.modal;
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
+import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType;
+import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.CivilStatus;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -19,10 +21,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class ViewResidentController implements BaseViewController {
@@ -32,10 +34,12 @@ public class ViewResidentController implements BaseViewController {
     private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, nameExtensionInput, addressInput, birthdateInput, birthPlaceInput,
             emailInput, contactNumberInput, telephoneNumberInput, citizenshipInput, civilStatusInput, motherToungeInput, bloodTypeInput, religionInput, incomeInput,
             residencyStatusInput, educationAttainmentInput, spouseLastNameInput, spouseFirstNameInput, spouseMiddleNameInput, spouseNameExtensionInput, spouseOccupationInput,
-            fatherLastNameInput, fatherFirstNameInput, fatherMiddleNameInput, fatherNameExtensionInput, fatherOccupationInput, motherLastNameINput, motherFirstNameInput, motherMiddleNameInput,
+            fatherLastNameInput, fatherFirstNameInput, fatherMiddleNameInput, fatherNameExtensionInput, fatherOccupationInput, motherLastNameInput, motherFirstNameInput, motherMiddleNameInput,
             motherNameExtensionInput, motherOccupationInput;
     @FXML
     private HBox profileContainer, viewGovernmentID, governmentIdPreviewContainer, viewTinId, viewTinIdPreviewContainer;
+    @FXML
+    private VBox spouseContainer;
     @FXML
     private Text validIdExpiryDateText;
 
@@ -52,14 +56,24 @@ public class ViewResidentController implements BaseViewController {
     public ViewResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.residentService = dependencyInjector.getResidentService();
-        this.currentStage = dependencyInjector.getStage();
         this.imageService = dependencyInjector.getImageService();
+        Platform.runLater(() -> currentStage = (Stage) closeBtn.getScene().getWindow());
     }
 
     public void initialize() {
         closeBtn.setOnMouseClicked(_ -> closeView());
         setupPreviewRounded();
         populateFields();
+    }
+
+    private void setupSpouseContainer(CivilStatus civilStatus) {
+        if (civilStatus.equals(CivilStatus.MARRIED)) {
+            spouseContainer.setVisible(true);
+            spouseContainer.setManaged(true);
+            return;
+        }
+        spouseContainer.setVisible(false);
+        spouseContainer.setManaged(false);
     }
 
     private void populateFields() {
@@ -95,9 +109,9 @@ public class ViewResidentController implements BaseViewController {
         lastNameInput.setText(resident.getLastName());
         firstNameInput.setText(resident.getFirstName());
         middleNameInput.setText(resident.getMiddleName());
-        nameExtensionInput.setText(resident.getNameExtension());
+        nameExtensionInput.setText(!resident.getNameExtension().isEmpty() ? resident.getNameExtension() : ResidentInfomationType.SuffixName.NONE.getName());
         addressInput.setText(resident.getAddress());
-        birthdateInput.setText(resident.getBirthdate().toString());
+        birthdateInput.setText(DateFormatter.formatToLongDate(resident.getBirthdate()));
         birthPlaceInput.setText(resident.getBirthplace());
         emailInput.setText(resident.getEmail());
         contactNumberInput.setText(resident.getMobileNumber());
@@ -118,14 +132,15 @@ public class ViewResidentController implements BaseViewController {
         fatherLastNameInput.setText(resident.getFatherLastName());
         fatherFirstNameInput.setText(resident.getFatherFirstName());
         fatherMiddleNameInput.setText(resident.getFatherMiddleName());
-        fatherNameExtensionInput.setText(resident.getFatherSuffixName());
+        fatherNameExtensionInput.setText(!resident.getFatherSuffixName().isEmpty() ? resident.getFatherSuffixName() : ResidentInfomationType.SuffixName.NONE.getName());
         fatherOccupationInput.setText(resident.getFatherOccupation());
-        motherLastNameINput.setText(resident.getMotherLastName());
+        motherLastNameInput.setText(resident.getMotherLastName());
         motherFirstNameInput.setText(resident.getMotherFirstName());
         motherMiddleNameInput.setText(resident.getMotherMiddleName());
-        motherNameExtensionInput.setText(resident.getMotherSuffixName());
+        motherNameExtensionInput.setText(!resident.getMotherSuffixName().isEmpty() ? resident.getMotherSuffixName() : ResidentInfomationType.SuffixName.NONE.getName());
         motherOccupationInput.setText(resident.getMotherOccupation());
-        validIdExpiryDateText.setText(DateFormatter.toNamedFormat(resident.getValidIdExpiration()));
+        validIdExpiryDateText.setText(DateFormatter.formatShortToLongDate(resident.getValidIdExpiration()));
+        setupSpouseContainer(resident.getCivilStatus());
     }
 
     private void loadProfileImage(String directory, String link) {

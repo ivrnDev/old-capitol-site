@@ -66,7 +66,7 @@ public class IdFormController {
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
         this.validator = dependencyInjector.getValidator();
-        this.currentStage = dependencyInjector.getStage();
+        Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
 
     public void initialize() {
@@ -148,7 +148,7 @@ public class IdFormController {
                     birthdateText.setText(residentInfo.getBirthdate());
                     civilStatusText.setText(residentInfo.getCivilStatus().getName());
                     residencyStatusText.setText(residentInfo.getResidencyStatus().getName());
-                    expirationDateText.setText(DateFormatter.toStringLocaleDateFormat(LocalDate.now().plusYears(1)));
+                    expirationDateText.setText(DateFormatter.formatLocalDateToUsShortDate(LocalDate.now().plusYears(1)));
                     emergencyFullNameText.setText(emergencyFullName);
                     emergencyContactText.setText(residentInfo.getEmergencyMobileNumber());
                     emergencyRelationshipText.setText(residentInfo.getEmergencyRelationship());

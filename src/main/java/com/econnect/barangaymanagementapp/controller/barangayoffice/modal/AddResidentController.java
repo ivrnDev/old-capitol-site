@@ -84,7 +84,7 @@ public class AddResidentController {
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
         this.residentService = dependencyInjector.getResidentService();
-        this.currentStage = dependencyInjector.getStage();
+        Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
 
     public void initialize() {
@@ -155,7 +155,7 @@ public class AddResidentController {
                 .telephoneNumber(telephoneInput.getText())
                 .email(emailInput.getText())
                 .address(addressInput.getText())
-                .birthdate(birthdatePicker.getValue() != null ? DateFormatter.toStandardFormat(birthdatePicker.getValue()) : null)
+                .birthdate(birthdatePicker.getValue() != null ? DateFormatter.formatToUsShortDate(birthdatePicker.getValue()) : null)
                 .birthplace(birthplaceInput.getText())
                 .citizenship(citizenshipInput.getText())
                 .civilStatus(CivilStatus.fromName(civilStatusComboBox.getValue()))
@@ -163,7 +163,7 @@ public class AddResidentController {
                 .bloodType(BloodType.fromName(bloodTypeComboBox.getValue()))
                 .religion(Religion.fromName(religionComboBox.getValue()))
                 .occupation(occupationInput.getText())
-                .age(birthdatePicker.getValue() != null ? DateFormatter.calculateAge(birthdatePicker.getValue()) : null)
+                .age(birthdatePicker.getValue() != null ? DateFormatter.calculateAgeFromBirthdate(birthdatePicker.getValue()) : null)
                 .sex(GenderType.fromName(sexComboBox.getValue()))
 
                 .fatherFirstName(fatherFirstNameInput.getText())
@@ -200,7 +200,7 @@ public class AddResidentController {
                 .validIdUrl(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
                 .tinIdUrl(tidIdFile != null ? tidIdFile.toURI().toString() : null)
                 .tinIdNumber(tinIdNumberInput.getText())
-                .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.toStandardFormat(validIdExpirationDatePicker.getValue()) : null)
+                .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.formatLocalDateToUsShortDate(validIdExpirationDatePicker.getValue()) : null)
                 .createdAt(ZonedDateTime.now())
                 .updatedAt(ZonedDateTime.now())
                 .build();
