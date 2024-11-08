@@ -1,10 +1,12 @@
 package com.econnect.barangaymanagementapp.controller.component;
 
-import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
-import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.NavigationType;
 import com.econnect.barangaymanagementapp.MainApplication;
-import com.econnect.barangaymanagementapp.util.*;
+import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
+import com.econnect.barangaymanagementapp.enumeration.type.NavigationType;
+import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
+import com.econnect.barangaymanagementapp.util.SceneManager;
 import com.econnect.barangaymanagementapp.util.state.NavigationState;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -13,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.util.Objects;
@@ -25,6 +26,7 @@ public class SidebarController {
     private final NavigationState navigationState;
     private final ModalUtils modalUtils;
     private DepartmentType currentDepartment;
+    private LiveReloadUtils liveReloadUtils;
 
     @FXML
     private VBox navigationBar;
@@ -34,6 +36,7 @@ public class SidebarController {
         this.sceneManager = dependencyInjector.getSceneManager();
         this.navigationState = dependencyInjector.getNavigationState();
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     public void initialize() {
@@ -92,6 +95,7 @@ public class SidebarController {
             if (isConfirmed) {
                 navigationState.setActiveItem(null);
                 userSession.clearSession();
+                liveReloadUtils.stopListeningToUpdates();
                 sceneManager.switchToDefaultScene();
             }
         });
