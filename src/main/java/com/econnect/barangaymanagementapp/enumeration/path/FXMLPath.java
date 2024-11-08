@@ -3,15 +3,21 @@ package com.econnect.barangaymanagementapp.enumeration.path;
 public enum FXMLPath {
     TABLE_NO_DATA("view/component/no-data-row.fxml"),
 
+    //Employee Table
     EMPLOYEE_TABLE("view/shared/table/employee/employee-table.fxml"),
     EMPLOYEE_ROW("view/shared/table/employee/employee-row.fxml"),
     EMPLOYEE_APPLICATION_TABLE("view/shared/table/application/application-table.fxml"),
     EMPLOYEE_APPLICATION_ROW("view/shared/table/application/application-row.fxml"),
 
+    // Resident Table
     RESIDENT_TABLE("view/barangayoffice/table/resident/resident-table.fxml"),
     RESIDENT_ROW("view/barangayoffice/table/resident/resident-row.fxml"),
     RESIDENT_APPLICATION_TABLE("view/barangayoffice/table/resident/resident-application-table.fxml"),
     RESIDENT_APPLICATION_ROW("view/barangayoffice/table/resident/resident-application-row.fxml"),
+
+    // Request Table
+    REQUEST_TABLE("view/barangayoffice/table/request/request-table.fxml"),
+    REQUEST_ROW("view/barangayoffice/table/request/request-row.fxml"),
 
     RESOURCE_ERROR_MODAL("view/component/modal/resource-error.fxml"),
     DEFAULT_PROFILE("images/default-profile.png"),
