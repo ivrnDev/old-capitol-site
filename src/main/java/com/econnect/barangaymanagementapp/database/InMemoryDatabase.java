@@ -25,7 +25,7 @@ public class InMemoryDatabase {
                 .department(DepartmentType.BARANGAY_OFFICE)
                 .status(StatusType.EmployeeStatus.ACTIVE)
                 .username(" ")
-                .access(" ")
+                .password(" ")
                 .createdAt(ZonedDateTime.now())
                 .updatedAt(ZonedDateTime.now())
                 .lastLogin(ZonedDateTime.now())

@@ -21,7 +21,6 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Emp
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final PasswordUtils passwordUtils;
     private final EmailService emailService;
     private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, RESIGNED, REJECTED, PENDING, EVALUATION);
     private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
@@ -29,7 +28,6 @@ public class EmployeeService {
 
     public EmployeeService(DependencyInjector dependencyInjector) {
         this.employeeRepository = dependencyInjector.getEmployeeRepository();
-        this.passwordUtils = dependencyInjector.getPasswordUtils();
         this.emailService = dependencyInjector.getEmailService();
     }
 
@@ -51,18 +49,14 @@ public class EmployeeService {
                     .firstName("Admin")
                     .lastName("Admin")
                     .department(DepartmentType.BARANGAY_OFFICE)
-                    .access(passwordUtils.encryptPassword("admin"))
+                    .password("admin")
                     .status(ACTIVE)
                     .username("admin")
                     .build());
         }
-        return employeeRepository.findEmployeeByFilter(user -> user.getStatus().equals(ACTIVE) && user.getUsername().equals(username) && passwordUtils.comparePassword(password, user.getAccess()))
+        return employeeRepository.findEmployeeByFilter(user -> user.getStatus().equals(ACTIVE) && user.getUsername().equals(username) && user.getPassword().equals(password))
                 .stream()
                 .findFirst();
-       /* var employee = InMemoryDatabase.getInstance().getList();
-        return employee.stream()
-                .filter(user -> user.getUsername().equals(username) && user.getAccess().equals(password))
-                .findFirst();*/
     }
 
     public List<Employee> findAllEmployeesByStatus(StatusType.EmployeeStatus status) {
@@ -176,7 +170,6 @@ public class EmployeeService {
     }
 
     public Response terminateEmployee(String employeeId) {
-        System.out.println(employeeId);
         Optional<Employee> findEmployee = findEmployeeById(employeeId);
         if (!findEmployee.isPresent()) return null;
         return updateEmployeeByStatus(employeeId, TERMINATED);
@@ -225,9 +218,9 @@ public class EmployeeService {
         String formattedId = String.format("%03d", employeeCount);
         String username = employee.getLastName().toLowerCase() + formattedId;
         password = employee.getLastName().toLowerCase() + generate6DigitPin();
-        String hashedPassword = passwordUtils.encryptPassword(password);
+//        String hashedPassword = passwordUtils.encryptPassword(password);
         employee.setUsername(username);
-        employee.setAccess(hashedPassword);
+        employee.setPassword(password);
         return employee;
     }
 
