@@ -1,27 +1,24 @@
 package com.econnect.barangaymanagementapp.enumeration.type;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum RequestType {
-    BARANGAY_CLEARANCE("Barangay Clearance"),
-    CERTIFICATE_OF_INDIGENCY("Certificate of Indigency"),
-    CERTIFICATE_OF_RESIDENCY("Certificate of Residency"),
-    CEDULA("Cedula"),
-    BARANGAY_ID("Barangay ID");
+    ALL("All"),
+    CERTIFICATES("Certificates"),
+    EVENTS("Events");
 
     private final String name;
 
-    RequestType(String requestType) {
-        this.name = requestType;
-    }
-
-    public static RequestType fromName(String requestType) {
-        for (RequestType type : RequestType.values()) {
-            if (type.getName().equalsIgnoreCase(requestType)) {
-                return type;
+    public static RequestType fromName(String name) {
+        for (RequestType filter : values()) {
+            if (filter.getName().equalsIgnoreCase(name)) {
+                return filter;
             }
         }
         return null;
     }
+
 }
