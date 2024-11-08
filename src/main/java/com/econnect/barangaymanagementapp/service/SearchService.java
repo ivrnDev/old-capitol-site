@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import javafx.concurrent.Task;
@@ -114,4 +115,14 @@ public class SearchService<T> {
         };
     }
 
+    public Predicate<Request> createRequestFilter(String searchText) {
+        return request -> request.getId().toLowerCase().contains(searchText)
+                || request.getReferenceNumber().toLowerCase().contains(searchText)
+                || request.getApplicationType().getName().toLowerCase().contains(searchText)
+                || request.getRequest().toLowerCase().contains(searchText)
+                || request.getStatus().getName().toLowerCase().contains(searchText)
+                || request.getCreatedAt() != null && DateFormatter.formatDateToLongStyle(request.getCreatedAt()).toLowerCase().contains(searchText)
+                || request.getCreatedAt() != null && DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()).toLowerCase().contains(searchText);
+
+    }
 }

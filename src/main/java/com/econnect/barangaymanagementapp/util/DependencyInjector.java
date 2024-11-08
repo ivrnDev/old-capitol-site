@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.repository.*;
 import com.econnect.barangaymanagementapp.service.*;
@@ -32,6 +33,7 @@ public class DependencyInjector {
     private final FileChooserUtils fileChooserUtils;
     private final SearchService<Employee> employeeSearchService;
     private final SearchService<Resident> residentSearchService;
+    private final SearchService<Request> requestSearchService;
     private final Validator validator;
     private final LiveReloadUtils liveReloadUtils;
 
@@ -77,6 +79,7 @@ public class DependencyInjector {
         this.certificateService = new CertificateService(this);
         this.employeeSearchService = new SearchService<>();
         this.residentSearchService = new SearchService<>();
+        this.requestSearchService = new SearchService<>();
         this.barangayidService = new BarangayidService(this);
     }
 }
