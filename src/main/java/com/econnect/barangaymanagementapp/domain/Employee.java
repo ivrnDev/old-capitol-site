@@ -34,7 +34,7 @@ public class Employee extends BaseEntity {
     private DepartmentType department;
     private EmploymentType employment;
     private String username;
-    private String access;
+    private String password;
     private String profileUrl;
     private String resumeUrl;
     private String nbiClearanceUrl;

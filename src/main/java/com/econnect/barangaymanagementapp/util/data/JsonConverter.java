@@ -1,8 +1,7 @@
 package com.econnect.barangaymanagementapp.util.data;
 
 import com.econnect.barangaymanagementapp.config.deserializer.JacksonFactory;
-import com.econnect.barangaymanagementapp.domain.Request;
-import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +30,8 @@ public class JsonConverter {
                 new JacksonFactory.EnumDeserializer<>(MotherTongue::fromName));
         customModule.addDeserializer(ResidencyStatus.class,
                 new JacksonFactory.EnumDeserializer<>(ResidencyStatus::fromName));
-        customModule.addDeserializer(RequestType.class,
-                new JacksonFactory.EnumDeserializer<>(RequestType::fromName));
+        customModule.addDeserializer(CertificateType.class,
+                new JacksonFactory.EnumDeserializer<>(CertificateType::fromName));
 
 
         customModule.addSerializer(GenderType.class,
@@ -49,8 +48,8 @@ public class JsonConverter {
                 new JacksonFactory.EnumSerializer<>(MotherTongue::getName));
         customModule.addSerializer(ResidencyStatus.class,
                 new JacksonFactory.EnumSerializer<>(ResidencyStatus::getName));
-        customModule.addSerializer(RequestType.class,
-                new JacksonFactory.EnumSerializer<>(RequestType::getName));
+        customModule.addSerializer(CertificateType.class,
+                new JacksonFactory.EnumSerializer<>(CertificateType::getName));
 
 
         this.objectMapper = new ObjectMapper()

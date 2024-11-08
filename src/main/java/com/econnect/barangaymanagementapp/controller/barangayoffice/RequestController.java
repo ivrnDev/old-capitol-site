@@ -1,12 +1,15 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
-import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
-import com.econnect.barangaymanagementapp.domain.Resident;
-import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.table.request.RequestTableController;
+import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.service.BarangayidService;
+import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -14,150 +17,192 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestController {
-   /* @FXML
-    private TextField residentApplicationSearchField, residentListSearchField;
-
     @FXML
-    private VBox residentApplicationContent, residentListContent;
-
+    private VBox contentPane;
     @FXML
-    private Button addResidentBtn;
+    private VBox residentRequestContainer;
+    @FXML
+    private TextField residentRequestSearchField;
+    @FXML
+    private ComboBox<String> residentRequestComboBox;
 
-    private final ResidentService residentService;
-    private final SearchService<Resident> searchService;
-    private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
     private final ModalUtils modalUtils;
-    private ResidentApplicationTableController residentApplicationTableController;
-    private ResidentTableController residentTableController;
-    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
+    private final FXMLLoaderFactory fxmlLoaderFactory;
+    private RequestTableController requestTableController;
+    private final LiveReloadUtils liveReloadUtils;
+    private final SearchService<Request> searchService;
+    private final ResidentService residentService;
+    private final CertificateService certificateService;
+    private final BarangayidService barangayidService;
+
+    private List<Request> allRequest = new ArrayList<>();
     private StackPane loadingIndicator;
+
+    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public RequestController(DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
+        this.residentService = dependencyInjector.getResidentService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
-        this.residentService = dependencyInjector.getResidentService();
-        this.searchService = dependencyInjector.getResidentSearchService();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
+        this.searchService = dependencyInjector.getRequestSearchService();
+        this.certificateService = dependencyInjector.getCertificateService();
+        this.barangayidService = dependencyInjector.getBarangayidService();
     }
 
     public void initialize() {
-        addResidentBtn.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ADD_RESIDENT));
-        residentApplicationTableController = loadTable(RESIDENT_APPLICATION_TABLE);
-        residentTableController = loadTable(RESIDENT_TABLE);
-//        populateResidentApplicationRow();
-//        populateResidentRow();
-        residentApplicationSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchDelay.setOnFinished(_ -> performSearch());
-            searchDelay.playFromStart();
-        });
+//        resetLiveReload();
+//        initializeSSEListener();
+
+        setupListener();
+        loadRequestTable();
+        fetchData();
     }
 
-    private <T extends BaseTableController<Resident>> T loadTable(FXMLPath fxmlPath) {
+    private void loadRequestTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(fxmlPath.getFxmlPath(), dependencyInjector, this);
-            Parent residentApplicationTable = loader.load();
-            T tableController = loader.getController();
-            if (fxmlPath.equals(RESIDENT_APPLICATION_TABLE)) {
-                residentApplicationContent.getChildren().add(residentApplicationTable);
-            } else {
-                residentListContent.getChildren().add(residentApplicationTable);
-            }
-            return tableController;
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_TABLE.getFxmlPath(), dependencyInjector);
+            Parent requestTable = loader.load();
+            requestTableController = loader.getController();
+            residentRequestContainer.getChildren().add(requestTable);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error loading employee table: " + e.getMessage());
-            return null;
+            System.err.println("Error loading request table: " + e.getMessage());
         }
     }
 
-    private void populateResidentApplicationRow() {
-        addLoadingIndicator();
-        Runnable call = () -> {
-            List<Resident> allResidentApplications = residentService.findAllPendingResidents();
-
-            Platform.runLater(() -> {
-                removeLoadingIndicator();
-                residentApplicationTableController.clearRow();
-                if (allResidentApplications.isEmpty()) {
-                    residentApplicationTableController.showNoData();
-                    return;
-                }
-                if (allResidentApplications.isEmpty()) {
-                    residentApplicationTableController.showNoData();
-                    return;
-                }
-                allResidentApplications.forEach(resident -> residentApplicationTableController.addRow(resident));
-            });
-        };
-
-        Runnable onFailed = () -> {
-            Platform.runLater(() -> residentApplicationContent.getChildren().remove(loadingIndicator));
-            System.err.println("Error loading employees");
-        };
-
-        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+    private void fetchData() {
+        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
+        populateRows(selectedType);
     }
 
-    private void populateResidentRow() {
-        addLoadingIndicator();
+    private void populateRows(RequestType type) {
+        addTableLoadingIndicator();
         Runnable call = () -> {
-            List<Resident> allResidents = residentService.findAllResidents();
+            List<Request> fetchedRequests;
+
+            switch (type) {
+                case CERTIFICATES -> {
+                    fetchedRequests = certificateService.findAllCertificates();
+                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.CERTIFICATES));
+                }
+//                case EVENTS -> {
+//                    fetchedRequests = barangayidService.findAllEvents();
+//                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.EVENTS));
+//                }
+//                case BARANGAY_ID -> {
+//                    fetchedRequests = barangayidService.findAllBarangayIds();
+//                    fetchedRequests.forEach(request -> request.setRequestType(RequestType.BARANGAY_ID));
+//                }
+
+                case ALL -> {
+                    fetchedRequests = new ArrayList<>();
+                    fetchedRequests.addAll(certificateService.findAllCertificates());
+//                    fetchedRequests.addAll(barangayidService.findAllEvents());
+                }
+                default -> fetchedRequests = new ArrayList<>(); // Handle other cases if needed
+            }
+
+            allRequest.clear();
+            allRequest.addAll(fetchedRequests);
 
             Platform.runLater(() -> {
-                removeLoadingIndicator();
-                residentApplicationTableController.clearRow();
-                if (allResidents.isEmpty()) {
-                    residentApplicationTableController.showNoData();
-                    return;
+                removeTableLoadingIndicator();
+                if (allRequest.isEmpty()) {
+                    requestTableController.clearRow();
+                    requestTableController.showNoData();
+                } else {
+                    updateRequestRow(allRequest);
                 }
-                if (allResidents.isEmpty()) {
-                    residentApplicationTableController.showNoData();
-                    return;
-                }
-                allResidents.forEach(resident -> residentTableController.addRow(resident));
             });
         };
 
         Runnable onFailed = () -> {
-            Platform.runLater(() -> residentListContent.getChildren().remove(loadingIndicator));
-            System.err.println("Error loading employees");
+            removeTableLoadingIndicator();
+            System.err.println("Error loading request");
         };
 
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
     private void performSearch() {
-//        String searchText = residentApplicationSearchField.getText().trim().toLowerCase();
-//        searchService.performSearch(
-//                searchText,
-//                allResidentApplications,
-//                searchService.createEmployeeApplicationFilter(searchText),
-//                (filteredApplications) -> updateResidentApplication(filteredApplications));
+        String searchText = residentRequestSearchField.getText().trim().toLowerCase();
+        searchService.performSearch(
+                searchText,
+                allRequest,
+                searchService.createRequestFilter(searchText),
+                (filteredResidents) -> updateRequestRow(filteredResidents));
     }
 
-    public void addLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentApplicationContent.getWidth(), residentApplicationContent.getHeight());
-        residentApplicationContent.getChildren().add(loadingIndicator);
+    private void updateRequestRow(List<Request> requests) {
+        requestTableController.clearRow();
+
+        if (requests.isEmpty()) {
+            requestTableController.showNoData();
+            return;
+        }
+        requests.forEach(request -> requestTableController.addRow(request));
     }
 
-    public void removeLoadingIndicator() {
-        residentApplicationContent.getChildren().remove(loadingIndicator);
+//    public void updateRequestRow(String id) {
+//        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
+//        updatedEmployee.ifPresentOrElse(request -> {
+//            if (!INACTIVE_RESIDENT.contains(request.getStatus())) {
+//                requestTableController.updateRow(request);
+//            } else {
+//                requestTableController.deleteRow(request.getId());
+//
+//            }
+//        }, () -> requestTableController.deleteRow(id));
+//    }
+
+    private void setupListener() {
+        residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(_ -> performSearch());
+            searchDelay.playFromStart();
+        });
+        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(RequestType::getName).toList());
+        residentRequestComboBox.setValue(RequestType.ALL.getName());
+        residentRequestComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            populateRows(fromName(newValue));
+        });
     }
 
-    public void reloadTable() {
-        populateResidentApplicationRow();
-    }*/
+    //Live Reload
+    private void initializeSSEListener() {
+        residentService.listenToUpdates(result -> Platform.runLater(() -> {
+//            updateRequestRow(result);
+        }));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
+    }
+
+    //Loading Indicator
+    public void addTableLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContainer.getWidth(), residentRequestContainer.getHeight());
+        residentRequestContainer.getChildren().add(loadingIndicator);
+    }
+
+    public void removeTableLoadingIndicator() {
+        residentRequestContainer.getChildren().remove(loadingIndicator);
+    }
+
 }

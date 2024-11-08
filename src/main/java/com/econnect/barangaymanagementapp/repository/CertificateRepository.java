@@ -12,43 +12,43 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class RequestRepository extends BaseRepository<Request> {
+public class CertificateRepository extends BaseRepository<Request> {
     private final String apiKey = Config.getFirebaseUrl() + Firebase.CERTIFICATES.getPath();
 
-    public RequestRepository(DependencyInjector dependencyInjector) {
+    public CertificateRepository(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
     }
 
-    public Response createRequest(Request request) {
+    public Response createCertificate(Request request) {
         return create(apiKey + "/" + request.getId(), request);
     }
 
-    public Response updateRequest(Request request) {
+    public Response updateCertificate(Request request) {
         return create(apiKey + "/" + request.getId(), request);
 
     }
 
-    public Boolean deleteRequestById(String id) {
+    public Boolean deleteCertificateById(String id) {
         return deleteById(apiKey, id);
     }
 
-    public Optional<Request> findRequestById(String requestId) {
+    public Optional<Request> findCertificateById(String requestId) {
         return findById(apiKey, requestId, new TypeReference<>() {
         });
 
     }
 
-    public List<Request> findAllRequests() {
+    public List<Request> findAllCertificates() {
         return findAll(apiKey, new TypeReference<>() {
         });
     }
 
-    public List<Request> findRequestByFilter(Predicate<Request> predicate) {
+    public List<Request> findCertificateByFilter(Predicate<Request> predicate) {
         return findAllByFilter(apiKey, new TypeReference<>() {
         }, predicate);
     }
 
-    public Response updateRequestByStatus(String requestId, StatusType.RequestStatus status) {
+    public Response updateCertificateByStatus(String requestId, StatusType.RequestStatus status) {
         return updateBy(apiKey, requestId, new TypeReference<>() {
         }, request -> request.setStatus(status));
     }
