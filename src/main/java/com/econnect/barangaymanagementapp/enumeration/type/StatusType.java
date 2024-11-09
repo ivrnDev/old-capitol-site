@@ -54,6 +54,7 @@ public class StatusType {
     public enum RequestStatus {
         PENDING("Pending"),
         IN_PROGRESS("In Progress"),
+        RELEASING("Releasing"),
         COMPLETED("Completed"),
         REJECTED("Rejected");
 
@@ -102,6 +103,7 @@ public class StatusType {
     public enum BarangayIdStatus {
         PENDING("Pending"),
         IN_PROGRESS("In Progress"),
+        RELEASING("Releasing"),
         COMPLETED("Completed"),
         REJECTED("Rejected");
 

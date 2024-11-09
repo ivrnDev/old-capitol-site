@@ -30,6 +30,7 @@ public enum FXMLPath {
     VIEW_RESIDENT("view/shared/modal/view-resident.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml"),
+    VIEW_REQUEST("view/barangayoffice/modal/view/view-document-request.fxml"),
 
     //Form
     CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),
