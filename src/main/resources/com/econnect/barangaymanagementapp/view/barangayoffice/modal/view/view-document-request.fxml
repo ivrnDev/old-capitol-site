@@ -31,7 +31,7 @@
         </ImageView>
         <ScrollPane fitToWidth="true" layoutX="10.0" layoutY="57.0" prefHeight="560.0" prefWidth="962.0" styleClass="root-pane" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="11.0">
             <content>
-                <VBox prefHeight="503.0" prefWidth="947.0">
+                <VBox prefHeight="503.0" prefWidth="958.0">
                     <children>
                         <HBox prefWidth="887.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
@@ -289,6 +289,60 @@
                                                         </TextField>
                                                     </children>
                                                 </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="158.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label text="Date" textOverrun="CLIP">
+                                                   <font>
+                                                      <Font name="Arial" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="20.0" />
+                                             </padding>
+                                          </HBox>
+                                          <TextField fx:id="dateInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Arial" size="12.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="232.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label text="Time" textOverrun="CLIP">
+                                                   <font>
+                                                      <Font name="Arial" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="20.0" />
+                                             </padding>
+                                          </HBox>
+                                          <TextField fx:id="timeInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Arial" size="12.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
                                                 <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">

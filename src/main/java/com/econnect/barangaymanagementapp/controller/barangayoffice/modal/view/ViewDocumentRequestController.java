@@ -7,6 +7,7 @@ import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -33,7 +34,7 @@ public class ViewDocumentRequestController implements BaseViewController {
     @FXML
     private HBox profileContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput;
+    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput;
     @FXML
     private Text fullNameText, emailText, mobileNumberText;
 
@@ -117,6 +118,8 @@ public class ViewDocumentRequestController implements BaseViewController {
         typeInput.setText("Certificate");
         statusInput.setText(certificate.getStatus().getName());
         referenceNumberInput.setText(certificate.getReferenceNumber());
+        dateInput.setText(DateFormatter.formatDateToLongStyle(certificate.getCreatedAt()));
+        timeInput.setText(DateFormatter.formatTimeTo12HourStyle(certificate.getCreatedAt()));
     }
 
     private void populateResidentData(Resident resident) {
