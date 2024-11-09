@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequest;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -217,16 +217,6 @@ public class RequestRowController extends BaseRowController<Request> {
         buttonContainer.getChildren().add(accept);
     }
 
-    private void createUndoButton() {
-        Button undo = ButtonUtils.createButton("Undo", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Undo", "Would you like to undo request #" + request.getReferenceNumber() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.RELEASING);
-            });
-        });
-
-        buttonContainer.getChildren().add(undo);
-    }
-
     private void createRestoreButton() {
         Button reject = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to reject request #" + request.getReferenceNumber() + "?", isConfirmed -> {
@@ -265,7 +255,7 @@ public class RequestRowController extends BaseRowController<Request> {
         Button viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.VIEW_REQUEST,
-                    ViewDocumentRequest.class,
+                    ViewDocumentRequestController.class,
                     controller -> controller.setId(requestId)
             );
         });
