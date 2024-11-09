@@ -23,7 +23,7 @@ public class Certificate extends BaseEntity {
     private String controlNumber;
     private String request;
     private String purpose;
-    private StatusType.RequestStatus status;
+    private StatusType.CertificateStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;
     private RequestType requestType;

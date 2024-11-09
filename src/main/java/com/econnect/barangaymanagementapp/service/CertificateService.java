@@ -3,6 +3,7 @@ package com.econnect.barangaymanagementapp.service;
 import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.repository.CertificateRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
@@ -12,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus.PENDING;
 
 public class CertificateService {
     private final CertificateRepository certificateRepository;
@@ -31,7 +32,7 @@ public class CertificateService {
         certificate.setCreatedAt(ZonedDateTime.now());
         certificate.setUpdatedAt(ZonedDateTime.now());
         certificate.setApplicationType(ApplicationType.WALK_IN);
-        certificate.setStatus(PENDING);
+        certificate.setStatus(CertificateStatus.PENDING);
         return certificateRepository.createCertificate(certificate);
     }
 
@@ -52,10 +53,10 @@ public class CertificateService {
     }
 
     public Optional<Certificate> findCompletedCertificate(String id) {
-        return certificateRepository.findCertificateById(id).filter(request -> request.getStatus().equals(StatusType.RequestStatus.COMPLETED));
+        return certificateRepository.findCertificateById(id).filter(request -> request.getStatus().equals(StatusType.CertificateStatus.COMPLETED));
     }
 
-    public Response updateCertificateByStatus(String requestId, StatusType.RequestStatus status) {
+    public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
         return certificateRepository.updateCertificateByStatus(requestId, status);
     }
 

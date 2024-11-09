@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -96,7 +97,7 @@ public class CertificateFormController {
             @Override
             protected Void call() {
                 List<Certificate> certificates = createRequestsFromInput();
-                certificates.forEach(certificateService::createCertificate);
+                certificates.forEach(certificate -> certificateService.createCertificate(certificate));
                 return null;
             }
 
@@ -120,19 +121,20 @@ public class CertificateFormController {
     }
 
     private List<Certificate> createRequestsFromInput() {
+        List<Certificate> certificates = new ArrayList<>();
         List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
-
-        return (List<Certificate>) checkBoxes.stream().map(checkBox -> {
+        for (CheckBox checkBox : checkBoxes) {
             if (checkBox.isSelected()) {
-                return Certificate.builder()
+                Certificate certificate = Certificate.builder()
                         .id(residentIdInput.getText())
                         .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
                         .request(checkBox.getText())
                         .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
                         .build();
+                certificates.add(certificate);
             }
-            return null;
-        }).toList();
+        }
+        return certificates;
     }
 
     private void populateInputFields(String residentId) {
@@ -296,7 +298,6 @@ public class CertificateFormController {
         };
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
-
 
     private void setupViewImage() {
         ImageUtils.setRoundedClip(profilePicture, 25, 25);
