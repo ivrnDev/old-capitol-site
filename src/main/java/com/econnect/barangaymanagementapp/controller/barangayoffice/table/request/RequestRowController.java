@@ -217,16 +217,6 @@ public class RequestRowController extends BaseRowController<Request> {
         buttonContainer.getChildren().add(accept);
     }
 
-    private void createUndoButton() {
-        Button undo = ButtonUtils.createButton("Undo", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Undo", "Would you like to undo request #" + request.getReferenceNumber() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.RELEASING);
-            });
-        });
-
-        buttonContainer.getChildren().add(undo);
-    }
-
     private void createRestoreButton() {
         Button reject = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to reject request #" + request.getReferenceNumber() + "?", isConfirmed -> {
