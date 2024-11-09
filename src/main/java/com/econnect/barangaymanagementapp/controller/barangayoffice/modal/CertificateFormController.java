@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 
 import com.econnect.barangaymanagementapp.MainApplication;
-import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -95,8 +95,8 @@ public class CertificateFormController {
         Task<Void> addResidentTask = new Task<>() {
             @Override
             protected Void call() {
-                Request request = createRequestsFromInput();
-                certificateService.createCertificate(request);
+                Certificate certificate = createRequestsFromInput();
+                certificateService.createCertificate(certificate);
                 return null;
             }
 
@@ -119,7 +119,7 @@ public class CertificateFormController {
         new Thread(addResidentTask).start();
     }
 
-    private Request createRequestsFromInput() {
+    private Certificate createRequestsFromInput() {
         List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
 
         StringBuilder requests = new StringBuilder();
@@ -133,7 +133,7 @@ public class CertificateFormController {
             requests.setLength(requests.length() - 2);
         }
 
-        return Request.builder()
+        return Certificate.builder()
                 .id(residentIdInput.getText())
                 .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
                 .request(String.valueOf(requests))
