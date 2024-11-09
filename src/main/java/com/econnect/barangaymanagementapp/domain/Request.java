@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
 public class Request extends BaseEntity {
+    private String residentId;
     private StatusType.RequestStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;

@@ -9,27 +9,35 @@ import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.BA
 import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.CERTIFICATES;
 
 public class RequestMapper {
-    public static Request toRequestObject(BarangayId idRequest) {
+    public static Request toRequestObject(BarangayId request) {
+        int length = request.getId().length();
+        String residentId = request.getId().substring(0, length - 5);
+
         return Request.builder()
-                .id(idRequest.getId())
+                .id(request.getId())
+                .residentId(residentId)
                 .requestType(BARANGAY_ID)
-                .applicationType(idRequest.getApplicationType())
-                .createdAt(idRequest.getCreatedAt())
-                .updatedAt(idRequest.getUpdatedAt())
-                .status(StatusType.RequestStatus.fromName(idRequest.getStatus().getName()))
-                .referenceNumber(idRequest.getReferenceNumber())
+                .applicationType(request.getApplicationType())
+                .createdAt(request.getCreatedAt())
+                .updatedAt(request.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(request.getStatus().getName()))
+                .referenceNumber(request.getReferenceNumber())
                 .build();
     }
 
-    public static Request toRequestObject(Certificate idRequest) {
+    public static Request toRequestObject(Certificate request) {
+        int length = request.getId().length();
+        String residentId = request.getId().substring(0, length - 5);
+
         return Request.builder()
-                .id(idRequest.getId())
+                .id(request.getId())
+                .residentId(residentId)
                 .requestType(CERTIFICATES)
-                .applicationType(idRequest.getApplicationType())
-                .createdAt(idRequest.getCreatedAt())
-                .updatedAt(idRequest.getUpdatedAt())
-                .status(StatusType.RequestStatus.fromName(idRequest.getStatus().getName()))
-                .referenceNumber(idRequest.getReferenceNumber())
+                .applicationType(request.getApplicationType())
+                .createdAt(request.getCreatedAt())
+                .updatedAt(request.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(request.getStatus().getName()))
+                .referenceNumber(request.getReferenceNumber())
                 .build();
     }
 }

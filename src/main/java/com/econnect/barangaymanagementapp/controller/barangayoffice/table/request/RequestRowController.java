@@ -57,6 +57,7 @@ public class RequestRowController extends BaseRowController<Request> {
         this.requestId = request.getId();
 //        Platform.runLater(() -> setupButtonContainer());
         requestIdLabel.setText(request.getId());
+        residentIdLabel.setText(request.getResidentId());
         requestTypeLabel.setText(request.getRequestType() != null ? request.getRequestType().getName() : "");
         statusLabel.setText(request.getStatus().getName());
         dateLabel.setText(DateFormatter.formatDateToLongStyle(request.getCreatedAt()));
