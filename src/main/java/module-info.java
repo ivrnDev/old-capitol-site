@@ -36,6 +36,7 @@ module com.econnect.barangaymanagementapp {
     opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.request to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view to javafx.fxml;
     //Human Resources
     opens com.econnect.barangaymanagementapp.controller.humanresources to javafx.fxml;
 
