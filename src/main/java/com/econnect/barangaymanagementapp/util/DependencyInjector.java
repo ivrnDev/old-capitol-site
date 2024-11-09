@@ -6,7 +6,6 @@ import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.repository.*;
 import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
-import com.econnect.barangaymanagementapp.util.data.PasswordUtils;
 import com.econnect.barangaymanagementapp.util.resource.SoundUtils;
 import com.econnect.barangaymanagementapp.util.state.NavigationState;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
