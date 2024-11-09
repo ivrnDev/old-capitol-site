@@ -28,6 +28,7 @@ public class RequestMapper {
                 .applicationType(idRequest.getApplicationType())
                 .createdAt(idRequest.getCreatedAt())
                 .updatedAt(idRequest.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(idRequest.getStatus().getName()))
                 .referenceNumber(idRequest.getReferenceNumber())
                 .build();
     }
