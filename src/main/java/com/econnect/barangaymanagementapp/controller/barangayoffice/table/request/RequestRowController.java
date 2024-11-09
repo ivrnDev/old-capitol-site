@@ -56,7 +56,7 @@ public class RequestRowController extends BaseRowController<Request> {
     protected void setData(Request request) {
         this.requestId = request.getId();
 //        Platform.runLater(() -> setupButtonContainer());
-        requestIdLabel.setText(request.getId());
+        requestIdLabel.setText(request.getReferenceNumber());
         residentIdLabel.setText(request.getResidentId());
         requestTypeLabel.setText(request.getRequestType() != null ? request.getRequestType().getName() : "");
         statusLabel.setText(request.getStatus().getName());
