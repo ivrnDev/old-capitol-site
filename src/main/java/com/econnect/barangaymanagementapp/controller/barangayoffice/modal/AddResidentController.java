@@ -111,13 +111,15 @@ public class AddResidentController {
                 loadingIndicator.setVisible(false);
                 rootPane.getChildren().remove(loadingIndicator);
                 closeWindow();
+                modalUtils.showModal(Modal.SUCCESS, "Success", "Resident successfully added.");
             }
 
             @Override
             protected void failed() {
                 loadingIndicator.setVisible(false);
                 rootPane.getChildren().remove(loadingIndicator);
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the resident."));
+                modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add resident. Please try again.");
+
             }
         };
 
@@ -133,15 +135,7 @@ public class AddResidentController {
         resident.setProfileUrl(profileUrl);
         resident.setValidIdUrl(governmentIDUrl);
         resident.setTinIdUrl(tinIdURl);
-        try (Response response = residentService.createResident(resident)) {
-            if (response.isSuccessful()) {
-                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Resident added successfully"));
-            } else {
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add resident"));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        residentService.createResident(resident);
         return null;
     }
 
@@ -301,6 +295,8 @@ public class AddResidentController {
         emergencyMiddleNameInput.setText("Santos");
         emergencyMobileNumberInput.setText("09123456789");
         emergencyRelationshipInput.setText("Mother");
+        tinIdNumberInput.setText("1234-1234-1234-0000");
+        telephoneInput.setText("1234567");
         validIdExpirationDatePicker.setValue(LocalDate.now().plusYears(5));
         birthdatePicker.setValue(LocalDate.now().minusYears(50));
     }

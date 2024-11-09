@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -95,8 +96,8 @@ public class CertificateFormController {
         Task<Void> addResidentTask = new Task<>() {
             @Override
             protected Void call() {
-                Certificate certificate = createRequestsFromInput();
-                certificateService.createCertificate(certificate);
+                List<Certificate> certificates = createRequestsFromInput();
+                certificates.forEach(certificate -> certificateService.createCertificate(certificate));
                 return null;
             }
 
@@ -119,26 +120,21 @@ public class CertificateFormController {
         new Thread(addResidentTask).start();
     }
 
-    private Certificate createRequestsFromInput() {
+    private List<Certificate> createRequestsFromInput() {
+        List<Certificate> certificates = new ArrayList<>();
         List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
-
-        StringBuilder requests = new StringBuilder();
         for (CheckBox checkBox : checkBoxes) {
             if (checkBox.isSelected()) {
-                requests.append(checkBox.getText()).append(", ");
+                Certificate certificate = Certificate.builder()
+                        .id(residentIdInput.getText())
+                        .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
+                        .request(checkBox.getText())
+                        .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
+                        .build();
+                certificates.add(certificate);
             }
         }
-
-        if (requests.length() > 0) {
-            requests.setLength(requests.length() - 2);
-        }
-
-        return Certificate.builder()
-                .id(residentIdInput.getText())
-                .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
-                .request(String.valueOf(requests))
-                .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
-                .build();
+        return certificates;
     }
 
     private void populateInputFields(String residentId) {
@@ -303,7 +299,6 @@ public class CertificateFormController {
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
-
     private void setupViewImage() {
         ImageUtils.setRoundedClip(profilePicture, 25, 25);
     }
@@ -355,4 +350,28 @@ public class CertificateFormController {
             if (result) closeWindow();
         });
     }
+
+    // Compact Request
+//    private Certificate createRequestsFromInput() {
+//        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
+//
+//        StringBuilder requests = new StringBuilder();
+//        for (CheckBox checkBox : checkBoxes) {
+//            if (checkBox.isSelected()) {
+//                requests.append(checkBox.getText()).append(", ");
+//            }
+//        }
+//
+//        if (requests.length() > 0) {
+//            requests.setLength(requests.length() - 2);
+//        }
+//
+//        return Certificate.builder()
+//                .id(residentIdInput.getText())
+//                .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
+//                .request(String.valueOf(requests))
+//                .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
+//                .build();
+//    }
+
 }

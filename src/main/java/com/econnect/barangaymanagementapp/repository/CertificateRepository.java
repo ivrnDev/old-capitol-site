@@ -48,7 +48,7 @@ public class CertificateRepository extends BaseRepository<Certificate> {
         }, predicate);
     }
 
-    public Response updateCertificateByStatus(String requestId, StatusType.RequestStatus status) {
+    public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
         return updateBy(apiKey, requestId, new TypeReference<>() {
         }, request -> request.setStatus(status));
     }

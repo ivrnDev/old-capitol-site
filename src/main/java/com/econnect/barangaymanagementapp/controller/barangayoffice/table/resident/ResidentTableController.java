@@ -69,7 +69,7 @@ public class ResidentTableController extends BaseTableController<Resident> {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
                 ResidentRowController rowController = (ResidentRowController) residentRow.getUserData();
-                if (rowController.getResidentId().equals(employeeId)) {
+                if (rowController != null && rowController.getResidentId().equals(employeeId)) {
                     tableContent.getChildren().remove(residentRow);
                     break;
                 }

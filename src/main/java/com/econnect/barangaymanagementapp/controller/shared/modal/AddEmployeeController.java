@@ -187,13 +187,14 @@ public class AddEmployeeController {
                 loadingIndicator.setVisible(false);
                 rootPane.getChildren().remove(loadingIndicator);
                 closeWindow();
+                modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully.");
             }
 
             @Override
             protected void failed() {
                 loadingIndicator.setVisible(false);
                 rootPane.getChildren().remove(loadingIndicator);
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the employee."));
+                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while adding the employee.");
             }
         };
 
@@ -226,16 +227,7 @@ public class AddEmployeeController {
         employee.setResumeUrl(resumeUrl);
         employee.setProfileUrl(profileLink);
         employee.setNbiClearanceUrl(nbiClearanceUrl);
-
-        try (Response response = employeeService.createEmployee(employee)) {
-            if (response.isSuccessful()) {
-                Platform.runLater(() -> modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully"));
-            } else {
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Failed", "Failed to add employee"));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        employeeService.createEmployee(employee);
         return null;
     }
 

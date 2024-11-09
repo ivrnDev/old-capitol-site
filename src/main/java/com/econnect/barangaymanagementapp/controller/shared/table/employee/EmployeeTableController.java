@@ -71,7 +71,7 @@ public class EmployeeTableController extends BaseTableController<Employee> {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox employeeRow) {
                 EmployeeRowController rowController = (EmployeeRowController) employeeRow.getUserData();
-                if (rowController.getEmployeeId().equals(employeeId)) {
+                if (rowController != null && rowController.getEmployeeId().equals(employeeId)) {
                     tableContent.getChildren().remove(employeeRow);
                     break;
                 }

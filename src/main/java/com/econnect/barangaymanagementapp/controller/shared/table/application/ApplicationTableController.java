@@ -72,7 +72,7 @@ public class ApplicationTableController extends BaseTableController<Employee> {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox applicationRow) {
                 ApplicationRowController rowController = (ApplicationRowController) applicationRow.getUserData();
-                if (rowController.getResidentId().equals(employeeId)) {
+                if (rowController != null && rowController.getResidentId().equals(employeeId)) {
                     tableContent.getChildren().remove(applicationRow);
                     break;
                 }
