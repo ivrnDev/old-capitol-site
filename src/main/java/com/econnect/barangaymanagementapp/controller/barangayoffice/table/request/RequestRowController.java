@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequest;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -265,7 +265,7 @@ public class RequestRowController extends BaseRowController<Request> {
         Button viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.VIEW_REQUEST,
-                    ViewDocumentRequest.class,
+                    ViewDocumentRequestController.class,
                     controller -> controller.setId(requestId)
             );
         });
