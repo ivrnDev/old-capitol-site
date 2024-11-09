@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.domain;
 
-import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -18,8 +18,11 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
-public class Request extends BaseEntity {
-    private String residentId;
+public class Certificate extends BaseEntity {
+    private String requestorType;
+    private String controlNumber;
+    private String request;
+    private String purpose;
     private StatusType.RequestStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;

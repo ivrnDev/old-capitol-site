@@ -1,7 +1,7 @@
 package com.econnect.barangaymanagementapp.repository;
 
 import com.econnect.barangaymanagementapp.config.Config;
-import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.enumeration.database.Firebase;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -12,19 +12,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class CertificateRepository extends BaseRepository<Request> {
+public class CertificateRepository extends BaseRepository<Certificate> {
     private final String apiKey = Config.getFirebaseUrl() + Firebase.CERTIFICATES.getPath();
 
     public CertificateRepository(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
     }
 
-    public Response createCertificate(Request request) {
-        return create(apiKey + "/" + request.getId(), request);
+    public Response createCertificate(Certificate certificate) {
+        return create(apiKey + "/" + certificate.getId(), certificate);
     }
 
-    public Response updateCertificate(Request request) {
-        return create(apiKey + "/" + request.getId(), request);
+    public Response updateCertificate(Certificate certificate) {
+        return create(apiKey + "/" + certificate.getId(), certificate);
 
     }
 
@@ -32,18 +32,18 @@ public class CertificateRepository extends BaseRepository<Request> {
         return deleteById(apiKey, id);
     }
 
-    public Optional<Request> findCertificateById(String requestId) {
+    public Optional<Certificate> findCertificateById(String requestId) {
         return findById(apiKey, requestId, new TypeReference<>() {
         });
 
     }
 
-    public List<Request> findAllCertificates() {
+    public List<Certificate> findAllCertificates() {
         return findAll(apiKey, new TypeReference<>() {
         });
     }
 
-    public List<Request> findCertificateByFilter(Predicate<Request> predicate) {
+    public List<Certificate> findCertificateByFilter(Predicate<Certificate> predicate) {
         return findAllByFilter(apiKey, new TypeReference<>() {
         }, predicate);
     }

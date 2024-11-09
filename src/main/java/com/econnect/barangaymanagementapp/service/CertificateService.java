@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.service;
 
-import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.CertificateRepository;
@@ -21,29 +21,29 @@ public class CertificateService {
         this.certificateRepository = dependencyInjector.getCertificateRepository();
     }
 
-    public Response createCertificate(Request request) {
+    public Response createCertificate(Certificate certificate) {
         int baseId = 1000;
-        String residentId = request.getId();
+        String residentId = certificate.getId();
         int countOfCertificates = findCountOfCertificatesByResidentId(residentId);
         int autoIncrementId = countOfCertificates > 0 ? baseId + countOfCertificates : baseId;
-        request.setId(request.getId() + "-" + autoIncrementId);
-        request.setReferenceNumber(generateReferenceNumber());
-        request.setCreatedAt(ZonedDateTime.now());
-        request.setUpdatedAt(ZonedDateTime.now());
-        request.setApplicationType(ApplicationType.WALK_IN);
-        request.setStatus(PENDING);
-        return certificateRepository.createCertificate(request);
+        certificate.setId(certificate.getId() + "-" + autoIncrementId);
+        certificate.setReferenceNumber(generateReferenceNumber());
+        certificate.setCreatedAt(ZonedDateTime.now());
+        certificate.setUpdatedAt(ZonedDateTime.now());
+        certificate.setApplicationType(ApplicationType.WALK_IN);
+        certificate.setStatus(PENDING);
+        return certificateRepository.createCertificate(certificate);
     }
 
-    public List<Request> findAllCertificates() {
+    public List<Certificate> findAllCertificates() {
         return certificateRepository.findAllCertificates();
     }
 
-    public List<Request> findAllPendingCertificates() {
+    public List<Certificate> findAllPendingCertificates() {
         return certificateRepository.findCertificateByFilter(request -> request.getStatus().equals(PENDING));
     }
 
-    public Optional<Request> findCertificateById(String id) {
+    public Optional<Certificate> findCertificateById(String id) {
         return certificateRepository.findCertificateById(id);
     }
 
@@ -51,7 +51,7 @@ public class CertificateService {
         return (int) certificateRepository.findCertificateByFilter(request -> request.getId().contains(residentId)).stream().count();
     }
 
-    public Optional<Request> findCompletedCertificate(String id) {
+    public Optional<Certificate> findCompletedCertificate(String id) {
         return certificateRepository.findCertificateById(id).filter(request -> request.getStatus().equals(StatusType.RequestStatus.COMPLETED));
     }
 

@@ -63,8 +63,32 @@ public class StatusType {
             this.name = name;
         }
 
-        public static ResidentStatus fromName(String name) {
-            for (ResidentStatus status : ResidentStatus.values()) {
+        public static RequestStatus fromName(String name) {
+            for (RequestStatus status : RequestStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+
+    }
+
+    @Getter
+    public enum CertificateStatus {
+        PENDING("Pending"),
+        IN_PROGRESS("In Progress"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected");
+
+        private String name;
+
+        CertificateStatus(String name) {
+            this.name = name;
+        }
+
+        public static CertificateStatus fromName(String name) {
+            for (CertificateStatus status : CertificateStatus.values()) {
                 if (status.getName().equalsIgnoreCase(name)) {
                     return status;
                 }

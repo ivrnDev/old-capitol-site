@@ -18,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -39,10 +38,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private HBox tableRow, buttonContainer;
 
     @FXML
-    private Label requestIdLabel, residentIdLabel, requestLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
-
-    @FXML
-    private ImageView profilePicture;
+    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
 
     public RequestRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
@@ -57,21 +53,19 @@ public class RequestRowController extends BaseRowController<Request> {
     }
 
     @Override
-    protected void setData(Request requestData) {
-        this.requestId = requestData.getId();
+    protected void setData(Request request) {
+        this.requestId = request.getId();
 //        Platform.runLater(() -> setupButtonContainer());
-
-        requestIdLabel.setText(requestData.getId());
-        requestLabel.setText(requestData.getRequest());
-        requestTypeLabel.setText(requestData.getRequestType() != null ? requestData.getRequestType().getName() : "");
-        statusLabel.setText(requestData.getStatus().getName());
-        dateLabel.setText(DateFormatter.formatDateToLongStyle(requestData.getCreatedAt()));
-        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(requestData.getCreatedAt()));
+        requestIdLabel.setText(request.getReferenceNumber());
+        residentIdLabel.setText(request.getResidentId());
+        requestTypeLabel.setText(request.getRequestType() != null ? request.getRequestType().getName() : "");
+        statusLabel.setText(request.getStatus().getName());
+        dateLabel.setText(DateFormatter.formatDateToLongStyle(request.getCreatedAt()));
+        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()));
     }
 
     @Override
     public void setImage(Image profileImage) {
-        profilePicture.setImage(profileImage);
     }
 
     private void setupRowClickEvents() {
