@@ -17,6 +17,7 @@ import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -90,73 +91,63 @@ public class RequestController {
     }
 
     private void fetchData() {
+        addTableLoadingIndicator();
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         populateRows(selectedType);
     }
 
     private void populateRows(RequestType type) {
-        addTableLoadingIndicator();
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                List<Request> cachedRequests = requestCache.get(type);
 
-        Runnable call = () -> {
-            List<Request> cachedRequests = requestCache.get(type);
-            if (cachedRequests != null && !cachedRequests.isEmpty()) {
-                Platform.runLater(() -> {
-                    removeTableLoadingIndicator();
-                    updateRequestRow(cachedRequests);
-                });
-                return;
+                if (cachedRequests != null && !cachedRequests.isEmpty()) {
+                    Platform.runLater(() -> {
+                        updateRequestRow(cachedRequests);
+                    });
+                    return null;
+                }
+
+                List<Request> allRequest = new ArrayList<>();
+                List<Request> allRequestCertificates = certificateService.findAllCertificates().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
+                List<Request> allRequestBarangayId = barangayidService.findAllBarangayIds().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
+
+                allRequest.addAll(allRequestCertificates);
+                allRequest.addAll(allRequestBarangayId);
+
+                requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
+                requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
+                requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
+                return null;
             }
 
-            switch (type) {
-                case CERTIFICATES -> {
-                    List<Certificate> fetchedCertificates = certificateService.findAllCertificates();
-                    List<Request> mappedCertificatesRequest = fetchedCertificates.stream()
-                            .map(RequestMapper::toRequestObject)
-                            .toList();
-                    requestCache.computeIfAbsent(RequestType.CERTIFICATES, k -> new ArrayList<>()).addAll(mappedCertificatesRequest);
-                }
-
-                case BARANGAY_ID -> {
-                    List<BarangayId> fetchedBarangayId = barangayidService.findAllBarangayIds();
-                    List<Request> mappedBarangayIdRequest = fetchedBarangayId.stream()
-                            .map(RequestMapper::toRequestObject)
-                            .toList();
-                    requestCache.computeIfAbsent(RequestType.BARANGAY_ID, k -> new ArrayList<>()).addAll(mappedBarangayIdRequest);
-                }
-
-                case ALL -> {
-                    List<Certificate> allCertificates = certificateService.findAllCertificates();
-                    List<BarangayId> allBarangayId = barangayidService.findAllBarangayIds();
-                    List<Request> allFetchedRequests = new ArrayList<>();
-
-                    allFetchedRequests.addAll(allCertificates.stream()
-                            .map(RequestMapper::toRequestObject)
-                            .toList());
-                    allFetchedRequests.addAll(allBarangayId.stream()
-                            .map(RequestMapper::toRequestObject)
-                            .toList());
-                    requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allFetchedRequests);
-                }
-            }
-
-            Platform.runLater(() -> {
+            @Override
+            protected void succeeded() {
                 removeTableLoadingIndicator();
-                List<Request> requests = requestCache.get(type);
-                if (requests == null || requests.isEmpty()) {
-                    requestTableController.clearRow();
-                    requestTableController.showNoData();
-                } else {
-                    updateRequestRow(requests);
-                }
-            });
-        };
+                Platform.runLater(() -> {
+                    List<Request> requests = requestCache.get(type);
+                    if (requests == null || requests.isEmpty()) {
+                        requestTableController.clearRow();
+                        requestTableController.showNoData();
+                    } else {
+                        updateRequestRow(requests);
+                    }
+                });
+            }
 
-        Runnable onFailed = () -> {
-            removeTableLoadingIndicator();
-            System.err.println("Error loading request");
-        };
+            @Override
+            protected void failed() {
+                removeTableLoadingIndicator();
+                System.out.println("Error loading requests: " + getException().getMessage());
+            }
 
-        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+        };
+        new Thread(task).start();
     }
 
     public void clearCacheForType(RequestType type) {
@@ -202,7 +193,6 @@ public class RequestController {
             requestCache.computeIfPresent(requestType, (key, cachedRequests) -> {
                 cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
                 cachedRequests.add(request);
-                System.out.println("Calling Per Request Type");
                 return cachedRequests;
             });
 
