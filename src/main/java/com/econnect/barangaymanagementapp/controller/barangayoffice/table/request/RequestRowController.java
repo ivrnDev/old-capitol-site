@@ -36,6 +36,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private final BarangayidService barangayidService;
     @Getter
     private String requestId;
+    @Getter
     private Request request;
 
     @FXML

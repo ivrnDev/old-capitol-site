@@ -53,7 +53,6 @@ public class RequestController {
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
 
-    private List<Request> allRequests = new ArrayList<>();
     private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private StackPane loadingIndicator;
 
@@ -100,54 +99,54 @@ public class RequestController {
 
         Runnable call = () -> {
             List<Request> cachedRequests = requestCache.get(type);
+            if (cachedRequests != null && !cachedRequests.isEmpty()) {
+                Platform.runLater(() -> {
+                    removeTableLoadingIndicator();
+                    updateRequestRow(cachedRequests);
+                });
+                return;
+            }
 
-            if (cachedRequests != null) {
-                allRequests.clear();
-                allRequests.addAll(cachedRequests);
-            } else {
-                allRequests.clear();
-                switch (type) {
-                    case CERTIFICATES -> {
-                        List<Certificate> fetchedCertificates = certificateService.findAllCertificates();
-                        List<Request> mappedCertificatesRequest = fetchedCertificates.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList();
-                        allRequests.addAll(mappedCertificatesRequest);
-                        requestCache.put(RequestType.CERTIFICATES, mappedCertificatesRequest);
-                    }
+            switch (type) {
+                case CERTIFICATES -> {
+                    List<Certificate> fetchedCertificates = certificateService.findAllCertificates();
+                    List<Request> mappedCertificatesRequest = fetchedCertificates.stream()
+                            .map(RequestMapper::toRequestObject)
+                            .toList();
+                    requestCache.computeIfAbsent(RequestType.CERTIFICATES, k -> new ArrayList<>()).addAll(mappedCertificatesRequest);
+                }
 
-                    case BARANGAY_ID -> {
-                        List<BarangayId> fetchedBarangayId = barangayidService.findAllBarangayIds();
-                        List<Request> mappedBarangayIdRequest = fetchedBarangayId.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList();
-                        allRequests.addAll(mappedBarangayIdRequest);
-                        requestCache.put(RequestType.BARANGAY_ID, mappedBarangayIdRequest);
-                    }
+                case BARANGAY_ID -> {
+                    List<BarangayId> fetchedBarangayId = barangayidService.findAllBarangayIds();
+                    List<Request> mappedBarangayIdRequest = fetchedBarangayId.stream()
+                            .map(RequestMapper::toRequestObject)
+                            .toList();
+                    requestCache.computeIfAbsent(RequestType.BARANGAY_ID, k -> new ArrayList<>()).addAll(mappedBarangayIdRequest);
+                }
 
-                    case ALL -> {
-                        List<Request> allFetchedRequests = new ArrayList<>();
-                        List<Certificate> allCertificates = certificateService.findAllCertificates();
-                        List<BarangayId> allBarangayId = barangayidService.findAllBarangayIds();
-                        allFetchedRequests.addAll(allCertificates.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList());
-                        allFetchedRequests.addAll(allBarangayId.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList());
-                        allRequests.addAll(allFetchedRequests);
-                        requestCache.put(RequestType.ALL, allFetchedRequests);
-                    }
+                case ALL -> {
+                    List<Certificate> allCertificates = certificateService.findAllCertificates();
+                    List<BarangayId> allBarangayId = barangayidService.findAllBarangayIds();
+                    List<Request> allFetchedRequests = new ArrayList<>();
+
+                    allFetchedRequests.addAll(allCertificates.stream()
+                            .map(RequestMapper::toRequestObject)
+                            .toList());
+                    allFetchedRequests.addAll(allBarangayId.stream()
+                            .map(RequestMapper::toRequestObject)
+                            .toList());
+                    requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allFetchedRequests);
                 }
             }
 
             Platform.runLater(() -> {
                 removeTableLoadingIndicator();
-                if (allRequests.isEmpty()) {
+                List<Request> requests = requestCache.get(type);
+                if (requests == null || requests.isEmpty()) {
                     requestTableController.clearRow();
                     requestTableController.showNoData();
                 } else {
-                    updateRequestRow(allRequests);
+                    updateRequestRow(requests);
                 }
             });
         };
@@ -172,7 +171,7 @@ public class RequestController {
         String searchText = residentRequestSearchField.getText().trim().toLowerCase();
         searchService.performSearch(
                 searchText,
-                allRequests,
+                requestCache.get(ALL),
                 searchService.createRequestFilter(searchText),
                 (filteredRequest) -> updateRequestRow(filteredRequest));
     }
@@ -200,8 +199,23 @@ public class RequestController {
         }
 
         updatedRequest.ifPresentOrElse(request -> {
-            requestTableController.updateRow(request);
-        }, () -> requestTableController.deleteRow(id));
+            requestCache.computeIfPresent(requestType, (key, cachedRequests) -> {
+                cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
+                cachedRequests.add(request);
+                System.out.println("Calling Per Request Type");
+                return cachedRequests;
+            });
+
+            requestCache.computeIfPresent(RequestType.ALL, (key, cachedRequests) -> {
+                cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
+                cachedRequests.add(request);
+                return cachedRequests;
+            });
+
+            if (request.getRequestType() == RequestType.fromName(residentRequestComboBox.getValue()) || residentRequestComboBox.getValue().equals(RequestType.ALL.getName())) {
+                requestTableController.updateRow(request);
+            }
+        }, () -> requestTableController.deleteRow(id, requestType));
     }
 
     private void setupListener() {
