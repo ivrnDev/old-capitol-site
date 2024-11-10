@@ -119,6 +119,7 @@ public class SearchService<T> {
         return request -> request.getId().toLowerCase().contains(searchText)
                 || request.getReferenceNumber().toLowerCase().contains(searchText)
                 || request.getApplicationType().getName().toLowerCase().contains(searchText)
+                || request.getRequestType().getName().toLowerCase().contains(searchText)
                 || request.getStatus().getName().toLowerCase().contains(searchText)
                 || request.getCreatedAt() != null && DateFormatter.formatDateToLongStyle(request.getCreatedAt()).toLowerCase().contains(searchText)
                 || request.getCreatedAt() != null && DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()).toLowerCase().contains(searchText);

@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.reque
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import javafx.fxml.FXML;
@@ -47,7 +48,7 @@ public class RequestTableController extends BaseTableController<Request> {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
                 RequestRowController rowController = (RequestRowController) residentRow.getUserData();
-                if (rowController != null && rowController.getRequestId().equals(updatedRequest.getId())) {
+                if (rowController != null && rowController.getRequestId().equals(updatedRequest.getId()) && rowController.getRequest().getRequestType().equals(updatedRequest.getRequestType())) {
                     rowController.setData(updatedRequest);
                     rowExists = true;
                     break;
@@ -61,11 +62,12 @@ public class RequestTableController extends BaseTableController<Request> {
         }
     }
 
-    public void deleteRow(String employeeId) {
+    public void deleteRow(String requestId, RequestType requestType) {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
                 RequestRowController rowController = (RequestRowController) residentRow.getUserData();
-                if (rowController.getRequestId().equals(employeeId)) {
+
+                if (rowController != null && rowController.getRequestId().equals(requestId) && rowController.getRequest().getRequestType().equals(requestType)) {
                     tableContent.getChildren().remove(residentRow);
                     break;
                 }

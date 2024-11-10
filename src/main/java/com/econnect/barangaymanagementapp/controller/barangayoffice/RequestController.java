@@ -17,6 +17,7 @@ import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,15 +28,11 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_TABLE;
-import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.fromName;
-import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.values;
+import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestController {
     @FXML
@@ -57,7 +54,6 @@ public class RequestController {
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
 
-    private List<Request> allRequests = new ArrayList<>();
     private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private StackPane loadingIndicator;
 
@@ -75,8 +71,8 @@ public class RequestController {
     }
 
     public void initialize() {
-//        resetLiveReload();
-//        initializeSSEListener();
+        resetLiveReload();
+        initializeSSEListener();
 
         setupListener();
         loadRequestTable();
@@ -95,88 +91,72 @@ public class RequestController {
     }
 
     private void fetchData() {
+        addTableLoadingIndicator();
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         populateRows(selectedType);
     }
 
     private void populateRows(RequestType type) {
-        addTableLoadingIndicator();
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                List<Request> cachedRequests = requestCache.get(type);
 
-        Runnable call = () -> {
-            List<Request> cachedRequests = requestCache.get(type);
-
-            if (cachedRequests != null) {
-                allRequests.clear();
-                allRequests.addAll(cachedRequests);
-            } else {
-                allRequests.clear();
-                switch (type) {
-                    case CERTIFICATES -> {
-                        List<Certificate> fetchedCertificates = certificateService.findAllCertificates();
-                        List<Request> mappedCertificatesRequest = fetchedCertificates.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList();
-                        allRequests.addAll(mappedCertificatesRequest);
-                        requestCache.put(RequestType.CERTIFICATES, mappedCertificatesRequest);
-                    }
-
-                    case BARANGAY_ID -> {
-                        List<BarangayId> fetchedBarangayId = barangayidService.findAllBarangayIds();
-                        List<Request> mappedBarangayIdRequest = fetchedBarangayId.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList();
-                        allRequests.addAll(mappedBarangayIdRequest);
-                        requestCache.put(RequestType.BARANGAY_ID, mappedBarangayIdRequest);
-                    }
-
-                    case ALL -> {
-                        List<Request> allFetchedRequests = new ArrayList<>();
-                        List<Certificate> allCertificates = certificateService.findAllCertificates();
-                        List<BarangayId> allBarangayId = barangayidService.findAllBarangayIds();
-                        allFetchedRequests.addAll(allCertificates.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList());
-                        allFetchedRequests.addAll(allBarangayId.stream()
-                                .map(RequestMapper::toRequestObject)
-                                .toList());
-                        allRequests.addAll(allFetchedRequests);
-                        requestCache.put(RequestType.ALL, allFetchedRequests);
-                    }
+                if (cachedRequests != null && !cachedRequests.isEmpty()) {
+                    Platform.runLater(() -> {
+                        updateRequestRow(cachedRequests);
+                    });
+                    return null;
                 }
+
+                List<Request> allRequest = new ArrayList<>();
+                List<Request> allRequestCertificates = certificateService.findAllCertificates().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
+                List<Request> allRequestBarangayId = barangayidService.findAllBarangayIds().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
+
+                allRequest.addAll(allRequestCertificates);
+                allRequest.addAll(allRequestBarangayId);
+
+                requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
+                requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
+                requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
+                return null;
             }
 
-            Platform.runLater(() -> {
+            @Override
+            protected void succeeded() {
                 removeTableLoadingIndicator();
-                if (allRequests.isEmpty()) {
-                    requestTableController.clearRow();
-                    requestTableController.showNoData();
-                } else {
-                    updateRequestRow(allRequests);
-                }
-            });
+                Platform.runLater(() -> {
+                    List<Request> requests = requestCache.get(type);
+                    if (requests == null || requests.isEmpty()) {
+                        requestTableController.clearRow();
+                        requestTableController.showNoData();
+                    } else {
+                        updateRequestRow(requests);
+                    }
+                });
+            }
+
+            @Override
+            protected void failed() {
+                removeTableLoadingIndicator();
+                System.out.println("Error loading requests: " + getException().getMessage());
+            }
+
         };
-
-        Runnable onFailed = () -> {
-            removeTableLoadingIndicator();
-            System.err.println("Error loading request");
-        };
-
-        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
-    }
-
-    public void clearCacheForType(RequestType type) {
-        requestCache.remove(type);
-    }
-
-    public void clearAllCaches() {
-        requestCache.clear();
+        new Thread(task).start();
     }
 
     private void performSearch() {
+        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         String searchText = residentRequestSearchField.getText().trim().toLowerCase();
+
         searchService.performSearch(
                 searchText,
-                allRequests,
+                requestCache.get(selectedType),
                 searchService.createRequestFilter(searchText),
                 (filteredRequest) -> updateRequestRow(filteredRequest));
     }
@@ -191,17 +171,36 @@ public class RequestController {
         requests.forEach(request -> requestTableController.addRow(request));
     }
 
-//    public void updateRequestRow(String id) {
-//        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
-//        updatedEmployee.ifPresentOrElse(request -> {
-//            if (!INACTIVE_RESIDENT.contains(request.getStatus())) {
-//                requestTableController.updateRow(request);
-//            } else {
-//                requestTableController.deleteRow(request.getId());
-//
-//            }
-//        }, () -> requestTableController.deleteRow(id));
-//    }
+    public void updateRequestRow(RequestType requestType, String id) {
+        Optional<Request> updatedRequest = Optional.empty();
+
+        switch (requestType) {
+            case CERTIFICATES:
+                updatedRequest = certificateService.findCertificateById(id).map(RequestMapper::toRequestObject);
+                break;
+            case BARANGAY_ID:
+                updatedRequest = barangayidService.findBarangayIdById(id).map(RequestMapper::toRequestObject);
+                break;
+        }
+
+        updatedRequest.ifPresentOrElse(request -> {
+            requestCache.computeIfPresent(requestType, (key, cachedRequests) -> {
+                cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
+                cachedRequests.add(request);
+                return cachedRequests;
+            });
+
+            requestCache.computeIfPresent(RequestType.ALL, (key, cachedRequests) -> {
+                cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
+                cachedRequests.add(request);
+                return cachedRequests;
+            });
+
+            if (request.getRequestType() == RequestType.fromName(residentRequestComboBox.getValue()) || residentRequestComboBox.getValue().equals(RequestType.ALL.getName())) {
+                requestTableController.updateRow(request);
+            }
+        }, () -> requestTableController.deleteRow(id, requestType));
+    }
 
     private void setupListener() {
         residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -217,9 +216,8 @@ public class RequestController {
 
     //Live Reload
     private void initializeSSEListener() {
-        residentService.listenToUpdates(result -> Platform.runLater(() -> {
-//            updateRequestRow(result);
-        }));
+        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
+        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
     }
 
     private void resetLiveReload() {
