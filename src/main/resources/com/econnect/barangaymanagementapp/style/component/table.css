@@ -11,6 +11,10 @@
     -fx-background-color: transparent; /* Remove background */
 }
 
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Remove background */
+}
+
 .table-row {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #787878;
@@ -20,7 +24,8 @@
 }
 
 .table-content {
-    -fx-background-color: #EEFCFF;
+    -fx-background-color: transparent; /* Remove background */
+    /*-fx-background-color: #EEFCFF;*/
 }
 
 .table-row.selected {
