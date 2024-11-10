@@ -147,7 +147,7 @@ public class CertificateFormController {
         Task<Optional<Resident>> residentTask = new Task<>() {
             @Override
             protected Optional<Resident> call() {
-                return residentService.findAllVerifiedResidents(residentId);
+                return residentService.findVerifiedResidentById(residentId);
             }
 
             @Override

@@ -46,7 +46,7 @@ public class ResidentService {
         return residentRepository.findResidentById(id);
     }
 
-    public Optional<Resident> findAllVerifiedResidents(String id) {
+    public Optional<Resident> findVerifiedResidentById(String id) {
         return residentRepository.findResidentById(id).filter(resident -> resident.getStatus().equals(VERIFIED));
     }
 
