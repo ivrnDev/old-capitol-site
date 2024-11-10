@@ -135,7 +135,7 @@
                                                                         </Label>
                                                                     </children>
                                                                 </VBox>
-                                                                <HBox spacing="40.0" VBox.vgrow="ALWAYS">
+                                                                <HBox spacing="55.0" VBox.vgrow="ALWAYS">
                                                                     <children>
                                                                         <VBox alignment="CENTER">
                                                                             <children>
@@ -167,7 +167,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="97.0" layoutY="10.0">
                                                                             <children>
-                                                            <Label fx:id="weightText" prefHeight="40.0" prefWidth="106.0" text="04/24/2002">
+                                                            <Label fx:id="weightText" prefHeight="40.0" text="20 KG">
                                                                <font>
                                                                   <Font name="Arial Bold" size="21.0" />
                                                                </font>
@@ -181,7 +181,7 @@
                                                                         </VBox>
                                                                         <VBox alignment="CENTER" layoutX="184.0" layoutY="10.0">
                                                                             <children>
-                                                            <Label fx:id="heightText" prefHeight="40.0" prefWidth="106.0" text="04/24/2002">
+                                                            <Label fx:id="heightText" prefHeight="40.0" text="2'3 FT">
                                                                <font>
                                                                   <Font name="Arial Bold" size="21.0" />
                                                                </font>

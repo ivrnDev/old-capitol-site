@@ -26,11 +26,16 @@ public enum FXMLPath {
     //Modal
     ADD_EMPLOYEE("view/shared/modal/add-employee.fxml"),
     ADD_RESIDENT("view/barangayoffice/modal/add-resident.fxml"),
-    VIEW_APPLICATION_EMPLOYEE("view/shared/modal/view-application-employee.fxml"),
-    VIEW_RESIDENT("view/shared/modal/view-resident.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml"),
-    VIEW_REQUEST("view/barangayoffice/modal/view/view-document-request.fxml"),
+
+    //View Modal
+    VIEW_APPLICATION_EMPLOYEE("view/shared/modal/view-application-employee.fxml"),
+    VIEW_RESIDENT("view/shared/modal/view-resident.fxml"),
+    VIEW_DOCUMENT_REQUEST("view/barangayoffice/modal/view/view-document-request.fxml"),
+    VIEW_ID_REQUEST("view/barangayoffice/modal/view/view-id-request.fxml"),
+    VIEW_BARANGAY_ID("view/barangayoffice/modal/view/view-id.fxml"),
+
 
     //Form
     CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),

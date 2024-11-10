@@ -4,7 +4,6 @@ import com.econnect.barangaymanagementapp.controller.component.BaseViewControlle
 import com.econnect.barangaymanagementapp.domain.BarangayId;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
-import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.service.BarangayidService;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -17,6 +16,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -35,6 +35,8 @@ public class ViewIdController implements BaseViewController {
     @FXML
     private HBox profileContainer;
     @FXML
+    private TextField residentIdInput;
+    @FXML
     private Label fullNameText, addressText, genderText, birthdateText, civilStatusText, residencyStatusText, expirationDateText, emergencyFullNameText, emergencyContactText, emergencyRelationshipText, weightText, heightText;
 
     private Stage currentStage;
@@ -43,7 +45,6 @@ public class ViewIdController implements BaseViewController {
     private final BarangayidService barangayidService;
     private final ImageService imageService;
     private Image validIdImage;
-    private String residentId;
     private String requestId;
 
     public ViewIdController(DependencyInjector dependencyInjector) {
@@ -63,7 +64,7 @@ public class ViewIdController implements BaseViewController {
         Task<Optional<Resident>> findResidentById = new Task<>() {
             @Override
             protected Optional<Resident> call() {
-                return residentService.findVerifiedResidentById(residentId);
+                return residentService.findVerifiedResidentById(requestId.substring(0, requestId.length() - 5));
             }
 
             @Override
@@ -73,6 +74,7 @@ public class ViewIdController implements BaseViewController {
                     Resident residentInfo = resident.get();
                     String fullName = residentInfo.getLastName() + ", " + residentInfo.getFirstName() + " " + residentInfo.getMiddleName();
                     String emergencyFullName = residentInfo.getEmergencyLastName() + ", " + residentInfo.getEmergencyFirstName() + " " + residentInfo.getEmergencyMiddleName();
+                    residentIdInput.setText(residentInfo.getId());
                     fullNameText.setText(fullName);
                     addressText.setText(residentInfo.getAddress());
                     genderText.setText(residentInfo.getSex().getName());
@@ -104,8 +106,8 @@ public class ViewIdController implements BaseViewController {
                 Optional<BarangayId> barangayId = getValue();
                 if (barangayId.isPresent()) {
                     BarangayId barangayIdInfo = barangayId.get();
-                    weightText.setText(barangayIdInfo.getWeight());
-                    heightText.setText(barangayIdInfo.getHeight());
+                    weightText.setText(barangayIdInfo.getWeight() + " KG");
+                    heightText.setText(barangayIdInfo.getHeight() + " FT");
                 }
             }
 
@@ -147,21 +149,15 @@ public class ViewIdController implements BaseViewController {
     }
 
     private void setupEventListener() {
-        closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
+        closeBtn.setOnMouseClicked(_ -> closeWindow());
     }
 
     public void closeWindow() {
         modalUtils.closeCustomizeModal();
     }
 
-    private void closeWindowConfirmation() {
-        modalUtils.showModal(Modal.DEFAULT_REJECT, "Confirm Exit", "Are you sure you want to exit this window? Any unsaved changes will be lost.", result -> {
-            if (result) closeWindow();
-        });
-    }
-
     @Override
     public void setId(String id) {
-        this.residentId = id;
+        this.requestId = id;
     }
 }

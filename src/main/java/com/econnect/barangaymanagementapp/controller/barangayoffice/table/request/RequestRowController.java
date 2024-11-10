@@ -1,10 +1,13 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdRequestController;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
@@ -94,8 +97,8 @@ public class RequestRowController extends BaseRowController<Request> {
     @Override
     public void setupButtonContainer() {
         buttonContainer.getChildren().clear();
-        setupViewButton();
         String currentStatus = statusLabel.getText();
+        setupViewButton(request.getRequestType(), currentStatus);
         switch (request.getRequestType()) {
             case CERTIFICATES:
                 setupDocumentButton(currentStatus);
@@ -252,14 +255,36 @@ public class RequestRowController extends BaseRowController<Request> {
         buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
     }
 
-    private void setupViewButton() {
-        Button viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.VIEW_REQUEST,
-                    ViewDocumentRequestController.class,
-                    controller -> controller.setId(requestId)
-            );
-        });
+    private void setupViewButton(RequestType requestType, String currentStatus) {
+        Button viewBtn = null;
+        switch (requestType) {
+            case CERTIFICATES -> viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.VIEW_DOCUMENT_REQUEST,
+                        ViewDocumentRequestController.class,
+                        controller -> controller.setId(requestId)
+                );
+            });
+
+            case BARANGAY_ID -> viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
+                if (BarangayIdStatus.fromName(currentStatus) == BarangayIdStatus.COMPLETED) {
+                    modalUtils.customizeModalWithCallback(
+                            FXMLPath.VIEW_BARANGAY_ID,
+                            ViewIdController.class,
+                            controller -> controller.setId(requestId)
+                    );
+                } else {
+                    modalUtils.customizeModalWithCallback(
+                            FXMLPath.VIEW_ID_REQUEST,
+                            ViewIdRequestController.class,
+                            controller -> controller.setId(requestId)
+                    );
+                }
+            });
+
+        }
+
+
         buttonContainer.getChildren().add(viewBtn);
     }
 
