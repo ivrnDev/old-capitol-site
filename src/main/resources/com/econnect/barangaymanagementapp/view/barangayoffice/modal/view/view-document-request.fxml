@@ -5,6 +5,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -16,7 +17,7 @@
 
 <AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" stylesheets="@../../../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController">
     <children>
-        <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CERTIFICATE REQUEST">
+        <Text fill="#414141" layoutX="37.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CERTIFICATE REQUEST">
             <font>
                 <Font name="Arial Bold" size="25.0" />
             </font>
@@ -31,9 +32,9 @@
         </ImageView>
         <ScrollPane fitToWidth="true" layoutX="10.0" layoutY="57.0" prefHeight="560.0" prefWidth="962.0" styleClass="root-pane" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="11.0">
             <content>
-                <VBox prefHeight="503.0" prefWidth="958.0">
+                <VBox prefHeight="552.0" prefWidth="958.0">
                     <children>
-                        <HBox prefWidth="887.0" spacing="40.0" VBox.vgrow="ALWAYS">
+                        <HBox prefWidth="898.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <AnchorPane prefHeight="400.0" prefWidth="340.0" styleClass="profile-container">
                                     <children>
@@ -101,7 +102,7 @@
                                         </VBox>
                                     </children>
                                 </AnchorPane>
-                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" HBox.hgrow="ALWAYS">
+                                <VBox prefWidth="518.0" spacing="30.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
@@ -380,6 +381,20 @@
                                                 </HBox>
                                             </children>
                                         </VBox>
+                              <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Purpose" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextArea fx:id="purposeInput" editable="false" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" prefWidth="518.0" styleClass="text-field" wrapText="true">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                              </VBox>
                                     </children>
                                 </VBox>
                             </children>

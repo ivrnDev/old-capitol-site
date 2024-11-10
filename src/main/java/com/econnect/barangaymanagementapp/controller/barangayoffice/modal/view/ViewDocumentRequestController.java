@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,6 +36,8 @@ public class ViewDocumentRequestController implements BaseViewController {
     private HBox profileContainer;
     @FXML
     private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput;
+    @FXML
+    private TextArea purposeInput;
     @FXML
     private Text fullNameText, emailText, mobileNumberText;
 
@@ -115,6 +118,7 @@ public class ViewDocumentRequestController implements BaseViewController {
         applicationTypeInput.setText(certificate.getApplicationType().getName());
         residentTypeInput.setText(certificate.getRequestorType());
         typeInput.setText("Certificate");
+        purposeInput.setText(certificate.getPurpose());
         statusInput.setText(certificate.getStatus().getName());
         referenceNumberInput.setText(certificate.getReferenceNumber());
         dateInput.setText(DateFormatter.formatDateToLongStyle(certificate.getCreatedAt()));
