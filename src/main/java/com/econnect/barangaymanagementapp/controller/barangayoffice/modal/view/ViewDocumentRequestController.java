@@ -56,8 +56,7 @@ public class ViewDocumentRequestController implements BaseViewController {
 
     public void initialize() {
         closeBtn.setOnMouseClicked(_ -> closeView());
-//        profilePicture.setOnMouseClicked(_ -> handleClickProfile());
-        fetchData();
+        Platform.runLater(this::fetchData);
         setupViewImage();
     }
 
