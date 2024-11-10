@@ -48,16 +48,16 @@
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="345.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="661.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Department" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Department" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="573.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="661.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Status" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                             <font>
