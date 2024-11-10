@@ -27,15 +27,11 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_TABLE;
-import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.fromName;
-import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.values;
+import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestController {
     @FXML
@@ -75,8 +71,8 @@ public class RequestController {
     }
 
     public void initialize() {
-//        resetLiveReload();
-//        initializeSSEListener();
+        resetLiveReload();
+        initializeSSEListener();
 
         setupListener();
         loadRequestTable();
@@ -191,17 +187,22 @@ public class RequestController {
         requests.forEach(request -> requestTableController.addRow(request));
     }
 
-//    public void updateRequestRow(String id) {
-//        Optional<Resident> updatedEmployee = residentService.findResidentById(id);
-//        updatedEmployee.ifPresentOrElse(request -> {
-//            if (!INACTIVE_RESIDENT.contains(request.getStatus())) {
-//                requestTableController.updateRow(request);
-//            } else {
-//                requestTableController.deleteRow(request.getId());
-//
-//            }
-//        }, () -> requestTableController.deleteRow(id));
-//    }
+    public void updateRequestRow(RequestType requestType, String id) {
+        Optional<Request> updatedRequest = Optional.empty();
+
+        switch (requestType) {
+            case CERTIFICATES:
+                updatedRequest = certificateService.findCertificateById(id).map(RequestMapper::toRequestObject);
+                break;
+            case BARANGAY_ID:
+                updatedRequest = barangayidService.findBarangayIdById(id).map(RequestMapper::toRequestObject);
+                break;
+        }
+
+        updatedRequest.ifPresentOrElse(request -> {
+            requestTableController.updateRow(request);
+        }, () -> requestTableController.deleteRow(id));
+    }
 
     private void setupListener() {
         residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -217,9 +218,8 @@ public class RequestController {
 
     //Live Reload
     private void initializeSSEListener() {
-        residentService.listenToUpdates(result -> Platform.runLater(() -> {
-//            updateRequestRow(result);
-        }));
+        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
+        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
     }
 
     private void resetLiveReload() {

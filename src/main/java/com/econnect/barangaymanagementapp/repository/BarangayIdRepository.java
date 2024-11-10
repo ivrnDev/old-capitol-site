@@ -10,6 +10,7 @@ import okhttp3.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class BarangayIdRepository extends BaseRepository<BarangayId> {
@@ -50,5 +51,9 @@ public class BarangayIdRepository extends BaseRepository<BarangayId> {
     public Response updateBarangayIdByStatus(String requestId, StatusType.BarangayIdStatus status) {
         return updateBy(apiKey, requestId, new TypeReference<>() {
         }, request -> request.setStatus(status));
+    }
+
+    public void enableLiveReload(Consumer<String> handleDataUpdates) {
+        enableLiveReload(apiKey, handleDataUpdates, "BarangayID:");
     }
 }

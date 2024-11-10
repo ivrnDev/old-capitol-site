@@ -10,6 +10,7 @@ import okhttp3.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CertificateRepository extends BaseRepository<Certificate> {
@@ -51,6 +52,10 @@ public class CertificateRepository extends BaseRepository<Certificate> {
     public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
         return updateBy(apiKey, requestId, new TypeReference<>() {
         }, request -> request.setStatus(status));
+    }
+
+    public void enableLiveReload(Consumer<String> handleDataUpdates) {
+        enableLiveReload(apiKey, handleDataUpdates, "CERTIFICATE:");
     }
 
 }

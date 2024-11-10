@@ -10,6 +10,7 @@ import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus.PENDING;
@@ -64,5 +65,9 @@ public class BarangayidService {
         SecureRandom random = new SecureRandom();
         long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));
         return String.format("%012d", otp);
+    }
+
+    public void listenToUpdates(Consumer<String> handleDataUpdate) {
+        barangayIdRepository.enableLiveReload(handleDataUpdate);
     }
 }
