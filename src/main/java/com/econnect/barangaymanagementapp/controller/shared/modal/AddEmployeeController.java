@@ -187,7 +187,7 @@ public class AddEmployeeController {
                 loadingIndicator.setVisible(false);
                 rootPane.getChildren().remove(loadingIndicator);
                 closeWindow();
-                modalUtils.showModal(Modal.SUCCESS, "Success", "Employee added successfully.");
+                modalUtils.showModal(Modal.SUCCESS, "Success", "Employee application has been submitted successfully.");
             }
 
             @Override

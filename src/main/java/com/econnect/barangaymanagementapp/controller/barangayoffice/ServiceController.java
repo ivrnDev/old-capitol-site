@@ -24,7 +24,7 @@ public class ServiceController {
     private void setupEventListener() {
         certificateForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CERTIFICATE_FORM));
         barangayIdForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ID_FORM));
-        applyWorkForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.APPLY_WORK_FORM));
+        applyWorkForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ADD_EMPLOYEE));
         eventRequestForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.EVENT_REQUEST_FORM));
         toolsAndMaterialsForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.TOOL_AND_MATERIALS_FORM));
         assistanceForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ASSISTANCE_FORM));
