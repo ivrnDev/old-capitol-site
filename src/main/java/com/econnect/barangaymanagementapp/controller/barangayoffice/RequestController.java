@@ -150,19 +150,13 @@ public class RequestController {
         new Thread(task).start();
     }
 
-    public void clearCacheForType(RequestType type) {
-        requestCache.remove(type);
-    }
-
-    public void clearAllCaches() {
-        requestCache.clear();
-    }
-
     private void performSearch() {
+        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         String searchText = residentRequestSearchField.getText().trim().toLowerCase();
+
         searchService.performSearch(
                 searchText,
-                requestCache.get(ALL),
+                requestCache.get(selectedType),
                 searchService.createRequestFilter(searchText),
                 (filteredRequest) -> updateRequestRow(filteredRequest));
     }
