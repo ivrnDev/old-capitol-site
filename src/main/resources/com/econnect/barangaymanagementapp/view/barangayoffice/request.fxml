@@ -21,12 +21,12 @@
         <fx:include fx:id="sidebar" source="../component/sidebar.fxml" />
     </left>
     <center>
-        <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="1200.0" prefWidth="1080.0" styleClass="root-pane" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
+        <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="600.0" prefWidth="1080.0" styleClass="root-pane" stylesheets="@../../style/component/content.css" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets />
             </BorderPane.margin>
             <content>
-                <VBox fx:id="contentPane" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                <VBox fx:id="contentPane" spacing="20.0">
                     <children>
                         <AnchorPane prefWidth="938.0">
                             <children>
@@ -62,7 +62,7 @@
                                 </HBox>
                             </children>
                         </AnchorPane>
-                        <VBox fx:id="residentRequestContainer" minHeight="-Infinity" prefHeight="600.0" prefWidth="1038.0" spacing="30.0">
+                        <VBox fx:id="residentRequestContainer" minHeight="-Infinity" prefHeight="600.0" prefWidth="1038.0" spacing="30.0" VBox.vgrow="ALWAYS">
                             <padding>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                             </padding>
