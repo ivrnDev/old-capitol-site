@@ -125,7 +125,7 @@ public class RequestRowController extends BaseRowController<Request> {
                 break;
             case REJECTED:
                 createRestoreButton();
-                createDeleteButton();
+                invisibleButton();
                 break;
             case COMPLETED:
                 invisibleButton();
@@ -239,16 +239,6 @@ public class RequestRowController extends BaseRowController<Request> {
         });
 
         buttonContainer.getChildren().add(reject);
-    }
-
-    private void createDeleteButton() {
-        Button delete = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Delete", "Would you like to delete request #" + request.getReferenceNumber() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.REJECTED);
-            });
-        });
-
-        buttonContainer.getChildren().add(delete);
     }
 
     private void invisibleButton() {
