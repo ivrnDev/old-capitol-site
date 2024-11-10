@@ -45,7 +45,7 @@
                                         <Image url="@../../icon/search.png" />
                                     </image>
                                 </ImageView>
-                                <TextField fx:id="searchField" promptText="SEARCH" HBox.hgrow="ALWAYS">
+                                <TextField fx:id="searchField" promptText="Search" HBox.hgrow="ALWAYS">
                                     <font>
                                         <Font name="Arial" size="12.0" />
                                     </font>
