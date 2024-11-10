@@ -435,16 +435,16 @@
                                 <Insets top="30.0" />
                             </VBox.margin>
                         </HBox>
-                        <HBox fx:id="purposeContainer" layoutX="40.0" layoutY="40.0" spacing="40.0">
-                            <children>
-                                <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                  <VBox>
+                     <children>
+                                <VBox fx:id="clearancePurposeContainer" spacing="20.0">
                                     <children>
-                                        <Label text="Purpose" textOverrun="CLIP">
+                                        <Label text="Purpose for Barangay Clearance" textOverrun="CLIP">
                                             <font>
                                                 <Font name="Arial" size="20.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="purposeInput" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" styleClass="text-field" wrapText="true">
+                                        <TextArea fx:id="clearanceInput" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" styleClass="text-field" wrapText="true">
                                             <font>
                                                 <Font name="Arial" size="15.0" />
                                             </font>
@@ -454,8 +454,42 @@
                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                     </padding>
                                 </VBox>
-                            </children>
-                        </HBox>
+                        <VBox fx:id="residencyPurposeContainer" layoutX="10.0" layoutY="10.0" spacing="20.0">
+                           <children>
+                              <Label text="Purpose for Barangay Residency" textOverrun="CLIP">
+                                 <font>
+                                    <Font name="Arial" size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextArea fx:id="residencyInput" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" styleClass="text-field" wrapText="true">
+                                 <font>
+                                    <Font name="Arial" size="15.0" />
+                                 </font>
+                              </TextArea>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox fx:id="indigencyPurposeContainer" layoutX="10.0" layoutY="173.0" spacing="20.0">
+                           <children>
+                              <Label text="Purpose for Barangay Indigency" textOverrun="CLIP">
+                                 <font>
+                                    <Font name="Arial" size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextArea fx:id="indigencyInput" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" styleClass="text-field" wrapText="true">
+                                 <font>
+                                    <Font name="Arial" size="15.0" />
+                                 </font>
+                              </TextArea>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
                     </children>
                     <padding>
                         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

@@ -24,13 +24,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_DOCUMENT;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
@@ -38,27 +36,20 @@ import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAU
 public class CertificateFormController {
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private ImageView closeBtn, profilePicture, governmentIdPreview;
-
     @FXML
     private Button cancelBtn, confirmBtn;
-
     @FXML
-    private HBox viewGovernmentID, profileContainer, purposeContainer, certificateContainer, governmentIdPreviewContainer;
-
+    private HBox viewGovernmentID, profileContainer, certificateContainer, governmentIdPreviewContainer;
+    @FXML
+    private VBox clearancePurposeContainer, residencyPurposeContainer, indigencyPurposeContainer;
     @FXML
     private TextField residentIdInput, nameInput, addressInput, emailInput, contactNumberInput, birthdateInput, occupationInput, sexInput;
-
     @FXML
-    private TextArea purposeInput;
-
+    private TextArea indigencyInput, residencyInput, clearanceInput;
     @FXML
     private CheckBox clearanceCheckBox, indigencyCheckBox, residencyComboBox;
-
-    @FXML
-    private RadioButton studentRadio, seniorRadio, pwdRadio, jobSeekerRadio;
 
     @FXML
     private ToggleGroup residentTypeRadio;
@@ -71,8 +62,12 @@ public class CertificateFormController {
     private final ImageService imageService;
     private Image governmentIdImage;
     private Image profilePictureImage;
-
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
+
+    private List<CheckBox> checkBoxes = new ArrayList<>();
+    private List<TextArea> purposeInputs = new ArrayList<>();
+    private List<VBox> purposeContainer = new ArrayList<>();
+    private Map<CheckBox, TextArea> certificatePurpose = new HashMap<>();
     private boolean residentExists = false;
 
     public CertificateFormController(DependencyInjector dependencyInjector) {
@@ -85,6 +80,7 @@ public class CertificateFormController {
     }
 
     public void initialize() {
+        setupPurposeField();
         setupEventListener();
         setupViewImage();
     }
@@ -122,14 +118,13 @@ public class CertificateFormController {
 
     private List<Certificate> createRequestsFromInput() {
         List<Certificate> certificates = new ArrayList<>();
-        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
         for (CheckBox checkBox : checkBoxes) {
             if (checkBox.isSelected()) {
                 Certificate certificate = Certificate.builder()
                         .id(residentIdInput.getText())
                         .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
                         .request(checkBox.getText())
-                        .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
+                        .purpose(certificatePurpose.get(checkBox).getText())
                         .build();
                 certificates.add(certificate);
             }
@@ -225,13 +220,35 @@ public class CertificateFormController {
         }
 
         if (indigencyCheckBox.isSelected()) {
-            if (purposeInput.getText().isEmpty()) {
-                purposeInput.requestFocus();
-                purposeInput.getStyleClass().add("error");
-                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the indigency certificate.");
+            if (indigencyInput.getText().isEmpty()) {
+                indigencyInput.requestFocus();
+                indigencyInput.getStyleClass().add("error");
+                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Certificate of Indigency.");
                 return;
             } else {
-                purposeInput.getStyleClass().remove("error");
+                indigencyInput.getStyleClass().remove("error");
+            }
+        }
+
+        if (residencyComboBox.isSelected()) {
+            if (residencyInput.getText().isEmpty()) {
+                residencyInput.requestFocus();
+                residencyInput.getStyleClass().add("error");
+                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Certificate of Residency.");
+                return;
+            } else {
+                residencyInput.getStyleClass().remove("error");
+            }
+        }
+
+        if (clearanceCheckBox.isSelected()) {
+            if (clearanceInput.getText().isEmpty()) {
+                clearanceInput.requestFocus();
+                clearanceInput.getStyleClass().add("error");
+                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Barangay Clearance.");
+                return;
+            } else {
+                clearanceInput.getStyleClass().remove("error");
             }
         }
 
@@ -304,22 +321,10 @@ public class CertificateFormController {
     }
 
     private void setupEventListener() {
-        purposeContainer.setManaged(false);
-        purposeContainer.setVisible(false);
-
         closeBtn.setOnMouseClicked(_ -> closeWindowConfirmation());
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> validateData());
 
-        indigencyCheckBox.setOnAction(_ -> {
-            if (indigencyCheckBox.isSelected()) {
-                purposeContainer.setManaged(true);
-                purposeContainer.setVisible(true);
-            } else {
-                purposeContainer.setManaged(false);
-                purposeContainer.setVisible(false);
-            }
-        });
         residentIdInput.setOnKeyPressed(_ -> {
             residentIdInput.textProperty().addListener((_, _, newValue) -> {
                 searchDelay.setOnFinished(_ -> populateInputFields(newValue));
@@ -327,18 +332,68 @@ public class CertificateFormController {
             });
         });
         validator.setupResidentIdInput(residentIdInput);
+        purposeContainer.forEach(this::hidePurposeField);
 
-        purposeInput.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("[a-zA-Z ]*")) {
-                purposeInput.setText(newValue.replaceAll("[^a-zA-Z ]", ""));
-            }
-            if (purposeInput.getText().length() > 40) {
-                purposeInput.setText(oldValue);
+        checkBoxes.forEach((checkBox) -> {
+            switch (checkBox.getText()) {
+                case "Barangay Clearance" -> checkBox.setOnAction(_ -> {
+                    if (checkBox.isSelected()) {
+                        showInputField(clearancePurposeContainer);
+                    } else {
+                        hidePurposeField(clearancePurposeContainer);
+                    }
+                });
+                case "Certificate of Indigency" -> checkBox.setOnAction(_ -> {
+                    if (checkBox.isSelected()) {
+                        showInputField(indigencyPurposeContainer);
+                    } else {
+                        hidePurposeField(indigencyPurposeContainer);
+                    }
+                });
+                case "Certificate of Residency" -> checkBox.setOnAction(_ -> {
+                    if (checkBox.isSelected()) {
+                        showInputField(residencyPurposeContainer);
+                    } else {
+                        hidePurposeField(residencyPurposeContainer);
+                    }
+                });
             }
         });
-        purposeInput.setOnKeyTyped(_ -> {
-            purposeInput.getStyleClass().remove("error");
+
+        purposeInputs.forEach((input) -> {
+            input.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("[a-zA-Z ]*")) {
+                    input.setText(newValue.replaceAll("[^a-zA-Z ]", ""));
+                }
+                if (input.getText().length() > 40) {
+                    input.setText(oldValue);
+                }
+            });
+
+            clearanceCheckBox.setOnKeyTyped(_ -> {
+                clearanceCheckBox.getStyleClass().remove("error");
+            });
         });
+    }
+
+    private void setupPurposeField() {
+        checkBoxes = new ArrayList<>(List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox));
+        purposeInputs = new ArrayList<>(List.of(clearanceInput, indigencyInput, residencyInput));
+        purposeContainer = new ArrayList<>(List.of(clearancePurposeContainer, indigencyPurposeContainer, residencyPurposeContainer));
+
+        certificatePurpose.put(clearanceCheckBox, clearanceInput);
+        certificatePurpose.put(indigencyCheckBox, indigencyInput);
+        certificatePurpose.put(residencyComboBox, residencyInput);
+    }
+
+    private void hidePurposeField(VBox purposeContainer) {
+        purposeContainer.setVisible(false);
+        purposeContainer.setManaged(false);
+    }
+
+    private void showInputField(VBox purposeContainer) {
+        purposeContainer.setVisible(true);
+        purposeContainer.setManaged(true);
     }
 
     public void closeWindow() {
@@ -350,28 +405,4 @@ public class CertificateFormController {
             if (result) closeWindow();
         });
     }
-
-    // Compact Request
-//    private Certificate createRequestsFromInput() {
-//        List<CheckBox> checkBoxes = List.of(clearanceCheckBox, indigencyCheckBox, residencyComboBox);
-//
-//        StringBuilder requests = new StringBuilder();
-//        for (CheckBox checkBox : checkBoxes) {
-//            if (checkBox.isSelected()) {
-//                requests.append(checkBox.getText()).append(", ");
-//            }
-//        }
-//
-//        if (requests.length() > 0) {
-//            requests.setLength(requests.length() - 2);
-//        }
-//
-//        return Certificate.builder()
-//                .id(residentIdInput.getText())
-//                .requestorType(((RadioButton) residentTypeRadio.getSelectedToggle()).getText())
-//                .request(String.valueOf(requests))
-//                .purpose(indigencyCheckBox.isSelected() ? purposeInput.getText() : "")
-//                .build();
-//    }
-
 }
