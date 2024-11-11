@@ -118,7 +118,7 @@ public class ComplaintFormController {
             return;
         }
 
-        if (validator.hasEmptyFields(reliefSoughtInput, complainInput)) return;
+        if (validator.hasEmptyFields(List.of(reliefSoughtInput, complainInput))) return;
 
         submitData();
     }
