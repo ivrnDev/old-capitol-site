@@ -26,7 +26,7 @@ public class Certificate extends BaseEntity {
     private StatusType.CertificateStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;
-    private RequestType requestType;
+    private RequestType requestType; // Not included in serialization
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }
