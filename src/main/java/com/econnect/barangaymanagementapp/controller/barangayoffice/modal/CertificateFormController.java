@@ -198,8 +198,6 @@ public class CertificateFormController {
     }
 
     private void validateData() {
-        CheckBox[] checkBoxes = {clearanceCheckBox, indigencyCheckBox, residencyComboBox};
-
         if (validator.validate(residentIdInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             residentIdInput.requestFocus();
             residentIdInput.setStyle("-fx-border-color: red;");
@@ -214,43 +212,20 @@ public class CertificateFormController {
             return;
         }
 
-        if (validator.hasEmptyCheckBox(checkBoxes, certificateContainer)) {
+        if (validator.hasEmptyCheckBox(new CheckBox[]{clearanceCheckBox, indigencyCheckBox, residencyComboBox}, certificateContainer)) {
             modalUtils.showModal(Modal.ERROR, "Failed", "Please select at least one certificate.");
             return;
         }
 
-        if (indigencyCheckBox.isSelected()) {
-            if (indigencyInput.getText().isEmpty()) {
-                indigencyInput.requestFocus();
-                indigencyInput.getStyleClass().add("error");
-                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Certificate of Indigency.");
-                return;
-            } else {
-                indigencyInput.getStyleClass().remove("error");
-            }
-        }
+        List<TextArea> selectedPurposeInputs = new ArrayList<>();
 
-        if (residencyComboBox.isSelected()) {
-            if (residencyInput.getText().isEmpty()) {
-                residencyInput.requestFocus();
-                residencyInput.getStyleClass().add("error");
-                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Certificate of Residency.");
-                return;
-            } else {
-                residencyInput.getStyleClass().remove("error");
+        checkBoxes.forEach(checkBox -> {
+            if (checkBox.isSelected()) {
+                TextArea purposeInput = certificatePurpose.get(checkBox);
+                selectedPurposeInputs.add(purposeInput);
             }
-        }
-
-        if (clearanceCheckBox.isSelected()) {
-            if (clearanceInput.getText().isEmpty()) {
-                clearanceInput.requestFocus();
-                clearanceInput.getStyleClass().add("error");
-                modalUtils.showModal(Modal.ERROR, "Empty Purpose", "Please enter a purpose for the Barangay Clearance.");
-                return;
-            } else {
-                clearanceInput.getStyleClass().remove("error");
-            }
-        }
+        });
+        if (validator.hasEmptyFields(selectedPurposeInputs)) return;
 
         submitData();
     }
@@ -370,8 +345,8 @@ public class CertificateFormController {
                 }
             });
 
-            clearanceCheckBox.setOnKeyTyped(_ -> {
-                clearanceCheckBox.getStyleClass().remove("error");
+            input.setOnKeyTyped(_ -> {
+                input.getStyleClass().remove("error");
             });
         });
     }
@@ -394,6 +369,20 @@ public class CertificateFormController {
     private void showInputField(VBox purposeContainer) {
         purposeContainer.setVisible(true);
         purposeContainer.setManaged(true);
+    }
+
+    private boolean validatePurpose(CheckBox checkBox, TextArea textArea, String errorMessage) {
+        if (checkBox.isSelected()) {
+            if (textArea.getText().isEmpty()) {
+                textArea.requestFocus();
+                textArea.setStyle("-fx-border-color: red;");
+                modalUtils.showModal(Modal.ERROR, "Empty Purpose", errorMessage);
+                return false;
+            } else {
+                textArea.setStyle(null);
+            }
+        }
+        return true;
     }
 
     public void closeWindow() {
