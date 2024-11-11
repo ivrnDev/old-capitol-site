@@ -80,7 +80,7 @@
                                                 <String fx:value="input-container-default" />
                                             </styleClass>
                                         </HBox>
-                              <HBox fx:id="profileContainer" alignment="CENTER" maxWidth="-Infinity" styleClass="profile-container">
+                              <HBox fx:id="complainantProfilePictureContainer" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" styleClass="profile-container">
                                  <padding>
                                     <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                                  </padding>
@@ -287,7 +287,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </HBox>
-                              <HBox fx:id="profileContainer1" alignment="CENTER" maxWidth="-Infinity" styleClass="profile-container">
+                              <HBox fx:id="respondentProfilePictureContainer" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" styleClass="profile-container">
                                  <padding>
                                     <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                                  </padding>

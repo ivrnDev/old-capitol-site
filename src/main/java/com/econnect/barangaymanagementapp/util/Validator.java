@@ -55,6 +55,30 @@ public class Validator {
         return false;
     }
 
+    public boolean hasEmptyFields(TextArea... textAreaFields) {
+        boolean hasError = false;
+        for (TextArea textField : textAreaFields) {
+            if (textField.getText().isEmpty()) {
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                }
+                textField.setStyle("-fx-border-color: red");
+            } else {
+                hasError = false;
+                textField.setStyle("");
+            }
+            addTextAreaListener(textField);
+        }
+
+        if (hasError) {
+            triggerError();
+            return true;
+        }
+        return false;
+    }
+
     public boolean hasEmptyFields(List<TextField> textFields, List<TextArea> textAreas) {
         boolean textFieldHasError = false;
         boolean textAreaHasError = false;

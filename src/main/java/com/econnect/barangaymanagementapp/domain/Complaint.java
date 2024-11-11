@@ -19,8 +19,11 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
 public class Complaint extends BaseEntity {
+    private String respondentId;
     private String respondentName;
     private String respondentAddress;
+    private String problem;
+    private String solution;
     private StatusType.ComplaintStatus status;
     private String caseNumber;
     private ApplicationType applicationType;
