@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 public class ServiceController {
 
     @FXML
-    private VBox certificateForm, barangayIdForm, applyWorkForm, eventRequestForm, toolsAndMaterialsForm, assistanceForm, complaintForm, healthForm;
+    private VBox certificateForm, barangayIdForm, cedulaRequestForm, applyWorkForm, eventRequestForm, toolsAndMaterialsForm, assistanceForm, complaintForm, healthForm;
 
     private final ModalUtils modalUtils;
 
@@ -24,6 +24,7 @@ public class ServiceController {
     private void setupEventListener() {
         certificateForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CERTIFICATE_FORM));
         barangayIdForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ID_FORM));
+        cedulaRequestForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.CEDULA_FORM));
         applyWorkForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ADD_EMPLOYEE));
         eventRequestForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.EVENT_REQUEST_FORM));
         toolsAndMaterialsForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.TOOL_AND_MATERIALS_FORM));

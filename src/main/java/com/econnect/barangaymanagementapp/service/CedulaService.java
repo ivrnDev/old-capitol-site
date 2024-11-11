@@ -16,48 +16,48 @@ import java.util.function.Consumer;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.PENDING;
 
 public class CedulaService {
-    private final CedulaRepository certificateRepository;
+    private final CedulaRepository cedulaRepository;
 
     public CedulaService(DependencyInjector dependencyInjector) {
-        this.certificateRepository = dependencyInjector.getCedulaRepository();
+        this.cedulaRepository = dependencyInjector.getCedulaRepository();
     }
 
-    public Response createCedula(Cedula certificate) {
+    public Response createCedula(Cedula cedula) {
         int baseId = 1000;
-        String residentId = certificate.getId();
+        String residentId = cedula.getId();
         int countOfCedulas = findCountOfCedulasByResidentId(residentId);
         int autoIncrementId = countOfCedulas > 0 ? baseId + countOfCedulas : baseId;
-        certificate.setId(certificate.getId() + "-" + autoIncrementId);
-        certificate.setReferenceNumber(generateReferenceNumber());
-        certificate.setCreatedAt(ZonedDateTime.now());
-        certificate.setUpdatedAt(ZonedDateTime.now());
-        certificate.setApplicationType(ApplicationType.WALK_IN);
-        certificate.setStatus(CedulaStatus.PENDING);
-        return certificateRepository.createCedula(certificate);
+        cedula.setId(cedula.getId() + "-" + autoIncrementId);
+        cedula.setReferenceNumber(generateReferenceNumber());
+        cedula.setCreatedAt(ZonedDateTime.now());
+        cedula.setUpdatedAt(ZonedDateTime.now());
+        cedula.setApplicationType(ApplicationType.WALK_IN);
+        cedula.setStatus(CedulaStatus.PENDING);
+        return cedulaRepository.createCedula(cedula);
     }
 
     public List<Cedula> findAllCedulas() {
-        return certificateRepository.findAllCedulas();
+        return cedulaRepository.findAllCedulas();
     }
 
     public List<Cedula> findAllPendingCedulas() {
-        return certificateRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING));
+        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING));
     }
 
     public Optional<Cedula> findCedulaById(String id) {
-        return certificateRepository.findCedulaById(id);
+        return cedulaRepository.findCedulaById(id);
     }
 
     private int findCountOfCedulasByResidentId(String residentId) {
-        return (int) certificateRepository.findCedulaByFilter(request -> request.getId().contains(residentId)).stream().count();
+        return (int) cedulaRepository.findCedulaByFilter(request -> request.getId().contains(residentId)).stream().count();
     }
 
     public Optional<Cedula> findCompletedCedula(String id) {
-        return certificateRepository.findCedulaById(id).filter(request -> request.getStatus().equals(CedulaStatus.COMPLETED));
+        return cedulaRepository.findCedulaById(id).filter(request -> request.getStatus().equals(CedulaStatus.COMPLETED));
     }
 
     public Response updateCedulaByStatus(String requestId, CedulaStatus status) {
-        return certificateRepository.updateCedulaByStatus(requestId, status);
+        return cedulaRepository.updateCedulaByStatus(requestId, status);
     }
 
     private String generateReferenceNumber() {
@@ -68,6 +68,6 @@ public class CedulaService {
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
-        certificateRepository.enableLiveReload(handleDataUpdate);
+        cedulaRepository.enableLiveReload(handleDataUpdate);
     }
 }
