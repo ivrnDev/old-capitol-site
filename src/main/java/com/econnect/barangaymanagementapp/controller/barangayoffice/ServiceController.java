@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -12,12 +13,15 @@ public class ServiceController {
     private VBox certificateForm, barangayIdForm, cedulaRequestForm, applyWorkForm, eventRequestForm, toolsAndMaterialsForm, assistanceForm, complaintForm, healthForm;
 
     private final ModalUtils modalUtils;
+    private final LiveReloadUtils liveReloadUtils;
 
     public ServiceController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
     }
 
     public void initialize() {
+        resetLiveReload();
         setupEventListener();
     }
 
@@ -31,5 +35,9 @@ public class ServiceController {
         assistanceForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ASSISTANCE_FORM));
         complaintForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.COMPLAINT_FORM));
         healthForm.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.HEALTH_FORM));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
     }
 }
