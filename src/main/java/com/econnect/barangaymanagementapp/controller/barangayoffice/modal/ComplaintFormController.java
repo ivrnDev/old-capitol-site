@@ -130,7 +130,7 @@ public class ComplaintFormController {
         Task<Response> addComplaintTask = new Task<>() {
             @Override
             protected Response call() {
-                Complaint complaint = createRequestsFromInput();
+                Complaint complaint = createComplaintFromInput();
                 return complaintService.createComplaint(complaint);
             }
 
@@ -155,9 +155,10 @@ public class ComplaintFormController {
         new Thread(addComplaintTask).start();
     }
 
-    private Complaint createRequestsFromInput() {
+    private Complaint createComplaintFromInput() {
         return Complaint.builder()
                 .id(respondentIdInput.getText())
+                .respondentId(respondentIdInput.getText())
                 .respondentName(respondentFirstNameInput.getText() + " " + respondentMiddleNameInput.getText() + " " + respondentLastNameInput.getText())
                 .respondentAddress(respondentAddressInput.getText())
                 .problem(reliefSoughtInput.getText())
