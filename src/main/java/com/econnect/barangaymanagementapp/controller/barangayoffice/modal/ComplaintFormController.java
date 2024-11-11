@@ -113,6 +113,11 @@ public class ComplaintFormController {
             return;
         }
 
+        if (respondentIdInput.getText().equals(complainantIdInput.getText())) {
+            modalUtils.showModal(Modal.ERROR, "Mismatch Error", "Complainant ID and Respondent ID cannot be the same.");
+            return;
+        }
+
         if (validator.hasEmptyFields(reliefSoughtInput, complainInput)) return;
 
         submitData();

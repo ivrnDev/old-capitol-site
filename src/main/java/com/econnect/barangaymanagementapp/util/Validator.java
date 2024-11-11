@@ -64,10 +64,10 @@ public class Validator {
                     errorTitle = "Failed";
                     errorMessage = "Please fill out all required fields";
                 }
-                textField.setStyle("-fx-border-color: red");
+                textField.getStyleClass().add("error");
             } else {
                 hasError = false;
-                textField.setStyle("");
+                textField.getStyleClass().remove("error");
             }
             addTextAreaListener(textField);
         }
