@@ -56,17 +56,18 @@ public class Validator {
     }
 
     public boolean hasEmptyFields(List<TextField> textFields, List<TextArea> textAreas) {
-        boolean hasError = false;
+        boolean textFieldHasError = false;
+        boolean textAreaHasError = false;
         for (TextField textField : textFields) {
             if (textField.getText().isEmpty()) {
-                if (!hasError) {
-                    hasError = true;
+                if (!textFieldHasError) {
+                    textFieldHasError = true;
                     errorTitle = "Failed";
                     errorMessage = "Please fill out all required fields";
                 }
                 textField.setStyle("-fx-border-color: red");
             } else {
-                hasError = false;
+                textFieldHasError = false;
                 textField.setStyle("");
             }
             addTextFieldListener(textField);
@@ -74,20 +75,20 @@ public class Validator {
 
         for (TextArea textArea : textAreas) {
             if (textArea.getText().isEmpty()) {
-                if (!hasError) {
-                    hasError = true;
+                if (!textAreaHasError) {
+                    textAreaHasError = true;
                     errorTitle = "Failed";
                     errorMessage = "Please fill out all required fields";
                 }
                 textArea.getStyleClass().add("error");
             } else {
-                hasError = false;
+                textAreaHasError = false;
                 textArea.getStyleClass().remove("error");
             }
             addTextAreaListener(textArea);
         }
 
-        if (hasError) {
+        if (textAreaHasError || textFieldHasError) {
             triggerError();
             return true;
         }
