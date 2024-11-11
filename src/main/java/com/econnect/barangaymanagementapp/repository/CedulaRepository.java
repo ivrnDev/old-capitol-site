@@ -55,7 +55,7 @@ public class CedulaRepository extends BaseRepository<Cedula> {
     }
 
     public void enableLiveReload(Consumer<String> handleDataUpdates) {
-        enableLiveReload(apiKey, handleDataUpdates, "CERTIFICATE:");
+        enableLiveReload(apiKey, handleDataUpdates, "CEDULA:");
     }
 
 }
