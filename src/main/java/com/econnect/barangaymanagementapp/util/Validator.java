@@ -11,11 +11,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.File;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 
 public class Validator {
@@ -28,30 +31,6 @@ public class Validator {
     }
 
     //Setup Fields
-    public boolean hasEmptyCheckBox(CheckBox[] checkBoxes, HBox container) {
-        boolean hasError = true;
-        for (CheckBox checkBox : checkBoxes) {
-            if (checkBox.isSelected()) hasError = false;
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    container.setStyle(null);
-                } else {
-                    boolean anySelected = Arrays.stream(checkBoxes).anyMatch(CheckBox::isSelected);
-                    if (!anySelected) {
-                        container.setStyle("-fx-border-color: red;");
-                    }
-                }
-            });
-        }
-
-        if (hasError) {
-            container.setStyle("-fx-border-color: red;");
-            return true;
-        }
-        container.setStyle(null);
-        return false;
-    }
-
     public boolean hasEmptyFields(TextField... textFields) {
         boolean hasError = false;
         for (TextField textField : textFields) {
@@ -67,6 +46,45 @@ public class Validator {
                 textField.setStyle("");
             }
             addTextFieldListener(textField);
+        }
+
+        if (hasError) {
+            triggerError();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasEmptyFields(List<TextField> textFields, List<TextArea> textAreas) {
+        boolean hasError = false;
+        for (TextField textField : textFields) {
+            if (textField.getText().isEmpty()) {
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                }
+                textField.setStyle("-fx-border-color: red");
+            } else {
+                hasError = false;
+                textField.setStyle("");
+            }
+            addTextFieldListener(textField);
+        }
+
+        for (TextArea textArea : textAreas) {
+            if (textArea.getText().isEmpty()) {
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                }
+                textArea.getStyleClass().add("error");
+            } else {
+                hasError = false;
+                textArea.getStyleClass().remove("error");
+            }
+            addTextAreaListener(textArea);
         }
 
         if (hasError) {
@@ -134,6 +152,7 @@ public class Validator {
         return false;
     }
 
+
     public boolean hasEmptyComboBox(ComboBox<String>[] comboBoxes) {
         boolean hasError = false;
         for (ComboBox<String> comboBox : comboBoxes) {
@@ -156,6 +175,31 @@ public class Validator {
         return false;
     }
 
+    public boolean hasEmptyCheckBox(CheckBox[] checkBoxes, HBox container) {
+        boolean hasError = true;
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox.isSelected()) hasError = false;
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    container.setStyle(null);
+                } else {
+                    boolean anySelected = Arrays.stream(checkBoxes).anyMatch(CheckBox::isSelected);
+                    if (!anySelected) {
+                        container.setStyle("-fx-border-color: red;");
+                    }
+                }
+            });
+        }
+
+        if (hasError) {
+            container.setStyle("-fx-border-color: red;");
+            return true;
+        }
+        container.setStyle(null);
+        return false;
+    }
+
+    //Setup Special Fields
     public void setupDatePicker(LocalDate minDate, LocalDate maxDate, DatePicker... datePickers) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
@@ -356,8 +400,25 @@ public class Validator {
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                if (textField.getText().length() < 3) {
+                if (!textField.getText().matches("\\d+") && textField.getText().length() < 3) {
                     textField.setStyle("-fx-border-color: red;");
+                    Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Invalid", "Input must be at least 2 characters"));
+                }
+            }
+        });
+    }
+
+    public void addTextAreaListener(TextArea textArea) {
+        textArea.setOnKeyTyped(_ -> {
+            if (!textArea.getText().isEmpty()) {
+                textArea.getStyleClass().remove("error");
+            }
+        });
+
+        textArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (!textArea.getText().matches("\\d+") && textArea.getText().length() < 3) {
+                    textArea.getStyleClass().add("error");
                     Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Invalid", "Input must be at least 2 characters"));
                 }
             }
@@ -372,6 +433,49 @@ public class Validator {
                 }
                 if (field.getText().length() > maxLength) {
                     field.setText(oldValue);
+                }
+            });
+        }
+    }
+
+    public void setupCurrencyListener(TextField... textFields) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+
+        for (TextField field : textFields) {
+            field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue) { // When focus is lost
+                    String text = field.getText().replaceAll(",", "");
+                    if (!text.isEmpty()) {
+                        try {
+                            Number number = numberFormat.parse(text);
+                            String formattedText = numberFormat.format(number);
+                            field.setText(formattedText);
+                        } catch (ParseException e) {
+                            field.setText("");
+                        }
+                    }
+                }
+            });
+
+
+            field.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("[\\d,.]*")) {
+                    field.setText(oldValue);
+                } else {
+                    String[] parts = newValue.split("\\.");
+                    if (parts.length > 2 || (parts.length == 2 && parts[1].length() > 2)) {
+                        field.setText(oldValue);
+                    } else {
+                        String[] integerParts = parts[0].split(",");
+                        for (String part : integerParts) {
+                            if (part.length() > 3 || part.equals("000")) {
+                                field.setText(oldValue);
+                                break;
+                            }
+                        }
+                    }
                 }
             });
         }
