@@ -123,6 +123,30 @@ public class StatusType {
         }
     }
 
+    @Getter
+    public enum CedulaStatus {
+        PENDING("Pending"),
+        IN_PROGRESS("In Progress"),
+        RELEASING("Releasing"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected");
+
+        private String name;
+
+        CedulaStatus(String name) {
+            this.name = name;
+        }
+
+        public static CedulaStatus fromName(String name) {
+            for (CedulaStatus status : CedulaStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+    }
+
 
 }
 

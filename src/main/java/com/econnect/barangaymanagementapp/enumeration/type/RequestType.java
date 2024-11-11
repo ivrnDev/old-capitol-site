@@ -9,6 +9,7 @@ public enum RequestType {
     ALL("All"),
     CERTIFICATES("Certificates"),
     BARANGAY_ID("Barangay ID"),
+    CEDULA("Cedula"),
     EVENTS("Events");
 
     private final String name;

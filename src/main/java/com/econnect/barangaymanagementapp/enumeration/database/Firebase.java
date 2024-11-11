@@ -6,18 +6,7 @@ public enum Firebase {
     ACCOUNTS("/Accounts"),
     CERTIFICATES("/3-Certificates"),
     BARANGAYID("/3-BarangayId"),
-    VISITORS("/3-Visitors"),
-    ANNOUNCEMENTS("/3-Announcements"),
-    EVENTS("/3-Events"),
-    BLOTTERS("/3-Blotters"),
-    DOCUMENTS("/3-Documents"),
-    EMPLOYEE_LOGS("/3-EmployeeLogs"),
-    RESIDENT_LOGS("/3-ResidentLogs"),
-    VISITOR_LOGS("/3-VisitorLogs"),
-    ANNOUNCEMENT_LOGS("/3-AnnouncementLogs"),
-    EVENT_LOGS("/3-EventLogs"),
-    BLOTTER_LOGS("/3-BlotterLogs"),
-    DOCUMENT_LOGS("/3-DocumentLogs");
+    CEDULA("3-Sedula");
 
     private final String path;
 
