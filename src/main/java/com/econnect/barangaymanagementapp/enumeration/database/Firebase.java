@@ -6,7 +6,8 @@ public enum Firebase {
     ACCOUNTS("/Accounts"),
     CERTIFICATES("/3-Certificates"),
     BARANGAYID("/3-BarangayId"),
-    CEDULA("3-Sedula");
+    CEDULA("3-Sedula"),
+    COMPLAINT("3-Complaints");
 
     private final String path;
 

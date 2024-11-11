@@ -56,7 +56,11 @@ public class StatusType {
         IN_PROGRESS("In Progress"),
         RELEASING("Releasing"),
         COMPLETED("Completed"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        PROCESSING("Processing"),
+        UNDER_INVESTIGATION("Under Investigation"),
+        RESOLVED("Resolved"),
+        UNRESOLVED("Unresolved");
 
         private String name;
 
@@ -139,6 +143,31 @@ public class StatusType {
 
         public static CedulaStatus fromName(String name) {
             for (CedulaStatus status : CedulaStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+    }
+
+    @Getter
+    public enum ComplaintStatus {
+        PENDING("Pending"),
+        PROCESSING("Processing"),
+        UNDER_INVESTIGATION("Under Investigation"),
+        RESOLVED("Resolved"),
+        REJECTED("Rejected"),
+        UNRESOLVED("Unresolved");
+
+        private String name;
+
+        ComplaintStatus(String name) {
+            this.name = name;
+        }
+
+        public static ComplaintStatus fromName(String name) {
+            for (ComplaintStatus status : ComplaintStatus.values()) {
                 if (status.getName().equalsIgnoreCase(name)) {
                     return status;
                 }
