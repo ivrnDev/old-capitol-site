@@ -8,43 +8,44 @@ import okhttp3.Response;
 import java.util.function.Consumer;
 
 public class HealthAppointmentService {
-    private final HealthAppointmentRepository cedulaRepository;
+    private final HealthAppointmentRepository appointmentRepository;
 
     public HealthAppointmentService(DependencyInjector dependencyInjector) {
-        this.cedulaRepository = dependencyInjector.getHealthAppointmentRepository();
+        this.appointmentRepository = dependencyInjector.getHealthAppointmentRepository();
     }
 
-    public Response createHealthAppointment(HealthAppointment cedula) {
+    public Response createHealthAppointment(HealthAppointment appointment) {
         int baseId = 1000;
-        String residentId = cedula.getId();
+        String residentId = appointment.getId();
         int countOfHealthAppointments = findCountOfHealthAppointmentsByResidentId(residentId);
         int autoIncrementId = countOfHealthAppointments > 0 ? baseId + countOfHealthAppointments : baseId;
-        cedula.setId(cedula.getId() + "-" + autoIncrementId);
-        return cedulaRepository.createHealthAppointment(cedula);
+        appointment.setId(appointment.getId() + "-" + autoIncrementId);
+        appointment.setStatus("PENDING");
+        return appointmentRepository.createHealthAppointment(appointment);
     }
 
     private int findCountOfHealthAppointmentsByResidentId(String residentId) {
-        return (int) cedulaRepository.findHealthAppointmentByFilter(request -> request.getId().contains(residentId)).stream().count();
+        return (int) appointmentRepository.findHealthAppointmentByFilter(request -> request.getId().contains(residentId)).stream().count();
     }
 
  /*   public List<HealthAppointment> findAllHealthAppointments() {
-        return cedulaRepository.findAllHealthAppointments();
+        return appointmentRepository.findAllHealthAppointments();
     }
 
     public List<HealthAppointment> findAllPendingHealthAppointments() {
-        return cedulaRepository.findHealthAppointmentByFilter(request -> request.getStatus().equals(PENDING));
+        return appointmentRepository.findHealthAppointmentByFilter(request -> request.getStatus().equals(PENDING));
     }
 
     public Optional<HealthAppointment> findHealthAppointmentById(String id) {
-        return cedulaRepository.findHealthAppointmentById(id);
+        return appointmentRepository.findHealthAppointmentById(id);
     }
 
     public Optional<HealthAppointment> findCompletedHealthAppointment(String id) {
-        return cedulaRepository.findHealthAppointmentById(id).filter(request -> request.getStatus().equals(HealthAppointmentStatus.COMPLETED));
+        return appointmentRepository.findHealthAppointmentById(id).filter(request -> request.getStatus().equals(HealthAppointmentStatus.COMPLETED));
     }
 
     public Response updateHealthAppointmentByStatus(String requestId, HealthAppointmentStatus status) {
-        return cedulaRepository.updateHealthAppointmentByStatus(requestId, status);
+        return appointmentRepository.updateHealthAppointmentByStatus(requestId, status);
     }*/
 
 //    private String generateReferenceNumber() {
@@ -55,6 +56,6 @@ public class HealthAppointmentService {
 //    }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
-        cedulaRepository.enableLiveReload(handleDataUpdate);
+        appointmentRepository.enableLiveReload(handleDataUpdate);
     }
 }

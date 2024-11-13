@@ -46,7 +46,7 @@ public enum FXMLPath {
     TOOL_AND_MATERIALS_FORM("view/barangayoffice/modal/tools-and-materials-form.fxml"),
     ASSISTANCE_FORM("view/barangayoffice/modal/assistance-form.fxml"),
     COMPLAINT_FORM("view/barangayoffice/modal/complaint-form.fxml"),
-    HEALTH_FORM("view/barangayoffice/modal/health-form.fxml");
+    HEALTH_FORM("view/barangayoffice/modal/health-appointment-form.fxml");
 
 
     private final String fxmlPath;
