@@ -43,6 +43,8 @@ public class DependencyInjector {
     private final BarangayIdRepository barangayIdRepository;
     private final CedulaRepository cedulaRepository;
     private final ComplaintRepository complaintRepository;
+    private final PatientRepository patientRepository;
+    private final HealthAppointmentRepository healthAppointmentRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
@@ -52,6 +54,8 @@ public class DependencyInjector {
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
     private final ComplaintService complaintService;
+    private final PatientService patientService;
+    private final HealthAppointmentService healthAppointmentService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -77,6 +81,8 @@ public class DependencyInjector {
         this.barangayIdRepository = new BarangayIdRepository(this);
         this.cedulaRepository = new CedulaRepository(this);
         this.complaintRepository = new ComplaintRepository(this);
+        this.patientRepository = new PatientRepository(this);
+        this.healthAppointmentRepository = new HealthAppointmentRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
@@ -88,5 +94,7 @@ public class DependencyInjector {
         this.barangayidService = new BarangayidService(this);
         this.cedulaService = new CedulaService(this);
         this.complaintService = new ComplaintService(this);
+        this.patientService = new PatientService(this);
+        this.healthAppointmentService = new HealthAppointmentService(this);
     }
 }
