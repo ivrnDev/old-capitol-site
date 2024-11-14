@@ -48,7 +48,7 @@ public class EmployeeService {
             return Optional.ofNullable(Employee.builder()
                     .firstName("Admin")
                     .lastName("Admin")
-                    .department(DepartmentType.BARANGAY_OFFICE)
+                    .department(DepartmentType.HUMAN_RESOURCES)
                     .password("admin")
                     .status(ACTIVE)
                     .username("admin")
