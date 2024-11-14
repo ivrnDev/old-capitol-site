@@ -1,9 +1,6 @@
 package com.econnect.barangaymanagementapp.mapper;
 
-import com.econnect.barangaymanagementapp.domain.BarangayId;
-import com.econnect.barangaymanagementapp.domain.Cedula;
-import com.econnect.barangaymanagementapp.domain.Certificate;
-import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.domain.*;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
@@ -54,6 +51,22 @@ public class RequestMapper {
                 .updatedAt(cedula.getUpdatedAt())
                 .status(StatusType.RequestStatus.fromName(cedula.getStatus().getName()))
                 .referenceNumber(cedula.getReferenceNumber())
+                .build();
+    }
+
+    public static Request toRequestObject(Complaint complaint) {
+        int length = complaint.getId().length();
+        String residentId = complaint.getId().substring(0, length - 5);
+
+        return Request.builder()
+                .id(complaint.getId())
+                .residentId(residentId)
+                .requestType(COMPLAINT)
+                .applicationType(complaint.getApplicationType())
+                .createdAt(complaint.getCreatedAt())
+                .updatedAt(complaint.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(complaint.getStatus().getName()))
+                .referenceNumber(complaint.getCaseNumber())
                 .build();
     }
 }

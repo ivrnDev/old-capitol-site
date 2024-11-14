@@ -52,6 +52,7 @@ public class RequestController {
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
+    private final ComplaintService complaintService;
 
     private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private StackPane loadingIndicator;
@@ -68,6 +69,7 @@ public class RequestController {
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
+        this.complaintService = dependencyInjector.getComplaintService();
     }
 
     public void initialize() {
@@ -119,14 +121,19 @@ public class RequestController {
                 List<Request> allCedula = cedulaService.findAllCedulas().stream()
                         .map(RequestMapper::toRequestObject)
                         .toList();
+                List<Request> allComplaint = complaintService.findAllComplaints().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
 
                 allRequest.addAll(allRequestCertificates);
                 allRequest.addAll(allRequestBarangayId);
                 allRequest.addAll(allCedula);
+                allRequest.addAll(allComplaint);
 
                 requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
                 requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
                 requestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
+                requestCache.computeIfAbsent(COMPLAINT, k -> new ArrayList<>()).addAll(allComplaint);
                 requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
                 return null;
             }
@@ -189,6 +196,9 @@ public class RequestController {
             case CEDULA:
                 updatedRequest = cedulaService.findCedulaById(id).map(RequestMapper::toRequestObject);
                 break;
+            case COMPLAINT:
+                updatedRequest = complaintService.findComplaintById(id).map(RequestMapper::toRequestObject);
+
         }
 
         updatedRequest.ifPresentOrElse(request -> {
@@ -227,6 +237,7 @@ public class RequestController {
         barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
         certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
         cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CEDULA, result)));
+        complaintService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(COMPLAINT, result)));
     }
 
     private void resetLiveReload() {

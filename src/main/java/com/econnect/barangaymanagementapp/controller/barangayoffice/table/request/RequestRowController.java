@@ -12,10 +12,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.service.BarangayidService;
-import com.econnect.barangaymanagementapp.service.CedulaService;
-import com.econnect.barangaymanagementapp.service.CertificateService;
-import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
@@ -33,6 +30,8 @@ import lombok.Getter;
 import okhttp3.Response;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.COMPLETED;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.RESOLVED;
 
 
 public class RequestRowController extends BaseRowController<Request> {
@@ -41,6 +40,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
+    private final ComplaintService complaintService;
     @Getter
     private String requestId;
     @Getter
@@ -59,6 +59,7 @@ public class RequestRowController extends BaseRowController<Request> {
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
+        this.complaintService = dependencyInjector.getComplaintService();
     }
 
     public void initialize() {
@@ -114,6 +115,9 @@ public class RequestRowController extends BaseRowController<Request> {
             case CEDULA:
                 setupDocumentButton(currentStatus);
                 break;
+            case COMPLAINT:
+                setupComplaintButton(currentStatus);
+                break;
             default:
                 invisibleButton();
                 invisibleButton();
@@ -150,27 +154,70 @@ public class RequestRowController extends BaseRowController<Request> {
         }
     }
 
+    private void setupComplaintButton(String currentStatus) {
+        switch (RequestStatus.fromName(currentStatus)) {
+            case PENDING:
+                createAcceptButton();
+                createRejectButton();
+                break;
+            case PROCESSING:
+                createUnderInvestigationButton();
+                createRejectButton();
+                break;
+            case UNDER_INVESTIGATION:
+                createCompletedButton();
+                createUnresolvedButton();
+                break;
+            case RESOLVED:
+                invisibleButton();
+                invisibleButton();
+                break;
+            case REJECTED, UNRESOLVED:
+                createRestoreButton();
+                invisibleButton();
+                break;
+            default:
+                createRejectButton();
+                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+                break;
+        }
+    }
+
     private void createAcceptButton() {
         String head;
         String message;
+        RequestStatus status = null;
 
         switch (request.getRequestType()) {
             case CERTIFICATES:
                 head = "Accept Request";
                 message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                status = RequestStatus.IN_PROGRESS;
                 break;
             case BARANGAY_ID:
                 head = "Accept Request";
                 message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                status = RequestStatus.IN_PROGRESS;
+                break;
+            case CEDULA:
+                head = "Accept Request";
+                message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                status = RequestStatus.IN_PROGRESS;
+                break;
+            case COMPLAINT:
+                head = "Accept Request";
+                message = "Would you like to accept complaint request #" + request.getReferenceNumber() + "?";
+                status = RequestStatus.PROCESSING;
                 break;
             default:
                 head = "Accept Request";
                 message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
                 break;
         }
+        RequestStatus finalStatus = status;
         Button accept = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(RequestStatus.IN_PROGRESS);
+                if (isConfirmed) updateRequestStatus(finalStatus);
             });
         });
 
@@ -190,6 +237,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 head = "Release";
                 message = "Would you like to release the ID for request #" + request.getReferenceNumber() + "?";
                 break;
+            case CEDULA:
+                head = "Release";
+                message = "Would you like to release the cedula for request #" + request.getReferenceNumber() + "?";
+                break;
             default:
                 head = "Release";
                 message = "Would you like to release request #" + request.getReferenceNumber() + "?";
@@ -208,25 +259,39 @@ public class RequestRowController extends BaseRowController<Request> {
     private void createCompletedButton() {
         String head;
         String message;
+        RequestStatus status = null;
 
         switch (request.getRequestType()) {
             case CERTIFICATES:
                 head = "Mark as complete";
                 message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                status = COMPLETED;
                 break;
             case BARANGAY_ID:
                 head = "Mark as complete";
                 message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                status = COMPLETED;
+                break;
+            case CEDULA:
+                head = "Mark as complete";
+                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                status = COMPLETED;
+                break;
+            case COMPLAINT:
+                head = "Mark as complete";
+                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                status = RESOLVED;
                 break;
             default:
                 head = "Mark as complete";
-                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                message = "Would you like to mark complaint #" + request.getReferenceNumber() + " as completed?";
                 break;
         }
 
+        RequestStatus finalStatus = status;
         Button accept = ButtonUtils.createButton("Complete", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(RequestStatus.COMPLETED);
+                if (isConfirmed) updateRequestStatus(finalStatus);
             });
         });
 
@@ -292,11 +357,67 @@ public class RequestRowController extends BaseRowController<Request> {
                 );
             });
 
+            case COMPLAINT -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.VIEW_ID_REQUEST,
+                        ViewIdRequestController.class,
+                        controller -> controller.setId(requestId)
+                );
+            });
+
 
         }
 
 
         buttonContainer.getChildren().add(viewBtn);
+    }
+
+    private void createUnderInvestigationButton() {
+        String head;
+        String message;
+
+        switch (request.getRequestType()) {
+            case COMPLAINT:
+                head = "Investigate";
+                message = "Would you like to investigate the current complaint request #" + request.getReferenceNumber() + "?";
+                break;
+            default:
+                head = "Investigate";
+                message = "Would you like to investigate the current complaint request #" + request.getReferenceNumber() + "?";
+                break;
+        }
+
+        Button release = ButtonUtils.createButton("Proceed", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.UNDER_INVESTIGATION);
+            });
+        });
+
+        buttonContainer.getChildren().add(release);
+    }
+
+    private void createUnresolvedButton() {
+        String head;
+        String message;
+
+        switch (request.getRequestType()) {
+            case COMPLAINT:
+                head = "Resolved";
+                message = "Would you like to confirm that the current complaint request #" + request.getReferenceNumber() + "has been unresolved?";
+                break;
+            default:
+                head = "Resolved";
+                message = "Would you like to confirm that the current complaint request #\" + request.getReferenceNumber() + \"has been unresolved?";
+                break;
+        }
+
+        Button release = ButtonUtils.createButton("Unresolve", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.UNRESOLVED);
+            });
+        });
+
+        buttonContainer.getChildren().add(release);
     }
 
 
@@ -319,6 +440,8 @@ public class RequestRowController extends BaseRowController<Request> {
                         return barangayidService.updateBarangayIdByStatus(requestId, BarangayIdStatus.fromName(status.getName()));
                     case CEDULA:
                         return cedulaService.updateCedulaByStatus(requestId, CedulaStatus.fromName(status.getName()));
+                    case COMPLAINT:
+                        return complaintService.updateComplaintByStatus(requestId, ComplaintStatus.fromName(status.getName()));
                     default:
                 }
                 return null;
