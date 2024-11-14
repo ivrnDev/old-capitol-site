@@ -39,7 +39,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="30.0" layoutY="30.0" prefWidth="938.0">
                             <children>
-                                <ComboBox fx:id="residentRequestComboBox" layoutX="7.0" layoutY="7.0" prefWidth="150.0" />
+                                <ComboBox fx:id="residentRequestComboBox" layoutX="7.0" layoutY="7.0" prefHeight="25.0" prefWidth="125.0" style="-fx-background-color: D9D9D9; -fx-background-radius: 5;" visibleRowCount="6" />
                                 <HBox alignment="CENTER_LEFT" layoutX="848.0" layoutY="4.0" styleClass="search-box" stylesheets="@../../style/component/search.css" AnchorPane.rightAnchor="6.0">
                                     <children>
                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
