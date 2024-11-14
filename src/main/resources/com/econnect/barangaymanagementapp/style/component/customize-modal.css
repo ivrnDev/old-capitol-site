@@ -147,7 +147,12 @@
 .input-date.date-picker .text-field:empty:focused {
     -fx-cursor: default;
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
 
+.input-date-rounded.date-picker .text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
 
 /* Check Box */

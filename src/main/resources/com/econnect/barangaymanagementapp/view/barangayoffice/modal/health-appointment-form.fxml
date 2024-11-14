@@ -279,14 +279,15 @@
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                        <String fx:value="text-input-rounded" />
-                                                    </styleClass>
                                                     <padding>
                                                         <Insets left="-1.0" />
                                                     </padding>
+                                       <styleClass>
+                                          <String fx:value="input-date" />
+                                          <String fx:value="input-date-rounded" />
+                                          <String fx:value="text-input" />
+                                          <String fx:value="text-input-rounded" />
+                                       </styleClass>
                                                 </DatePicker>
                                             </children>
                                         </HBox>
