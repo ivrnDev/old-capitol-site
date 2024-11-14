@@ -2,14 +2,12 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.request.RequestTableController;
 import com.econnect.barangaymanagementapp.domain.BarangayId;
+import com.econnect.barangaymanagementapp.domain.Cedula;
 import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.mapper.RequestMapper;
-import com.econnect.barangaymanagementapp.service.BarangayidService;
-import com.econnect.barangaymanagementapp.service.CertificateService;
-import com.econnect.barangaymanagementapp.service.ResidentService;
-import com.econnect.barangaymanagementapp.service.SearchService;
+import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
@@ -53,6 +51,7 @@ public class RequestController {
     private final ResidentService residentService;
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
+    private final CedulaService cedulaService;
 
     private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private StackPane loadingIndicator;
@@ -68,6 +67,7 @@ public class RequestController {
         this.searchService = dependencyInjector.getRequestSearchService();
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
+        this.cedulaService = dependencyInjector.getCedulaService();
     }
 
     public void initialize() {
@@ -116,12 +116,17 @@ public class RequestController {
                 List<Request> allRequestBarangayId = barangayidService.findAllBarangayIds().stream()
                         .map(RequestMapper::toRequestObject)
                         .toList();
+                List<Request> allCedula = cedulaService.findAllCedulas().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
 
                 allRequest.addAll(allRequestCertificates);
                 allRequest.addAll(allRequestBarangayId);
+                allRequest.addAll(allCedula);
 
                 requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
                 requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
+                requestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
                 requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
                 return null;
             }
@@ -181,6 +186,9 @@ public class RequestController {
             case BARANGAY_ID:
                 updatedRequest = barangayidService.findBarangayIdById(id).map(RequestMapper::toRequestObject);
                 break;
+            case CEDULA:
+                updatedRequest = cedulaService.findCedulaById(id).map(RequestMapper::toRequestObject);
+                break;
         }
 
         updatedRequest.ifPresentOrElse(request -> {
@@ -218,6 +226,7 @@ public class RequestController {
     private void initializeSSEListener() {
         barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
         certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
+        cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CEDULA, result)));
     }
 
     private void resetLiveReload() {

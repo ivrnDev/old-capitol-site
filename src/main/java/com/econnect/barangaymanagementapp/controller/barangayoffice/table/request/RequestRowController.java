@@ -13,6 +13,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayId
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.BarangayidService;
+import com.econnect.barangaymanagementapp.service.CedulaService;
 import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -31,12 +32,15 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import okhttp3.Response;
 
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.*;
+
 
 public class RequestRowController extends BaseRowController<Request> {
     private final ModalUtils modalUtils;
     private final ResidentService residentService;
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
+    private final CedulaService cedulaService;
     @Getter
     private String requestId;
     @Getter
@@ -54,6 +58,7 @@ public class RequestRowController extends BaseRowController<Request> {
         this.residentService = dependencyInjector.getResidentService();
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
+        this.cedulaService = dependencyInjector.getCedulaService();
     }
 
     public void initialize() {
@@ -106,11 +111,18 @@ public class RequestRowController extends BaseRowController<Request> {
             case BARANGAY_ID:
                 setupDocumentButton(currentStatus);
                 break;
+            case CEDULA:
+                setupDocumentButton(currentStatus);
+                break;
+            default:
+                invisibleButton();
+                invisibleButton();
+                break;
         }
     }
 
     private void setupDocumentButton(String currentStatus) {
-        switch (StatusType.RequestStatus.fromName(currentStatus)) {
+        switch (RequestStatus.fromName(currentStatus)) {
             case PENDING:
                 createAcceptButton();
                 createRejectButton();
@@ -158,7 +170,7 @@ public class RequestRowController extends BaseRowController<Request> {
         }
         Button accept = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.IN_PROGRESS);
+                if (isConfirmed) updateRequestStatus(RequestStatus.IN_PROGRESS);
             });
         });
 
@@ -186,7 +198,7 @@ public class RequestRowController extends BaseRowController<Request> {
 
         Button release = ButtonUtils.createButton("Release", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.RELEASING);
+                if (isConfirmed) updateRequestStatus(RequestStatus.RELEASING);
             });
         });
 
@@ -214,7 +226,7 @@ public class RequestRowController extends BaseRowController<Request> {
 
         Button accept = ButtonUtils.createButton("Complete", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.COMPLETED);
+                if (isConfirmed) updateRequestStatus(RequestStatus.COMPLETED);
             });
         });
 
@@ -224,7 +236,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private void createRestoreButton() {
         Button reject = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to reject request #" + request.getReferenceNumber() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.PENDING);
+                if (isConfirmed) updateRequestStatus(RequestStatus.PENDING);
             });
         });
 
@@ -234,7 +246,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private void createRejectButton() {
         Button reject = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Would you like to reject request #" + request.getReferenceNumber() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(StatusType.RequestStatus.REJECTED);
+                if (isConfirmed) updateRequestStatus(RequestStatus.REJECTED);
             });
         });
 
@@ -272,6 +284,15 @@ public class RequestRowController extends BaseRowController<Request> {
                 }
             });
 
+            case CEDULA -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.VIEW_ID_REQUEST,
+                        ViewIdRequestController.class,
+                        controller -> controller.setId(requestId)
+                );
+            });
+
+
         }
 
 
@@ -279,7 +300,7 @@ public class RequestRowController extends BaseRowController<Request> {
     }
 
 
-    private void updateRequestStatus(StatusType.RequestStatus status) {
+    private void updateRequestStatus(RequestStatus status) {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
 
         tableRow.getChildren().forEach(node -> {
@@ -296,6 +317,8 @@ public class RequestRowController extends BaseRowController<Request> {
                         return certificateService.updateCertificateByStatus(requestId, CertificateStatus.fromName(status.getName()));
                     case BARANGAY_ID:
                         return barangayidService.updateBarangayIdByStatus(requestId, BarangayIdStatus.fromName(status.getName()));
+                    case CEDULA:
+                        return cedulaService.updateCedulaByStatus(requestId, CedulaStatus.fromName(status.getName()));
                     default:
                 }
                 return null;
