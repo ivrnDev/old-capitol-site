@@ -251,7 +251,7 @@ public class AddEmployeeController {
             return;
         }
 
-        if (validator.hasEmptyFields(null, datePickers, comboBoxes)) return;
+        if (validator.hasEmptyFields((TextField[]) null, datePickers, comboBoxes)) return;
 
         if (validator.hasEmptyFiles(files, uploadBtns)) return;
 
