@@ -13,6 +13,7 @@ import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -24,9 +25,13 @@ import javafx.util.Duration;
 import okhttp3.Response;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HealthAppointmentForm {
     @FXML
@@ -40,7 +45,7 @@ public class HealthAppointmentForm {
     @FXML
     private DatePicker appointmentDatePicker, birthdatePicker1;
     @FXML
-    private ComboBox<String> servicesComboBox, providerComboBox;
+    private ComboBox<String> servicesComboBox, providerComboBox, timeComboBox;
     @FXML
     private TextArea remarksInput;
     @FXML
@@ -189,6 +194,11 @@ public class HealthAppointmentForm {
 
         providerComboBox.getItems().addAll(Arrays.stream(HealthType.HealthcareProvider.values()).map(HealthType.HealthcareProvider::getName).toList());
         servicesComboBox.getItems().addAll(Arrays.stream(HealthType.HealthServiceType.values()).map(HealthType.HealthServiceType::getName).toList());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        List<LocalTime> times = Stream.iterate(LocalTime.of(9, 0), time -> time.plusMinutes(30))
+                .limit(13)
+                .collect(Collectors.toList());
+        timeComboBox.getItems().addAll(times.stream().map(time -> time.format(timeFormatter)).toList());
     }
 
     public void closeWindow() {

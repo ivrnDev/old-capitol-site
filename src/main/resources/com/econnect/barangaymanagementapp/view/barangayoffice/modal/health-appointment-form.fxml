@@ -300,21 +300,20 @@
                                                 <String fx:value="input-container" />
                                                 <String fx:value="input-container-default" />
                                             </styleClass>
-                                            <children>
-                                                <DatePicker fx:id="birthdatePicker1" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
-                                                    <cursor>
-                                                        <Cursor fx:constant="HAND" />
-                                                    </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                        <String fx:value="text-input-rounded" />
-                                                    </styleClass>
-                                                    <padding>
-                                                        <Insets left="-1.0" />
-                                                    </padding>
-                                                </DatePicker>
-                                            </children>
+                                 <children>
+                                    <ComboBox fx:id="timeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="32.0" prefWidth="430.0" promptText="Select Time">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                       <styleClass>
+                                          <String fx:value="text-input-rounded" />
+                                          <String fx:value="text-input" />
+                                       </styleClass>
+                                    </ComboBox>
+                                 </children>
                                         </HBox>
                                     </children>
                                 </VBox>
