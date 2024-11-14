@@ -89,6 +89,7 @@ public class LoginController {
             if (isConfirmed) {
                 Stage stage = (Stage) closeBtn.getScene().getWindow();
                 stage.close();
+                Platform.exit();
             }
         });
     }
