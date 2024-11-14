@@ -111,6 +111,7 @@ public class HealthAppointmentForm {
                 .healthService(servicesComboBox.getValue())
                 .healthCareProvider(providerComboBox.getValue())
                 .appointmentDate(DateFormatter.formatLocalDateToUsShortDate(appointmentDatePicker.getValue()))
+                .appointmentTime(timeComboBox.getValue())
                 .build();
     }
 
@@ -173,6 +174,9 @@ public class HealthAppointmentForm {
             return;
         }
 
+        if (validator.hasEmptyFields(new TextArea[]{remarksInput}, new DatePicker[]{appointmentDatePicker}, new ComboBox[]{servicesComboBox, providerComboBox, timeComboBox}))
+            return;
+
         submitData();
     }
 
@@ -190,11 +194,11 @@ public class HealthAppointmentForm {
         });
 
         validator.setupDatePicker(LocalDate.now(), LocalDate.now().plusMonths(1), appointmentDatePicker);
-        validator.setupComboBox(List.of(providerComboBox, servicesComboBox));
+        validator.setupComboBox(List.of(providerComboBox, servicesComboBox, timeComboBox));
 
         providerComboBox.getItems().addAll(Arrays.stream(HealthType.HealthcareProvider.values()).map(HealthType.HealthcareProvider::getName).toList());
         servicesComboBox.getItems().addAll(Arrays.stream(HealthType.HealthServiceType.values()).map(HealthType.HealthServiceType::getName).toList());
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
         List<LocalTime> times = Stream.iterate(LocalTime.of(9, 0), time -> time.plusMinutes(30))
                 .limit(13)
                 .collect(Collectors.toList());
