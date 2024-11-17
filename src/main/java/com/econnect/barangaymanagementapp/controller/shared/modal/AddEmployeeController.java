@@ -7,7 +7,6 @@ import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
-import com.econnect.barangaymanagementapp.enumeration.type.FileType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
@@ -15,9 +14,9 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.UploadImageUtils;
 import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
-import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -31,14 +30,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import okhttp3.Response;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -48,8 +42,6 @@ import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAU
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEFAULT_PROFILE;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
 import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.NBI_CLEARANCE;
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.RESUME;
 
 public class AddEmployeeController {
     @FXML
@@ -74,12 +66,9 @@ public class AddEmployeeController {
     private final EmployeeService employeeService;
     private final ResidentService residentService;
     private final ImageService imageService;
-    private final FileChooserUtils fileChooserUtils;
     private final Validator validator;
-    private File resumeFile;
-    private File clearanceFile;
-    private Image profilePictureImage;
-    private Image governmentIdImage;
+    private final UploadImageUtils uploadImageUtils;
+    private Image profilePictureImage, governmentIdImage, resumeImage, clearanceImage;
     private String profileLink;
     private Boolean residentExists = false;
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
@@ -89,8 +78,8 @@ public class AddEmployeeController {
         this.employeeService = dependencyInjector.getEmployeeService();
         this.residentService = dependencyInjector.getResidentService();
         this.imageService = dependencyInjector.getImageService();
-        this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
+        this.uploadImageUtils = dependencyInjector.getUploadImageUtils();
         Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
 
@@ -222,8 +211,8 @@ public class AddEmployeeController {
     }
 
     private Void processEmployeeCreation(Employee employee) {
-        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeFile, employee.getId());
-        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceFile, employee.getId());
+        String resumeUrl = imageService.uploadImage(Firestore.RESUME, resumeImage, employee.getId());
+        String nbiClearanceUrl = imageService.uploadImage(Firestore.NBI_CLEARANCE, clearanceImage, employee.getId());
         employee.setResumeUrl(resumeUrl);
         employee.setProfileUrl(profileLink);
         employee.setNbiClearanceUrl(nbiClearanceUrl);
@@ -232,7 +221,7 @@ public class AddEmployeeController {
     }
 
     private void validateFields() {
-        File[] files = {resumeFile, clearanceFile};
+        Image[] images = {resumeImage, clearanceImage};
         HBox[] uploadBtns = {uploadResume, uploadClearance};
         DatePicker[] datePickers = {nbiExpirationPicker};
         ComboBox[] comboBoxes = {employmentTypeComboBox};
@@ -253,40 +242,9 @@ public class AddEmployeeController {
 
         if (validator.hasEmptyFields((TextField[]) null, datePickers, comboBoxes)) return;
 
-        if (validator.hasEmptyFiles(files, uploadBtns)) return;
+        if (validator.hasEmptyImages(images, uploadBtns)) return;
 
         addEmployee();
-    }
-
-    private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
-        FileChooser fileChooser = fileChooserUtils.createFileChooser();
-        File file = fileChooser.showOpenDialog(currentStage);
-
-        if (file != null) {
-            try {
-                if (fileType.equals(RESUME)) {
-                    resumeFile = file;
-                    viewResume.setCursor(Cursor.HAND);
-                    validator.hasEmptyFile(resumeFile, uploadResume);
-                } else if (fileType.equals(NBI_CLEARANCE)) {
-                    clearanceFile = file;
-                    viewClearance.setCursor(Cursor.HAND);
-                    validator.hasEmptyFile(clearanceFile, uploadClearance);
-                }
-
-                preview.setImage(new Image(new FileInputStream(file)));
-                label.setText(file.getName());
-                viewBtn.setVisible(true);
-
-            } catch (FileNotFoundException e) {
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "File not found: " + file.getName()));
-                e.printStackTrace();
-            }
-        } else {
-            viewClearance.setCursor(Cursor.HAND);
-            viewResume.setCursor(Cursor.HAND);
-            Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "No File Selected", "Please select a valid file."));
-        }
     }
 
     private void loadProfileImage(String directory, String link) {
@@ -366,16 +324,34 @@ public class AddEmployeeController {
         employmentTypeComboBox.getItems().addAll(VOLUNTEER.getName(), FULL_TIME.getName());
 
         viewResume.setOnMouseClicked(_ -> {
-            if (resumeFile != null) showImageView(resumePreview.getImage());
+            if (resumeImage != null) showImageView(resumePreview.getImage());
         });
 
         viewClearance.setOnMouseClicked(_ -> {
-            if (clearanceFile != null) showImageView(clearancePreview.getImage());
+            if (clearanceImage != null) showImageView(clearancePreview.getImage());
         });
 
-        uploadResume.setOnMouseClicked(_ -> uploadImage(viewResume, resumePreview, resumeLabel, RESUME));
-        uploadClearance.setOnMouseClicked(_ -> uploadImage(viewClearance, clearancePreview, clearanceLabel, NBI_CLEARANCE));
+        uploadResume.setOnMouseClicked(_ -> {
+            uploadImageUtils.loadSetupFile(currentStage, image -> {
+                resumeImage = image;
+                viewResume.setCursor(Cursor.HAND);
+                resumePreview.setImage(image);
+                resumeLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
+                viewResume.setVisible(true);
+                uploadResume.setStyle(null);
+            });
+        });
 
+        uploadClearance.setOnMouseClicked(_ -> {
+            uploadImageUtils.loadSetupFile(currentStage, image -> {
+                clearanceImage = image;
+                viewClearance.setCursor(Cursor.HAND);
+                clearancePreview.setImage(image);
+                clearanceLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
+                viewClearance.setVisible(true);
+                uploadClearance.setStyle(null);
+            });
+        });
         validator.setupDatePicker(minDate, maxDate, nbiExpirationPicker);
         validator.setupResidentIdInput(residentIdInput);
         validator.setupComboBox(employmentTypeComboBox);
