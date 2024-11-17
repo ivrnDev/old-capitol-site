@@ -333,6 +333,7 @@ public class AddResidentController {
             profileLabel.setText("Profile Picture");
             viewProfileBtn.setVisible(true);
             profileImage = image;
+            profileLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
         }));
 
         uploadGovernmentId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
@@ -340,6 +341,7 @@ public class AddResidentController {
             governmentIdLabel.setText("Government ID");
             viewGovernmentIdBtn.setVisible(true);
             governmentIdImage = image;
+            governmentIdLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
         }));
 
         uploadTinId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
@@ -347,6 +349,7 @@ public class AddResidentController {
             governmentIdLabel.setText("TIN ID");
             viewTinId.setVisible(true);
             tinImage = image;
+            governmentIdLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
         }));
 
     }
