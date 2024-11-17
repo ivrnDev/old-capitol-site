@@ -115,9 +115,6 @@ public class RequestRowController extends BaseRowController<Request> {
             case CEDULA:
                 setupDocumentButton(currentStatus);
                 break;
-            case COMPLAINT:
-                setupComplaintButton(currentStatus);
-                break;
             default:
                 invisibleButton();
                 invisibleButton();
@@ -154,35 +151,6 @@ public class RequestRowController extends BaseRowController<Request> {
         }
     }
 
-    private void setupComplaintButton(String currentStatus) {
-        switch (RequestStatus.fromName(currentStatus)) {
-            case PENDING:
-                createAcceptButton();
-                createRejectButton();
-                break;
-            case PROCESSING:
-                createUnderInvestigationButton();
-                createRejectButton();
-                break;
-            case UNDER_INVESTIGATION:
-                createCompletedButton();
-                createUnresolvedButton();
-                break;
-            case RESOLVED:
-                invisibleButton();
-                invisibleButton();
-                break;
-            case REJECTED, UNRESOLVED:
-                createRestoreButton();
-                invisibleButton();
-                break;
-            default:
-                createRejectButton();
-                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
-                break;
-        }
-    }
-
     private void createAcceptButton() {
         String head;
         String message;
@@ -203,11 +171,6 @@ public class RequestRowController extends BaseRowController<Request> {
                 head = "Accept Request";
                 message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
                 status = RequestStatus.IN_PROGRESS;
-                break;
-            case COMPLAINT:
-                head = "Accept Request";
-                message = "Would you like to accept complaint request #" + request.getReferenceNumber() + "?";
-                status = RequestStatus.PROCESSING;
                 break;
             default:
                 head = "Accept Request";
@@ -276,11 +239,6 @@ public class RequestRowController extends BaseRowController<Request> {
                 head = "Mark as complete";
                 message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
                 status = COMPLETED;
-                break;
-            case COMPLAINT:
-                head = "Mark as complete";
-                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
-                status = RESOLVED;
                 break;
             default:
                 head = "Mark as complete";
@@ -356,70 +314,11 @@ public class RequestRowController extends BaseRowController<Request> {
                         controller -> controller.setId(requestId)
                 );
             });
-
-            case COMPLAINT -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
-                modalUtils.customizeModalWithCallback(
-                        FXMLPath.VIEW_ID_REQUEST,
-                        ViewIdRequestController.class,
-                        controller -> controller.setId(requestId)
-                );
-            });
-
-
         }
 
 
         buttonContainer.getChildren().add(viewBtn);
     }
-
-    private void createUnderInvestigationButton() {
-        String head;
-        String message;
-
-        switch (request.getRequestType()) {
-            case COMPLAINT:
-                head = "Investigate";
-                message = "Would you like to investigate the current complaint request #" + request.getReferenceNumber() + "?";
-                break;
-            default:
-                head = "Investigate";
-                message = "Would you like to investigate the current complaint request #" + request.getReferenceNumber() + "?";
-                break;
-        }
-
-        Button release = ButtonUtils.createButton("Proceed", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(RequestStatus.UNDER_INVESTIGATION);
-            });
-        });
-
-        buttonContainer.getChildren().add(release);
-    }
-
-    private void createUnresolvedButton() {
-        String head;
-        String message;
-
-        switch (request.getRequestType()) {
-            case COMPLAINT:
-                head = "Resolved";
-                message = "Would you like to confirm that the current complaint request #" + request.getReferenceNumber() + "has been unresolved?";
-                break;
-            default:
-                head = "Resolved";
-                message = "Would you like to confirm that the current complaint request #\" + request.getReferenceNumber() + \"has been unresolved?";
-                break;
-        }
-
-        Button release = ButtonUtils.createButton("Unresolve", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(RequestStatus.UNRESOLVED);
-            });
-        });
-
-        buttonContainer.getChildren().add(release);
-    }
-
 
     private void updateRequestStatus(RequestStatus status) {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
@@ -440,8 +339,6 @@ public class RequestRowController extends BaseRowController<Request> {
                         return barangayidService.updateBarangayIdByStatus(requestId, BarangayIdStatus.fromName(status.getName()));
                     case CEDULA:
                         return cedulaService.updateCedulaByStatus(requestId, CedulaStatus.fromName(status.getName()));
-                    case COMPLAINT:
-                        return complaintService.updateComplaintByStatus(requestId, ComplaintStatus.fromName(status.getName()));
                     default:
                 }
                 return null;

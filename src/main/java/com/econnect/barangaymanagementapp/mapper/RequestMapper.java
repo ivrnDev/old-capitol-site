@@ -53,20 +53,4 @@ public class RequestMapper {
                 .referenceNumber(cedula.getReferenceNumber())
                 .build();
     }
-
-    public static Request toRequestObject(Complaint complaint) {
-        int length = complaint.getId().length();
-        String residentId = complaint.getId().substring(0, length - 5);
-
-        return Request.builder()
-                .id(complaint.getId())
-                .residentId(residentId)
-                .requestType(COMPLAINT)
-                .applicationType(complaint.getApplicationType())
-                .createdAt(complaint.getCreatedAt())
-                .updatedAt(complaint.getUpdatedAt())
-                .status(StatusType.RequestStatus.fromName(complaint.getStatus().getName()))
-                .referenceNumber(complaint.getCaseNumber())
-                .build();
-    }
 }
