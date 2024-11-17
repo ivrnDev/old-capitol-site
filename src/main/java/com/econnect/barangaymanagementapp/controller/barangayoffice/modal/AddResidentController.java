@@ -91,7 +91,7 @@ public class AddResidentController {
         setupPreviewRounded();
         setupActionButtons();
         setupInputFields();
-//        mockData();
+        mockData();
     }
 
     private void addResident() {
@@ -130,7 +130,7 @@ public class AddResidentController {
         String id = residentService.generateResidentId();
         String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileFile, id);
         String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdFile, id);
-        String tinIdURl = imageService.uploadImage(Firestore.TIN_ID, tidIdFile, id);
+        String tinIdURl = tidIdFile != null ? imageService.uploadImage(Firestore.TIN_ID, tidIdFile, id) : null;
         resident.setId(id);
         resident.setProfileUrl(profileUrl);
         resident.setValidIdUrl(governmentIDUrl);
@@ -145,8 +145,8 @@ public class AddResidentController {
                 .middleName(middleNameInput.getText())
                 .lastName(lastNameInput.getText())
                 .nameExtension(suffixComboBox.getValue())
-                .mobileNumber("0" + mobileNumberInput.getText())
-                .telephoneNumber(telephoneInput.getText())
+                .mobileNumber(mobileNumberInput.getText())
+                .telephoneNumber(!telephoneInput.getText().isEmpty() ? telephoneInput.getText() : null)
                 .email(emailInput.getText())
                 .address(addressInput.getText())
                 .birthdate(birthdatePicker.getValue() != null ? DateFormatter.formatToUsShortDate(birthdatePicker.getValue()) : null)
@@ -193,7 +193,7 @@ public class AddResidentController {
                 .profileUrl(profileFile != null ? profileFile.toURI().toString() : null)
                 .validIdUrl(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
                 .tinIdUrl(tidIdFile != null ? tidIdFile.toURI().toString() : null)
-                .tinIdNumber(tinIdNumberInput.getText())
+                .tinIdNumber(!tinIdNumberInput.getText().isEmpty() ? tinIdNumberInput.getText() : null)
                 .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.formatLocalDateToUsShortDate(validIdExpirationDatePicker.getValue()) : null)
                 .createdAt(ZonedDateTime.now())
                 .updatedAt(ZonedDateTime.now())
@@ -295,8 +295,6 @@ public class AddResidentController {
         emergencyMiddleNameInput.setText("Santos");
         emergencyMobileNumberInput.setText("09123456789");
         emergencyRelationshipInput.setText("Mother");
-        tinIdNumberInput.setText("1234-1234-1234-0000");
-        telephoneInput.setText("1234567");
         validIdExpirationDatePicker.setValue(LocalDate.now().plusYears(5));
         birthdatePicker.setValue(LocalDate.now().minusYears(50));
     }
@@ -304,11 +302,10 @@ public class AddResidentController {
     private void validateForm() {
         TextField[] textFields = {
                 lastNameInput, firstNameInput, middleNameInput,
-                birthplaceInput, occupationInput, emailInput, addressInput,
-                telephoneInput, mobileNumberInput, fatherFirstNameInput, fatherLastNameInput,
+                birthplaceInput, occupationInput, emailInput, addressInput, mobileNumberInput, fatherFirstNameInput, fatherLastNameInput,
                 fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
                 motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
-                citizenshipInput, tinIdNumberInput, emergencyFirstNameInput, emergencyLastNameInput,
+                citizenshipInput, emergencyFirstNameInput, emergencyLastNameInput,
                 emergencyMiddleNameInput, emergencyMobileNumberInput, emergencyRelationshipInput};
         TextField[] spouseTextField = {spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput};
         DatePicker[] datePickers = {birthdatePicker, validIdExpirationDatePicker};
@@ -317,8 +314,8 @@ public class AddResidentController {
                 motherSuffixComboBox, residencyStatusComboBox};
         CheckBox[] checkBoxes = {ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox};
         ComboBox[] spouseComboBox = {spouseSuffixComboBox};
-        File[] files = {profileFile, governmentIdFile, tidIdFile};
-        HBox[] fileContainers = {uploadProfile, uploadGovernmentId, uploadTinId};
+        File[] files = {profileFile, governmentIdFile};
+        HBox[] fileContainers = {uploadProfile, uploadGovernmentId};
 
         if (validator.hasEmptyFields(textFields, datePickers, comboBoxes)) return;
 

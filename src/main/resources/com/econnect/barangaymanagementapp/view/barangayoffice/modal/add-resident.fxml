@@ -492,7 +492,7 @@
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Telephone Number" textOverrun="CLIP">
+                                                        <Label text="Telephone (Optional)" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
@@ -1384,7 +1384,7 @@
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Tin ID Number" textOverrun="CLIP">
+                                                        <Label text="Tin Number (Optional)" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0" />
                                                             </font>
