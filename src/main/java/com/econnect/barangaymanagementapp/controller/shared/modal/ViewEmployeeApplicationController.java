@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.shared.modal;
 
 import com.econnect.barangaymanagementapp.controller.component.BaseViewController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType;
@@ -29,7 +30,7 @@ import java.util.Optional;
 
 public class ViewEmployeeApplicationController implements BaseViewController {
     @FXML
-    private ImageView closeBtn, profilePicture, validIdPreview, tinIdPreview, resumePreview;
+    private ImageView closeBtn, profilePicture, validIdPreview, NBIPreview, resumePreview;
     @FXML
     private TextField residentIdInput, lastNameInput, firstNameInput, middleNameInput, nameExtensionInput, addressInput, birthdateInput, birthPlaceInput,
             emailInput, contactNumberInput, telephoneNumberInput, citizenshipInput, civilStatusInput, motherToungeInput, bloodTypeInput, religionInput, incomeInput,
@@ -37,11 +38,11 @@ public class ViewEmployeeApplicationController implements BaseViewController {
             fatherLastNameInput, fatherFirstNameInput, fatherMiddleNameInput, fatherNameExtensionInput, fatherOccupationInput, motherLastNameInput, motherFirstNameInput, motherMiddleNameInput,
             motherNameExtensionInput, motherOccupationInput;
     @FXML
-    private HBox profileContainer, viewValidId, viewValidIdPreviewContainer, viewTinId, viewTinIdPreviewContainer, viewResumePreviewContainer, viewResume;
+    private HBox profileContainer, viewValidId, viewValidIdPreviewContainer, viewNBI, viewNBIPreviewContainer, viewResumePreviewContainer, viewResume;
     @FXML
     private VBox spouseContainer;
     @FXML
-    private Text validIdExpiryDateText;
+    private Text validIdExpiryDateText, NBIExpiryDateText;
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
@@ -50,7 +51,7 @@ public class ViewEmployeeApplicationController implements BaseViewController {
     private final EmployeeService employeeService;
     private Image profileImage;
     private Image governmentIdImage;
-    private Image tinIdImage;
+    private Image NBIImage;
     private Image resumeImage;
     private String residentId;
 
@@ -94,7 +95,6 @@ public class ViewEmployeeApplicationController implements BaseViewController {
                     populateData(resident);
                     loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), resident.getProfileUrl());
                     loadGovernmentIdImage(Firestore.VALID_ID.getPath(), resident.getValidIdUrl());
-                    loadTinIdImage(Firestore.TIN_ID.getPath(), resident.getTinIdUrl());
                 }
             }
 
@@ -104,18 +104,20 @@ public class ViewEmployeeApplicationController implements BaseViewController {
             }
         };
 
-        Task<String> findResumeById = new Task<>() {
+        Task<Optional<Employee>> findEmployeeURL = new Task<>() {
             @Override
-            protected String call() {
-                return employeeService.findResumeUrlById(residentId);
+            protected Optional<Employee> call() {
+                return employeeService.findEmployeeById(residentId);
             }
 
             @Override
             protected void succeeded() {
-                String resumeUrl = getValue();
-                if (!resumeUrl.isEmpty()) {
-                    loadResumeImage(Firestore.RESUME.getPath(), resumeUrl);
-                }
+                Optional<Employee> fetchedEmployee = getValue();
+                fetchedEmployee.ifPresent(employee -> {
+                    loadResumeImage(Firestore.RESUME.getPath(), employee.getResumeUrl());
+                    loadNBIIImage(Firestore.NBI_CLEARANCE.getPath(), employee.getNbiClearanceUrl());
+                    NBIExpiryDateText.setText(DateFormatter.formatShortToLongDate(employee.getNbiClearanceExpiration()));
+                });
             }
 
             @Override
@@ -124,7 +126,7 @@ public class ViewEmployeeApplicationController implements BaseViewController {
             }
         };
         new Thread(residentTask).start();
-        new Thread(findResumeById).start();
+        new Thread(findEmployeeURL).start();
     }
 
     private void populateData(Resident resident) {
@@ -228,33 +230,33 @@ public class ViewEmployeeApplicationController implements BaseViewController {
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
 
-    private void loadTinIdImage(String directory, String link) {
-        viewTinId.setOnMouseClicked(_ -> {
-            if (tinIdImage != null) {
-                modalUtils.showImageView(tinIdImage, currentStage);
+    private void loadNBIIImage(String directory, String link) {
+        viewNBI.setOnMouseClicked(_ -> {
+            if (NBIImage != null) {
+                modalUtils.showImageView(NBIImage, currentStage);
             }
         });
-        tinIdPreview.setVisible(false);
-        tinIdPreview.setManaged(false);
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(viewTinIdPreviewContainer.getWidth(), viewTinIdPreviewContainer.getHeight());
-        Platform.runLater(() -> viewTinIdPreviewContainer.getChildren().add(loadingIndicator));
+        NBIPreview.setVisible(false);
+        NBIPreview.setManaged(false);
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(viewNBIPreviewContainer.getWidth(), viewNBIPreviewContainer.getHeight());
+        Platform.runLater(() -> viewNBIPreviewContainer.getChildren().add(loadingIndicator));
         Runnable call = () -> {
-            tinIdImage = imageService.getImage(directory, link);
+            NBIImage = imageService.getImage(directory, link);
             Platform.runLater(() -> {
-                viewTinIdPreviewContainer.getChildren().remove(loadingIndicator);
-                tinIdPreview.setImage(tinIdImage);
-                viewTinId.setCursor(Cursor.HAND);
-                tinIdPreview.setVisible(true);
-                tinIdPreview.setManaged(true);
+                viewNBIPreviewContainer.getChildren().remove(loadingIndicator);
+                NBIPreview.setImage(NBIImage);
+                viewNBI.setCursor(Cursor.HAND);
+                NBIPreview.setVisible(true);
+                NBIPreview.setManaged(true);
             });
         };
 
         Runnable onFailed = () -> {
             Platform.runLater(() -> {
-                viewTinIdPreviewContainer.getChildren().remove(loadingIndicator);
+                viewNBIPreviewContainer.getChildren().remove(loadingIndicator);
             });
-            tinIdPreview.setVisible(true);
-            tinIdPreview.setManaged(true);
+            NBIPreview.setVisible(true);
+            NBIPreview.setManaged(true);
 
             System.err.println("Error loading image");
         };
@@ -296,7 +298,7 @@ public class ViewEmployeeApplicationController implements BaseViewController {
 
     private void setupPreviewRounded() {
         ImageUtils.setRoundedClip(profilePicture, 25, 25);
-        ImageUtils.setRoundedClip(tinIdPreview, 10, 10);
+        ImageUtils.setRoundedClip(NBIPreview, 10, 10);
         ImageUtils.setRoundedClip(resumePreview, 10, 10);
         ImageUtils.setRoundedClip(validIdPreview, 10, 10);
     }
