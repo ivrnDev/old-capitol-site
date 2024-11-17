@@ -7,6 +7,8 @@ module com.econnect.barangaymanagementapp {
     requires com.fasterxml.jackson.datatype.jsr310;
     requires static lombok;
     requires jakarta.mail;
+    requires org.bytedeco.javacv;
+    requires org.bytedeco.opencv;
 
     exports com.econnect.barangaymanagementapp;
     exports com.econnect.barangaymanagementapp.config;

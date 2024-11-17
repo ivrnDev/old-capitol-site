@@ -3,6 +3,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
+import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.type.FileType;
 import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.CivilStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue;
@@ -12,6 +13,7 @@ import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.Validator;
+import com.econnect.barangaymanagementapp.util.WebCam;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -56,7 +58,7 @@ public class AddResidentController {
     @FXML
     private DatePicker birthdatePicker, validIdExpirationDatePicker;
     @FXML
-    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId, checkBoxContainer;
+    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId, checkBoxContainer, cameraBtn;
     @FXML
     private VBox spouseInputContainer;
     @FXML
@@ -74,6 +76,7 @@ public class AddResidentController {
     private final ImageService imageService;
     private final FileChooserUtils fileChooserUtils;
     private final Validator validator;
+    private final WebCam webCam;
     private final ResidentService residentService;
     private Stage currentStage;
     private File profileFile, governmentIdFile, tidIdFile;
@@ -83,6 +86,7 @@ public class AddResidentController {
         this.imageService = dependencyInjector.getImageService();
         this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
+        this.webCam = dependencyInjector.getWebCam();
         this.residentService = dependencyInjector.getResidentService();
         Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
@@ -242,16 +246,16 @@ public class AddResidentController {
         });
         citizenshipInput.setEditable(false);
         citizenshipInput.setText("Filipino");
-//        suffixComboBox.setValue(NONE.getName());
-//        fatherSuffixComboBox.setValue(NONE.getName());
-//        motherSuffixComboBox.setValue(NONE.getName());
-//        if (spouseInputContainer.isVisible()) {
-//            spouseSuffixComboBox.setValue(NONE.getName());
-//        }
-//        motherToungeComboBox.setValue(TAGALOG.getName());
-//        civilStatusComboBox.setValue(CivilStatus.SINGLE.getName());
-//        religionComboBox.setValue(Religion.CATHOLICISM.getName());
-//        residencyStatusComboBox.setValue(ResidencyStatus.OWNER.getName());
+        //        suffixComboBox.setValue(NONE.getName());
+        //        fatherSuffixComboBox.setValue(NONE.getName());
+        //        motherSuffixComboBox.setValue(NONE.getName());
+        //        if (spouseInputContainer.isVisible()) {
+        //            spouseSuffixComboBox.setValue(NONE.getName());
+        //        }
+        //        motherToungeComboBox.setValue(TAGALOG.getName());
+        //        civilStatusComboBox.setValue(CivilStatus.SINGLE.getName());
+        //        religionComboBox.setValue(Religion.CATHOLICISM.getName());
+        //        residencyStatusComboBox.setValue(ResidencyStatus.OWNER.getName());
     }
 
     public void mockData() {
@@ -373,6 +377,15 @@ public class AddResidentController {
         uploadProfile.setOnMouseClicked(_ -> uploadImage(viewProfileBtn, profilePreview, profileLabel, PROFILE_PICTURE));
         uploadGovernmentId.setOnMouseClicked(_ -> uploadImage(viewGovernmentIdBtn, governmentIdPreview, governmentIdLabel, GOVERNMENT_ID));
         uploadTinId.setOnMouseClicked(_ -> uploadImage(viewTinId, tinIdPreview, governmentIdLabel, FileType.TIN_ID));
+
+//        cameraBtn.setOnMouseClicked(_ -> {
+//            webCam.startWithCapture(currentStage);
+//            webCam.setOnCaptureImage(image -> {
+//                profilePreview.setImage(image);
+//                profileLabel.setText("Captured Image");
+//                viewProfileBtn.setVisible(true);
+//            });
+//        });
     }
 
     private void populateComboBoxes() {
