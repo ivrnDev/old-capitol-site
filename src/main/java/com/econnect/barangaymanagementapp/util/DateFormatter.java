@@ -98,5 +98,9 @@ public class DateFormatter {
         return String.valueOf(age);
     }
 
+    public static String toTimeStamp(ZonedDateTime zonedDateTime) {
+        return zonedDateTime.toInstant().toEpochMilli() + "";
+    }
+
 
 }
