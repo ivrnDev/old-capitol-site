@@ -44,7 +44,7 @@ public class EmployeeService {
     }
 
     public Optional<Employee> findEmployeeByCredentials(String username, String password) {
-        if (findAllActiveEmployees().isEmpty() && username.equals("admin") && password.equals("admin")) {
+        if (username.equals("admin") && password.equals("admin")) {
             return Optional.ofNullable(Employee.builder()
                     .firstName("Admin")
                     .lastName("Admin")
