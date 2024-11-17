@@ -3,19 +3,14 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.modal;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
-import com.econnect.barangaymanagementapp.enumeration.type.FileType;
-import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.CivilStatus;
-import com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.UploadImageUtils;
 import com.econnect.barangaymanagementapp.util.Validator;
-import com.econnect.barangaymanagementapp.util.WebCam;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
-import com.econnect.barangaymanagementapp.util.ui.FileChooserUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
@@ -28,23 +23,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import okhttp3.Response;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.GOVERNMENT_ID;
-import static com.econnect.barangaymanagementapp.enumeration.type.FileType.PROFILE_PICTURE;
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
-import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue.fromName;
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.SuffixName.values;
 
 public class AddResidentController {
@@ -58,7 +46,7 @@ public class AddResidentController {
     @FXML
     private DatePicker birthdatePicker, validIdExpirationDatePicker;
     @FXML
-    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId, checkBoxContainer, cameraBtn;
+    private HBox uploadProfile, viewProfileBtn, uploadGovernmentId, viewGovernmentIdBtn, uploadTinId, viewTinId, checkBoxContainer;
     @FXML
     private VBox spouseInputContainer;
     @FXML
@@ -74,19 +62,17 @@ public class AddResidentController {
 
     private final ModalUtils modalUtils;
     private final ImageService imageService;
-    private final FileChooserUtils fileChooserUtils;
     private final Validator validator;
-    private final WebCam webCam;
+    private final UploadImageUtils uploadImageUtils;
     private final ResidentService residentService;
     private Stage currentStage;
-    private File profileFile, governmentIdFile, tidIdFile;
+    private Image profileImage, governmentIdImage, tinImage;
 
     public AddResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.imageService = dependencyInjector.getImageService();
-        this.fileChooserUtils = dependencyInjector.getFileChooserUtils();
         this.validator = dependencyInjector.getValidator();
-        this.webCam = dependencyInjector.getWebCam();
+        this.uploadImageUtils = dependencyInjector.getUploadImageUtils();
         this.residentService = dependencyInjector.getResidentService();
         Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
@@ -132,9 +118,9 @@ public class AddResidentController {
 
     private Void processResidentCreation(Resident resident) {
         String id = residentService.generateResidentId();
-        String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileFile, id);
-        String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdFile, id);
-        String tinIdURl = tidIdFile != null ? imageService.uploadImage(Firestore.TIN_ID, tidIdFile, id) : null;
+        String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileImage, id);
+        String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdImage, id);
+        String tinIdURl = tinImage != null ? imageService.uploadImage(Firestore.TIN_ID, tinImage, id) : null;
         resident.setId(id);
         resident.setProfileUrl(profileUrl);
         resident.setValidIdUrl(governmentIDUrl);
@@ -194,9 +180,6 @@ public class AddResidentController {
                 .educationalAttainment(educationalAttainment.getSelectedToggle() != null
                         ? ((RadioButton) educationalAttainment.getSelectedToggle()).getText()
                         : null)
-                .profileUrl(profileFile != null ? profileFile.toURI().toString() : null)
-                .validIdUrl(governmentIdFile != null ? governmentIdFile.toURI().toString() : null)
-                .tinIdUrl(tidIdFile != null ? tidIdFile.toURI().toString() : null)
                 .tinIdNumber(!tinIdNumberInput.getText().isEmpty() ? tinIdNumberInput.getText() : null)
                 .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.formatLocalDateToUsShortDate(validIdExpirationDatePicker.getValue()) : null)
                 .createdAt(ZonedDateTime.now())
@@ -318,7 +301,7 @@ public class AddResidentController {
                 motherSuffixComboBox, residencyStatusComboBox};
         CheckBox[] checkBoxes = {ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox};
         ComboBox[] spouseComboBox = {spouseSuffixComboBox};
-        File[] files = {profileFile, governmentIdFile};
+        Image[] images = {profileImage, governmentIdImage};
         HBox[] fileContainers = {uploadProfile, uploadGovernmentId};
 
         if (validator.hasEmptyFields(textFields, datePickers, comboBoxes)) return;
@@ -331,38 +314,9 @@ public class AddResidentController {
             return;
         }
 
-        if (validator.hasEmptyFiles(files, fileContainers)) return;
+        if (validator.hasEmptyImages(images, fileContainers)) return;
 
         addResident();
-    }
-
-    private void uploadImage(HBox viewBtn, ImageView preview, Label label, FileType fileType) {
-        FileChooser fileChooser = fileChooserUtils.createFileChooser();
-        File file = fileChooser.showOpenDialog(currentStage);
-
-        if (file != null) {
-            try {
-                if (fileType.equals(PROFILE_PICTURE)) {
-                    profileFile = file;
-                    validator.hasEmptyFile(profileFile, uploadProfile);
-                } else if (fileType.equals(GOVERNMENT_ID)) {
-                    governmentIdFile = file;
-                    validator.hasEmptyFile(governmentIdFile, uploadGovernmentId);
-                } else if (fileType.equals(FileType.TIN_ID)) {
-                    tidIdFile = file;
-                    validator.hasEmptyFile(tidIdFile, uploadTinId);
-                }
-
-                preview.setImage(new Image(new FileInputStream(file)));
-                label.setText(file.getName());
-                viewBtn.setVisible(true);
-            } catch (FileNotFoundException e) {
-                Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "Error", "File not found: " + file.getName()));
-                e.printStackTrace();
-            }
-        } else {
-            Platform.runLater(() -> modalUtils.showModal(Modal.ERROR, "No File Selected", "Please select a valid file."));
-        }
     }
 
     private void setupActionButtons() {
@@ -374,18 +328,27 @@ public class AddResidentController {
         viewGovernmentIdBtn.setOnMouseClicked(_ -> showImageView(governmentIdPreview.getImage()));
         viewTinId.setOnMouseClicked(_ -> showImageView(tinIdPreview.getImage()));
 
-        uploadProfile.setOnMouseClicked(_ -> uploadImage(viewProfileBtn, profilePreview, profileLabel, PROFILE_PICTURE));
-        uploadGovernmentId.setOnMouseClicked(_ -> uploadImage(viewGovernmentIdBtn, governmentIdPreview, governmentIdLabel, GOVERNMENT_ID));
-        uploadTinId.setOnMouseClicked(_ -> uploadImage(viewTinId, tinIdPreview, governmentIdLabel, FileType.TIN_ID));
+        uploadProfile.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
+            profilePreview.setImage(image);
+            profileLabel.setText("Profile Picture");
+            viewProfileBtn.setVisible(true);
+            profileImage = image;
+        }));
 
-//        cameraBtn.setOnMouseClicked(_ -> {
-//            webCam.startWithCapture(currentStage);
-//            webCam.setOnCaptureImage(image -> {
-//                profilePreview.setImage(image);
-//                profileLabel.setText("Captured Image");
-//                viewProfileBtn.setVisible(true);
-//            });
-//        });
+        uploadGovernmentId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
+            governmentIdPreview.setImage(image);
+            governmentIdLabel.setText("Government ID");
+            viewGovernmentIdBtn.setVisible(true);
+            governmentIdImage = image;
+        }));
+
+        uploadTinId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
+            tinIdPreview.setImage(image);
+            governmentIdLabel.setText("TIN ID");
+            viewTinId.setVisible(true);
+            tinImage = image;
+        }));
+
     }
 
     private void populateComboBoxes() {
