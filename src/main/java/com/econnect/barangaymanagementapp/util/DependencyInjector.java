@@ -36,6 +36,7 @@ public class DependencyInjector {
     private final Validator validator;
     private final LiveReloadUtils liveReloadUtils;
     private final WebCam webCam;
+    private final UploadImageUtils uploadImageUtils;
 
     private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
@@ -75,6 +76,7 @@ public class DependencyInjector {
         this.emailService = new EmailService();
         this.liveReloadUtils = new LiveReloadUtils();
         this.webCam = new WebCam();
+        this.uploadImageUtils = new UploadImageUtils(this);
 
         this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);

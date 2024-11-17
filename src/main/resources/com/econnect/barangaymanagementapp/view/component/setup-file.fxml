@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootContainer" prefHeight="290.0" prefWidth="612.0" styleClass="panel" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.component.SetupFileController">
+    <children>
+        <Text fill="#414141" layoutX="26.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please choose an option:">
+            <font>
+                <Font name="Arial" size="24.0" />
+            </font>
+        </Text>
+        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="583.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../icon/close.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <VBox fx:id="uploadImageBtn" alignment="TOP_CENTER" layoutX="103.0" layoutY="87.0" prefHeight="149.0" prefWidth="165.0" spacing="20.0" styleClass="card-variant-2">
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icon/upload.png" />
+               </image></ImageView>
+                <Text fill="#414141" strokeType="OUTSIDE" strokeWidth="0.0" text="Upload Image">
+                    <font>
+                        <Font name="Arial" size="24.0" />
+                    </font>
+                </Text>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </VBox>
+        <VBox fx:id="takePhotoBtn" alignment="TOP_CENTER" layoutX="371.0" layoutY="87.0" prefHeight="149.0" prefWidth="165.0" spacing="20.0" styleClass="card-variant-2">
+            <children>
+                <ImageView fitHeight="80.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icon/take-photo.png" />
+               </image></ImageView>
+                <Text fill="#414141" strokeType="OUTSIDE" strokeWidth="0.0" text="Take Photo">
+                    <font>
+                        <Font name="Arial" size="24.0" />
+                    </font>
+                </Text>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@../../style/component/customize-modal.css" />
+        <URL value="@../../style/component/card.css" />
+    </stylesheets>
+</AnchorPane>

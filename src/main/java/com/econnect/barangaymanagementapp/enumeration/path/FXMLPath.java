@@ -2,7 +2,7 @@ package com.econnect.barangaymanagementapp.enumeration.path;
 
 public enum FXMLPath {
     TABLE_NO_DATA("view/component/no-data-row.fxml"),
-    WEB_CAM("view/component/web-cam.fxml"),
+    SETUP_FILE("view/component/setup-file.fxml"),
 
     //Employee Table
     EMPLOYEE_TABLE("view/shared/table/employee/employee-table.fxml"),
@@ -29,7 +29,6 @@ public enum FXMLPath {
     ADD_RESIDENT("view/barangayoffice/modal/add-resident.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     SETUP_REQUIREMENTS("view/shared/setup-requirements.fxml"),
-
     //View Modal
     VIEW_APPLICATION_EMPLOYEE("view/shared/modal/view-application-employee.fxml"),
     VIEW_RESIDENT("view/shared/modal/view-resident.fxml"),
