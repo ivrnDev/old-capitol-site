@@ -81,13 +81,6 @@ public class EmployeeService {
         return findEmployeeById(employeeId).map(employee -> employee.getEmail()).orElse(null);
     }
 
-    public String findResumeUrlById(String id) {
-        return employeeRepository.findEmployeeByFilter(employee -> employee.getId().equals(id))
-                .stream()
-                .findFirst()
-                .map(employee -> employee.getResumeUrl())
-                .orElse(null);
-    }
 
     public int countAllActiveEmployees() {
         return findAllActiveEmployees().size();
