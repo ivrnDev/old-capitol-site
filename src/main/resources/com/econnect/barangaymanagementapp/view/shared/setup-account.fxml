@@ -44,7 +44,7 @@
                                 <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Department" visibleRowCount="2" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Department" visibleRowCount="5" HBox.hgrow="ALWAYS">
                             <styleClass>
                                 <String fx:value="text-input-first" />
                                 <String fx:value="text-input" />
@@ -80,7 +80,7 @@
                                 <String fx:value="input-label" />
                             </styleClass>
                         </HBox>
-                        <ComboBox fx:id="roleComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Role" visibleRowCount="2" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="roleComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Role" visibleRowCount="5" HBox.hgrow="ALWAYS">
                             <styleClass>
                                 <String fx:value="text-input-last" />
                                 <String fx:value="text-input" />
