@@ -4,6 +4,7 @@ import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
@@ -424,6 +425,30 @@ public class Validator {
                     hasError = true;
                     errorTitle = "Failed";
                     errorMessage = "Please upload all required files";
+                }
+            } else {
+                buttonContainer.setStyle(null);
+            }
+        }
+
+        if (hasError) {
+            triggerError();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasEmptyImages(Image[] images, HBox[] fileContainers) {
+        boolean hasError = false;
+        for (int i = 0; i < images.length; i++) {
+            Image image = images[i];
+            HBox buttonContainer = fileContainers[i];
+            if (image == null) {
+                buttonContainer.setStyle("-fx-border-color: red;");
+                if (!hasError) {
+                    hasError = true;
+                    errorTitle = "Failed";
+                    errorMessage = "Please upload all required images";
                 }
             } else {
                 buttonContainer.setStyle(null);
