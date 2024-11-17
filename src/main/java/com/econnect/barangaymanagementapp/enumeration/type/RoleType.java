@@ -19,9 +19,18 @@ public enum RoleType {
     TREASURER("Treasurer"),
 
     //Secretary Department
-    SECRETARY("Secretary");
+    SECRETARY("Secretary"),
 
     //Utilities Department
+
+    //Health Department
+    GENERAL_DOCTOR("General Doctor"),
+    DENTAL("Dental"),
+    MIDWIFE("Midwife"),
+    DNS("Director of Nursing Services"),
+    BHW("Barangay Health Worker"),
+    HEALTH_COMMITTEE_HEAD("Head of Health Committee"),
+    ;
 
 
     private final String name;

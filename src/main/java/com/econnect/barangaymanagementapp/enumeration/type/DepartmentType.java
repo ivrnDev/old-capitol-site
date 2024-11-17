@@ -18,7 +18,12 @@ public enum DepartmentType {
             "Barangay Office",
             "view/barangayoffice/dashboard.fxml",
             List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, REQUESTS, RESIDENTS, SERVICES, HISTORY),
-            List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK));
+            List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, RECORDS_CLERK, FINANCIAL_CLERK, EVENT_COORDINATOR, CERTIFICATION_CLERK)),
+    HEALTH_DEPARTMENT(
+            "Health Department",
+            "",
+            List.of(),
+            List.of(GENERAL_DOCTOR, DENTAL, MIDWIFE, DNS, BHW, HEALTH_COMMITTEE_HEAD));
 
     @Getter
     private final String name;
