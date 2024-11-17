@@ -96,4 +96,46 @@ public class ImageService {
         }
     }
 
+    public String uploadImage(Firestore directory, Image image, String id) {
+        File file = null;
+        try {
+            file = saveImageToFile(image);
+            return uploadImage(directory, file, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private File saveImageToFile(Image image) throws Exception {
+        // Create a temporary file
+        File tempFile = File.createTempFile("captured_image", ".png");
+        tempFile.deleteOnExit();
+
+        // Extract pixel data from the Image
+        int width = (int) image.getWidth();
+        int height = (int) image.getHeight();
+        javafx.scene.image.PixelReader pixelReader = image.getPixelReader();
+
+        // Create a BufferedImage for writing
+        java.awt.image.BufferedImage bufferedImage = new java.awt.image.BufferedImage(width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+
+        // Transfer pixel data
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                javafx.scene.paint.Color fxColor = pixelReader.getColor(x, y);
+                int argb = (int) (fxColor.getOpacity() * 255) << 24 |
+                        (int) (fxColor.getRed() * 255) << 16 |
+                        (int) (fxColor.getGreen() * 255) << 8 |
+                        (int) (fxColor.getBlue() * 255);
+                bufferedImage.setRGB(x, y, argb);
+            }
+        }
+
+        // Write the BufferedImage to a file
+        javax.imageio.ImageIO.write(bufferedImage, "png", tempFile);
+
+        return tempFile;
+    }
+
 }
