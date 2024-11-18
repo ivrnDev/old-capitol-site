@@ -146,10 +146,10 @@ public abstract class BaseRepository<T> {
         }
     }
 
-    public Response updateBy(String apiUrl, String id, TypeReference<T> typeReference, Consumer<T> statusUpdater) {
+    public Response updateBy(String apiUrl, String id, TypeReference<T> typeReference, Consumer<T> updater) {
         Optional<T> entity = findById(apiUrl, id, typeReference);
         if (entity.isPresent()) {
-            statusUpdater.accept(entity.get());
+            updater.accept(entity.get());
             return update(apiUrl, id, entity.get());
         }
         return null;
