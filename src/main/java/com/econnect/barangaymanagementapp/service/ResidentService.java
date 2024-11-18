@@ -5,6 +5,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.AccountRepository;
 import com.econnect.barangaymanagementapp.repository.ResidentRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
@@ -58,6 +59,14 @@ public class ResidentService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Response updateResident(Resident resident) {
+        return residentRepository.updateResident(resident);
+    }
+
+    public Response updateResidentTin(String residentId, String tinNumber, String tinUrl) {
+        return residentRepository.updateResidentTin(residentId, tinNumber, tinUrl);
     }
 
     public String generateResidentId() {

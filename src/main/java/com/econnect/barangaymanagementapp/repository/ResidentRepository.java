@@ -25,8 +25,8 @@ public class ResidentRepository extends BaseRepository<Resident> {
         return create(apiKey + "/" + resident.getId(), resident);
     }
 
-    public Response updateResident(Object object) {
-        return null;
+    public Response updateResident(Resident resident) {
+        return update(apiKey, resident.getId(), resident);
     }
 
     public Boolean deleteResidentById(String id) {
@@ -51,6 +51,14 @@ public class ResidentRepository extends BaseRepository<Resident> {
     public Response updateResidentByStatus(String residentId, StatusType.ResidentStatus status) {
         return updateBy(apiKey, residentId, new TypeReference<>() {
         }, resident -> resident.setStatus(status));
+    }
+
+    public Response updateResidentTin(String residentId, String tinNumber, String tinUrl) {
+        return updateBy(apiKey, residentId, new TypeReference<>() {
+        }, resident -> {
+            resident.setTinIdUrl(tinUrl);
+            resident.setTinIdNumber(tinNumber);
+        });
     }
 
     public void enableLiveReload(Consumer<String> handleDataUpdates) {

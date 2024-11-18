@@ -350,7 +350,7 @@
                                         </Label>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
-                                                <TextField fx:id="tinNumberInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-rounded" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="tinNumberInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-rounded" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -416,6 +416,54 @@
                                                 <Font name="Arial" size="15.0" />
                                             </font>
                                         </TextArea>
+                              <HBox spacing="50.0">
+                                 <children>
+                                    <HBox fx:id="uploadTinId" alignment="CENTER_LEFT" prefWidth="183.0" spacing="10.0" styleClass="file-chooser">
+                                       <children>
+                                          <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../icon/upload-image.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="tinIdLabel" text="Tin ID" textFill="#686464">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                                       </padding>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </HBox>
+                                    <HBox fx:id="viewTinId" alignment="CENTER_LEFT" prefWidth="183.0" spacing="10.0" styleClass="file-chooser" visible="false">
+                                       <children>
+                                          <HBox fx:id="tinIdPreviewContainer">
+                                             <children>
+                                                <ImageView fx:id="tinIdPreview" fitHeight="38.0" fitWidth="38.0" pickOnBounds="true">
+                                                   <image>
+                                                      <Image url="@../../../icon/upload-image.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </HBox>
+                                          <Label text="View Tin ID" textFill="#686464">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                                       </padding>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </HBox>
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                             </children>
