@@ -57,7 +57,7 @@
                                        <children>
                                           <HBox fx:id="governmentIdPreviewContainer" alignment="CENTER">
                                              <children>
-                                                <ImageView fx:id="governmentIdPreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="governmentIdPreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                                    <image>
                                                       <Image url="@../../../icon/document-icon.png" />
                                                    </image>
@@ -86,7 +86,7 @@
                                  <children>
                                     <HBox fx:id="viewClearance" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="194.0" spacing="20.0" styleClass="view-id">
                                        <children>
-                                          <ImageView fx:id="clearancePreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="clearancePreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                              <image>
                                                 <Image url="@../../../icon/document-icon.png" />
                                              </image>
@@ -113,7 +113,7 @@
                                  <children>
                                     <HBox fx:id="viewResume" alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="194.0" spacing="20.0" styleClass="view-id">
                                        <children>
-                                          <ImageView fx:id="resumePreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="resumePreview" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                              <image>
                                                 <Image url="@../../../icon/document-icon.png" />
                                              </image>
