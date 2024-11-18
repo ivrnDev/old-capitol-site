@@ -123,8 +123,8 @@ public class ApplicationRowController extends BaseRowController<Employee> {
     }
 
     private void setupPendingButtons() {
-        Button acceptBtn = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Accept", "The resident with ID" + residentId + " will be emailed for an interview.", isConfirmed -> {
+        Button acceptBtn = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Approve", "Do you want to approve application no." + residentId + "?", isConfirmed -> {
                 if (isConfirmed) updateEmployeeStatus(UNDER_REVIEW);
             });
         });
@@ -133,7 +133,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
     private void setupUnderReviewButtons() {
         Button acceptBtn = ButtonUtils.createButton("Evaluate", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "The applicant will be evaluated and now waiting for appointment", isConfirmed -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Evaluate", "The applicant will be emailed for an interview process.", isConfirmed -> {
                 if (isConfirmed) updateEmployeeStatus(EVALUATION);
             });
         });
@@ -142,7 +142,7 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
     private void setupRejectButton() {
         Button rejectBtn = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this employee?", isConfirmed -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Are you sure you want to reject this application?", isConfirmed -> {
                 if (isConfirmed) updateEmployeeStatus(REJECTED);
             });
         });
@@ -174,7 +174,6 @@ public class ApplicationRowController extends BaseRowController<Employee> {
 
     private void updateEmployeeStatus(StatusType.EmployeeStatus status) {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
-        // Add loading indicator on the row
         tableRow.getChildren().forEach(node -> {
             node.setVisible(false);
             node.setManaged(false);
@@ -208,11 +207,11 @@ public class ApplicationRowController extends BaseRowController<Employee> {
                 if (response.isSuccessful()) {
                     switch (status) {
                         case UNDER_REVIEW ->
-                                modalUtils.showModal(Modal.SUCCESS, "Notified", "Employee + " + residentId + " has been notified successfully.");
+                                modalUtils.showModal(Modal.SUCCESS, "Notified", "Application no." + residentId + " has been approved successfully");
                         case EVALUATION ->
-                                modalUtils.showModal(Modal.SUCCESS, "Evaluated", "Employee + " + residentId + " has been successully evaluated.");
+                                modalUtils.showModal(Modal.SUCCESS, "Evaluated", "Application no." + residentId + " has been successfully evaluated.");
                         case REJECTED ->
-                                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Employee + " + residentId + " has been rejected successfully.");
+                                modalUtils.showModal(Modal.SUCCESS, "Rejected", "Application no." + residentId + " has been rejected successfully.");
                     }
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Failed", "An error occurred while updating employee application.");
