@@ -542,47 +542,53 @@ public class Validator {
     }
 
     public void setupCurrencyListener(TextField... textFields) {
+        // Number format setup for currency
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         numberFormat.setMinimumFractionDigits(2);
         numberFormat.setMaximumFractionDigits(2);
 
         for (TextField field : textFields) {
+            // Listener to format the text when focus is lost
             field.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue) { // When focus is lost
                     String text = field.getText().replaceAll(",", "");
                     if (!text.isEmpty()) {
                         try {
+                            // Parse and format the text as a number
                             Number number = numberFormat.parse(text);
-                            String formattedText = numberFormat.format(number);
-                            field.setText(formattedText);
+                            field.setText(numberFormat.format(number));
                         } catch (ParseException e) {
+                            // Clear the field if parsing fails
                             field.setText("");
                         }
                     }
                 }
             });
 
-
+            // Listener to validate and restrict input
             field.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue.matches("[\\d,.]*")) {
+                    // Restrict non-numeric and invalid characters
                     field.setText(oldValue);
                 } else {
+                    // Handle split for integer and decimal parts
                     String[] parts = newValue.split("\\.");
                     if (parts.length > 2 || (parts.length == 2 && parts[1].length() > 2)) {
+                        // Ensure at most one decimal point and up to two decimal digits
                         field.setText(oldValue);
                     } else {
-                        String[] integerParts = parts[0].split(",");
-                        for (String part : integerParts) {
-                            if (part.length() > 3 || part.equals("000")) {
-                                field.setText(oldValue);
-                                break;
-                            }
+                        // Validate grouping separators in the integer part
+                        String integerPart = parts[0].replaceAll(",", "");
+                        if (!integerPart.matches("\\d*") || (integerPart.startsWith("0") && integerPart.length() > 1)) {
+                            // Ensure the integer part contains only digits and avoids leading zeros
+                            field.setText(oldValue);
                         }
                     }
                 }
             });
         }
     }
+
 
     // Formatters
     public void createMobileNumberFormatter(int maxChar, TextField... textFields) {
