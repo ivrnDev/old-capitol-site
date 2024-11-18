@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.PrintIdController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdRequestController;
@@ -8,13 +9,16 @@ import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.service.*;
+import com.econnect.barangaymanagementapp.service.BarangayidService;
+import com.econnect.barangaymanagementapp.service.CedulaService;
+import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
+import com.econnect.barangaymanagementapp.util.PrintUtils;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -29,18 +33,18 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import okhttp3.Response;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.COMPLETED;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.RESOLVED;
 
 
 public class RequestRowController extends BaseRowController<Request> {
+    private final FXMLLoaderFactory fxmlLoaderFactory;
     private final ModalUtils modalUtils;
-    private final ResidentService residentService;
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
-    private final ComplaintService complaintService;
+    private final PrintUtils printUtils;
     @Getter
     private String requestId;
     @Getter
@@ -55,11 +59,11 @@ public class RequestRowController extends BaseRowController<Request> {
     public RequestRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.modalUtils = dependencyInjector.getModalUtils();
-        this.residentService = dependencyInjector.getResidentService();
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
-        this.complaintService = dependencyInjector.getComplaintService();
+        this.printUtils = dependencyInjector.getPrintUtils();
+        this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
     }
 
     public void initialize() {
@@ -110,7 +114,7 @@ public class RequestRowController extends BaseRowController<Request> {
                 setupDocumentButton(currentStatus);
                 break;
             case BARANGAY_ID:
-                setupDocumentButton(currentStatus);
+                setupBarangayIdButton(currentStatus);
                 break;
             case CEDULA:
                 setupDocumentButton(currentStatus);
@@ -125,7 +129,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private void setupDocumentButton(String currentStatus) {
         switch (RequestStatus.fromName(currentStatus)) {
             case PENDING:
-                createAcceptButton();
+                createApproveButton();
                 createRejectButton();
                 break;
             case IN_PROGRESS:
@@ -151,39 +155,63 @@ public class RequestRowController extends BaseRowController<Request> {
         }
     }
 
-    private void createAcceptButton() {
+    private void setupBarangayIdButton(String currenStatus) {
+        switch (BarangayIdStatus.fromName(currenStatus)) {
+            case PENDING:
+                createBarangayIdAcceptButton();
+                createRejectButton();
+                break;
+            case RELEASING:
+                createCompletedButton();
+                createRejectButton();
+                break;
+            case REJECTED:
+                createRestoreButton();
+                invisibleButton();
+                break;
+            case COMPLETED:
+                invisibleButton();
+                invisibleButton();
+                break;
+            default:
+                createRejectButton();
+                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+                break;
+        }
+    }
+
+    private void createApproveButton() {
         String head;
         String message;
         RequestStatus status = null;
 
         switch (request.getRequestType()) {
             case CERTIFICATES:
-                head = "Accept Request";
-                message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                head = "Approve Request";
+                message = "Would you like to approve certificate request no." + request.getReferenceNumber() + "?";
                 status = RequestStatus.IN_PROGRESS;
                 break;
             case BARANGAY_ID:
-                head = "Accept Request";
-                message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                head = "Approve Request";
+                message = "Would you like to approve barangay id request no." + request.getReferenceNumber() + "?";
                 status = RequestStatus.IN_PROGRESS;
                 break;
             case CEDULA:
-                head = "Accept Request";
-                message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                head = "Approve Request";
+                message = "Would you like to approve cedula request no." + request.getReferenceNumber() + "?";
                 status = RequestStatus.IN_PROGRESS;
                 break;
             default:
-                head = "Accept Request";
-                message = "Would you like to accept request #" + request.getReferenceNumber() + "?";
+                head = "Approve Request";
+                message = "Would you like to approve request no." + request.getReferenceNumber() + "?";
                 break;
         }
         RequestStatus finalStatus = status;
-        Button accept = ButtonUtils.createButton("Accept", ButtonStyle.ACCEPT, () -> {
+        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
                 if (isConfirmed) updateRequestStatus(finalStatus);
             });
         });
-
         buttonContainer.getChildren().add(accept);
     }
 
@@ -194,19 +222,19 @@ public class RequestRowController extends BaseRowController<Request> {
         switch (request.getRequestType()) {
             case CERTIFICATES:
                 head = "Release";
-                message = "Would you like to release the certificate for request #" + request.getReferenceNumber() + "?";
+                message = "Would you like to release the certificate for request no." + request.getReferenceNumber() + "?";
                 break;
             case BARANGAY_ID:
                 head = "Release";
-                message = "Would you like to release the ID for request #" + request.getReferenceNumber() + "?";
+                message = "Would you like to release the barangay id for request no." + request.getReferenceNumber() + "?";
                 break;
             case CEDULA:
                 head = "Release";
-                message = "Would you like to release the cedula for request #" + request.getReferenceNumber() + "?";
+                message = "Would you like to release the cedula for request no." + request.getReferenceNumber() + "?";
                 break;
             default:
                 head = "Release";
-                message = "Would you like to release request #" + request.getReferenceNumber() + "?";
+                message = "Would you like to release request no." + request.getReferenceNumber() + "?";
                 break;
         }
 
@@ -227,22 +255,22 @@ public class RequestRowController extends BaseRowController<Request> {
         switch (request.getRequestType()) {
             case CERTIFICATES:
                 head = "Mark as complete";
-                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                message = "Would you like to mark cetificate request no." + request.getReferenceNumber() + " as completed?";
                 status = COMPLETED;
                 break;
             case BARANGAY_ID:
                 head = "Mark as complete";
-                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                message = "Would you like to mark barangay id request no." + request.getReferenceNumber() + " as completed?";
                 status = COMPLETED;
                 break;
             case CEDULA:
                 head = "Mark as complete";
-                message = "Would you like to mark request #" + request.getReferenceNumber() + " as completed?";
+                message = "Would you like to mark cedula request no." + request.getReferenceNumber() + " as completed?";
                 status = COMPLETED;
                 break;
             default:
                 head = "Mark as complete";
-                message = "Would you like to mark complaint #" + request.getReferenceNumber() + " as completed?";
+                message = "Would you like to mark request no." + request.getReferenceNumber() + " as completed?";
                 break;
         }
 
@@ -371,5 +399,22 @@ public class RequestRowController extends BaseRowController<Request> {
             }
         };
         new Thread(task).start();
+    }
+
+    private void createBarangayIdAcceptButton() {
+        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.PRINT_ID,
+                    PrintIdController.class,
+                    controller -> {
+                        controller.setId(requestId);
+                        controller.setCallback(isSuccess -> {
+                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                        });
+                    }
+            );
+        });
+
+        buttonContainer.getChildren().add(accept);
     }
 }

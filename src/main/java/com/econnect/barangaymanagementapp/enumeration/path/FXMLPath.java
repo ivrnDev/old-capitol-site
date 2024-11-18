@@ -35,6 +35,7 @@ public enum FXMLPath {
     VIEW_DOCUMENT_REQUEST("view/barangayoffice/modal/view/view-document-request.fxml"),
     VIEW_ID_REQUEST("view/barangayoffice/modal/view/view-id-request.fxml"),
     VIEW_BARANGAY_ID("view/barangayoffice/modal/view/view-id.fxml"),
+    PRINT_ID("view/barangayoffice/modal/view/print-id.fxml"),
 
     //Form
     CERTIFICATE_FORM("view/barangayoffice/modal/certificate-form.fxml"),

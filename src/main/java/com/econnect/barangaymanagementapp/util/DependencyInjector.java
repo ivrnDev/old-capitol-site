@@ -37,6 +37,7 @@ public class DependencyInjector {
     private final LiveReloadUtils liveReloadUtils;
     private final WebCam webCam;
     private final UploadImageUtils uploadImageUtils;
+    private final PrintUtils printUtils;
 
     private final AccountRepository accountRepository;
     private final EmployeeRepository employeeRepository;
@@ -77,6 +78,8 @@ public class DependencyInjector {
         this.liveReloadUtils = new LiveReloadUtils();
         this.webCam = new WebCam();
         this.uploadImageUtils = new UploadImageUtils(this);
+        this.printUtils = new PrintUtils();
+
 
         this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);
