@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
-import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.MotherTongue.fromName;
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.SuffixName.values;
 
 public class AddResidentController {
@@ -143,13 +142,12 @@ public class AddResidentController {
                 .birthplace(birthplaceInput.getText())
                 .citizenship(citizenshipInput.getText())
                 .civilStatus(CivilStatus.fromName(civilStatusComboBox.getValue()))
-                .motherTounge(fromName(motherToungeComboBox.getValue()))
+                .motherTounge(motherToungeComboBox.getValue())
                 .bloodType(BloodType.fromName(bloodTypeComboBox.getValue()))
-                .religion(Religion.fromName(religionComboBox.getValue()))
+                .religion(religionComboBox.getValue())
                 .occupation(occupationInput.getText())
                 .age(birthdatePicker.getValue() != null ? DateFormatter.calculateAgeFromBirthdate(birthdatePicker.getValue()) : null)
                 .sex(GenderType.fromName(sexComboBox.getValue()))
-
                 .fatherFirstName(fatherFirstNameInput.getText())
                 .fatherMiddleName(fatherMiddleNameInput.getText())
                 .fatherLastName(fatherLastNameInput.getText())

@@ -37,9 +37,9 @@ public class Resident extends BaseEntity {
     private String citizenship;
     private String occupation;
     private CivilStatus civilStatus;
-    private MotherTongue motherTounge;
+    private String motherTounge;
     private BloodType bloodType;
-    private Religion religion;
+    private String religion;
 
     private String fatherFirstName;
     private String fatherLastName;

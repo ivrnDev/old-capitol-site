@@ -118,9 +118,9 @@ public class ViewResidentController implements BaseViewController {
         telephoneNumberInput.setText(resident.getTelephoneNumber());
         citizenshipInput.setText(resident.getCitizenship());
         civilStatusInput.setText(resident.getCivilStatus().getName());
-        motherToungeInput.setText(resident.getMotherTounge().getName());
+        motherToungeInput.setText(resident.getMotherTounge());
         bloodTypeInput.setText(resident.getBloodType().getName());
-        religionInput.setText(resident.getReligion().getName());
+        religionInput.setText(resident.getReligion());
         incomeInput.setText(resident.getSourceOfIncome());
         residencyStatusInput.setText(resident.getResidencyStatus().getName());
         educationAttainmentInput.setText(resident.getEducationalAttainment());

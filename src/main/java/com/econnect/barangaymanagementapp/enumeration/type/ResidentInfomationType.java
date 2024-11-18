@@ -118,6 +118,7 @@ public class ResidentInfomationType {
     @Getter
     @AllArgsConstructor
     public enum BloodType {
+        UNKNOWN("Unknown"),
         A_POSITIVE("A+"),
         A_NEGATIVE("A-"),
         B_POSITIVE("B+"),
@@ -142,8 +143,19 @@ public class ResidentInfomationType {
     @Getter
     @AllArgsConstructor
     public enum Religion {
-        CATHOLICISM("Catholic"),
+        ROMAN_CATHOLIC("Roman Catholic"),
         PROTESTANTISM("Protestantism"),
+        ANG_DATING_DAAN("Ang Dating Daan"),
+        JENOVAH_WITNESS("Jehovah's Witness"),
+        SEVENTH_DAY_ADVENTIST("Seventh Day Adventist"),
+        UCCP("United Church of Christ in the Philippines"),
+        UNITED_METHODIST("United Methodist"),
+        EPISCOPALIAN("Episcopalian"),
+        BIBLE_BAPTIST("Bible Baptist"),
+        EVANGELICAL_CHRISTIAN("Evangelical Christian"),
+        AGLIPAY("Aglipay"),
+        CHURCH_AND_STATE("Church of Christ"),
+        MUSLIM("Muslim"),
         ISLAM("Islam"),
         EVANGELICAL("Evangelical"),
         INC("Iglesia ni Cristo"),
