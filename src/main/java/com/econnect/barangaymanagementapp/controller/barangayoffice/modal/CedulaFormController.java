@@ -101,7 +101,7 @@ public class CedulaFormController {
                 if (getValue().isSuccessful()) {
                     successFlags[0] = true;
                 } else {
-                    modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while submitting Cedula request.");
+                    modalUtils.showModal(Modal.ERROR, "Failed", "Failed to submit Cedula request.");
                 }
             }
 
@@ -197,8 +197,10 @@ public class CedulaFormController {
                     citizenshipInput.setText(residentInfo.getCitizenship());
                     civilStatusInput.setText(residentInfo.getCivilStatus().getName());
                     tinNumberInput.setText(residentInfo.getTinIdNumber());
+                    tinNumberInput.setStyle(null);
                     if (!residentInfo.getTinIdNumber().isEmpty()) {
                         tinNumberInput.setEditable(false);
+                        tinNumberInput.setMouseTransparent(true);
                         loadTinId(Firestore.TIN_ID.getPath(), residentInfo.getTinIdUrl());
                         hideUploadTin();
                     }
