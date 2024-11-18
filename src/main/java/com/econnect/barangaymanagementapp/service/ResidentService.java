@@ -5,7 +5,6 @@ import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.AccountRepository;
 import com.econnect.barangaymanagementapp.repository.ResidentRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
@@ -21,10 +20,12 @@ import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESID
 public class ResidentService {
     private final ResidentRepository residentRepository;
     private final AccountRepository accountRepository;
+    private final EmailService emailService;
 
     public ResidentService(DependencyInjector dependencyInjector) {
         this.residentRepository = dependencyInjector.getResidentRepository();
         this.accountRepository = dependencyInjector.getAccountRepository();
+        this.emailService = dependencyInjector.getEmailService();
     }
 
     public Response createResident(Resident resident) {
@@ -55,6 +56,51 @@ public class ResidentService {
         try {
             Response updateAccountStatus = accountRepository.updateAccountByStatus(residentId, status);
             Response updateResidentStatus = residentRepository.updateResidentByStatus(residentId, status);
+            Resident resident = residentRepository.findResidentById(residentId).orElseThrow();
+            if (updateAccountStatus != null && updateAccountStatus.isSuccessful() && status.equals(VERIFIED)) {
+                emailService.sendEmailAsync(resident.getEmail(), "Congratulations! You are now verified", String.format("""
+                                Dear %s,
+
+                                We are delighted to welcome you as an official resident of Old Capitol Site! Your application has been reviewed and verified, and we are excited to have you join our community.
+
+                                As a resident, you are now entitled to various services and privileges offered within our locality. We look forward to your active participation in building a vibrant and supportive community.
+
+                                If you have any questions or need assistance, please don't hesitate to reach out to us at our office or through email.
+
+                                You may now visit and login in our website at https://old-capitol-site-69.netlify.app/ to access various services.
+
+                                Your Resident ID is: %s
+
+                                Best regards,
+                                Old Capitol Site Administration
+                                """,
+                        resident.getFirstName(),
+                        resident.getId()
+                ));
+            }
+
+            if (updateAccountStatus == null && status.equals(VERIFIED)) {
+                emailService.sendEmailAsync(resident.getEmail(), "Congratulations! You are now verified", String.format("""
+                                Dear %s,
+
+                                We are delighted to welcome you as an official resident of Old Capitol Site! Your application has been reviewed and verified, and we are excited to have you join our community.
+
+                                As a resident, you are now entitled to various services and privileges offered within our locality. We look forward to your active participation in building a vibrant and supportive community.
+
+                                If you have any questions or need assistance, please don't hesitate to reach out to us at our office or through email.
+
+                                To access the services online you may visit our website at https://old-capitol-site-69.netlify.app/ and signup using your Resident ID.
+                                                              
+                                Your Resident ID is: %s
+                                                                
+                                Best regards,
+                                Old Capitol Site Administration
+                                """,
+                        resident.getFirstName(),
+                        resident.getId()
+                ));
+            }
+
             return updateResidentStatus;
         } catch (Exception e) {
             throw new RuntimeException(e);
