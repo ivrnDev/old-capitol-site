@@ -1,13 +1,18 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Certificate;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
+import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.repository.CertificateRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.PrintUtils;
+import javafx.scene.image.Image;
 import okhttp3.Response;
 
+import java.io.File;
 import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -18,9 +23,11 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Cer
 
 public class CertificateService {
     private final CertificateRepository certificateRepository;
+    private final ResidentService residentService;
 
     public CertificateService(DependencyInjector dependencyInjector) {
         this.certificateRepository = dependencyInjector.getCertificateRepository();
+        this.residentService = dependencyInjector.getResidentService();
     }
 
     public Response createCertificate(Certificate certificate) {
@@ -57,8 +64,34 @@ public class CertificateService {
         return certificateRepository.findCertificateById(id).filter(request -> request.getStatus().equals(StatusType.CertificateStatus.COMPLETED));
     }
 
+    private int countOfCompletedCertificate(CertificateType certificateType) {
+        return (int) certificateRepository.findCertificateByFilter(request -> CertificateType.fromName(request.getRequest()).equals(certificateType) && request.getStatus().equals(StatusType.CertificateStatus.COMPLETED)).stream().count();
+    }
+
     public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
         return certificateRepository.updateCertificateByStatus(requestId, status);
+    }
+
+    public void printCertificate(File pdfFile, Consumer<Boolean> callback) {
+        try {
+            PrintUtils.printCertificate(pdfFile, callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public File generateCertificate(String residentId, CertificateType certificateType, Consumer<Image> callback) {
+        Optional<Resident> resident = residentService.findResidentById(residentId);
+        File[] generatedPdfFile = {null};
+        resident.ifPresent(res -> {
+            try {
+                String controlNumber = generateControlNumber(countOfCompletedCertificate(certificateType));
+                generatedPdfFile[0] = PrintUtils.generateCertificate(controlNumber, res, certificateType, callback);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return generatedPdfFile[0];
     }
 
     private String generateReferenceNumber() {
@@ -66,6 +99,13 @@ public class CertificateService {
         SecureRandom random = new SecureRandom();
         long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));
         return String.format("%012d", otp);
+    }
+
+    private String generateControlNumber(int increment) {
+        int baseId = 1;
+        int controlNumber = baseId + increment;
+        int currentYear = ZonedDateTime.now().getYear();
+        return String.format("000001-%d-COI", currentYear);
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {

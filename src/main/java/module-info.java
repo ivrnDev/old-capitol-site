@@ -9,6 +9,8 @@ module com.econnect.barangaymanagementapp {
     requires jakarta.mail;
     requires org.bytedeco.javacv;
     requires org.bytedeco.opencv;
+    requires org.apache.poi.ooxml;
+    requires org.apache.pdfbox;
 
     exports com.econnect.barangaymanagementapp;
     exports com.econnect.barangaymanagementapp.config;

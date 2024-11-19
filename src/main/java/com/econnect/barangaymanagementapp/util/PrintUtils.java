@@ -1,82 +1,39 @@
 package com.econnect.barangaymanagementapp.util;
 
+import com.econnect.barangaymanagementapp.domain.Resident;
+import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
 import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+import java.awt.image.BufferedImage;
+import java.awt.print.PrinterException;
+import java.io.File;
+import java.io.IOException;
+import java.util.function.Consumer;
 
 public class PrintUtils {
     private static final double ID_CARD_WIDTH_MM = 85.60;
     private static final double ID_CARD_HEIGHT_MM = 53.98 * 2;
-
-    public void printNode(Node node, Stage stage) {
-        PrinterJob printerJob = PrinterJob.createPrinterJob();
-
-        if (printerJob != null && printerJob.showPrintDialog(stage)) {
-            boolean success = printerJob.printPage(node);
-
-            if (success) {
-                printerJob.endJob();
-                System.out.println("Printing completed successfully.");
-            } else {
-                System.out.println("Printing failed.");
-            }
-        } else {
-            System.out.println("Printing canceled or no printers available.");
-        }
-    }
-
-    public boolean printNodeFitToPage(Node node, Stage ownerStage) {
-        Printer printer = Printer.getDefaultPrinter();
-        if (printer == null) {
-            System.out.println("No default printer found!");
-            return false;
-        }
-
-        PrinterJob printerJob = PrinterJob.createPrinterJob(printer);
-        if (printerJob == null) {
-            System.out.println("Failed to create a printer job!");
-            return false;
-        }
-
-        // Get the printer's page layout
-        PageLayout pageLayout = printer.getDefaultPageLayout();
-        double paperWidth = pageLayout.getPrintableWidth();
-        double paperHeight = pageLayout.getPrintableHeight();
-
-        // Get node's original size
-        double originalWidth = node.getBoundsInParent().getWidth();
-        double originalHeight = node.getBoundsInParent().getHeight();
-
-        // Calculate scaling factors to fit the page
-        double scaleX = paperWidth / originalWidth;
-        double scaleY = paperHeight / originalHeight;
-
-        // Apply scaling to the node (ignore aspect ratio)
-        node.getTransforms().add(new Scale(scaleX, scaleY));
-
-        // Show print dialog and print the page
-        boolean userProceeded = printerJob.showPrintDialog(ownerStage);
-        boolean success = userProceeded && printerJob.printPage(node);
-
-        // Reset scaling after printing
-        node.getTransforms().clear();
-
-        // End the job if successful
-        if (success) {
-            printerJob.endJob();
-            System.out.println("Printing successful!");
-        } else if (userProceeded) {
-            System.out.println("Printing failed!");
-        } else {
-            System.out.println("User canceled the print job!");
-        }
-
-        return success; // Return true if print is successful, otherwise false
-    }
 
     public boolean printNodeAsIdCard(Node node, Stage ownerStage) {
         Printer printer = Printer.getDefaultPrinter();
@@ -102,21 +59,11 @@ public class PrintUtils {
                 Printer.MarginType.HARDWARE_MINIMUM
         );
 
-        // Take a high-resolution snapshot of the node
-        SnapshotParameters params = new SnapshotParameters();
-        params.setTransform(new Scale(2, 2)); // Increase the scale for higher resolution
-        WritableImage snapshot = node.snapshot(params, null);
+        ImageView imageView = renderNodeAsImage(node, idCardWidthPoints, idCardHeightPoints);
 
-        // Create an ImageView to hold the snapshot
-        ImageView imageView = new ImageView(snapshot);
-        imageView.setFitWidth(idCardWidthPoints);
-        imageView.setFitHeight(idCardHeightPoints);
-
-        // Show the print dialog and print
         boolean userProceeded = printerJob.showPrintDialog(ownerStage);
         boolean success = userProceeded && printerJob.printPage(pageLayout, imageView);
 
-        // End the job if successful
         if (success) {
             printerJob.endJob();
             System.out.println("Printing successful!");
@@ -127,6 +74,152 @@ public class PrintUtils {
         }
 
         return success;
+    }
+
+    private ImageView renderNodeAsImage(Node node, double width, double height) {
+        SnapshotParameters params = new SnapshotParameters();
+        params.setTransform(new Scale(2, 2)); // Increase the scale for higher resolution
+        WritableImage snapshot = node.snapshot(params, null);
+
+        ImageView imageView = new ImageView(snapshot);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+
+        return imageView;
+    }
+
+    public static void printCertificate(File pdfFile, Consumer<Boolean> callback) {
+        printPdf(pdfFile, callback);
+    }
+
+    public static File generateCertificate(String controlNumber, Resident resident, CertificateType certificateType, Consumer<Image> callback) {
+        try {
+            File generatedPDF = createCertificateOfIndigency(controlNumber, resident);
+            callback.accept(convertPdfToImage(generatedPDF, 0));
+            return generatedPDF;
+        } catch (IOException e) {
+            e.printStackTrace();
+            callback.accept(null);
+        }
+        return null;
+    }
+
+    private static void printPdf(File pdfFile, Consumer<Boolean> callback) {
+        try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
+            java.awt.print.PrinterJob printerJob = java.awt.print.PrinterJob.getPrinterJob(); // Java's AWT PrinterJob
+            printerJob.setPrintable(new PDFPrintable(pdfDocument));
+
+            if (printerJob.printDialog()) {
+                printerJob.print(); // Start the print job
+                callback.accept(true); // Notify successful printing
+                System.out.println("Print job completed successfully.");
+            } else {
+                System.out.println("Print job was cancelled.");
+                callback.accept(false); // Notify cancellation
+            }
+        } catch (IOException | PrinterException e) {
+            e.printStackTrace();
+            callback.accept(false); // Notify an error occurred
+        }
+    }
+
+
+    public static Image convertPdfToImage(File pdfFile, int pageIndex) throws IOException {
+        try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
+            PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
+            BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(pageIndex, 300);
+            WritableImage fxImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
+            PixelWriter pixelWriter = fxImage.getPixelWriter();
+
+            for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                    pixelWriter.setArgb(x, y, bufferedImage.getRGB(x, y));
+                }
+            }
+            return fxImage;
+        }
+    }
+
+    public static File createPdfFromDocument(XWPFDocument document, String controlNumber) throws IOException {
+        File pdfFile = File.createTempFile("certificate" + controlNumber, ".pdf");
+        pdfFile.deleteOnExit();
+        try (PDDocument pdfDocument = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+
+            pdfDocument.addPage(page);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page)) {
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                contentStream.newLineAtOffset(50, 750);
+
+                for (XWPFParagraph paragraph : document.getParagraphs()) {
+                    for (XWPFRun run : paragraph.getRuns()) {
+                        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), run.getFontSize() != -1 ? run.getFontSize() : 12);
+                        if (run.isBold()) {
+                            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), run.getFontSize() != -1 ? run.getFontSize() : 12);
+                        }
+                        if (run.isItalic()) {
+                            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), run.getFontSize() != -1 ? run.getFontSize() : 12);
+                        }
+                        String[] lines = run.text().split("\n");
+                        for (String line : lines) {
+                            contentStream.showText(line);
+                            contentStream.newLineAtOffset(0, -15);
+                        }
+                    }
+                    contentStream.newLineAtOffset(0, -15);
+                }
+                contentStream.endText();
+            }
+            pdfDocument.save(pdfFile);
+        }
+        return pdfFile;
+    }
+
+    public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
+        XWPFDocument document = new XWPFDocument();
+
+        // Title
+        XWPFParagraph title = document.createParagraph();
+        XWPFRun titleRun = title.createRun();
+        titleRun.setText("Certificate of Indigency");
+        titleRun.setBold(true);
+        titleRun.setFontSize(20);
+        title.setAlignment(ParagraphAlignment.CENTER);
+
+        // Control Number and Date
+        XWPFParagraph controlNumberParagraph = document.createParagraph();
+        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
+        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setFontSize(12);
+        controlNumberRun.addBreak();
+        controlNumberRun.setText(String.format("Date Issued: %s", java.time.LocalDate.now()));
+        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+        // Body Content
+        XWPFParagraph body = document.createParagraph();
+        XWPFRun bodyRun = body.createRun();
+        bodyRun.setText("TO WHOM IT MAY CONCERN:");
+        bodyRun.setFontSize(12);
+        bodyRun.addBreak();
+
+        // Footer (Signature)
+        XWPFParagraph signature = document.createParagraph();
+        XWPFRun signatureRun = signature.createRun();
+        signatureRun.addBreak();
+        signatureRun.addBreak();
+        signatureRun.setText("_________________________");
+        signatureRun.addBreak();
+        signatureRun.setText("[Name of Barangay Captain]");
+        signatureRun.addBreak();
+        signatureRun.setText("Barangay Captain");
+        signature.setAlignment(ParagraphAlignment.CENTER);
+
+        // Generate PDF from the Word Document
+        File pdfFile = createPdfFromDocument(document, controlNumber);
+
+        return pdfFile;
     }
 
 

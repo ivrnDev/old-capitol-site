@@ -1,9 +1,6 @@
 package com.econnect.barangaymanagementapp.controller.barangayoffice.table.request;
 
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.PrintIdController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewDocumentRequestController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdController;
-import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.ViewIdRequestController;
+import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.*;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -129,7 +126,8 @@ public class RequestRowController extends BaseRowController<Request> {
     private void setupDocumentButton(String currentStatus) {
         switch (RequestStatus.fromName(currentStatus)) {
             case PENDING:
-                createApproveButton();
+//                createApproveButton();
+                createCertificateAcceptButton();
                 createRejectButton();
                 break;
             case IN_PROGRESS:
@@ -410,6 +408,24 @@ public class RequestRowController extends BaseRowController<Request> {
                         controller.setId(requestId);
                         controller.setCallback(isSuccess -> {
                             if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                        });
+                    }
+            );
+        });
+
+        buttonContainer.getChildren().add(accept);
+    }
+
+    private void createCertificateAcceptButton() {
+        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.PRINT_DOCUMENT,
+                    PrintDocumentController.class,
+                    controller -> {
+                        controller.setId(requestId);
+                        controller.setCallback(isSuccess -> {
+//                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                            if (isSuccess) System.out.println("Success");
                         });
                     }
             );
