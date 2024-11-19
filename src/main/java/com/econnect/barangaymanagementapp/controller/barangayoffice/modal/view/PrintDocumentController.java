@@ -9,6 +9,7 @@ import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -33,20 +35,17 @@ public class PrintDocumentController implements BaseViewController {
     @FXML
     private ImageView profilePicture;
     @FXML
-    private HBox profileContainer;
+    private HBox certficatePreviewContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput;
+    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput, fullNameText;
     @FXML
     private TextArea purposeInput;
-    @FXML
-    private Text fullNameText, emailText, mobileNumberText;
     @FXML
     private Button printBtn;
 
     private final ModalUtils modalUtils;
     private final ResidentService residentService;
     private final CertificateService certificateService;
-    private final ImageService imageService;
     private Image profilePictureImage;
     private Stage currentStage;
     private String certificateId;
@@ -60,7 +59,6 @@ public class PrintDocumentController implements BaseViewController {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.residentService = dependencyInjector.getResidentService();
         this.certificateService = dependencyInjector.getCertificateService();
-        this.imageService = dependencyInjector.getImageService();
         Platform.runLater(() -> currentStage = (Stage) closeBtn.getScene().getWindow());
     }
 
@@ -80,13 +78,33 @@ public class PrintDocumentController implements BaseViewController {
     }
 
     private void generateCertificate() {
-        generatedPdfFile = certificateService.generateCertificate(residentIdInput.getText(), CertificateType.fromName(certificate.getRequest()), image -> {
-            if (image != null) {
-                certificatePreview.setImage(image);
-                certificatePreview.setCursor(javafx.scene.Cursor.HAND);
-                certificatePreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(certficatePreviewContainer.getWidth(), certficatePreviewContainer.getHeight());
+        addLoadingIndicator(loadingIndicator);
+        Task<File> requestTask = new Task<>() {
+            @Override
+            protected File call() {
+                return certificateService.generateCertificate(residentIdInput.getText(), CertificateType.fromName(certificate.getRequest()), image -> {
+                    if (image != null) {
+                        certificatePreview.setImage(image);
+                        certificatePreview.setCursor(javafx.scene.Cursor.HAND);
+                        certificatePreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
+                    }
+                });
             }
-        });
+
+            @Override
+            protected void succeeded() {
+                removeLoadingIndicator(loadingIndicator);
+                generatedPdfFile = getValue();
+            }
+
+            @Override
+            protected void failed() {
+                System.out.println("Failed to generate certificate: " + getException().getMessage());
+                removeLoadingIndicator(loadingIndicator);
+            }
+        };
+        new Thread(requestTask).start();
     }
 
     private void fetchData() {
@@ -157,38 +175,20 @@ public class PrintDocumentController implements BaseViewController {
         if (resident == null) return;
         String fullName = resident.getLastName() + ", " + resident.getFirstName() + " " + resident.getMiddleName();
         fullNameText.setText(fullName);
-        emailText.setText(resident.getEmail());
-        mobileNumberText.setText(resident.getMobileNumber());
     }
 
-//    private void loadProfileImage(String directory, String link) {
-//        profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), currentStage));
-//        profilePicture.setCursor(Cursor.HAND);
-//        profilePicture.setVisible(false);
-//        profilePicture.setManaged(false);
-//        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(profileContainer.getWidth(), profileContainer.getHeight());
-//        Platform.runLater(() -> profileContainer.getChildren().add(loadingIndicator));
-//
-//        Runnable call = () -> {
-//            profilePictureImage = imageService.getImage(directory, link);
-//            Platform.runLater(() -> {
-//                profileContainer.getChildren().remove(loadingIndicator);
-//                profilePicture.setImage(profilePictureImage);
-//                profilePicture.setVisible(true);
-//                profilePicture.setManaged(true);
-//            });
-//        };
-//
-//        Runnable onFailed = () -> {
-//            Platform.runLater(() -> profileContainer.getChildren().remove(loadingIndicator));
-//            profilePicture.setVisible(true);
-//            profilePicture.setManaged(true);
-//            System.err.println("Error loading employees");
-//        };
-//        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
-//    }
+    private void addLoadingIndicator(StackPane loadingIndicator) {
+        certificatePreview.setManaged(false);
+        certificatePreview.setVisible(false);
+        certficatePreviewContainer.getChildren().add(loadingIndicator);
+    }
 
-    @FXML
+    private void removeLoadingIndicator(StackPane loadingIndicator) {
+        certificatePreview.setManaged(true);
+        certificatePreview.setVisible(true);
+        certficatePreviewContainer.getChildren().remove(loadingIndicator);
+    }
+
     private void closeView() {
         modalUtils.closeCustomizeModal();
     }
