@@ -29,6 +29,7 @@ public class RequestMapper {
         return Request.builder()
                 .id(request.getId())
                 .residentId(residentId)
+                .request(request.getRequest())
                 .requestType(CERTIFICATES)
                 .applicationType(request.getApplicationType())
                 .createdAt(request.getCreatedAt())

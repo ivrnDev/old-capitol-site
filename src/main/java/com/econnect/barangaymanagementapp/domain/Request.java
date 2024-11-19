@@ -23,6 +23,7 @@ public class Request extends BaseEntity {
     private StatusType.RequestStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;
+    private String request;
     private RequestType requestType;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
