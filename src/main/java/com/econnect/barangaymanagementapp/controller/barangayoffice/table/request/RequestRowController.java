@@ -6,6 +6,7 @@ import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
@@ -14,8 +15,8 @@ import com.econnect.barangaymanagementapp.service.CedulaService;
 import com.econnect.barangaymanagementapp.service.CertificateService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
-import com.econnect.barangaymanagementapp.util.PrintUtils;
+import com.econnect.barangaymanagementapp.util.RolePermission;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -30,7 +31,7 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import okhttp3.Response;
 
-import java.util.function.Supplier;
+import java.util.List;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus;
@@ -38,22 +39,21 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Req
 
 
 public class RequestRowController extends BaseRowController<Request> {
-    private final FXMLLoaderFactory fxmlLoaderFactory;
+    @FXML
+    private HBox tableRow, buttonContainer;
+    @FXML
+    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
+
     private final ModalUtils modalUtils;
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
-    private final PrintUtils printUtils;
+    private RoleType roleType;
+    private List<RolePermission.RequestAction> allowedActions;
     @Getter
     private String requestId;
     @Getter
     private Request request;
-
-    @FXML
-    private HBox tableRow, buttonContainer;
-
-    @FXML
-    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
 
     public RequestRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
@@ -61,12 +61,15 @@ public class RequestRowController extends BaseRowController<Request> {
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
-        this.printUtils = dependencyInjector.getPrintUtils();
-        this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
+        this.roleType = UserSession.getInstance().getEmployeeRole();
     }
 
     public void initialize() {
         setupRowClickEvents();
+        allowedActions = RolePermission.getActionByRole(
+                RolePermission.TableActions.REQUEST,
+                roleType
+        );
     }
 
     @Override
@@ -105,8 +108,8 @@ public class RequestRowController extends BaseRowController<Request> {
 
     @Override
     public void setupButtonContainer() {
-        buttonContainer.getChildren().clear();
         String currentStatus = statusLabel.getText();
+        buttonContainer.getChildren().clear();
         setupViewButton(request.getRequestType(), currentStatus);
         switch (request.getRequestType()) {
             case CERTIFICATES:
@@ -127,16 +130,16 @@ public class RequestRowController extends BaseRowController<Request> {
     private void setupCertificateButton(String currentStatus) {
         switch (RequestStatus.fromName(currentStatus)) {
             case PENDING:
-                createCertificateAcceptButton();
+                createCertificateApproveButton();
                 createRejectButton();
                 break;
             case IN_PROGRESS:
                 createReleaseButton();
-                createRejectButton();
+                createCancelButton();
                 break;
             case RELEASING:
                 createCompletedButton();
-                createRejectButton();
+                createCancelButton();
                 break;
             case REJECTED:
                 createRestoreButton();
@@ -155,12 +158,12 @@ public class RequestRowController extends BaseRowController<Request> {
     private void setupBarangayIdButton(String currenStatus) {
         switch (BarangayIdStatus.fromName(currenStatus)) {
             case PENDING:
-                createBarangayIdAcceptButton();
+                createBarangayIdApproveButton();
                 createRejectButton();
                 break;
             case RELEASING:
                 createCompletedButton();
-                createRejectButton();
+                createCancelButton();
                 break;
             case REJECTED:
                 createRestoreButton();
@@ -184,11 +187,11 @@ public class RequestRowController extends BaseRowController<Request> {
                 break;
             case IN_PROGRESS:
                 createReleaseButton();
-                createRejectButton();
+                createCancelButton();
                 break;
             case RELEASING:
                 createCompletedButton();
-                createRejectButton();
+                createCancelButton();
                 break;
             case REJECTED:
                 createRestoreButton();
@@ -204,8 +207,8 @@ public class RequestRowController extends BaseRowController<Request> {
         }
     }
 
-    private void createBarangayIdAcceptButton() {
-        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+    private void createBarangayIdApproveButton() {
+        Button approve = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.PRINT_ID,
                     PrintIdController.class,
@@ -217,33 +220,37 @@ public class RequestRowController extends BaseRowController<Request> {
                     }
             );
         });
+        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
 
-        buttonContainer.getChildren().add(accept);
+        buttonContainer.getChildren().add(approve);
     }
 
-    private void createCertificateAcceptButton() {
-        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+    private void createCertificateApproveButton() {
+        Button approve = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
                     FXMLPath.PRINT_DOCUMENT,
                     PrintDocumentController.class,
                     controller -> {
                         controller.setId(requestId);
                         controller.setCallback(isSuccess -> {
-                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                            if (isSuccess) updateRequestStatus(RequestStatus.IN_PROGRESS);
                         });
                     }
             );
         });
-        buttonContainer.getChildren().add(accept);
+        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
+        buttonContainer.getChildren().add(approve);
     }
 
     private void createApproveButton() {
-        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+        Button approve = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Approve Request", "Would you like to approve request no." + request.getReferenceNumber() + "?", isConfirmed -> {
                 if (isConfirmed) updateRequestStatus(RequestStatus.IN_PROGRESS);
             });
         });
-        buttonContainer.getChildren().add(accept);
+
+        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
+        buttonContainer.getChildren().add(approve);
     }
 
     private void createReleaseButton() {
@@ -275,6 +282,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
+        setButtonState(release, allowedActions, RolePermission.RequestAction.RELEASE);
         buttonContainer.getChildren().add(release);
     }
 
@@ -306,23 +314,27 @@ public class RequestRowController extends BaseRowController<Request> {
         }
 
         RequestStatus finalStatus = status;
-        Button accept = ButtonUtils.createButton("Complete", ButtonStyle.ACCEPT, () -> {
+        Button complete = ButtonUtils.createButton("Complete", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
                 if (isConfirmed) updateRequestStatus(finalStatus);
             });
         });
 
-        buttonContainer.getChildren().add(accept);
+        setButtonState(complete, allowedActions, RolePermission.RequestAction.COMPLETE);
+
+        buttonContainer.getChildren().add(complete);
     }
 
     private void createRestoreButton() {
-        Button reject = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to reject request #" + request.getReferenceNumber() + "?", isConfirmed -> {
+        Button restore = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to restore request #" + request.getReferenceNumber() + "?", isConfirmed -> {
                 if (isConfirmed) updateRequestStatus(RequestStatus.PENDING);
             });
         });
 
-        buttonContainer.getChildren().add(reject);
+        setButtonState(restore, allowedActions, RolePermission.RequestAction.RESTORE);
+
+        buttonContainer.getChildren().add(restore);
     }
 
     private void createRejectButton() {
@@ -332,7 +344,19 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
+        setButtonState(reject, allowedActions, RolePermission.RequestAction.REJECT);
         buttonContainer.getChildren().add(reject);
+    }
+
+    private void createCancelButton() {
+        Button cancel = ButtonUtils.createButton("Cancel", ButtonStyle.REJECT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_REJECT, "Cancel", "Would you like to cancel request #" + request.getReferenceNumber() + "?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.CANCELLED);
+            });
+        });
+
+        setButtonState(cancel, allowedActions, RolePermission.RequestAction.CANCEL);
+        buttonContainer.getChildren().add(cancel);
     }
 
     private void addInvisibleButtons(int count) {
@@ -432,4 +456,11 @@ public class RequestRowController extends BaseRowController<Request> {
         new Thread(task).start();
     }
 
+    private void setButtonState(Button button, List<RolePermission.RequestAction> allowedActions, RolePermission.RequestAction action) {
+        if (!allowedActions.contains(action)) {
+            button.setDisable(true);
+            button.setVisible(false);
+//            button.setStyle("-fx-opacity: 0.5;"); // Optional: Style to indicate the button is disabled
+        }
+    }
 }
