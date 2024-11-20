@@ -104,7 +104,6 @@ public class StatusType {
     @Getter
     public enum BarangayIdStatus {
         PENDING("Pending"),
-        IN_PROGRESS("In Progress"),
         RELEASING("Releasing"),
         COMPLETED("Completed"),
         REJECTED("Rejected");
