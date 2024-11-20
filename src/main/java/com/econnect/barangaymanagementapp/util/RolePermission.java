@@ -3,15 +3,13 @@ package com.econnect.barangaymanagementapp.util;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.NavigationType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.NavigationType.*;
 import static com.econnect.barangaymanagementapp.enumeration.type.RoleType.*;
-import static com.econnect.barangaymanagementapp.util.RolePermission.Action.*;
+import static com.econnect.barangaymanagementapp.util.RolePermission.RequestAction.*;
 
 public class RolePermission {
     private static final Map<DepartmentType, Map<RoleType, List<NavigationType>>> roleNavigationPermissions = Map.of(
@@ -28,13 +26,12 @@ public class RolePermission {
             )
     );
 
-    private static final Map<DepartmentType, Map<RoleType, List<Action>>> roleActionPermission = Map.of(
-            DepartmentType.BARANGAY_OFFICE, Map.of(
-                    SECRETARY, List.of(CREATE, UPDATE, DELETE),
-                    ADMINISTRATIVE_CLERK, List.of(CREATE, UPDATE, DELETE),
-                    OFFICE_FRONT_DESK, List.of(CREATE, UPDATE, DELETE),
-                    FINANCIAL_CLERK, List.of(CREATE, UPDATE, DELETE),
-                    EVENT_COORDINATOR, List.of(CREATE, UPDATE, DELETE)
+    private static final Map<TableActions, Map<RoleType, List<RequestAction>>> roleActionPermission = Map.of(
+            TableActions.REQUEST, Map.of(
+                    ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
+                    SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
+                    ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
+                    OFFICE_FRONT_DESK, List.of(APPROVE, REJECT, COMPLETE)
             )
     );
 
@@ -42,15 +39,22 @@ public class RolePermission {
         return roleNavigationPermissions.get(departmentType).get(roleType);
     }
 
-    @Getter
-    @AllArgsConstructor
-    public enum Action {
-        CREATE("Create"),
-        UPDATE("Update"),
-        DELETE("Delete"),
-        ACCEPT("Accept"),
-        REJECT("Reject");
-        private final String action;
+    public static List<RequestAction> getActionByRole(TableActions tableActions, RoleType roleType) {
+        return roleActionPermission.get(tableActions).get(roleType);
+    }
+
+    public enum RequestAction {
+        APPROVE,
+        CANCEL,
+        REJECT,
+        RELEASE,
+        COMPLETE
+    }
+
+    public enum TableActions {
+        EMPLOYEE,
+        RESIDENT,
+        REQUEST;
     }
 }
 
