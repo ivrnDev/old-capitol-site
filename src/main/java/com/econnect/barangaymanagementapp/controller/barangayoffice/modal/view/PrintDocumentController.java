@@ -5,7 +5,6 @@ import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
 import com.econnect.barangaymanagementapp.service.CertificateService;
-import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -21,7 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lombok.Setter;
 
@@ -35,7 +33,7 @@ public class PrintDocumentController implements BaseViewController {
     @FXML
     private ImageView profilePicture;
     @FXML
-    private HBox certficatePreviewContainer;
+    private HBox certificatePreviewContainer;
     @FXML
     private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput, fullNameText;
     @FXML
@@ -78,7 +76,7 @@ public class PrintDocumentController implements BaseViewController {
     }
 
     private void generateCertificate() {
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(certficatePreviewContainer.getWidth(), certficatePreviewContainer.getHeight());
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(certificatePreviewContainer.getWidth(), certificatePreviewContainer.getHeight());
         addLoadingIndicator(loadingIndicator);
         Task<File> requestTask = new Task<>() {
             @Override
@@ -181,13 +179,13 @@ public class PrintDocumentController implements BaseViewController {
     private void addLoadingIndicator(StackPane loadingIndicator) {
         certificatePreview.setManaged(false);
         certificatePreview.setVisible(false);
-        certficatePreviewContainer.getChildren().add(loadingIndicator);
+        certificatePreviewContainer.getChildren().add(loadingIndicator);
     }
 
     private void removeLoadingIndicator(StackPane loadingIndicator) {
         certificatePreview.setManaged(true);
         certificatePreview.setVisible(true);
-        certficatePreviewContainer.getChildren().remove(loadingIndicator);
+        certificatePreviewContainer.getChildren().remove(loadingIndicator);
     }
 
     private void closeView() {
