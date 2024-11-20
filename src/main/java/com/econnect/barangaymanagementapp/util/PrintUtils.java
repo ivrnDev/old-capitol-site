@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.function.Consumer;
 
 public class PrintUtils {
@@ -94,7 +95,13 @@ public class PrintUtils {
 
     public static File generateCertificate(String controlNumber, Resident resident, CertificateType certificateType, Consumer<Image> callback) {
         try {
-            File generatedPDF = createCertificateOfIndigency(controlNumber, resident);
+            File generatedPDF = null;
+            switch (certificateType) {
+                case BARANGAY_CLEARANCE -> generatedPDF = createBarangayClearance(controlNumber, resident);
+                case CERTIFICATE_OF_RESIDENCY -> generatedPDF = createCertificateOfResidency(controlNumber, resident);
+                case CEDULA -> generatedPDF = createCedulaDocument(controlNumber, resident);
+                case CERTIFICATE_OF_INDIGENCY -> generatedPDF = createCertificateOfIndigency(controlNumber, resident);
+            }
             callback.accept(convertPdfToImage(generatedPDF, 0));
             return generatedPDF;
         } catch (IOException e) {
@@ -108,7 +115,6 @@ public class PrintUtils {
         try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
             java.awt.print.PrinterJob printerJob = java.awt.print.PrinterJob.getPrinterJob(); // Java's AWT PrinterJob
             printerJob.setPrintable(new PDFPrintable(pdfDocument));
-
             if (printerJob.printDialog()) {
                 printerJob.print(); // Start the print job
                 callback.accept(true); // Notify successful printing
@@ -122,7 +128,6 @@ public class PrintUtils {
             callback.accept(false); // Notify an error occurred
         }
     }
-
 
     public static Image convertPdfToImage(File pdfFile, int pageIndex) throws IOException {
         try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
@@ -177,6 +182,7 @@ public class PrintUtils {
         return pdfFile;
     }
 
+    // DOCUMENTS
     public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
         XWPFDocument document = new XWPFDocument();
 
@@ -194,7 +200,142 @@ public class PrintUtils {
         controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
         controlNumberRun.setFontSize(12);
         controlNumberRun.addBreak();
-        controlNumberRun.setText(String.format("Date Issued: %s", java.time.LocalDate.now()));
+        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
+        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+        // Body Content
+        XWPFParagraph body = document.createParagraph();
+        XWPFRun bodyRun = body.createRun();
+        bodyRun.setText("TO WHOM IT MAY CONCERN:");
+        bodyRun.setFontSize(12);
+        bodyRun.addBreak();
+
+        // Footer (Signature)
+        XWPFParagraph signature = document.createParagraph();
+        XWPFRun signatureRun = signature.createRun();
+        signatureRun.addBreak();
+        signatureRun.addBreak();
+        signatureRun.setText("_________________________");
+        signatureRun.addBreak();
+        signatureRun.setText("[Name of Barangay Captain]");
+        signatureRun.addBreak();
+        signatureRun.setText("Barangay Captain");
+        signature.setAlignment(ParagraphAlignment.CENTER);
+
+        // Generate PDF from the Word Document
+        File pdfFile = createPdfFromDocument(document, controlNumber);
+
+        return pdfFile;
+    }
+
+    public static File createBarangayClearance(String controlNumber, Resident resident) throws IOException {
+        XWPFDocument document = new XWPFDocument();
+
+        // Title
+        XWPFParagraph title = document.createParagraph();
+        XWPFRun titleRun = title.createRun();
+        titleRun.setText("Barangay Clearance");
+        titleRun.setBold(true);
+        titleRun.setFontSize(20);
+        title.setAlignment(ParagraphAlignment.CENTER);
+
+        // Control Number and Date
+        XWPFParagraph controlNumberParagraph = document.createParagraph();
+        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
+        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setFontSize(12);
+        controlNumberRun.addBreak();
+        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
+        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+        // Body Content
+        XWPFParagraph body = document.createParagraph();
+        XWPFRun bodyRun = body.createRun();
+        bodyRun.setText("TO WHOM IT MAY CONCERN:");
+        bodyRun.setFontSize(12);
+        bodyRun.addBreak();
+
+        // Footer (Signature)
+        XWPFParagraph signature = document.createParagraph();
+        XWPFRun signatureRun = signature.createRun();
+        signatureRun.addBreak();
+        signatureRun.addBreak();
+        signatureRun.setText("_________________________");
+        signatureRun.addBreak();
+        signatureRun.setText("[Name of Barangay Captain]");
+        signatureRun.addBreak();
+        signatureRun.setText("Barangay Captain");
+        signature.setAlignment(ParagraphAlignment.CENTER);
+
+        // Generate PDF from the Word Document
+        File pdfFile = createPdfFromDocument(document, controlNumber);
+
+        return pdfFile;
+    }
+
+    public static File createCertificateOfResidency(String controlNumber, Resident resident) throws IOException {
+        XWPFDocument document = new XWPFDocument();
+
+        // Title
+        XWPFParagraph title = document.createParagraph();
+        XWPFRun titleRun = title.createRun();
+        titleRun.setText("Certificate of Residency");
+        titleRun.setBold(true);
+        titleRun.setFontSize(20);
+        title.setAlignment(ParagraphAlignment.CENTER);
+
+        // Control Number and Date
+        XWPFParagraph controlNumberParagraph = document.createParagraph();
+        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
+        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setFontSize(12);
+        controlNumberRun.addBreak();
+        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
+        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+
+        // Body Content
+        XWPFParagraph body = document.createParagraph();
+        XWPFRun bodyRun = body.createRun();
+        bodyRun.setText("TO WHOM IT MAY CONCERN:");
+        bodyRun.setFontSize(12);
+        bodyRun.addBreak();
+
+        // Footer (Signature)
+        XWPFParagraph signature = document.createParagraph();
+        XWPFRun signatureRun = signature.createRun();
+        signatureRun.addBreak();
+        signatureRun.addBreak();
+        signatureRun.setText("_________________________");
+        signatureRun.addBreak();
+        signatureRun.setText("[Name of Barangay Captain]");
+        signatureRun.addBreak();
+        signatureRun.setText("Barangay Captain");
+        signature.setAlignment(ParagraphAlignment.CENTER);
+
+        // Generate PDF from the Word Document
+        File pdfFile = createPdfFromDocument(document, controlNumber);
+
+        return pdfFile;
+    }
+
+    public static File createCedulaDocument(String controlNumber, Resident resident) throws IOException {
+        XWPFDocument document = new XWPFDocument();
+
+        // Title
+        XWPFParagraph title = document.createParagraph();
+        XWPFRun titleRun = title.createRun();
+        titleRun.setText("Cedula");
+        titleRun.setBold(true);
+        titleRun.setFontSize(20);
+        title.setAlignment(ParagraphAlignment.CENTER);
+
+        // Control Number and Date
+        XWPFParagraph controlNumberParagraph = document.createParagraph();
+        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
+        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setFontSize(12);
+        controlNumberRun.addBreak();
+        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
         controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
 
         // Body Content
