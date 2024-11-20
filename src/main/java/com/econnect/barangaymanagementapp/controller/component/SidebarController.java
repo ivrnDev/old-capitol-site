@@ -4,8 +4,10 @@ import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.NavigationType;
+import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
+import com.econnect.barangaymanagementapp.util.RolePermission;
 import com.econnect.barangaymanagementapp.util.SceneManager;
 import com.econnect.barangaymanagementapp.util.state.NavigationState;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
@@ -17,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.List;
 import java.util.Objects;
 
 public class SidebarController {
@@ -26,6 +29,7 @@ public class SidebarController {
     private final NavigationState navigationState;
     private final ModalUtils modalUtils;
     private DepartmentType currentDepartment;
+    private RoleType userRole;
     private LiveReloadUtils liveReloadUtils;
 
     @FXML
@@ -42,17 +46,19 @@ public class SidebarController {
     public void initialize() {
         if (userSession.hasSession()) {
             currentDepartment = userSession.getEmployeeDepartment();
+            userRole = userSession.getEmployeeRole();
             loadNavigationBar();
         }
     }
 
     private void loadNavigationBar() {
-        if (navigationState.getActiveItem() == null && !currentDepartment.getNavigationItems().isEmpty()) {
-            navigationState.setActiveItem(currentDepartment.getNavigationItems().getFirst());
+        List<NavigationType> navigationItems = RolePermission.getNavigationByRole(currentDepartment, userRole);
+        if (navigationState.getActiveItem() == null && !navigationItems.isEmpty()) {
+            navigationState.setActiveItem(navigationItems.getFirst());
         }
 
         navigationBar.getChildren().clear();
-        currentDepartment.getNavigationItems().forEach(item -> {
+        navigationItems.forEach(item -> {
             navigationBar.getChildren().add(createNavButton(item));
         });
     }
