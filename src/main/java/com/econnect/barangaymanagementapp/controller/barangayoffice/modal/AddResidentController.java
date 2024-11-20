@@ -80,7 +80,7 @@ public class AddResidentController {
         setupPreviewRounded();
         setupActionButtons();
         setupInputFields();
-        mockData();
+//        mockData();
     }
 
     private void addResident() {
