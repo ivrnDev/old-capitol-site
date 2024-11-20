@@ -66,7 +66,7 @@ public class PrintDocumentController implements BaseViewController {
     }
 
     private void handlePrint() {
-        certificateService.printCertificate(generatedPdfFile, success -> {
+        certificateService.printCertificate(generatedPdfFile, currentStage, success -> {
             if (success) {
                 callback.accept(true);
                 closeView();

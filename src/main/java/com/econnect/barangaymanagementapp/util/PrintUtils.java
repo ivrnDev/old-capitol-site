@@ -11,6 +11,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -19,13 +20,17 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.printing.Scaling;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
@@ -89,8 +94,8 @@ public class PrintUtils {
         return imageView;
     }
 
-    public static void printCertificate(File pdfFile, Consumer<Boolean> callback) {
-        printPdf(pdfFile, callback);
+    public static void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
+        printPdf(pdfFile, callback, currentStage);
     }
 
     public static File generateCertificate(String controlNumber, Resident resident, CertificateType certificateType, Consumer<Image> callback) {
@@ -111,23 +116,42 @@ public class PrintUtils {
         return null;
     }
 
-    private static void printPdf(File pdfFile, Consumer<Boolean> callback) {
+    public static void printPdf(File pdfFile, Consumer<Boolean> callback, Window owner) {
         try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
-            java.awt.print.PrinterJob printerJob = java.awt.print.PrinterJob.getPrinterJob(); // Java's AWT PrinterJob
-            printerJob.setPrintable(new PDFPrintable(pdfDocument));
-            if (printerJob.printDialog()) {
-                printerJob.print(); // Start the print job
-                callback.accept(true); // Notify successful printing
-                System.out.println("Print job completed successfully.");
+            PrinterJob fxPrinterJob = PrinterJob.createPrinterJob();
+
+            if (fxPrinterJob != null && fxPrinterJob.showPrintDialog(owner)) {
+                java.awt.print.PrinterJob awtPrinterJob = java.awt.print.PrinterJob.getPrinterJob();
+                PageFormat pageFormat = awtPrinterJob.defaultPage();
+                java.awt.print.Paper paper = pageFormat.getPaper();
+
+                paper.setSize(595, 842);
+                paper.setImageableArea(0, 0, 595, 842);
+
+                pageFormat.setPaper(paper);
+
+                awtPrinterJob.setPrintable(new PDFPrintable(pdfDocument, Scaling.SHRINK_TO_FIT), pageFormat);
+
+                try {
+                    awtPrinterJob.print();
+                    callback.accept(true);
+                    System.out.println("Print job completed successfully.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.accept(false);
+                    System.out.println("Print job failed.");
+                }
             } else {
+                callback.accept(false);
                 System.out.println("Print job was cancelled.");
-                callback.accept(false); // Notify cancellation
             }
-        } catch (IOException | PrinterException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             callback.accept(false); // Notify an error occurred
+            System.out.println("An error occurred while printing.");
         }
     }
+
 
     public static Image convertPdfToImage(File pdfFile, int pageIndex) throws IOException {
         try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {

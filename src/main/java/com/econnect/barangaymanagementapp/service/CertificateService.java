@@ -10,6 +10,7 @@ import com.econnect.barangaymanagementapp.repository.CertificateRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.PrintUtils;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import okhttp3.Response;
 
 import java.io.File;
@@ -72,9 +73,9 @@ public class CertificateService {
         return certificateRepository.updateCertificateByStatus(requestId, status);
     }
 
-    public void printCertificate(File pdfFile, Consumer<Boolean> callback) {
+    public void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
         try {
-            PrintUtils.printCertificate(pdfFile, callback);
+            PrintUtils.printCertificate(pdfFile, currentStage, callback);
         } catch (Exception e) {
             e.printStackTrace();
         }
