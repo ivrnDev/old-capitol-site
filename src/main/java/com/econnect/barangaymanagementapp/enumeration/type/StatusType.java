@@ -58,9 +58,7 @@ public class StatusType {
         COMPLETED("Completed"),
         REJECTED("Rejected"),
         PROCESSING("Processing"),
-        UNDER_INVESTIGATION("Under Investigation"),
-        RESOLVED("Resolved"),
-        UNRESOLVED("Unresolved");
+        CANCELLED("Cancelled");
 
         private String name;
 
