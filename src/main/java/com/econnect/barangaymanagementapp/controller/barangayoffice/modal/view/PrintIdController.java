@@ -33,6 +33,7 @@ import okhttp3.Response;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 public class PrintIdController implements BaseViewController {
@@ -77,6 +78,8 @@ public class PrintIdController implements BaseViewController {
     }
 
     private void populateFields() {
+        CountDownLatch latch = new CountDownLatch(3);
+        Optional<Resident> resident = null;
         Task<Optional<Resident>> findResidentById = new Task<>() {
             @Override
             protected Optional<Resident> call() {
@@ -101,13 +104,15 @@ public class PrintIdController implements BaseViewController {
                     emergencyFullNameText.setText(emergencyFullName);
                     emergencyContactText.setText(residentInfo.getEmergencyMobileNumber());
                     emergencyRelationshipText.setText(residentInfo.getEmergencyRelationship());
-                    loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl());
+                    loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), residentInfo.getProfileUrl(), latch);
                 }
+                latch.countDown();
             }
 
             @Override
             protected void failed() {
                 System.out.println("Failed to fetch data: " + getException().getMessage());
+                latch.countDown();
             }
         };
 
@@ -125,44 +130,72 @@ public class PrintIdController implements BaseViewController {
                     weightText.setText(barangayIdInfo.getWeight() + " KG");
                     heightText.setText(barangayIdInfo.getHeight() + " FT");
                 }
+                latch.countDown();
             }
 
             @Override
             protected void failed() {
                 System.out.println("Failed to fetch barangay id: " + getException().getMessage());
+                latch.countDown();
             }
         };
 
         new Thread(findResidentById).start();
         new Thread(findBarangayId).start();
+
+        new Thread(() -> {
+            try {
+                latch.await();
+                Platform.runLater(() -> printBtn.setDisable(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    private void loadProfileImage(String directory, String link) {
+    private void loadProfileImage(String directory, String link, CountDownLatch latch) {
         profilePicture.setOnMouseClicked(_ -> modalUtils.showImageView(profilePicture.getImage(), currentStage));
         profilePicture.setCursor(Cursor.HAND);
         profilePicture.setManaged(false);
         profilePicture.setVisible(false);
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(profileContainer.getWidth(), profileContainer.getHeight());
-        Platform.runLater(() -> profileContainer.getChildren().add(loadingIndicator));
+        profileContainer.getChildren().add(loadingIndicator);
 
-        Runnable call = () -> {
-            validIdImage = imageService.getImage(directory, link);
-            Platform.runLater(() -> {
-                profileContainer.getChildren().remove(loadingIndicator);
-                profilePicture.setImage(validIdImage);
-                profilePicture.setManaged(true);
-                profilePicture.setVisible(true);
-            });
+        Task<Image> imageTask = new Task<>() {
+            @Override
+            protected Image call() {
+                return imageService.getImage(directory, link);
+            }
+
+            @Override
+            protected void succeeded() {
+                try {
+                    validIdImage = getValue();
+                    profilePicture.setImage(validIdImage);
+                    profilePicture.setManaged(true);
+                    profilePicture.setVisible(true);
+                } finally {
+                    profileContainer.getChildren().remove(loadingIndicator);
+                    latch.countDown();
+                }
+            }
+
+            @Override
+            protected void failed() {
+                try {
+                    System.err.println("Error loading resident profile image");
+                } finally {
+                    profileContainer.getChildren().remove(loadingIndicator);
+                    profilePicture.setManaged(true);
+                    profilePicture.setVisible(true);
+                    latch.countDown();
+                }
+            }
         };
 
-        Runnable onFailed = () -> {
-            Platform.runLater(() -> profileContainer.getChildren().remove(loadingIndicator));
-            profilePicture.setManaged(true);
-            profilePicture.setVisible(true);
-            System.err.println("Error loading resident");
-        };
-        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+        new Thread(imageTask).start();
     }
+
 
     private void setupEventListener() {
         closeBtn.setOnMouseClicked(_ -> closeWindow());
