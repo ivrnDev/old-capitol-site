@@ -424,8 +424,7 @@ public class RequestRowController extends BaseRowController<Request> {
                     controller -> {
                         controller.setId(requestId);
                         controller.setCallback(isSuccess -> {
-//                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
-                            if (isSuccess) System.out.println("Success");
+                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
                         });
                     }
             );
