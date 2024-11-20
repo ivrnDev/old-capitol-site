@@ -49,7 +49,6 @@ public class PrintDocumentController implements BaseViewController {
     private String certificateId;
     @Setter
     private Consumer<Boolean> callback;
-    private Resident resident;
     private Certificate certificate;
     private File generatedPdfFile;
 
@@ -140,9 +139,7 @@ public class PrintDocumentController implements BaseViewController {
                 Optional<Resident> residentValue = getValue();
                 if (residentValue.isPresent()) {
                     Resident resident = residentValue.get();
-                    resident = residentValue.get();
                     populateResidentData(resident);
-//                    loadProfileImage(Firestore.PROFILE_PICTURE.getPath(), resident.getProfileUrl());
                 }
             }
 
