@@ -2,26 +2,21 @@ package com.econnect.barangaymanagementapp.enumeration.type;
 
 public enum RoleType {
     NONE("None"),
+    ADMIN("Admin"),
     //Human Resource Department
 //    HR_MANAGER("HR Manager"), //Managing the HR Department
-//    HR_RECRUITER("HR Recruiter"), //Interviewing
     HR_FRONT_DESK("HR Front Desk"), //Receptionist
 
     //Barangay Office Department
     ADMINISTRATIVE_CLERK("Administrative Clerk"),
     OFFICE_FRONT_DESK("Office Front Desk"),
-    RECORDS_CLERK("Records Clerk"),
     FINANCIAL_CLERK("Financial Clerk"),
     EVENT_COORDINATOR("Event Coordinator"),
-    CERTIFICATION_CLERK("Certification Clerk"),
+    DOCUMENT_CLERK("Document Clerk"),
+    SECRETARY("Secretary"),
 
     //Finance Department
     TREASURER("Treasurer"),
-
-    //Secretary Department
-    SECRETARY("Secretary"),
-
-    //Utilities Department
 
     //Health Department
     GENERAL_DOCTOR("General Doctor"),
@@ -31,7 +26,6 @@ public enum RoleType {
     BHW("Barangay Health Worker"),
     HEALTH_COMMITTEE_HEAD("Head of Health Committee"),
     ;
-
 
     private final String name;
 

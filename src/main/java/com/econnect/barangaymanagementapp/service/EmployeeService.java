@@ -45,6 +45,7 @@ public class EmployeeService {
                     .firstName("Admin")
                     .lastName("Admin")
                     .department(DepartmentType.BARANGAY_OFFICE)
+                    .role(RoleType.ADMIN)
                     .password("admin")
                     .status(ACTIVE)
                     .username("admin")
