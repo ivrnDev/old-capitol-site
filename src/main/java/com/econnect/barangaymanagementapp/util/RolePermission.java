@@ -17,6 +17,7 @@ public class RolePermission {
                     ADMIN, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, REQUESTS, RESIDENTS, SERVICES, HISTORY),
                     SECRETARY, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, REQUESTS, RESIDENTS, SERVICES, HISTORY),
                     ADMINISTRATIVE_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS, HISTORY),
+                    DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS, HISTORY),
                     OFFICE_FRONT_DESK, List.of(DASHBOARD, RESIDENTS, SERVICES),
                     FINANCIAL_CLERK, List.of(DASHBOARD, HISTORY),
                     EVENT_COORDINATOR, List.of(DASHBOARD)
@@ -28,10 +29,10 @@ public class RolePermission {
 
     private static final Map<TableActions, Map<RoleType, List<RequestAction>>> roleActionPermission = Map.of(
             TableActions.REQUEST, Map.of(
-                    ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
-                    SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
-                    ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE),
-                    OFFICE_FRONT_DESK, List.of(APPROVE, REJECT, COMPLETE)
+                    ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
+                    SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
+                    ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
+                    DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE)
             )
     );
 
@@ -48,7 +49,8 @@ public class RolePermission {
         CANCEL,
         REJECT,
         RELEASE,
-        COMPLETE
+        COMPLETE,
+        RESTORE
     }
 
     public enum TableActions {
