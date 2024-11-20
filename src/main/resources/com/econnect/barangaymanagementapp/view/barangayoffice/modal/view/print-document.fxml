@@ -45,7 +45,13 @@
                                               <ImageView fx:id="certificatePreview" fitHeight="382.0" fitWidth="295.0" pickOnBounds="true" />
                                  </children>
                               </HBox>
-                                        <Button fx:id="printBtn" layoutX="44.0" layoutY="456.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="256.0" styleClass="add" stylesheets="@../../../../style/component/button.css" text="PRINT" />
+                                        <Button fx:id="printBtn" disable="true" layoutX="44.0" layoutY="456.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="256.0" styleClass="add" stylesheets="@../../../../style/component/button.css" text="PRINT">
+                                 <font>
+                                    <Font name="Arial Bold" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
                                     </children>
                                 </AnchorPane>
                                 <VBox prefWidth="518.0" spacing="30.0" HBox.hgrow="ALWAYS">

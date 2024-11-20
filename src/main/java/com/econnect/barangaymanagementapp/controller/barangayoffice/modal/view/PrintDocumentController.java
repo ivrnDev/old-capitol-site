@@ -96,6 +96,7 @@ public class PrintDocumentController implements BaseViewController {
             protected void succeeded() {
                 removeLoadingIndicator(loadingIndicator);
                 generatedPdfFile = getValue();
+                printBtn.setDisable(false);
             }
 
             @Override
