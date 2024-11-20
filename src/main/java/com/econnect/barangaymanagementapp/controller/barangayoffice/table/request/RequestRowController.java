@@ -30,6 +30,8 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import okhttp3.Response;
 
+import java.util.function.Supplier;
+
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.COMPLETED;
@@ -108,25 +110,23 @@ public class RequestRowController extends BaseRowController<Request> {
         setupViewButton(request.getRequestType(), currentStatus);
         switch (request.getRequestType()) {
             case CERTIFICATES:
-                setupDocumentButton(currentStatus);
+                setupCertificateButton(currentStatus);
                 break;
             case BARANGAY_ID:
                 setupBarangayIdButton(currentStatus);
                 break;
             case CEDULA:
-                setupDocumentButton(currentStatus);
+                setupCedulaButton(currentStatus);
                 break;
             default:
-                invisibleButton();
-                invisibleButton();
+                addInvisibleButtons(2);
                 break;
         }
     }
 
-    private void setupDocumentButton(String currentStatus) {
+    private void setupCertificateButton(String currentStatus) {
         switch (RequestStatus.fromName(currentStatus)) {
             case PENDING:
-//                createApproveButton();
                 createCertificateAcceptButton();
                 createRejectButton();
                 break;
@@ -140,11 +140,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 break;
             case REJECTED:
                 createRestoreButton();
-                invisibleButton();
+                addInvisibleButtons(1);
                 break;
             case COMPLETED:
-                invisibleButton();
-                invisibleButton();
+                addInvisibleButtons(2);
                 break;
             default:
                 createRejectButton();
@@ -165,11 +164,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 break;
             case REJECTED:
                 createRestoreButton();
-                invisibleButton();
+                addInvisibleButtons(1);
                 break;
             case COMPLETED:
-                invisibleButton();
-                invisibleButton();
+                addInvisibleButtons(2);
                 break;
             default:
                 createRejectButton();
@@ -178,36 +176,71 @@ public class RequestRowController extends BaseRowController<Request> {
         }
     }
 
-    private void createApproveButton() {
-        String head;
-        String message;
-        RequestStatus status = null;
-
-        switch (request.getRequestType()) {
-            case CERTIFICATES:
-                head = "Approve Request";
-                message = "Would you like to approve certificate request no." + request.getReferenceNumber() + "?";
-                status = RequestStatus.IN_PROGRESS;
+    private void setupCedulaButton(String currentStatus) {
+        switch (RequestStatus.fromName(currentStatus)) {
+            case PENDING:
+                createApproveButton();
+                createRejectButton();
                 break;
-            case BARANGAY_ID:
-                head = "Approve Request";
-                message = "Would you like to approve barangay id request no." + request.getReferenceNumber() + "?";
-                status = RequestStatus.IN_PROGRESS;
+            case IN_PROGRESS:
+                createReleaseButton();
+                createRejectButton();
                 break;
-            case CEDULA:
-                head = "Approve Request";
-                message = "Would you like to approve cedula request no." + request.getReferenceNumber() + "?";
-                status = RequestStatus.IN_PROGRESS;
+            case RELEASING:
+                createCompletedButton();
+                createRejectButton();
+                break;
+            case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case COMPLETED:
+                addInvisibleButtons(2);
                 break;
             default:
-                head = "Approve Request";
-                message = "Would you like to approve request no." + request.getReferenceNumber() + "?";
+                createRejectButton();
+                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
                 break;
         }
-        RequestStatus finalStatus = status;
+    }
+
+    private void createBarangayIdAcceptButton() {
         Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, head, message, isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(finalStatus);
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.PRINT_ID,
+                    PrintIdController.class,
+                    controller -> {
+                        controller.setId(requestId);
+                        controller.setCallback(isSuccess -> {
+                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                        });
+                    }
+            );
+        });
+
+        buttonContainer.getChildren().add(accept);
+    }
+
+    private void createCertificateAcceptButton() {
+        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.PRINT_DOCUMENT,
+                    PrintDocumentController.class,
+                    controller -> {
+                        controller.setId(requestId);
+                        controller.setCallback(isSuccess -> {
+                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
+                        });
+                    }
+            );
+        });
+        buttonContainer.getChildren().add(accept);
+    }
+
+    private void createApproveButton() {
+        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Approve Request", "Would you like to approve request no." + request.getReferenceNumber() + "?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.IN_PROGRESS);
             });
         });
         buttonContainer.getChildren().add(accept);
@@ -302,8 +335,10 @@ public class RequestRowController extends BaseRowController<Request> {
         buttonContainer.getChildren().add(reject);
     }
 
-    private void invisibleButton() {
-        buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+    private void addInvisibleButtons(int count) {
+        for (int i = 0; i < count; i++) {
+            buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+        }
     }
 
     private void setupViewButton(RequestType requestType, String currentStatus) {
@@ -341,8 +376,6 @@ public class RequestRowController extends BaseRowController<Request> {
                 );
             });
         }
-
-
         buttonContainer.getChildren().add(viewBtn);
     }
 
@@ -399,37 +432,4 @@ public class RequestRowController extends BaseRowController<Request> {
         new Thread(task).start();
     }
 
-    private void createBarangayIdAcceptButton() {
-        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.PRINT_ID,
-                    PrintIdController.class,
-                    controller -> {
-                        controller.setId(requestId);
-                        controller.setCallback(isSuccess -> {
-                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
-                        });
-                    }
-            );
-        });
-
-        buttonContainer.getChildren().add(accept);
-    }
-
-    private void createCertificateAcceptButton() {
-        Button accept = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
-            modalUtils.customizeModalWithCallback(
-                    FXMLPath.PRINT_DOCUMENT,
-                    PrintDocumentController.class,
-                    controller -> {
-                        controller.setId(requestId);
-                        controller.setCallback(isSuccess -> {
-                            if (isSuccess) updateRequestStatus(RequestStatus.RELEASING);
-                        });
-                    }
-            );
-        });
-
-        buttonContainer.getChildren().add(accept);
-    }
 }
