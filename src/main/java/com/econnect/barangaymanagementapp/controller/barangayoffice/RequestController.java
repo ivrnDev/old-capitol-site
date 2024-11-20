@@ -137,6 +137,7 @@ public class RequestController {
             @Override
             protected void succeeded() {
                 removeTableLoadingIndicator();
+                residentRequestComboBox.setDisable(false);
                 Platform.runLater(() -> {
                     List<Request> requests = requestCache.get(type);
                     if (requests == null || requests.isEmpty()) {
