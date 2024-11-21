@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resid
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.modal.ViewResidentController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
@@ -10,7 +11,9 @@ import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.RolePermission;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -27,6 +30,8 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import okhttp3.Response;
 
+import java.util.List;
+
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
 
 public class ResidentRowController extends BaseRowController<Resident> {
@@ -34,6 +39,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
     private final Stage parentStage;
     private final ResidentService residentService;
     private final DependencyInjector dependencyInjector;
+    private List<RolePermission.Action> allowedActions;
+    private Employee loggedEmployee;
     @Getter
     private String residentId;
 
@@ -52,11 +59,13 @@ public class ResidentRowController extends BaseRowController<Resident> {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.residentService = dependencyInjector.getResidentService();
+        this.loggedEmployee = UserSession.getInstance().getCurrentEmployee();
     }
 
     public void initialize() {
         setupProfileImageClick();
         setupRowClickEvents();
+        allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
     }
 
     @Override
@@ -107,45 +116,47 @@ public class ResidentRowController extends BaseRowController<Resident> {
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
             case VERIFIED:
-                setupActiveButton();
-                setupDeleteButton();
+                createSuspendButton();
+                addInvisibleButtons(1);
                 break;
             case SUSPENDED:
-                setupInactiveButton();
-                setupDeleteButton();
+                createRestoreButton();
+                createDeleteButton();
                 break;
             default:
-                setupDeleteButton();
-                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+                addInvisibleButtons(2);
                 break;
         }
     }
 
-    private void setupInactiveButton() {
-        Button restore = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
-            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to restore resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
-                if (isConfirmed) updateResidentStatus(VERIFIED);
-            });
-        });
-        buttonContainer.getChildren().addAll(restore);
-    }
-
-    private void setupActiveButton() {
+    private void createSuspendButton() {
         Button suspend = ButtonUtils.createButton("Suspend", ButtonStyle.WARNING, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Suspend", "Would you like to suspend resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(SUSPENDED);
             });
         });
-        buttonContainer.getChildren().addAll(suspend);
+        setButtonState(suspend, allowedActions, RolePermission.Action.SUSPEND);
+        buttonContainer.getChildren().add(suspend);
     }
 
-    private void setupDeleteButton() {
+    private void createDeleteButton() {
         Button delete = ButtonUtils.createButton("Delete", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Delete", "Would you like to delete resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(REMOVED);
             });
         });
+        setButtonState(delete, allowedActions, RolePermission.Action.DELETE);
         buttonContainer.getChildren().add(delete);
+    }
+
+    private void createRestoreButton() {
+        Button restore = ButtonUtils.createButton("Restore", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Restore", "Would you like to restore resident #" + residentIdLabel.getText() + "?", isConfirmed -> {
+                if (isConfirmed) updateResidentStatus(VERIFIED);
+            });
+        });
+        setButtonState(restore, allowedActions, RolePermission.Action.RESTORE);
+        buttonContainer.getChildren().add(restore);
     }
 
     private void setupViewButton() {
@@ -158,6 +169,13 @@ public class ResidentRowController extends BaseRowController<Resident> {
         });
         buttonContainer.getChildren().add(viewBtn);
     }
+
+    private void addInvisibleButtons(int count) {
+        for (int i = 0; i < count; i++) {
+            buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+        }
+    }
+
 
     private void updateResidentStatus(StatusType.ResidentStatus status) {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tableRow.getWidth(), tableRow.getHeight());
@@ -206,5 +224,11 @@ public class ResidentRowController extends BaseRowController<Resident> {
             }
         };
         new Thread(task).start();
+    }
+
+    private void setButtonState(Button button, List<RolePermission.Action> allowedActions, RolePermission.Action action) {
+        if (!allowedActions.contains(action)) {
+            button.setDisable(true);
+        }
     }
 }
