@@ -3,15 +3,19 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice.table.resid
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.shared.modal.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.controller.shared.modal.ViewResidentController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
+import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.RolePermission;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -28,7 +32,10 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import okhttp3.Response;
 
+import java.util.List;
+
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.*;
+import static com.econnect.barangaymanagementapp.util.RolePermission.Action.REJECT;
 
 public class ResidentApplicationRowController extends BaseRowController<Resident> {
     @FXML
@@ -41,6 +48,7 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final ResidentService residentService;
+    private Employee loggedEmployee;
     @Getter
     private String residentId;
 
@@ -49,6 +57,7 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.residentService = dependencyInjector.getResidentService();
+        this.loggedEmployee = UserSession.getInstance().getCurrentEmployee();
     }
 
     public void initialize() {
@@ -105,25 +114,30 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
             case PENDING:
-                setupPendingButtons();
+                createVerifyButton();
+                createRejectButton();
                 break;
         }
     }
 
-    private void setupPendingButtons() {
+    private void createVerifyButton() {
         Button verify = ButtonUtils.createButton("Verify", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Verify", "Would you like to verify resident #" + residentIdLabel.getText() + "application?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(VERIFIED);
             });
         });
+        setButtonState(verify, RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole()), RolePermission.Action.VERIFY);
+        buttonContainer.getChildren().add(verify);
+    }
 
+    private void createRejectButton() {
         Button reject = ButtonUtils.createButton("Reject", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Reject", "Would you like to reject resident #" + residentIdLabel.getText() + "application?", isConfirmed -> {
                 if (isConfirmed) updateResidentStatus(REJECTED);
             });
         });
-
-        buttonContainer.getChildren().addAll(verify, reject);
+        setButtonState(reject, RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole()), REJECT);
+        buttonContainer.getChildren().add(reject);
     }
 
     private void setupViewButton() {
@@ -182,5 +196,11 @@ public class ResidentApplicationRowController extends BaseRowController<Resident
             }
         };
         new Thread(task).start();
+    }
+
+    private void setButtonState(Button button, List<RolePermission.Action> allowedActions, RolePermission.Action action) {
+        if (!allowedActions.contains(action)) {
+            button.setDisable(true);
+        }
     }
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.NavigationType.*;
 import static com.econnect.barangaymanagementapp.enumeration.type.RoleType.*;
-import static com.econnect.barangaymanagementapp.util.RolePermission.RequestAction.*;
+import static com.econnect.barangaymanagementapp.util.RolePermission.Action.*;
 
 public class RolePermission {
     private static final Map<DepartmentType, Map<RoleType, List<NavigationType>>> roleNavigationPermissions = Map.of(
@@ -27,30 +27,40 @@ public class RolePermission {
             )
     );
 
-    private static final Map<TableActions, Map<RoleType, List<RequestAction>>> roleActionPermission = Map.of(
+    private static final Map<TableActions, Map<RoleType, List<Action>>> roleActionPermission = Map.of(
             TableActions.REQUEST, Map.of(
                     ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
                     SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
                     ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
                     DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE)
+            ),
+            TableActions.RESIDENT, Map.of(
+                    ADMIN, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
+                    SECRETARY, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
+                    ADMINISTRATIVE_CLERK, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
+                    DOCUMENT_CLERK, List.of()
             )
     );
+
 
     public static List<NavigationType> getNavigationByRole(DepartmentType departmentType, RoleType roleType) {
         return roleNavigationPermissions.get(departmentType).get(roleType);
     }
 
-    public static List<RequestAction> getActionByRole(TableActions tableActions, RoleType roleType) {
+    public static List<Action> getActionByRole(TableActions tableActions, RoleType roleType) {
         return roleActionPermission.get(tableActions).get(roleType);
     }
 
-    public enum RequestAction {
+    public enum Action {
         APPROVE,
         CANCEL,
         REJECT,
         RELEASE,
         COMPLETE,
-        RESTORE
+        RESTORE,
+        SUSPEND,
+        DELETE,
+        VERIFY
     }
 
     public enum TableActions {
