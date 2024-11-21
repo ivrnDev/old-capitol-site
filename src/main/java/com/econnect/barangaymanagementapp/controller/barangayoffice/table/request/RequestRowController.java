@@ -459,7 +459,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private void setButtonState(Button button, List<RolePermission.RequestAction> allowedActions, RolePermission.RequestAction action) {
         if (!allowedActions.contains(action)) {
             button.setDisable(true);
-            button.setVisible(false);
+//            button.setVisible(false);
 //            button.setStyle("-fx-opacity: 0.5;"); // Optional: Style to indicate the button is disabled
         }
     }
