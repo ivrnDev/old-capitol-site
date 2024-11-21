@@ -35,9 +35,9 @@ public class RolePermission {
                     DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE)
             ),
             TableActions.RESIDENT, Map.of(
-                    ADMIN, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
-                    SECRETARY, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
-                    ADMINISTRATIVE_CLERK, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT),
+                    ADMIN, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE),
+                    SECRETARY, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE),
+                    ADMINISTRATIVE_CLERK, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE),
                     DOCUMENT_CLERK, List.of()
             )
     );
@@ -60,7 +60,8 @@ public class RolePermission {
         RESTORE,
         SUSPEND,
         DELETE,
-        VERIFY
+        VERIFY,
+        CREATE,
     }
 
     public enum TableActions {

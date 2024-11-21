@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.barangayoffice;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentApplicationTableController;
 import com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident.ResidentTableController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -9,6 +10,8 @@ import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
+import com.econnect.barangaymanagementapp.util.RolePermission;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -49,6 +52,7 @@ public class ResidentController {
     private final SearchService<Resident> searchService;
     private final LiveReloadUtils liveReloadUtils;
     private final DependencyInjector dependencyInjector;
+    private Employee loggedEmployee;
 
     private List<Resident> allResidents;
     private List<Resident> allPendingResidents;
@@ -63,6 +67,7 @@ public class ResidentController {
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.searchService = dependencyInjector.getResidentSearchService();
         this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
+        this.loggedEmployee = UserSession.getInstance().getCurrentEmployee();
     }
 
     public void initialize() {
@@ -73,6 +78,7 @@ public class ResidentController {
         populateResidentApplicationRows();
         setupListener();
         initializeSSEListener();
+        triggerAddResidentPermission();
     }
 
     private void loadResidentTable() {
@@ -215,6 +221,15 @@ public class ResidentController {
 
     private void showAddResident() {
         modalUtils.customizeModal(FXMLPath.ADD_RESIDENT);
+    }
+
+    private void triggerAddResidentPermission() {
+        List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
+        if (!allowedActions.contains(RolePermission.Action.CREATE)) {
+            addResidentBtn.setDisable(true);
+        } else {
+            addResidentBtn.setDisable(false);
+        }
     }
 
     private void initializeSSEListener() {
