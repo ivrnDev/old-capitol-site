@@ -49,7 +49,7 @@ public class RequestRowController extends BaseRowController<Request> {
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
     private RoleType roleType;
-    private List<RolePermission.RequestAction> allowedActions;
+    private List<RolePermission.Action> allowedActions;
     @Getter
     private String requestId;
     @Getter
@@ -220,7 +220,7 @@ public class RequestRowController extends BaseRowController<Request> {
                     }
             );
         });
-        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
 
         buttonContainer.getChildren().add(approve);
     }
@@ -238,7 +238,7 @@ public class RequestRowController extends BaseRowController<Request> {
                     }
             );
         });
-        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
         buttonContainer.getChildren().add(approve);
     }
 
@@ -249,7 +249,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(approve, allowedActions, RolePermission.RequestAction.APPROVE);
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
         buttonContainer.getChildren().add(approve);
     }
 
@@ -282,7 +282,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(release, allowedActions, RolePermission.RequestAction.RELEASE);
+        setButtonState(release, allowedActions, RolePermission.Action.RELEASE);
         buttonContainer.getChildren().add(release);
     }
 
@@ -320,7 +320,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(complete, allowedActions, RolePermission.RequestAction.COMPLETE);
+        setButtonState(complete, allowedActions, RolePermission.Action.COMPLETE);
 
         buttonContainer.getChildren().add(complete);
     }
@@ -332,7 +332,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(restore, allowedActions, RolePermission.RequestAction.RESTORE);
+        setButtonState(restore, allowedActions, RolePermission.Action.RESTORE);
 
         buttonContainer.getChildren().add(restore);
     }
@@ -344,7 +344,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(reject, allowedActions, RolePermission.RequestAction.REJECT);
+        setButtonState(reject, allowedActions, RolePermission.Action.REJECT);
         buttonContainer.getChildren().add(reject);
     }
 
@@ -355,7 +355,7 @@ public class RequestRowController extends BaseRowController<Request> {
             });
         });
 
-        setButtonState(cancel, allowedActions, RolePermission.RequestAction.CANCEL);
+        setButtonState(cancel, allowedActions, RolePermission.Action.CANCEL);
         buttonContainer.getChildren().add(cancel);
     }
 
@@ -456,7 +456,7 @@ public class RequestRowController extends BaseRowController<Request> {
         new Thread(task).start();
     }
 
-    private void setButtonState(Button button, List<RolePermission.RequestAction> allowedActions, RolePermission.RequestAction action) {
+    private void setButtonState(Button button, List<RolePermission.Action> allowedActions, RolePermission.Action action) {
         if (!allowedActions.contains(action)) {
             button.setDisable(true);
 //            button.setVisible(false);
