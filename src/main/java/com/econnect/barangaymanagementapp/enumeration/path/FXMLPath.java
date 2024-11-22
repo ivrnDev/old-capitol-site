@@ -20,6 +20,7 @@ public enum FXMLPath {
     REQUEST_TABLE("view/barangayoffice/table/request/request-table.fxml"),
     REQUEST_ROW("view/barangayoffice/table/request/request-row.fxml"),
 
+
     RESOURCE_ERROR_MODAL("view/component/modal/resource-error.fxml"),
     DEFAULT_PROFILE("images/default-profile.png"),
     DEFAULT_DOCUMENT("icon/document-icon.png"),
@@ -47,8 +48,17 @@ public enum FXMLPath {
     TOOL_AND_MATERIALS_FORM("view/barangayoffice/modal/tools-and-materials-form.fxml"),
     ASSISTANCE_FORM("view/barangayoffice/modal/assistance-form.fxml"),
     COMPLAINT_FORM("view/barangayoffice/modal/complaint-form.fxml"),
-    HEALTH_FORM("view/barangayoffice/modal/health-appointment-form.fxml");
+    HEALTH_FORM("view/barangayoffice/modal/health-appointment-form.fxml"),
 
+
+    // Utilities
+    UTIL_REQUEST_TABLE("view/utilitydepartment/table/request/request-table.fxml"),
+    UTIL_REQUEST_ROW("view/utilitydepartment/table/request/request-row.fxml"),
+
+    INVENTORY_TABLE("view/utilitydepartment/table/inventory/inventory-table.fxml"),
+    INVENTORY_ROW("view/utilitydepartment/table/inventory/inventory-row.fxml"),
+
+    ;
 
     private final String fxmlPath;
 
