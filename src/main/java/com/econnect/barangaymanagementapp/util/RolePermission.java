@@ -23,7 +23,10 @@ public class RolePermission {
                     EVENT_COORDINATOR, List.of(DASHBOARD)
             ),
             DepartmentType.HUMAN_RESOURCES, Map.of(
-                    HR_FRONT_DESK, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES)
+                    HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES)
+            ),
+            DepartmentType.PUBLIC_UTILITIES_DEPARTMENT, Map.of(
+                    ADMIN, List.of(DASHBOARD, ANALYTICS, REQUESTS, INVENTORY)
             )
     );
 
@@ -67,7 +70,9 @@ public class RolePermission {
     public enum TableActions {
         EMPLOYEE,
         RESIDENT,
-        REQUEST;
+        REQUEST,
+        INVENTORY,
+        UTILS_REQUEST
     }
 }
 

@@ -11,7 +11,7 @@ public enum DepartmentType {
     HUMAN_RESOURCES(
             "Human Resources",
             "view/humanresources/dashboard.fxml",
-            List.of(HR_FRONT_DESK)),
+            List.of(HR_MANAGER)),
     BARANGAY_OFFICE(
             "Barangay Office",
             "view/barangayoffice/dashboard.fxml",
@@ -19,7 +19,12 @@ public enum DepartmentType {
     HEALTH_DEPARTMENT(
             "Health Department",
             "",
-            List.of(GENERAL_DOCTOR, DENTAL, MIDWIFE, DNS, BHW, HEALTH_COMMITTEE_HEAD));
+            List.of(GENERAL_DOCTOR, DENTAL, MIDWIFE, DNS, BHW, HEALTH_COMMITTEE_HEAD)),
+    PUBLIC_UTILITIES_DEPARTMENT(
+            "Public Utilities Department",
+            "",
+            List.of(UTILITY_HEAD, DELIVERY_ASSISTANT)),
+    ;
 
     @Getter
     private final String name;

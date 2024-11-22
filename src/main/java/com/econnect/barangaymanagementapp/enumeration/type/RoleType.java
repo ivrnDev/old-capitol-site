@@ -4,8 +4,7 @@ public enum RoleType {
     NONE("None"),
     ADMIN("Admin"),
     //Human Resource Department
-//    HR_MANAGER("HR Manager"), //Managing the HR Department
-    HR_FRONT_DESK("HR Front Desk"), //Receptionist
+    HR_MANAGER("HR Manager"), //Managing the HR Department
 
     //Barangay Office Department
     ADMINISTRATIVE_CLERK("Administrative Clerk"),
@@ -15,9 +14,6 @@ public enum RoleType {
     DOCUMENT_CLERK("Document Clerk"),
     SECRETARY("Secretary"),
 
-    //Finance Department
-    TREASURER("Treasurer"),
-
     //Health Department
     GENERAL_DOCTOR("General Doctor"),
     DENTAL("Dental"),
@@ -25,7 +21,10 @@ public enum RoleType {
     DNS("Director of Nursing Services"),
     BHW("Barangay Health Worker"),
     HEALTH_COMMITTEE_HEAD("Head of Health Committee"),
-    ;
+
+    //Public Utilities Department
+    UTILITY_HEAD("Utility Head"),
+    DELIVERY_ASSISTANT("Delivery Assistant");
 
     private final String name;
 
