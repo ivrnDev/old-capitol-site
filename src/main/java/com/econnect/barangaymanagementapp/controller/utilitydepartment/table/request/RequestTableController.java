@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.utilitydepartment.table;
+package com.econnect.barangaymanagementapp.controller.utilitydepartment.table.request;
 
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseTableController;
 import com.econnect.barangaymanagementapp.domain.Request;

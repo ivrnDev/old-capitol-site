@@ -8,7 +8,7 @@
 <HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row"
       stylesheets="@../../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.econnect.barangaymanagementapp.controller.utilitydepartment.table.RequestRowController">
+      fx:controller="com.econnect.barangaymanagementapp.controller.utilitydepartment.table.request.RequestRowController">
     <children>
         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0">
             <children>

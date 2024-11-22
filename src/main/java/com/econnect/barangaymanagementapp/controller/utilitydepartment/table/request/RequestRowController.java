@@ -1,4 +1,4 @@
-package com.econnect.barangaymanagementapp.controller.utilitydepartment.table;
+package com.econnect.barangaymanagementapp.controller.utilitydepartment.table.request;
 
 import com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view.*;
 import com.econnect.barangaymanagementapp.controller.shared.base.BaseRowController;
