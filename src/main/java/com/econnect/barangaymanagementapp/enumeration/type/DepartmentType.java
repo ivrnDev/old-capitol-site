@@ -21,8 +21,8 @@ public enum DepartmentType {
             "",
             List.of(GENERAL_DOCTOR, DENTAL, MIDWIFE, DNS, BHW, HEALTH_COMMITTEE_HEAD)),
     PUBLIC_UTILITIES_DEPARTMENT(
-            "Public Utilities Department",
-            "",
+            "Utility Department",
+            "view/utilitydepartment/dashboard.fxml",
             List.of(UTILITY_HEAD, DELIVERY_ASSISTANT)),
     ;
 
