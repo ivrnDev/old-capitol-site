@@ -1,0 +1,47 @@
+.id {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.id-header {
+    -fx-background-image: url("../images/id/id-header.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+}
+
+.body-background {
+    -fx-background-image: url("../images/id/body-background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+}
+
+.primary-background {
+    -fx-background-color: white;
+}
+
+.secondary-background {
+    -fx-background-color: #004ad2;
+}
+
+.primary-card {
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-background-color: white;
+}
+
+.secondary-card {
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-background-color: #0051ea;
+}
+
+.bordered-text {
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+
+
+
+
+

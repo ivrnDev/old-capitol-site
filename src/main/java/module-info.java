@@ -33,28 +33,13 @@ module com.econnect.barangaymanagementapp {
 
     opens com.econnect.barangaymanagementapp.controller to javafx.fxml;
     opens com.econnect.barangaymanagementapp.controller.component to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.component.modal to javafx.fxml;
 
-    //Barangay Office
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.resident to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.table.request to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.barangayoffice.modal.view to javafx.fxml;
-    //Human Resources
-    opens com.econnect.barangaymanagementapp.controller.humanresources to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.table.resident to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.table.request to javafx.fxml;
 
-    //Utility Department
-    opens com.econnect.barangaymanagementapp.controller.utilitydepartment to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.utilitydepartment.table.inventory to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.utilitydepartment.table.request to javafx.fxml;
-
-
-    //Shared
-    opens com.econnect.barangaymanagementapp.controller.shared.modal to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.shared.table.employee to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.shared.table.application to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.shared to javafx.fxml;
-    opens com.econnect.barangaymanagementapp.controller.shared.base to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.table.employee to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.base to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.detail to javafx.fxml;
+    opens com.econnect.barangaymanagementapp.controller.form to javafx.fxml;
 
 }

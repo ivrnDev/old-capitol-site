@@ -5,13 +5,13 @@ import com.econnect.barangaymanagementapp.enumeration.type.SoundType;
 import static com.econnect.barangaymanagementapp.enumeration.modal.ModalType.*;
 
 public enum Modal {
-    CLASSIC("view/component/Modal/classic.fxml", SoundType.DEFAULT, MODAL, "default-style", null),
-    DEFAULT("view/component/Modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "default-button"),
-    DEFAULT_APPROVE("view/component/Modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "approve-button"),
-    DEFAULT_REJECT("view/component/Modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "reject-button"),
-    SUCCESS("view/component/Modal/notification.fxml", SoundType.SUCCESS, NOTIFICATION, "success-style", null, "#026917", "Icon/success.png"),
-    WARNING("view/component/Modal/notification.fxml", SoundType.WARNING, NOTIFICATION, "warning-style", null, "#9e9600", "Icon/warning.png"),
-    ERROR("view/component/Modal/notification.fxml", SoundType.ERROR, NOTIFICATION, "error-style", null, "#b30707", "Icon/error.png");
+    CLASSIC("view/modal/classic.fxml", SoundType.DEFAULT, MODAL, "default-style", null),
+    DEFAULT("view/modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "default-button"),
+    DEFAULT_APPROVE("view/modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "approve-button"),
+    DEFAULT_REJECT("view/modal/default.fxml", SoundType.DEFAULT, MODAL, "default-style", "reject-button"),
+    SUCCESS("view/modal/notification.fxml", SoundType.SUCCESS, NOTIFICATION, "success-style", null, "#026917", "Icon/success.png"),
+    WARNING("view/modal/notification.fxml", SoundType.WARNING, NOTIFICATION, "warning-style", null, "#9e9600", "Icon/warning.png"),
+    ERROR("view/modal/notification.fxml", SoundType.ERROR, NOTIFICATION, "error-style", null, "#b30707", "Icon/error.png");
 
     private final String fxmlPath;
     private final SoundType sound;

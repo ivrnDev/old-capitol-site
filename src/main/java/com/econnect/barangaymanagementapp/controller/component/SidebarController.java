@@ -81,7 +81,7 @@ public class SidebarController {
         navButton.getChildren().addAll(navIcon, navText);
         navButton.setOnMouseClicked(_ -> {
             navigationState.setActiveItem(item);
-            sceneManager.switchScene("view/" + currentDepartment.getDirectoryName() + "/" + item.getLowerCaseName() + ".fxml");
+            sceneManager.switchScene("view" + "/" + item.getLowerCaseName() + ".fxml");
         });
         return navButton;
     }

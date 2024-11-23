@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="680.0" prefWidth="964.0" styleClass="panel"
+            stylesheets="@../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.econnect.barangaymanagementapp.controller.detail.ViewIdController">
+    <children>
+        <Text fill="#414141" layoutX="32.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BARANGAY ID">
+            <font>
+                <Font name="Arial Bold" size="25.0"/>
+            </font>
+        </Text>
+        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="1082.0" layoutY="9.0" pickOnBounds="true"
+                   preserveRatio="true" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="9.0">
+            <image>
+                <Image url="@../../icon/close.png"/>
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </ImageView>
+        <ScrollPane fitToWidth="true" layoutX="11.0" layoutY="57.0" prefHeight="556.0" prefWidth="942.0"
+                    styleClass="root-pane" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="12.0">
+            <content>
+                <VBox spacing="40.0" stylesheets="@../../style/barangay-id.css">
+                    <children>
+                        <HBox layoutX="20.0" layoutY="20.0" prefHeight="535.0" prefWidth="905.0" spacing="40.0"
+                              styleClass="id">
+                            <children>
+                                <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER" prefHeight="108.0" prefWidth="883.0" spacing="240.0"
+                                              styleClass="id-header">
+                                            <children>
+                                                <ImageView fitHeight="76.0" fitWidth="100.0" pickOnBounds="true"
+                                                           preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../images/quezon-city-logo.png"/>
+                                                    </image>
+                                                </ImageView>
+                                                <VBox alignment="CENTER">
+                                                    <children>
+                                                        <Label prefHeight="17.0" text="Republic of the Philippines">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="14.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label layoutX="10.0" layoutY="10.0" prefHeight="17.0"
+                                                               prefWidth="210.0" text="OLD CAPITOL SITE">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="20.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label layoutX="37.0" layoutY="39.0" prefHeight="17.0"
+                                                               text="Quezon City">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="14.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label layoutX="63.0" layoutY="48.0" prefHeight="17.0"
+                                                               prefWidth="195.0"
+                                                               text="Masaya Interior corner Matiwasay St.">
+                                                            <font>
+                                                                <Font name="Arial" size="11.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label layoutX="10.0" layoutY="61.0" prefHeight="17.0"
+                                                               text="oldcapitolsftmercado@gmail.com">
+                                                            <font>
+                                                                <Font name="Arial" size="11.0"/>
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </VBox>
+                                                <ImageView fitHeight="80.0" fitWidth="83.0" pickOnBounds="true"
+                                                           preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../../images/barangay-logo.png"/>
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="2.0" top="2.0"/>
+                                            </padding>
+                                        </HBox>
+                                        <HBox opacity="0.8" spacing="20.0" styleClass="body-background"
+                                              VBox.vgrow="ALWAYS">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                            </padding>
+                                            <children>
+                                                <VBox spacing="15.0">
+                                                    <children>
+                                                        <VBox maxHeight="310.0" prefWidth="611.0" spacing="15.0"
+                                                              styleClass="primary-background" VBox.vgrow="ALWAYS">
+                                                            <children>
+                                                                <VBox VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="fullNameText"
+                                                                               text="VILLAMORA, IVAN REN MANGUIAT">
+                                                                            <font>
+                                                                                <Font name="Arial Bold" size="23.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label text="Lastname, Firstname, Middle Name">
+                                                                            <font>
+                                                                                <Font name="Arial Italic" size="13.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <HBox spacing="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="addressText"
+                                                                                       text="38 MASAYA STREET,">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label fx:id="addressExtension"
+                                                                                       layoutX="10.0" layoutY="10.0"
+                                                                                       text="OLD CAPITOL SITE">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                        <Label fx:id="addressExtension1"
+                                                                               text="DILIMAN QUEZON CITY 1101">
+                                                                            <font>
+                                                                                <Font name="Arial Bold" size="21.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label text="Address">
+                                                                            <font>
+                                                                                <Font name="Arial Italic" size="13.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <HBox spacing="55.0" VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="genderText"
+                                                                                       prefHeight="40.0" text="FEMALE">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Gender">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="10.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="birthdateText"
+                                                                                       prefHeight="40.0"
+                                                                                       prefWidth="106.0"
+                                                                                       text="04/24/2002">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Date of Birth">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="97.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="weightText"
+                                                                                       prefHeight="40.0" text="20 KG">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Weight(kg)">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="184.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="heightText"
+                                                                                       prefHeight="40.0" text="2'3 FT">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Height(ft)">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox layoutX="25.0" layoutY="164.0" spacing="50.0"
+                                                                      VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="civilStatusText"
+                                                                                       text="SINGLE">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Status">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="10.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="residencyStatusText"
+                                                                                       text="OWNER">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="House Owned/Shared/Renter">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="97.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="expirationDateText"
+                                                                                       text="6/12/2005">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Expiration Date">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="15.0" left="15.0" right="15.0"
+                                                                        top="15.0"/>
+                                                            </padding>
+                                                        </VBox>
+                                                        <HBox prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <VBox alignment="CENTER" prefHeight="200.0"
+                                                                      prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="HON. NITEZERI P. MERCADO"
+                                                                               textFill="WHITE">
+                                                                            <font>
+                                                                                <Font name="Arial" size="18.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label layoutX="57.0" layoutY="50.0"
+                                                                               text="Barangay Captain" textFill="WHITE">
+                                                                            <font>
+                                                                                <Font name="Arial Italic" size="15.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <HBox alignment="BOTTOM_CENTER" layoutX="10.0"
+                                                                      layoutY="10.0" prefHeight="100.0"
+                                                                      prefWidth="266.0" styleClass="primary-background">
+                                                                    <padding>
+                                                                        <Insets bottom="10.0"/>
+                                                                    </padding>
+                                                                    <children>
+                                                                        <Label text="Holder's Signature">
+                                                                            <font>
+                                                                                <Font name="Arial" size="13.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                                <VBox layoutX="20.0" layoutY="20.0" spacing="15.0" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <HBox styleClass="primary-background" VBox.vgrow="ALWAYS">
+                                                            <children>
+                                                                <HBox fx:id="profileContainer" alignment="CENTER"
+                                                                      maxWidth="-Infinity" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <ImageView fx:id="profilePicture"
+                                                                                   fitHeight="254.0" fitWidth="258.0"
+                                                                                   pickOnBounds="true"
+                                                                                   HBox.hgrow="ALWAYS">
+                                                                            <image>
+                                                                                <Image url="@../../images/default-profile.png"/>
+                                                                            </image>
+                                                                        </ImageView>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </HBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0"
+                                                              styleClass="secondary-bacground">
+                                                            <children>
+                                                                <VBox alignment="CENTER" spacing="2.0"
+                                                                      VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="RESIDENT" textFill="WHITE">
+                                                                            <font>
+                                                                                <Font name="Arial Italic" size="18.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label layoutX="78.0" layoutY="36.0"
+                                                                               text="IDENTIFICATION" textFill="WHITE">
+                                                                            <font>
+                                                                                <Font name="Arial" size="18.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label text="CARD NUMBER" textFill="WHITE">
+                                                                            <font>
+                                                                                <Font name="Arial" size="18.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <HBox alignment="CENTER" styleClass="primary-background"
+                                                                      VBox.vgrow="ALWAYS">
+                                                                    <children>
+                                                                        <TextField fx:id="residentIdInput"
+                                                                                   alignment="CENTER" editable="false"
+                                                                                   prefHeight="33.0" prefWidth="211.0">
+                                                                            <font>
+                                                                                <Font name="Arial Black" size="18.0"/>
+                                                                            </font>
+                                                                        </TextField>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox opacity="0.8" prefHeight="535.0" prefWidth="905.0" spacing="40.0" VBox.vgrow="ALWAYS">
+                            <styleClass>
+                                <String fx:value="id"/>
+                                <String fx:value="body-background"/>
+                            </styleClass>
+                            <children>
+                                <AnchorPane HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <ImageView fitHeight="530.0" fitWidth="694.0" layoutX="176.0" layoutY="1.0"
+                                                   opacity="0.5" pickOnBounds="true" preserveRatio="true"
+                                                   AnchorPane.leftAnchor="176.0"
+                                                   AnchorPane.rightAnchor="175.727294921875">
+                                            <image>
+                                                <Image url="@../../images/barangay-logo.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <HBox prefHeight="530.0" prefWidth="905.0" spacing="20.0">
+                                            <children>
+                                                <VBox prefHeight="490.0" prefWidth="295.0" spacing="30.0">
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="411.0" prefWidth="304.0"
+                                                              spacing="15.0" styleClass="secondary-card"
+                                                              VBox.vgrow="ALWAYS">
+                                                            <children>
+                                                                <Label text="QC EMERGENCY" textFill="WHITE">
+                                                                    <font>
+                                                                        <Font name="Arial" size="24.0"/>
+                                                                    </font>
+                                                                </Label>
+                                                                <HBox alignment="CENTER"
+                                                                      styleClass="primary-background">
+                                                                    <children>
+                                                                        <ImageView fitHeight="212.0" fitWidth="323.0"
+                                                                                   pickOnBounds="true"
+                                                                                   preserveRatio="true">
+                                                                            <image>
+                                                                                <Image url="@../../images/sample-qr.png"/>
+                                                                            </image>
+                                                                        </ImageView>
+                                                                    </children>
+                                                                </HBox>
+                                                                <Label layoutX="59.0" layoutY="47.0" text="SCAN ME"
+                                                                       textFill="WHITE">
+                                                                    <font>
+                                                                        <Font name="Arial" size="35.0"/>
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets left="30.0" right="30.0"/>
+                                                            </padding>
+                                                        </VBox>
+                                                        <VBox alignment="BOTTOM_CENTER" prefHeight="133.0"
+                                                              prefWidth="295.0" styleClass="primary-card">
+                                                            <children>
+                                                                <Label text="Signature of Barangay Chairman">
+                                                                    <font>
+                                                                        <Font name="Arial" size="18.0"/>
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0" right="10.0"
+                                                                        top="10.0"/>
+                                                            </padding>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                                <VBox layoutX="30.0" layoutY="30.0" maxHeight="370.0"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <VBox alignment="CENTER_LEFT" prefHeight="347.0"
+                                                              prefWidth="550.0" VBox.vgrow="ALWAYS">
+                                                            <children>
+                                                                <Label prefWidth="458.0"
+                                                                       text="This is to certify that the person whose name, photograph and signature appear herein is a bonafide resident of Barangay Old Capitol Site, Quezon City."
+                                                                       textFill="WHITE" wrapText="true">
+                                                                    <font>
+                                                                        <Font name="Arial Italic" size="24.0"/>
+                                                                    </font>
+                                                                    <effect>
+                                                                        <DropShadow blurType="ONE_PASS_BOX"
+                                                                                    height="18.07" radius="8.535"
+                                                                                    spread="0.7" width="18.07"/>
+                                                                    </effect>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="378.0" prefWidth="550.0"
+                                                              spacing="22.0" styleClass="primary-card">
+                                                            <children>
+                                                                <VBox>
+                                                                    <children>
+                                                                        <Label text="Contact Person in case of Emergency:"
+                                                                               textAlignment="CENTER"
+                                                                               textFill="#e40000">
+                                                                            <font>
+                                                                                <Font name="Arial Bold" size="27.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox>
+                                                                    <children>
+                                                                        <Label fx:id="emergencyFullNameText"
+                                                                               text="VILLAMORA, IVAN REN MANGUIAT">
+                                                                            <font>
+                                                                                <Font name="Arial Bold" size="23.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <Label text="Lastname, Firstname, Middle Name">
+                                                                            <font>
+                                                                                <Font name="Arial Italic" size="13.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                    </children>
+                                                                </VBox>
+                                                                <HBox spacing="50.0">
+                                                                    <children>
+                                                                        <VBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="emergencyContactText"
+                                                                                       text="09123456789">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Contact Number">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <VBox alignment="CENTER" layoutX="10.0"
+                                                                              layoutY="10.0">
+                                                                            <children>
+                                                                                <Label fx:id="emergencyRelationshipText"
+                                                                                       text="FATHER">
+                                                                                    <font>
+                                                                                        <Font name="Arial Bold"
+                                                                                              size="21.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <Label text="Relationship">
+                                                                                    <font>
+                                                                                        <Font name="Arial Italic"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="20.0" left="20.0" right="20.0"
+                                                                        top="20.0"/>
+                                                            </padding>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                            </padding>
+                                        </HBox>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

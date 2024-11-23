@@ -10,11 +10,11 @@ public enum DepartmentType {
     NONE("None", "", List.of()),
     HUMAN_RESOURCES(
             "Human Resources",
-            "view/humanresources/dashboard.fxml",
+            "view/dashboard.fxml",
             List.of(HR_MANAGER)),
     BARANGAY_OFFICE(
             "Barangay Office",
-            "view/barangayoffice/dashboard.fxml",
+            "view/dashboard.fxml",
             List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, FINANCIAL_CLERK, EVENT_COORDINATOR)),
     HEALTH_DEPARTMENT(
             "Health Department",
@@ -22,7 +22,7 @@ public enum DepartmentType {
             List.of(GENERAL_DOCTOR, DENTAL, MIDWIFE, DNS, BHW, HEALTH_COMMITTEE_HEAD)),
     PUBLIC_UTILITIES_DEPARTMENT(
             "Utility Department",
-            "view/utilitydepartment/dashboard.fxml",
+            "view/dashboard.fxml",
             List.of(UTILITY_HEAD, DELIVERY_ASSISTANT)),
     ;
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox alignment="CENTER" minWidth="800.0" prefHeight="69.0" spacing="15.0" styleClass="resource-error"
+      stylesheets="@../../style/component/modal.css" xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="39.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../icon/warning.png"/>
+            </image>
+        </ImageView>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="There is no internet connection. Please try again"
+              wrappingWidth="400.0">
+            <font>
+                <Font name="Arial" size="16.0"/>
+            </font>
+        </Text>
+    </children>
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+</HBox>
