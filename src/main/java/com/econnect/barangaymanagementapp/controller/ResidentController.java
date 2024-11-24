@@ -61,6 +61,7 @@ public class ResidentController {
     private List<Resident> allResidents;
     private List<Resident> allPendingResidents;
     private StackPane loadingIndicator;
+    private boolean showApplication = true;
 
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
@@ -76,13 +77,13 @@ public class ResidentController {
 
     public void initialize() {
         resetLiveReload();
+        triggerPermission();
         loadResidentTable();
         loadResidentApplicationTable();
         populateResidentRows();
         populateResidentApplicationRows();
         setupListener();
         initializeSSEListener();
-        triggerPermission();
     }
 
     private void loadResidentTable() {
@@ -90,7 +91,11 @@ public class ResidentController {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentTable = loader.load();
             residentTableController = loader.getController();
-            residentListContent.getChildren().add(residentTable);
+            if (showApplication) {
+                residentListContent.getChildren().add(residentTable);
+            } else {
+                contentPane.getChildren().add(residentTable);
+            }
         } catch (IOException e) {
             System.err.println("Error loading employee table: " + e.getMessage());
         }
@@ -207,7 +212,11 @@ public class ResidentController {
 
     public void addResidentLoadingIndicator() {
         loadingIndicator = LoadingIndicator.createLoadingIndicator(residentListContent.getWidth(), residentListContent.getHeight());
-        residentListContent.getChildren().add(loadingIndicator);
+        if (showApplication) {
+            residentListContent.getChildren().add(loadingIndicator);
+        } else {
+            contentPane.getChildren().add(loadingIndicator);
+        }
     }
 
     public void addResidentApplicationLoadingIndicator() {
@@ -231,10 +240,13 @@ public class ResidentController {
         List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
         if (!allowedActions.contains(RolePermission.Action.CREATE)) addResidentBtn.setDisable(true);
         if (!allowedActions.contains(RolePermission.Action.APPLICATION)) {
+            showApplication = false;
             applicationHeader.setManaged(false);
             applicationHeader.setVisible(false);
             residentApplicationContent.setVisible(false);
             residentApplicationContent.setManaged(false);
+            residentListContent.setManaged(false);
+            residentListContent.setVisible(true);
         }
     }
 
