@@ -17,6 +17,9 @@ public enum FXMLPath {
     REQUEST_TABLE("view/table/request/request-table.fxml"),
     REQUEST_ROW("view/table/request/request-row.fxml"),
 
+    INVENTORY_TABLE("view/table/inventory/inventory-table.fxml"),
+    INVENTORY_ROW("view/table/inventory/inventory-row.fxml"),
+
     DEFAULT_PROFILE("images/default-profile.png"),
     DEFAULT_DOCUMENT("icon/document-icon.png"),
 

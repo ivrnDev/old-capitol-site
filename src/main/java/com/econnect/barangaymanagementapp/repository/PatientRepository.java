@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PatientRepository extends BaseRepository<Patient> {
-    private final String apiKey = Config.getFirebaseUrl() + Firebase.HEALTH_PATIENT_ID.getPath();
+    private final String apiKey = Config.getFirebaseUrl() + Firebase.ACCOUNTS.getPath();
 
     public PatientRepository(DependencyInjector dependencyInjector) {
         super(dependencyInjector);

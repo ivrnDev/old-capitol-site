@@ -173,6 +173,28 @@ public class StatusType {
         }
     }
 
+    @Getter
+    public enum InventoryStatus {
+        PRIVATE("Private"),
+        PUBLIC("Public"),
+        DELETED("Deleted");
+
+        private String name;
+
+        InventoryStatus(String name) {
+            this.name = name;
+        }
+
+        public static InventoryStatus fromName(String name) {
+            for (InventoryStatus status : InventoryStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+    }
+
 
 }
 

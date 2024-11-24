@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -124,5 +125,12 @@ public class SearchService<T> {
                 || request.getCreatedAt() != null && DateFormatter.formatDateToLongStyle(request.getCreatedAt()).toLowerCase().contains(searchText)
                 || request.getCreatedAt() != null && DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()).toLowerCase().contains(searchText);
 
+    }
+
+    public Predicate<Inventory> createInventoryFilter(String searchText) {
+        return inventory -> inventory.getId().toLowerCase().contains(searchText)
+                || inventory.getItemName().toLowerCase().contains(searchText)
+                || inventory.getItemType().toLowerCase().contains(searchText)
+                || inventory.getStocks().toLowerCase().contains(searchText);
     }
 }

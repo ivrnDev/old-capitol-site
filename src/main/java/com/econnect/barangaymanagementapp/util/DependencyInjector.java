@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.domain.Employee;
+import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.repository.*;
@@ -33,6 +34,7 @@ public class DependencyInjector {
     private final SearchService<Employee> employeeSearchService;
     private final SearchService<Resident> residentSearchService;
     private final SearchService<Request> requestSearchService;
+    private final SearchService<Inventory> inventorySearchService;
     private final Validator validator;
     private final LiveReloadUtils liveReloadUtils;
     private final WebCam webCam;
@@ -48,6 +50,7 @@ public class DependencyInjector {
     private final ComplaintRepository complaintRepository;
     private final PatientRepository patientRepository;
     private final HealthAppointmentRepository healthAppointmentRepository;
+    private final InventoryRepository inventoryRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
@@ -59,6 +62,7 @@ public class DependencyInjector {
     private final ComplaintService complaintService;
     private final PatientService patientService;
     private final HealthAppointmentService healthAppointmentService;
+    private final InventoryService inventoryService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -80,7 +84,6 @@ public class DependencyInjector {
         this.uploadImageUtils = new UploadImageUtils(this);
         this.printUtils = new PrintUtils();
 
-
         this.accountRepository = new AccountRepository(this);
         this.employeeRepository = new EmployeeRepository(this);
         this.residentRepository = new ResidentRepository(this);
@@ -90,6 +93,7 @@ public class DependencyInjector {
         this.complaintRepository = new ComplaintRepository(this);
         this.patientRepository = new PatientRepository(this);
         this.healthAppointmentRepository = new HealthAppointmentRepository(this);
+        this.inventoryRepository = new InventoryRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
@@ -98,10 +102,12 @@ public class DependencyInjector {
         this.employeeSearchService = new SearchService<>();
         this.residentSearchService = new SearchService<>();
         this.requestSearchService = new SearchService<>();
+        this.inventorySearchService = new SearchService<>();
         this.barangayidService = new BarangayidService(this);
         this.cedulaService = new CedulaService(this);
         this.complaintService = new ComplaintService(this);
         this.patientService = new PatientService(this);
         this.healthAppointmentService = new HealthAppointmentService(this);
+        this.inventoryService = new InventoryService(this);
     }
 }
