@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -43,6 +44,9 @@ public class ResidentController {
     private TextField residentApplicationSearchField, residentListSearchField;
     @FXML
     public Button addResidentBtn;
+    @FXML
+    private AnchorPane applicationHeader;
+
 
     private final ResidentService residentService;
     private final ModalUtils modalUtils;
@@ -52,7 +56,7 @@ public class ResidentController {
     private final SearchService<Resident> searchService;
     private final LiveReloadUtils liveReloadUtils;
     private final DependencyInjector dependencyInjector;
-    private Employee loggedEmployee;
+    private final Employee loggedEmployee;
 
     private List<Resident> allResidents;
     private List<Resident> allPendingResidents;
@@ -78,7 +82,7 @@ public class ResidentController {
         populateResidentApplicationRows();
         setupListener();
         initializeSSEListener();
-        triggerAddResidentPermission();
+        triggerPermission();
     }
 
     private void loadResidentTable() {
@@ -223,12 +227,14 @@ public class ResidentController {
         modalUtils.customizeModal(FXMLPath.ADD_RESIDENT);
     }
 
-    private void triggerAddResidentPermission() {
+    private void triggerPermission() {
         List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
-        if (!allowedActions.contains(RolePermission.Action.CREATE)) {
-            addResidentBtn.setDisable(true);
-        } else {
-            addResidentBtn.setDisable(false);
+        if (!allowedActions.contains(RolePermission.Action.CREATE)) addResidentBtn.setDisable(true);
+        if (!allowedActions.contains(RolePermission.Action.APPLICATION)) {
+            applicationHeader.setManaged(false);
+            applicationHeader.setVisible(false);
+            residentApplicationContent.setVisible(false);
+            residentApplicationContent.setManaged(false);
         }
     }
 
