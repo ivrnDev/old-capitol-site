@@ -33,6 +33,7 @@ public enum FXMLPath {
 
     ADD_EMPLOYEE("view/form/add-employee.fxml"),
     ADD_RESIDENT("view/form/add-resident.fxml"),
+    ADD_ITEM("view/form/add-item.fxml"),
     SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     CERTIFICATE_FORM("view/form/certificate-form.fxml"),
     APPLY_WORK_FORM("view/form/apply-work-form.fxml"),

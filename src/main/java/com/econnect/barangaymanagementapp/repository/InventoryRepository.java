@@ -3,7 +3,6 @@ package com.econnect.barangaymanagementapp.repository;
 import com.econnect.barangaymanagementapp.config.Config;
 import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.enumeration.database.Firebase;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
@@ -55,7 +54,7 @@ public class InventoryRepository extends BaseRepository<Inventory> {
 //    }
 
     public void enableLiveReload(Consumer<String> handleDataUpdates) {
-        enableLiveReload(apiKey, handleDataUpdates, "CERTIFICATE:");
+        enableLiveReload(apiKey, handleDataUpdates, "INVENTORY:");
     }
 
 }

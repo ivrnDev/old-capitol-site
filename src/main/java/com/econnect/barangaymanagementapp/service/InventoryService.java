@@ -20,8 +20,8 @@ public class InventoryService {
     public Response createInventory(Inventory inventory) {
         int baseId = 1000;
         int countOfInventoriess = findCountOfInventory();
-        int autoIncrementId = countOfInventoriess > 0 ? baseId + countOfInventoriess : baseId;
-        inventory.setId(inventory.getId() + "-" + autoIncrementId);
+        Integer autoIncrementId = countOfInventoriess > 0 ? baseId + countOfInventoriess : baseId;
+        inventory.setId(autoIncrementId.toString());
         inventory.setCreatedAt(ZonedDateTime.now());
         inventory.setUpdatedAt(ZonedDateTime.now());
         return inventoryRepository.createInventory(inventory);

@@ -7,7 +7,7 @@ public enum Firestore {
     ANNOUNCEMENT("/announcement_images", "announcement_images"),
     RESUME("/3-Resume", "Resume"),
     NBI_CLEARANCE("/3-NBIClearance", "NBIClearance"),
-    SAMPLE("/sample", "sample");
+    ITEM("/Item", "Item");
     public final String path;
     public final String name;
 

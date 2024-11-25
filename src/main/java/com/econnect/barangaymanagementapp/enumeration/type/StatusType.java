@@ -175,8 +175,8 @@ public class StatusType {
 
     @Getter
     public enum InventoryStatus {
-        PRIVATE("Private"),
-        PUBLIC("Public"),
+        AVAILABLE("Available"),
+        UNAVAILABLE("Unavailable"),
         DELETED("Deleted");
 
         private String name;

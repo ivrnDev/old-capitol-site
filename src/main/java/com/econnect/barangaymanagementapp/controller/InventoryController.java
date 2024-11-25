@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -29,9 +30,10 @@ public class InventoryController {
 
     @FXML
     private VBox contentPane;
-
     @FXML
     private TextField searchField;
+    @FXML
+    private Button addItemButton;
 
     private final InventoryService inventoryService;
     private final ModalUtils modalUtils;
@@ -62,6 +64,7 @@ public class InventoryController {
             searchDelay.setOnFinished(_ -> performSearch());
             searchDelay.playFromStart();
         });
+        addItemButton.setOnMouseClicked(_ -> modalUtils.customizeModal(FXMLPath.ADD_ITEM));
     }
 
     private void loadInventoryTable() {
@@ -132,10 +135,5 @@ public class InventoryController {
 
     private void resetLiveReload() {
         liveReloadUtils.stopListeningToUpdates();
-    }
-
-    @FXML
-    private void showAddInventory() {
-        modalUtils.customizeModal(FXMLPath.ADD_EMPLOYEE);
     }
 }

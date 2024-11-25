@@ -2,6 +2,8 @@ package com.econnect.barangaymanagementapp.domain;
 
 
 import com.econnect.barangaymanagementapp.config.deserializer.GenericSerializer;
+import com.econnect.barangaymanagementapp.enumeration.type.ItemAvailability;
+import com.econnect.barangaymanagementapp.enumeration.type.Itemtype;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,7 +27,8 @@ public class Inventory extends BaseEntity {
     private String itemType;
     private String stocks;
     private String itemImageUrl;
-    private StatusType.InventoryStatus status;
+    private String status;
+    private String availability;
     private String stockLevel;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
