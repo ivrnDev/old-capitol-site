@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.controller.table.employee;
 
 
+import com.econnect.barangaymanagementapp.controller.EditAccountController;
 import com.econnect.barangaymanagementapp.controller.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.detail.ViewEmployeeApplicationController;
 import com.econnect.barangaymanagementapp.domain.Employee;
@@ -11,7 +12,6 @@ import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
 import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
-import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ButtonUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -41,18 +41,14 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     private final ModalUtils modalUtils;
     private final Stage parentStage;
     private final EmployeeService employeeService;
-    private final DependencyInjector dependencyInjector;
-    private final UserSession userSession;
     @Getter
     private String employeeId;
 
     public EmployeeRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
-        this.dependencyInjector = dependencyInjector;
         this.modalUtils = dependencyInjector.getModalUtils();
         this.parentStage = dependencyInjector.getStage();
         this.employeeService = dependencyInjector.getEmployeeService();
-        this.userSession = UserSession.getInstance();
     }
 
     public void initialize() {
@@ -102,28 +98,30 @@ public class EmployeeRowController extends BaseRowController<Employee> {
     }
 
     protected void setupButtonContainer() {
+        buttonContainer.getChildren().clear();
         setupViewButton();
-        String currentStatus = statusLabel.getText();
-//        if (!fromName(currentStatus).equals(ACTIVE)) {
-//            setupInactiveButton();
-//            return;
-//        }
-        setupActiveButton();
+        createEditButton();
+        createTerminateButton();
     }
 
-    private void setupActiveButton() {
-        Button updateBtn = ButtonUtils.createButton("Update", ButtonStyle.UPDATE, () -> {
-//            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Notify", "Would you like to send an email to this employee requesting them to submit their pending requirements?", isConfirmed -> {
-//                if (isConfirmed) updateEmployeeToUnderReview();
-//            });
-        });
-
+    private void createTerminateButton() {
         Button terminateBtn = ButtonUtils.createButton("Terminate", ButtonStyle.REJECT, () -> {
             modalUtils.showModal(Modal.DEFAULT_REJECT, "Terminate", "Are you sure you want to terminate employee" + employeeIdLabel.getText() + "?", isConfirmed -> {
                 if (isConfirmed) updateEmployeeStatus(TERMINATED);
             });
         });
-        buttonContainer.getChildren().addAll(updateBtn, terminateBtn);
+        buttonContainer.getChildren().add(terminateBtn);
+    }
+
+    private void createEditButton() {
+        Button editBtn = ButtonUtils.createButton("Edit", ButtonStyle.UPDATE, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.EDIT_ACCOUNT,
+                    EditAccountController.class,
+                    controller -> controller.setId(employeeIdLabel.getText())
+            );
+        });
+        buttonContainer.getChildren().add(editBtn);
     }
 
     private void setupViewButton() {

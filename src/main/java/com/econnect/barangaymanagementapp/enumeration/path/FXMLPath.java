@@ -34,7 +34,6 @@ public enum FXMLPath {
     ADD_EMPLOYEE("view/form/add-employee.fxml"),
     ADD_RESIDENT("view/form/add-resident.fxml"),
     ADD_ITEM("view/form/add-item.fxml"),
-    SETUP_ACCOUNT("view/shared/setup-account.fxml"),
     CERTIFICATE_FORM("view/form/certificate-form.fxml"),
     APPLY_WORK_FORM("view/form/apply-work-form.fxml"),
     ID_FORM("view/form/id-form.fxml"),
@@ -44,6 +43,8 @@ public enum FXMLPath {
     ASSISTANCE_FORM("view/form/assistance-form.fxml"),
     COMPLAINT_FORM("view/form/complaint-form.fxml"),
     HEALTH_FORM("view/form/health-appointment-form.fxml"),
+    SETUP_ACCOUNT("view/form/setup-account.fxml"),
+    EDIT_ACCOUNT("view/form/edit-account.fxml"),
     ;
 
     private final String fxmlPath;

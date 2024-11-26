@@ -29,6 +29,11 @@ public class EmployeeRepository extends BaseRepository<Employee> {
 
     }
 
+    public Response updateEmployeeBy(String id, Consumer<Employee> consumer) {
+        return updateBy(apiKey + "/", id, new TypeReference<>() {
+        }, consumer);
+    }
+
     public Boolean deleteEmployeeById(String id) {
         return deleteById(apiKey, id);
     }

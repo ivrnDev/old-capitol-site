@@ -74,6 +74,13 @@ public class EmployeeService {
         return updateEmployeeByStatus(employeeId, EVALUATION);
     }
 
+    public Response updateEmployeeDepartmentAndRole(String employeeId, DepartmentType department, RoleType role) {
+        return employeeRepository.updateEmployeeBy(employeeId, employee -> {
+            employee.setDepartment(department);
+            employee.setRole(role);
+        });
+    }
+
     public Response activateEmployee(String employeeId, DepartmentType department, RoleType role) {
         Optional<Employee> response = findEmployeeById(employeeId);
         if (response.isPresent()) {

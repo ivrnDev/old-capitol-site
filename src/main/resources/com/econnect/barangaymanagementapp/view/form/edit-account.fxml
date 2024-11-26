@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootContainer" prefHeight="248.0" prefWidth="501.0" styleClass="panel"
+            stylesheets="@../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.econnect.barangaymanagementapp.controller.EditAccountController">
+    <children>
+        <Text fill="#414141" layoutX="20.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Account">
+            <font>
+                <Font name="Arial" size="24.0"/>
+            </font>
+        </Text>
+        <VBox layoutX="76.0" layoutY="87.0" prefWidth="349.0">
+            <children>
+                <HBox alignment="CENTER" prefWidth="269.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Department" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                            <styleClass>
+                                <String fx:value="input-label-first"/>
+                                <String fx:value="input-label"/>
+                            </styleClass>
+                        </HBox>
+                        <ComboBox fx:id="departmentComboBox" maxHeight="1.7976931348623157E308"
+                                  maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0"
+                                  promptText="Choose Department" visibleRowCount="5" HBox.hgrow="ALWAYS">
+                            <styleClass>
+                                <String fx:value="text-input-first"/>
+                                <String fx:value="text-input"/>
+                            </styleClass>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </ComboBox>
+                    </children>
+                    <styleClass>
+                        <String fx:value="input-container"/>
+                        <String fx:value="input-container-first"/>
+                    </styleClass>
+                </HBox>
+                <HBox alignment="CENTER" prefWidth="269.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Role" textOverrun="CLIP">
+                                    <font>
+                                        <Font name="Arial" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0"/>
+                            </padding>
+                            <styleClass>
+                                <String fx:value="input-label-last"/>
+                                <String fx:value="input-label"/>
+                            </styleClass>
+                        </HBox>
+                        <ComboBox fx:id="roleComboBox" maxHeight="1.7976931348623157E308"
+                                  maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0"
+                                  promptText="Choose Role" visibleRowCount="5" HBox.hgrow="ALWAYS">
+                            <styleClass>
+                                <String fx:value="text-input-last"/>
+                                <String fx:value="text-input"/>
+                            </styleClass>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </ComboBox>
+                    </children>
+                    <styleClass>
+                        <String fx:value="input-container"/>
+                        <String fx:value="input-container-last"/>
+                    </styleClass>
+                </HBox>
+            </children>
+        </VBox>
+        <HBox alignment="CENTER_RIGHT" layoutX="201.0" layoutY="190.0" prefHeight="36.0" prefWidth="277.0"
+              spacing="25.0" stylesheets="@../../style/component/button.css">
+            <children>
+                <Button fx:id="cancelBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0"
+                        styleClass="h-reject" text="Cancel">
+                    <font>
+                        <Font name="Arial" size="14.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+                <Button fx:id="confirmBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0"
+                        styleClass="h-accept" text="Confirm">
+                    <font>
+                        <Font name="Arial" size="14.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+            </children>
+        </HBox>
+        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="463.0" layoutY="8.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../../icon/close.png"/>
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+        </ImageView>
+    </children>
+</AnchorPane>
