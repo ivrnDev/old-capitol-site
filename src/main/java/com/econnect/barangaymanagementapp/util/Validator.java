@@ -740,6 +740,31 @@ public class Validator {
         }));
     }
 
+    public static void createNumberFormatter(TextField[] textFields) {
+        Arrays.stream(textFields).forEach(textField -> {
+            textField.setTextFormatter(new TextFormatter<>(change -> {
+                String newText = change.getControlNewText();
+                if (newText.isEmpty()) {
+                    return change;
+                }
+                if (!newText.matches("\\d*")) {
+                    return null;
+                }
+
+                try {
+                    int value = Integer.parseInt(newText);
+                    if (value > 999999) {
+                        return null;
+                    }
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+                return change;
+            }));
+        });
+
+    }
+
     public void setUnitFocusedProperty(TextField inputField, String unit) {
         inputField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
