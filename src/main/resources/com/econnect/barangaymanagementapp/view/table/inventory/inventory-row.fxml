@@ -8,67 +8,68 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row"
-      stylesheets="@../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.econnect.barangaymanagementapp.controller.table.inventory.InventoryRowController">
+<HBox fx:id="tableRow" alignment="CENTER_LEFT" prefHeight="68.0" styleClass="table-row" stylesheets="@../../../style/component/table.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.table.inventory.InventoryRowController">
     <children>
         <HBox alignment="CENTER" minWidth="90.0">
             <children>
                 <ImageView fx:id="itemPicture" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true">
                     <image>
-                        <Image url="@../../../images/barangay-logo.png"/>
+                        <Image url="@../../../images/barangay-logo.png" />
                     </image>
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </ImageView>
             </children>
         </HBox>
         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0">
             <children>
-                <Label fx:id="itemIdLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                       text="Loading" textAlignment="CENTER" wrapText="true">
+                <Label fx:id="itemIdLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
                     <font>
-                        <Font name="Arial Bold" size="14.0"/>
+                        <Font name="Arial Bold" size="14.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
         <HBox alignment="CENTER" layoutX="30.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
-                <Label fx:id="itemNameLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                       text="Loading" textAlignment="CENTER" wrapText="true">
+                <Label fx:id="itemNameLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
                     <font>
-                        <Font name="Arial Bold" size="14.0"/>
+                        <Font name="Arial Bold" size="14.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
         <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
-                <Label fx:id="itemTypeLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                       text="Loading" textAlignment="CENTER" wrapText="true">
+                <Label fx:id="itemTypeLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
                     <font>
-                        <Font name="Arial Bold" size="14.0"/>
+                        <Font name="Arial Bold" size="14.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
+      <HBox alignment="CENTER" layoutX="371.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0">
+         <children>
+            <Label fx:id="stockLevel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
         <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
             <children>
-                <Label fx:id="itemStocksLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0"
-                       minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
+                <Label fx:id="itemStocksLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Loading" textAlignment="CENTER" wrapText="true">
                     <font>
-                        <Font name="Arial Bold" size="14.0"/>
+                        <Font name="Arial Bold" size="14.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
-        <HBox fx:id="buttonContainer" alignment="CENTER" prefWidth="250.0" spacing="20.0"
-              stylesheets="@../../../style/component/button.css"/>
+        <HBox fx:id="buttonContainer" alignment="CENTER" prefWidth="250.0" spacing="20.0" stylesheets="@../../../style/component/button.css" />
     </children>
     <padding>
-        <Insets left="20.0" right="20.0"/>
+        <Insets left="20.0" right="20.0" />
     </padding>
 </HBox>

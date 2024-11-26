@@ -7,76 +7,75 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="table" stylesheets="@../../../style/component/table.css" xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.econnect.barangaymanagementapp.controller.table.inventory.InventoryTableController">
+<VBox fx:id="table" stylesheets="@../../../style/component/table.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.table.inventory.InventoryTableController">
     <children>
-        <HBox fx:id="tableHeader" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0"
-              prefWidth="927.0" styleClass="table-header">
+        <HBox fx:id="tableHeader" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="73.0" prefWidth="927.0" styleClass="table-header">
             <children>
-                <HBox alignment="CENTER_LEFT" minWidth="90.0"/>
+                <HBox alignment="CENTER_LEFT" minWidth="90.0" />
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                               text="Item ID" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Item ID" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0"/>
+                                <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
-                      HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" layoutX="135.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                               text="Item Name" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Item Name" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0"/>
+                                <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Label>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0"
-                               text="Item Type" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Item Type" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0"/>
+                                <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0"
-                      HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" layoutX="386.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Stock Level" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+                <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Stocks"
-                               textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Stocks" textAlignment="CENTER">
                             <font>
-                                <Font name="Arial Bold" size="14.0"/>
+                                <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Label>
                     </children>
                 </HBox>
-                <HBox alignment="CENTER" layoutX="450.0" layoutY="10.0" minWidth="90.0" prefHeight="73.0"
-                      prefWidth="250.0"/>
+                <HBox alignment="CENTER" layoutX="450.0" layoutY="10.0" minWidth="90.0" prefHeight="73.0" prefWidth="250.0" />
             </children>
             <padding>
-                <Insets left="20.0" right="20.0"/>
+                <Insets left="20.0" right="20.0" />
             </padding>
             <VBox.margin>
-                <Insets bottom="20.0"/>
+                <Insets bottom="20.0" />
             </VBox.margin>
         </HBox>
         <ScrollPane fitToWidth="true">
             <content>
                 <VBox fx:id="tableContent" spacing="20.0" styleClass="table-content">
                     <padding>
-                        <Insets bottom="20.0"/>
+                        <Insets bottom="20.0" />
                     </padding>
                 </VBox>
             </content>
             <VBox.margin>
-                <Insets/>
+                <Insets />
             </VBox.margin>
         </ScrollPane>
     </children>

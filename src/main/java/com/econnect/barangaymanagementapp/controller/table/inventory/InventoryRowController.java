@@ -5,6 +5,7 @@ import com.econnect.barangaymanagementapp.controller.base.BaseRowController;
 import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.service.InventoryService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.StockLevel;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -21,7 +22,7 @@ public class InventoryRowController extends BaseRowController<Inventory> {
     @FXML
     private HBox tableRow, buttonContainer;
     @FXML
-    private Label itemIdLabel, itemNameLabel, itemTypeLabel, itemStocksLabel;
+    private Label itemIdLabel, itemNameLabel, itemTypeLabel, stockLevel, itemStocksLabel;
     @FXML
     private ImageView itemPicture;
 
@@ -55,6 +56,11 @@ public class InventoryRowController extends BaseRowController<Inventory> {
         itemIdLabel.setText(itemData.getId());
         itemNameLabel.setText(itemData.getItemName());
         itemTypeLabel.setText(itemData.getItemType());
+
+        int currentStock = itemData.getStocks() != null ? Integer.parseInt(itemData.getStocks()) : 0;
+        int minStock = itemData.getMinStock() != null ? Integer.parseInt(itemData.getMinStock()) : 0;
+        int maxStock = itemData.getMaxStock() != null ? Integer.parseInt(itemData.getMaxStock()) : 0;
+        stockLevel.setText(StockLevel.getLevel(currentStock, minStock, maxStock).getName());
         itemStocksLabel.setText(itemData.getStocks());
     }
 
