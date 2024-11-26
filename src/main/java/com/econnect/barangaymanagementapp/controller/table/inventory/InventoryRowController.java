@@ -18,9 +18,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 
+import static com.econnect.barangaymanagementapp.util.StockLevel.OUT_OF_STOCK;
+
 public class InventoryRowController extends BaseRowController<Inventory> {
     @FXML
-    private HBox tableRow, buttonContainer;
+    private HBox tableRow, buttonContainer, stockLevelContainer;
     @FXML
     private Label itemIdLabel, itemNameLabel, itemTypeLabel, stockLevel, itemStocksLabel;
     @FXML
@@ -92,6 +94,19 @@ public class InventoryRowController extends BaseRowController<Inventory> {
     }
 
     protected void setupButtonContainer() {
+        switch (StockLevel.fromName(stockLevel.getText())) {
+            case OUT_OF_STOCK -> setStockLevelColor("#FF3B30");
+            case CRITICAL -> setStockLevelColor("#FF9500");
+            case SAFETY_STOCK -> setStockLevelColor("#FFCC00");
+            case LOW -> setStockLevelColor("#007AFF");
+            case MEDIUM -> setStockLevelColor("#34C759");
+            case MEDIUM_HIGH -> setStockLevelColor("#32CD32");
+            case HIGH -> setStockLevelColor("#0EAA1D");
+        }
+    }
+
+    private void setStockLevelColor(String color) {
+        stockLevelContainer.setStyle("-fx-background-color: " + color);
     }
 
 
