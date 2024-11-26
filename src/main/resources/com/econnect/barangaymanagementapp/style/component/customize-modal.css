@@ -22,6 +22,10 @@
     -fx-border-color: #787878;
 }
 
+.input-container-rounded {
+    -fx-border-radius: 10px;
+}
+
 .input-container-first {
     -fx-border-radius: 10px 10px 0 0;
 }
@@ -37,6 +41,10 @@
 /* Label */
 .input-label {
     -fx-background-color: #EEFCFF;
+}
+
+.input-label-rounded {
+    -fx-background-radius: 10px 0 0 10px;
 }
 
 .input-label-first {
@@ -74,6 +82,19 @@
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
+
+.text-input-semirounded {
+    -fx-border-width: 1px;
+    -fx-border-radius: 0 10px 10px 0;
+    -fx-background-radius: 0 10px 10px 0;
+}
+
+.text-input-inverted-semirounded {
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px 0 0 10px;
+    -fx-background-radius: 10px 0 0 10px;
+}
+
 
 .text-input-last {
     -fx-border-width: 1px;

@@ -29,7 +29,8 @@ public class Inventory extends BaseEntity {
     private String itemImageUrl;
     private String status;
     private String availability;
-    private String stockLevel;
+    private String minStock;
+    private String maxStock;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

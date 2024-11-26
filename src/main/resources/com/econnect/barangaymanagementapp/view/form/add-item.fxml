@@ -35,13 +35,13 @@
             <children>
                 <HBox spacing="40.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="459.0" prefWidth="412.0" spacing="50.0" styleClass="profile-container">
+                        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" spacing="50.0" styleClass="profile-container">
                             <children>
                                 <HBox fx:id="profileContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="profile-container">
                                     <children>
-                                        <ImageView fx:id="itemImage" fitHeight="296.0" fitWidth="296.0" pickOnBounds="true">
+                                        <ImageView fx:id="itemImage" fitHeight="234.0" fitWidth="255.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="@../../images/default-profile.png" />
+                                                <Image url="@../../icon/item.png" />
                                             </image>
                                         </ImageView>
                                     </children>
@@ -49,18 +49,32 @@
                                         <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                                     </padding>
                                 </HBox>
-                                <VBox spacing="10.0">
+                                <HBox fx:id="uploadItemImage" alignment="CENTER_LEFT" maxWidth="304.0" prefHeight="44.0" prefWidth="304.0" spacing="10.0" styleClass="file-chooser">
                                     <children>
-                                        <HBox alignment="CENTER" />
-                                        <HBox alignment="CENTER" />
+                                        <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../icon/upload-image.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label fx:id="itemLabel" text="Item Image" textFill="#686464">
+                                            <font>
+                                                <Font name="Arial" size="15.0" />
+                                            </font>
+                                        </Label>
                                     </children>
-                                </VBox>
+                                    <padding>
+                                        <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+                                    </padding>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </HBox>
                             </children>
                             <padding>
                                 <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                             </padding>
                         </VBox>
-                        <VBox prefHeight="459.0" prefWidth="454.0" HBox.hgrow="ALWAYS">
+                        <VBox HBox.hgrow="ALWAYS">
                             <children>
                                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
                                     <children>
@@ -83,7 +97,7 @@
                                                 <String fx:value="input-label" />
                                             </styleClass>
                                         </HBox>
-                                        <TextField fx:id="itemNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                        <TextField fx:id="itemNameInput" prefHeight="35.0" prefWidth="176.0" promptText="Type Here" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
@@ -124,9 +138,9 @@
                                         </ComboBox>
                                     </children>
                                 </HBox>
-                                <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                                             <children>
                                                 <Label text="Availability" textOverrun="CLIP">
                                                     <font>
@@ -140,35 +154,32 @@
                                             <padding>
                                                 <Insets left="20.0" />
                                             </padding>
+                                 <styleClass>
+                                    <String fx:value="input-label" />
+                                    <String fx:value="input-label-last" />
+                                 </styleClass>
                                         </HBox>
-                                        <ComboBox fx:id="availabilityComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                        <ComboBox fx:id="availabilityComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
                                             <cursor>
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
                                             <padding>
                                                 <Insets left="-1.0" />
                                             </padding>
+                                 <styleClass>
+                                    <String fx:value="text-input" />
+                                    <String fx:value="text-input-last" />
+                                 </styleClass>
                                         </ComboBox>
                                     </children>
+                           <styleClass>
+                              <String fx:value="input-container" />
+                              <String fx:value="input-container-last" />
+                           </styleClass>
                                 </HBox>
-                                <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
+                                <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                            <padding>
-                                                <Insets left="20.0" />
-                                            </padding>
-                                            <children>
-                                                <Label text="Quantity" textOverrun="CLIP">
-                                                    <font>
-                                                        <Font name="Arial" size="15.0" />
-                                                    </font>
-                                                </Label>
-                                            </children>
-                                        </HBox>
-                                        <TextField fx:id="quantityInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                        <TextField fx:id="minStockInput" alignment="CENTER" prefHeight="35.0" prefWidth="176.0" promptText="Min. 0" styleClass="text-input-inverted-semirounded" HBox.hgrow="ALWAYS">
                                             <font>
                                                 <Font name="Arial" size="12.0" />
                                             </font>
@@ -176,29 +187,77 @@
                                                 <Cursor fx:constant="DEFAULT" />
                                             </cursor>
                                         </TextField>
+                              <HBox alignment="CENTER" layoutX="11.0" layoutY="11.0" prefHeight="35.0" prefWidth="115.0" styleClass="input-label">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <children>
+                                    <Label text="Stock Level" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="maxStockInput" alignment="CENTER" layoutX="211.0" layoutY="11.0" prefHeight="35.0" prefWidth="176.0" promptText="Max. 999999" styleClass="text-input-semirounded">
+                                 <font>
+                                    <Font name="Arial" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </TextField>
                                     </children>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                           <styleClass>
+                              <String fx:value="input-container" />
+                              <String fx:value="input-container-rounded" />
+                           </styleClass>
                                 </HBox>
-                                <Slider fx:id="slider" prefHeight="40.0" prefWidth="452.0" />
-                                <HBox fx:id="uploadItemImage" alignment="CENTER_LEFT" prefWidth="183.0" spacing="10.0" styleClass="file-chooser">
-                                    <children>
-                                        <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../../icon/upload-image.png" />
-                                            </image>
-                                        </ImageView>
-                                        <Label fx:id="itemLabel" text="Item Image" textFill="#686464">
-                                            <font>
-                                                <Font name="Arial" size="15.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
-                                    </padding>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </HBox>
+                        <HBox>
+                           <children>
+                                      <Slider fx:id="minSlider" prefHeight="40.0" prefWidth="340.0" />
+                              <Slider fx:id="maxSlider" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="340.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Stocks" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
+                                 <styleClass>
+                                    <String fx:value="input-label-rounded" />
+                                    <String fx:value="input-label" />
+                                 </styleClass>
+                              </HBox>
+                              <TextField fx:id="stockInput" alignment="CENTER" prefHeight="35.0" prefWidth="176.0" promptText="0" styleClass="text-input-semirounded" HBox.hgrow="ALWAYS">
+                                 <font>
+                                    <Font name="Arial" size="12.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </TextField>
+                           </children>
+                           <styleClass>
+                              <String fx:value="input-container-rounded" />
+                              <String fx:value="input-container" />
+                           </styleClass>
+                        </HBox>
+                        <Slider fx:id="stockSlider" prefHeight="40.0" prefWidth="340.0" />
                             </children>
                         </VBox>
                     </children>

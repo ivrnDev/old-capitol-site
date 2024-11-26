@@ -172,6 +172,82 @@ public class Validator {
         return false;
     }
 
+    public boolean hasEmptyFields(TextField[] textFields, DatePicker[] datePickers, ComboBox<String>[] comboBox, TextField[] numberFields) {
+        Map<TextField, Boolean> hasErrorFields = new HashMap<>();
+        Map<DatePicker, Boolean> hasErrorDate = new HashMap<>();
+        Map<ComboBox, Boolean> hasErrorComboBox = new HashMap<>();
+
+        if (textFields != null) {
+            for (TextField textField : textFields) {
+                if (textField.getText().isEmpty()) {
+                    hasErrorFields.put(textField, true);
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                    textField.setStyle("-fx-border-color: red");
+                } else if (textField.getText().length() < 3) {
+                    hasErrorFields.put(textField, true);
+                    errorTitle = "Invalid";
+                    errorMessage = "Input must be at least 2 characters";
+                } else {
+                    hasErrorFields.put(textField, false);
+                    textField.setStyle("");
+                }
+                addTextFieldListener(textField);
+            }
+        }
+
+        if (datePickers != null) {
+            for (DatePicker datePicker : datePickers) {
+                if (datePicker.getEditor().getText().isEmpty()) {
+                    hasErrorDate.put(datePicker, true);
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                    datePicker.setStyle("-fx-border-color: red");
+                } else {
+                    hasErrorDate.put(datePicker, false);
+                    datePicker.setStyle("");
+                }
+            }
+        }
+
+        for (ComboBox<String> comboBox1 : comboBox) {
+            if (comboBox1.getValue() == null) {
+                hasErrorComboBox.put(comboBox1, true);
+                errorTitle = "Failed";
+                errorMessage = "Please fill out all required fields";
+                comboBox1.setStyle("-fx-border-color: red");
+            } else {
+                hasErrorComboBox.put(comboBox1, false);
+                comboBox1.setStyle("");
+            }
+        }
+
+        if (numberFields != null) {
+            for (TextField numberField : numberFields) {
+                if (numberField.getText().isEmpty()) {
+                    hasErrorFields.put(numberField, true);
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                    numberField.setStyle("-fx-border-color: red");
+                } else if (!numberField.getText().matches("\\d+")) {
+                    hasErrorFields.put(numberField, true);
+                    errorTitle = "Invalid";
+                    errorMessage = "Input must be a number";
+                } else {
+                    hasErrorFields.put(numberField, false);
+                    numberField.setStyle("");
+                }
+            }
+        }
+
+        if (hasErrorFields.containsValue(true) || hasErrorDate.containsValue(true) || hasErrorComboBox.containsValue(true)) {
+            triggerError();
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean hasEmptyFields(TextArea[] textAreas, DatePicker[] datePickers, ComboBox<String>[] comboBox) {
         Map<TextArea, Boolean> hasErrorArea = new HashMap<>();
         Map<DatePicker, Boolean> hasErrorDate = new HashMap<>();

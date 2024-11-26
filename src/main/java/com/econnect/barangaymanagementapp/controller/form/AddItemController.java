@@ -3,16 +3,15 @@ package com.econnect.barangaymanagementapp.controller.form;
 import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.enumeration.type.*;
+import com.econnect.barangaymanagementapp.enumeration.type.ItemAvailability;
+import com.econnect.barangaymanagementapp.enumeration.type.Itemtype;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.InventoryStatus;
-import com.econnect.barangaymanagementapp.service.InventoryService;
 import com.econnect.barangaymanagementapp.service.ImageService;
-import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.service.InventoryService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.UploadImageUtils;
 import com.econnect.barangaymanagementapp.util.Validator;
-import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -28,16 +27,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.FULL_TIME;
-import static com.econnect.barangaymanagementapp.enumeration.type.EmploymentType.VOLUNTEER;
 
 public class AddItemController {
     @FXML
@@ -45,13 +38,15 @@ public class AddItemController {
     @FXML
     private ImageView closeBtn, itemImage;
     @FXML
-    private TextField quantityInput, itemNameInput;
+    private TextField stockInput, itemNameInput, maxStockInput, minStockInput;
     @FXML
     private ComboBox<String> itemTypeComboBox, availabilityComboBox;
     @FXML
     private Label itemLabel;
     @FXML
     private HBox uploadItemImage;
+    @FXML
+    private Slider minSlider, maxSlider, stockSlider;
     @FXML
     private Button cancelBtn, confirmBtn;
 
@@ -114,7 +109,9 @@ public class AddItemController {
                 .itemName(itemNameInput.getText())
                 .itemType(itemTypeComboBox.getValue())
                 .availability(availabilityComboBox.getValue())
-                .stocks(quantityInput.getText())
+                .stocks(stockInput.getText())
+                .minStock(minStockInput.getText())
+                .maxStock(maxStockInput.getText())
                 .status(InventoryStatus.AVAILABLE.getName())
                 .build();
     }
@@ -129,10 +126,11 @@ public class AddItemController {
     private void validateFields() {
         Image[] images = {image};
         HBox[] uploadBtns = {uploadItemImage};
-        TextField[] textFields = {itemNameInput, quantityInput};
+        TextField[] textFields = {itemNameInput};
+        TextField[] numberFields = {stockInput, minStockInput, maxStockInput};
         ComboBox[] comboBoxes = {itemTypeComboBox, availabilityComboBox};
 
-        if (validator.hasEmptyFields(textFields, (DatePicker[]) null, comboBoxes)) return;
+        if (validator.hasEmptyFields(textFields, (DatePicker[]) null, comboBoxes, numberFields)) return;
 
         if (validator.hasEmptyImages(images, uploadBtns)) return;
 
@@ -162,6 +160,11 @@ public class AddItemController {
         availabilityComboBox.getItems().addAll(Arrays.stream(ItemAvailability.values()).map(item -> item.getName()).toList());
         itemTypeComboBox.getItems().addAll(Arrays.stream(Itemtype.values()).map(item -> item.getName()).toList());
         validator.setupComboBox(List.of(availabilityComboBox, itemTypeComboBox));
+        validator.createNumberFormatter(new TextField[]{stockInput, minStockInput, maxStockInput});
+
+        minSlider.valueProperty().addListener((observable, oldValue, newValue) -> minStockInput.setText(String.valueOf(newValue.intValue())));
+        maxSlider.valueProperty().addListener((observable, oldValue, newValue) -> maxStockInput.setText(String.valueOf(newValue.intValue())));
+        stockSlider.valueProperty().addListener((observable, oldValue, newValue) -> stockInput.setText(String.valueOf(newValue.intValue())));
     }
 
     public void closeWindow() {
