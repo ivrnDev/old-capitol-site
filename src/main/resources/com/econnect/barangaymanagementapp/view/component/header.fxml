@@ -58,5 +58,10 @@
             </ImageView>
          </children>
       </HBox>
+      <Text fx:id="timeLabel" layoutX="771.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" AnchorPane.rightAnchor="184.556640625">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

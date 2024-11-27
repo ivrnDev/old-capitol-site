@@ -5,16 +5,19 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class HeaderController {
     @FXML
-    private Text headerTitle, roleType;
+    private Text headerTitle, roleType, timeLabel;
     @FXML
     private ImageView profilePicture;
 
@@ -30,13 +33,18 @@ public class HeaderController {
     }
 
     public void initialize() {
-        loadEmployeeDetails();
         populateEmployeeDetails();
         loadProfileImage();
         ImageUtils.setCircleClip(profilePicture);
+        startClock();
     }
 
-    private void loadEmployeeDetails() {
+    private void startClock() {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            timeLabel.setText(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("MMMM d, yyyy hh:mm:ss a")));
+        }), new KeyFrame(Duration.seconds(1)));
+        clock.setCycleCount(Timeline.INDEFINITE);
+        clock.play();
     }
 
     private void populateEmployeeDetails() {
