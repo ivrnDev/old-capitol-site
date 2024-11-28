@@ -191,12 +191,13 @@ public class AddResidentController {
         DatePicker[] datePickers = {birthdatePicker};
         TextField[] letterOnlyFields = {
                 lastNameInput, firstNameInput, middleNameInput,
-                birthplaceInput, occupationInput, addressInput,
+                birthplaceInput, occupationInput,
                 fatherFirstNameInput, fatherLastNameInput,
                 fatherMiddleNameInput, fatherOccupationInput, motherFirstNameInput,
                 motherLastNameInput, motherMiddleNameInput, motherOccupationInput,
                 emergencyFirstNameInput, emergencyLastNameInput,
                 emergencyMiddleNameInput, emergencyRelationshipInput, spouseFirstNameInput, spouseLastNameInput, spouseMiddleNameInput, spouseOccupationInput};
+        TextField[] maxOnlyFields = {addressInput};
         List<ComboBox<String>> comboBoxList = List.of(
                 suffixComboBox, sexComboBox, civilStatusComboBox, motherToungeComboBox,
                 religionComboBox, bloodTypeComboBox, fatherSuffixComboBox,
@@ -205,6 +206,7 @@ public class AddResidentController {
 
 
         validator.setLettersOnlyListener(30, letterOnlyFields);
+        validator.setupMaxLengthListener(30, maxOnlyFields);
         validator.setupComboBox(comboBoxList);
         validator.setupDatePicker(birthMinDate, birthMaxDate, datePickers);
         validator.setupDatePicker(LocalDate.now(), LocalDate.now().plusYears(10), validIdExpirationDatePicker);

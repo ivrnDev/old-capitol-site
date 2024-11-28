@@ -617,6 +617,16 @@ public class Validator {
         }
     }
 
+    public void setupMaxLengthListener(int maxLength, TextField... textFields) {
+        for (TextField textField : textFields) {
+            textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.length() > maxLength) {
+                    textField.setText(oldValue);
+                }
+            });
+        }
+    }
+
     public void setupCurrencyListener(TextField... textFields) {
         // Number format setup for currency
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
