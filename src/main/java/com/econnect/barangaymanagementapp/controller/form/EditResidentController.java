@@ -171,7 +171,6 @@ public class EditResidentController implements BaseViewController {
         } else {
             resident.setTinIdUrl(this.resident.getTinIdUrl());
         }
-        System.out.println(resident);
         residentService.updateResident(resident);
         return null;
     }
@@ -334,20 +333,33 @@ public class EditResidentController implements BaseViewController {
         rentalCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("rental".toLowerCase().trim()));
         savingsCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("savings".toLowerCase().trim()));
 
-        if (!resident.getProfileUrl().isEmpty()) {
-            viewProfileBtn.setVisible(true);
-            profilePreview.setImage(new Image(resident.getProfileUrl()));
-        }
-        if (!resident.getValidIdUrl().isEmpty()) {
-            viewGovernmentIdBtn.setVisible(true);
-            governmentIdPreview.setImage(new Image(resident.getValidIdUrl()));
-        }
+        loadImages();
+    }
 
-        if (!resident.getTinIdUrl().isEmpty()) {
-            viewTinId.setVisible(true);
-            tinIdPreview.setImage(new Image(resident.getTinIdUrl()));
-        }
+    private void loadImages() {
+        Task<Void> loadImageTask = new Task<>() {
+            @Override
+            protected Void call() {
+                if (!resident.getProfileUrl().isEmpty()) {
+                    viewProfileBtn.setVisible(true);
+                    profilePreview.setImage(new Image(resident.getProfileUrl()));
+                }
 
+                if (!resident.getValidIdUrl().isEmpty()) {
+                    viewGovernmentIdBtn.setVisible(true);
+                    governmentIdPreview.setImage(new Image(resident.getValidIdUrl()));
+                }
+
+                if (!resident.getTinIdUrl().isEmpty()) {
+                    viewTinId.setVisible(true);
+                    tinIdPreview.setImage(new Image(resident.getTinIdUrl()));
+                }
+
+                return null;
+            }
+        };
+
+        new Thread(loadImageTask).start();
     }
 
     private void validateForm() {
