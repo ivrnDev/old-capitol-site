@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.*;
 import static com.econnect.barangaymanagementapp.enumeration.type.ResidentInfomationType.SuffixName.values;
 
+//TODO: Separate the thread of loading image and sync the information in the Employees
 public class EditResidentController implements BaseViewController {
     @FXML
     private AnchorPane rootPane;
@@ -70,6 +71,7 @@ public class EditResidentController implements BaseViewController {
     private Stage currentStage;
     private Image profileImage, governmentIdImage, tinImage;
     private String residentId;
+    private Resident resident;
 
     public EditResidentController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -91,12 +93,12 @@ public class EditResidentController implements BaseViewController {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
         rootPane.getChildren().add(loadingIndicator);
 
-        Resident employee = getResidentByInput();
+        Resident resident = getResidentByInput();
 
         Task<Void> editResident = new Task<>() {
             @Override
             protected Void call() {
-                return processResidentUpdate(employee);
+                return processResidentUpdate(resident);
             }
 
             @Override
@@ -132,8 +134,9 @@ public class EditResidentController implements BaseViewController {
             @Override
             protected void succeeded() {
                 loadingIndicator.setVisible(false);
-                Resident resident = getValue().get();
-                populateFields(resident);
+                Resident fetchedResident = getValue().get();
+                resident = fetchedResident;
+                populateFields(fetchedResident);
                 rootPane.getChildren().remove(loadingIndicator);
             }
 
@@ -149,20 +152,33 @@ public class EditResidentController implements BaseViewController {
     }
 
     private Void processResidentUpdate(Resident resident) {
-        String id = residentService.generateResidentId();
-        String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileImage, id);
-        String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdImage, id);
-        String tinIdURl = tinImage != null ? imageService.uploadImage(Firestore.TIN_ID, tinImage, id) : null;
-        resident.setId(id);
-        resident.setProfileUrl(profileUrl);
-        resident.setValidIdUrl(governmentIDUrl);
-        resident.setTinIdUrl(tinIdURl);
+        if (profileImage != null) {
+            String profileUrl = imageService.uploadImage(Firestore.PROFILE_PICTURE, profileImage, resident.getId());
+            resident.setProfileUrl(profileUrl);
+        } else {
+            resident.setProfileUrl(this.resident.getProfileUrl());
+        }
+        if (governmentIdImage != null) {
+            String governmentIDUrl = imageService.uploadImage(Firestore.VALID_ID, governmentIdImage, resident.getId());
+            resident.setValidIdUrl(governmentIDUrl);
+        } else {
+            resident.setValidIdUrl(this.resident.getValidIdUrl());
+        }
+
+        if (tinImage != null) {
+            String tinIdURl = imageService.uploadImage(Firestore.TIN_ID, tinImage, resident.getId());
+            resident.setTinIdUrl(tinIdURl);
+        } else {
+            resident.setTinIdUrl(this.resident.getTinIdUrl());
+        }
+        System.out.println(resident);
         residentService.updateResident(resident);
         return null;
     }
 
     private Resident getResidentByInput() {
         return Resident.builder()
+                .id(residentId)
                 .firstName(firstNameInput.getText())
                 .middleName(middleNameInput.getText())
                 .lastName(lastNameInput.getText())
@@ -202,7 +218,7 @@ public class EditResidentController implements BaseViewController {
                 .emergencyFirstName(emergencyFirstNameInput.getText())
                 .emergencyMiddleName(emergencyMiddleNameInput.getText())
                 .emergencyLastName(emergencyLastNameInput.getText())
-                .emergencyMobileNumber("0" + emergencyMobileNumberInput.getText())
+                .emergencyMobileNumber(emergencyMobileNumberInput.getText())
                 .emergencyRelationship(emergencyRelationshipInput.getText())
 
                 .status(StatusType.ResidentStatus.VERIFIED)
@@ -213,7 +229,7 @@ public class EditResidentController implements BaseViewController {
                         : null)
                 .tinIdNumber(!tinIdNumberInput.getText().isEmpty() ? tinIdNumberInput.getText() : null)
                 .validIdExpiration(validIdExpirationDatePicker.getValue() != null ? DateFormatter.formatLocalDateToUsShortDate(validIdExpirationDatePicker.getValue()) : null)
-                .createdAt(ZonedDateTime.now())
+                .createdAt(resident.getCreatedAt())
                 .updatedAt(ZonedDateTime.now())
                 .build();
     }
@@ -236,7 +252,6 @@ public class EditResidentController implements BaseViewController {
                 religionComboBox, bloodTypeComboBox, fatherSuffixComboBox,
                 motherSuffixComboBox, residencyStatusComboBox
         );
-
 
         validator.setLettersOnlyListener(30, letterOnlyFields);
         validator.setupMaxLengthListener(100, maxOnlyInput);
@@ -309,18 +324,30 @@ public class EditResidentController implements BaseViewController {
         educationalAttainment.selectToggle(educationalAttainment.getToggles().stream()
                 .filter(toggle -> ((RadioButton) toggle).getText().equals(resident.getEducationalAttainment()))
                 .findFirst().orElse(null));
-//        profilePreview.setImage(new Image(resident.getProfileUrl()));
-//        governmentIdPreview.setImage(new Image(resident.getValidIdUrl()));
-//        tinIdPreview.setImage(new Image(resident.getTinIdUrl()));
         ownEarningsCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("own earnings, salary, wages".toLowerCase().trim()));
         ownPensionCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("own pension".toLowerCase().trim()));
-        stocksCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("stocks".toLowerCase().trim()));
+        stocksCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("stock or dividends".toLowerCase().trim()));
         dependentCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("dependent".toLowerCase().trim()));
         spouseSalaryCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("spouse's salary".toLowerCase().trim()));
         spousePensionCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("spouse's pension".toLowerCase().trim()));
         insuranceCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("insurance".toLowerCase().trim()));
         rentalCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("rental".toLowerCase().trim()));
         savingsCheckBox.setSelected(resident.getSourceOfIncome().toLowerCase().contains("savings".toLowerCase().trim()));
+
+        if (!resident.getProfileUrl().isEmpty()) {
+            viewProfileBtn.setVisible(true);
+            profilePreview.setImage(new Image(resident.getProfileUrl()));
+        }
+        if (!resident.getValidIdUrl().isEmpty()) {
+            viewGovernmentIdBtn.setVisible(true);
+            governmentIdPreview.setImage(new Image(resident.getValidIdUrl()));
+        }
+
+        if (!resident.getTinIdUrl().isEmpty()) {
+            viewTinId.setVisible(true);
+            tinIdPreview.setImage(new Image(resident.getTinIdUrl()));
+        }
+
     }
 
     private void validateForm() {
@@ -338,8 +365,8 @@ public class EditResidentController implements BaseViewController {
                 motherSuffixComboBox, residencyStatusComboBox};
         CheckBox[] checkBoxes = {ownEarningsCheckBox, ownPensionCheckBox, stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox, spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox};
         ComboBox[] spouseComboBox = {spouseSuffixComboBox};
-        Image[] images = {profileImage, governmentIdImage};
-        HBox[] fileContainers = {uploadProfile, uploadGovernmentId};
+//        Image[] images = {profileImage, governmentIdImage};
+//        HBox[] fileContainers = {uploadProfile, uploadGovernmentId};
 
         if (validator.hasEmptyFields(textFields, datePickers, comboBoxes)) return;
 
@@ -351,7 +378,7 @@ public class EditResidentController implements BaseViewController {
             return;
         }
 
-        if (validator.hasEmptyImages(images, fileContainers)) return;
+//        if (validator.hasEmptyImages(images, fileContainers)) return;
 
         editResident();
     }
@@ -380,7 +407,6 @@ public class EditResidentController implements BaseViewController {
             governmentIdImage = image;
             governmentIdLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
             uploadGovernmentId.setStyle(null);
-
         }));
 
         uploadTinId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
@@ -411,7 +437,7 @@ public class EditResidentController implements BaseViewController {
         List<CheckBox> incomeSources = Arrays.asList(
                 ownEarningsCheckBox, ownPensionCheckBox,
                 stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox,
-                spousePensionCheckBox, insuranceCheckBox, rentalCheckBox
+                spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox
         );
 
         return incomeSources.stream()
