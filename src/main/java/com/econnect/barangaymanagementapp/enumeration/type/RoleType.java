@@ -13,6 +13,7 @@ public enum RoleType {
     EVENT_COORDINATOR("Event Coordinator"),
     DOCUMENT_CLERK("Document Clerk"),
     SECRETARY("Secretary"),
+    WEB_ADMINISTRATOR("Web Administrator"),
 
     //Health Department
     GENERAL_DOCTOR("General Doctor"),
