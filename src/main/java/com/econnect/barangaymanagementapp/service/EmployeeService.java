@@ -35,6 +35,10 @@ public class EmployeeService {
         return employeeRepository.createEmployee(employee);
     }
 
+    public Response updateEmployee(Employee employee) {
+        return employeeRepository.updateEmployee(employee);
+    }
+
     public Optional<Employee> findEmployeeById(String employeeId) {
         return employeeRepository.findEmployeeById(employeeId);
     }

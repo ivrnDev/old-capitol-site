@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.service;
 
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.AccountRepository;
@@ -11,6 +12,7 @@ import java.security.SecureRandom;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
@@ -20,12 +22,14 @@ import static com.econnect.barangaymanagementapp.util.StatusUtils.INACTIVE_RESID
 public class ResidentService {
     private final ResidentRepository residentRepository;
     private final AccountRepository accountRepository;
+    private final EmployeeService employeeService;
     private final EmailService emailService;
 
     public ResidentService(DependencyInjector dependencyInjector) {
         this.residentRepository = dependencyInjector.getResidentRepository();
         this.accountRepository = dependencyInjector.getAccountRepository();
         this.emailService = dependencyInjector.getEmailService();
+        this.employeeService = dependencyInjector.getEmployeeService();
     }
 
     public Response createResident(Resident resident) {
@@ -107,7 +111,24 @@ public class ResidentService {
         }
     }
 
-    public Response updateResident(Resident resident) {
+    public Response updateResidentAsync(Resident resident) {
+        Optional<Employee> employee = employeeService.findEmployeeById(resident.getId());
+        employee.ifPresentOrElse(
+                value -> {
+                    value.setFirstName(resident.getFirstName());
+                    value.setLastName(resident.getLastName());
+                    value.setMiddleName(resident.getMiddleName());
+                    value.setEmail(resident.getEmail());
+                    value.setAddress(resident.getAddress());
+                    value.setContactNumber(resident.getMobileNumber());
+                    value.setEmail(resident.getEmail());
+                    value.setProfileUrl(resident.getProfileUrl());
+                    employeeService.updateEmployee(value);
+                },
+                () -> {
+                    throw new RuntimeException("Employee not found");
+                }
+        );
         return residentRepository.updateResident(resident);
     }
 

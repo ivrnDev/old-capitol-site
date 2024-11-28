@@ -171,7 +171,7 @@ public class EditResidentController implements BaseViewController {
         } else {
             resident.setTinIdUrl(this.resident.getTinIdUrl());
         }
-        residentService.updateResident(resident);
+        residentService.updateResidentAsync(resident);
         return null;
     }
 
