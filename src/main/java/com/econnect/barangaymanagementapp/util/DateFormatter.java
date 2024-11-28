@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 
 public class DateFormatter {
 
@@ -100,6 +102,20 @@ public class DateFormatter {
 
     public static String toTimeStamp(ZonedDateTime zonedDateTime) {
         return zonedDateTime.toInstant().toEpochMilli() + "";
+    }
+
+    public static LocalDate convertToDatePickerLocalDate(String inputDate) {
+        // Create a lenient formatter for single-digit months/days
+        DateTimeFormatter inputFormatter = new DateTimeFormatterBuilder()
+                .appendValue(ChronoField.MONTH_OF_YEAR) // Handle single or double-digit months
+                .appendLiteral('/')
+                .appendValue(ChronoField.DAY_OF_MONTH) // Handle single or double-digit days
+                .appendLiteral('/')
+                .appendValue(ChronoField.YEAR, 4) // Year must be 4 digits
+                .toFormatter();
+
+        // Parse the input string to a LocalDate
+        return LocalDate.parse(inputDate, inputFormatter);
     }
 
 
