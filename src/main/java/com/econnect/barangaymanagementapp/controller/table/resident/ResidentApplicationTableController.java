@@ -38,7 +38,7 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
             Image defaultImage = super.getImageOrDefault(residentData.getId());
             residentApplicationRowController.setImage(defaultImage);
             residentApplicationRowController.setData(residentData);
-            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentApplicationRowController);
+            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentApplicationRowController, false);
             tableContent.getChildren().add(residentApplicationRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -53,6 +53,7 @@ public class ResidentApplicationTableController extends BaseTableController<Resi
                 ResidentApplicationRowController rowController = (ResidentApplicationRowController) residentApplicationRow.getUserData();
                 if (rowController != null && rowController.getResidentId().equals(updatedResident.getId())) {
                     rowController.setData(updatedResident);
+                    super.loadImage(updatedResident.getId(), updatedResident.getProfileUrl(), rowController, true);
                     rowExists = true;
                     break;
                 }

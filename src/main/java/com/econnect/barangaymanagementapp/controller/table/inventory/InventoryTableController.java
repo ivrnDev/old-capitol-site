@@ -38,7 +38,7 @@ public class InventoryTableController extends BaseTableController<Inventory> {
             inventoryRow.setUserData(inventoryRowController);
             inventoryRowController.setImage(defaultImage);
             inventoryRowController.setData(inventoryData);
-            super.loadImage(inventoryData.getId(), inventoryData.getItemImageUrl(), inventoryRowController);
+            super.loadImage(inventoryData.getId(), inventoryData.getItemImageUrl(), inventoryRowController, false);
             tableContent.getChildren().add(inventoryRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -53,6 +53,7 @@ public class InventoryTableController extends BaseTableController<Inventory> {
                 InventoryRowController rowController = (InventoryRowController) inventoryRow.getUserData();
                 if (rowController != null && rowController.getItemId().equals(updatedInventory.getId())) {
                     rowController.setData(updatedInventory);
+                    super.loadImage(updatedInventory.getId(), updatedInventory.getItemImageUrl(), rowController, true);
                     rowExist = true;
                     break;
                 }

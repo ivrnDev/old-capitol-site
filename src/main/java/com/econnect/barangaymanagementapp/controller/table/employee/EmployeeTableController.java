@@ -39,7 +39,7 @@ public class EmployeeTableController extends BaseTableController<Employee> {
             employeeRow.setUserData(employeeRowController);
             employeeRowController.setImage(defaultImage);
             employeeRowController.setData(employeeData);
-            super.loadImage(employeeData.getId(), employeeData.getProfileUrl(), employeeRowController);
+            super.loadImage(employeeData.getId(), employeeData.getProfileUrl(), employeeRowController, false);
             tableContent.getChildren().add(employeeRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -54,6 +54,7 @@ public class EmployeeTableController extends BaseTableController<Employee> {
                 EmployeeRowController rowController = (EmployeeRowController) employeeRow.getUserData();
                 if (rowController != null && rowController.getEmployeeId().equals(updatedEmployee.getId())) {
                     rowController.setData(updatedEmployee);
+                    super.loadImage(updatedEmployee.getId(), updatedEmployee.getProfileUrl(), rowController, true);
                     rowExist = true;
                     break;
                 }

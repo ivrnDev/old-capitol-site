@@ -50,39 +50,41 @@ public abstract class BaseTableController<T> {
         return imageCache.getOrDefault(employeeId, new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath()))));
     }
 
-    protected <C extends BaseRowController<T>> void loadImage(String id, String imageUrl, C rowController) {
-        if (imageCache.containsKey(id)) {
+
+    protected <C extends BaseRowController<T>> void loadImage(String id, String imageUrl, C rowController, boolean forceLoad) {
+        if (!forceLoad && imageCache.containsKey(id)) {
             rowController.setImage(imageCache.get(id));
-        } else {
-            Task<Image> loadImageTask = new Task<>() {
-                @Override
-                protected Image call() {
-                    if (imageUrl.isEmpty()) {
-                        return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
-                    } else {
-                        return new Image(imageUrl);
-                    }
-                }
-
-                @Override
-                protected void succeeded() {
-                    Image image = getValue();
-                    imageCache.put(id, image);
-                    rowController.setImage(image);
-                }
-
-                @Override
-                protected void failed() {
-                    Throwable exception = getException();
-                    System.err.println("Error loading image: " + exception.getMessage());
-                    Image defaultImage = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
-                    imageCache.put(id, defaultImage);
-                    rowController.setImage(defaultImage);
-                }
-            };
-
-            new Thread(loadImageTask).start();
+            return;
         }
+
+        Task<Image> loadImageTask = new Task<>() {
+            @Override
+            protected Image call() {
+                if (imageUrl.isEmpty()) {
+                    return new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
+                } else {
+                    return new Image(imageUrl);
+                }
+            }
+
+            @Override
+            protected void succeeded() {
+                Image image = getValue();
+                imageCache.put(id, image);
+                rowController.setImage(image);
+            }
+
+            @Override
+            protected void failed() {
+                Throwable exception = getException();
+                System.err.println("Error loading image: " + exception.getMessage());
+                Image defaultImage = new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream(DEFAULT_PROFILE.getFxmlPath())));
+                imageCache.put(id, defaultImage);
+                rowController.setImage(defaultImage);
+            }
+        };
+
+        new Thread(loadImageTask).start();
     }
 
     public void clearRow() {

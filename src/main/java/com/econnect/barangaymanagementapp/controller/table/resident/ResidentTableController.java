@@ -38,7 +38,7 @@ public class ResidentTableController extends BaseTableController<Resident> {
             Image defaultImage = super.getImageOrDefault(residentData.getId());
             residentRowController.setImage(defaultImage);
             residentRowController.setData(residentData);
-            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentRowController);
+            super.loadImage(residentData.getId(), residentData.getProfileUrl(), residentRowController, false);
             tableContent.getChildren().add(residentRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -53,6 +53,7 @@ public class ResidentTableController extends BaseTableController<Resident> {
                 ResidentRowController rowController = (ResidentRowController) residentRow.getUserData();
                 if (rowController != null && rowController.getResidentId().equals(updatedResident.getId())) {
                     rowController.setData(updatedResident);
+                    super.loadImage(updatedResident.getId(), updatedResident.getProfileUrl(), rowController, true);
                     rowExists = true;
                     break;
                 }

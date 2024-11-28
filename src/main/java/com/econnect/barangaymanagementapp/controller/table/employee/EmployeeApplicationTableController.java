@@ -41,7 +41,7 @@ public class EmployeeApplicationTableController extends BaseTableController<Empl
             Image defaultImage = super.getImageOrDefault(employeeData.getId());
             applicationRowController.setImage(defaultImage);
             applicationRowController.setData(employeeData);
-            super.loadImage(employeeData.getId(), employeeData.getProfileUrl(), applicationRowController);
+            super.loadImage(employeeData.getId(), employeeData.getProfileUrl(), applicationRowController, false);
             tableContent.getChildren().add(applicationRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -56,6 +56,7 @@ public class EmployeeApplicationTableController extends BaseTableController<Empl
                 EmployeeApplicationRowController rowController = (EmployeeApplicationRowController) applicationRow.getUserData();
                 if (rowController != null && rowController.getResidentId().equals(updatedEmployee.getId())) {
                     rowController.setData(updatedEmployee);
+                    super.loadImage(updatedEmployee.getId(), updatedEmployee.getProfileUrl(), rowController, true);
                     rowExist = true;
                     break;
                 }
