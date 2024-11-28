@@ -374,7 +374,7 @@ public class AddResidentController {
         List<CheckBox> incomeSources = Arrays.asList(
                 ownEarningsCheckBox, ownPensionCheckBox,
                 stocksCheckBox, dependentCheckBox, spouseSalaryCheckBox,
-                spousePensionCheckBox, insuranceCheckBox, rentalCheckBox
+                spousePensionCheckBox, insuranceCheckBox, rentalCheckBox, savingsCheckBox
         );
 
         return incomeSources.stream()
