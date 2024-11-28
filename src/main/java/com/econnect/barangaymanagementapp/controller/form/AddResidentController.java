@@ -169,7 +169,7 @@ public class AddResidentController {
                 .emergencyFirstName(emergencyFirstNameInput.getText())
                 .emergencyMiddleName(emergencyMiddleNameInput.getText())
                 .emergencyLastName(emergencyLastNameInput.getText())
-                .emergencyMobileNumber("0" + emergencyMobileNumberInput.getText())
+                .emergencyMobileNumber(emergencyMobileNumberInput.getText())
                 .emergencyRelationship(emergencyRelationshipInput.getText())
 
                 .status(StatusType.ResidentStatus.VERIFIED)
