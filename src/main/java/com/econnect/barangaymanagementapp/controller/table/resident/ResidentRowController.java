@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.table.resident;
 
 import com.econnect.barangaymanagementapp.controller.base.BaseRowController;
 import com.econnect.barangaymanagementapp.controller.detail.ViewResidentController;
+import com.econnect.barangaymanagementapp.controller.form.EditResidentController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
@@ -116,8 +117,8 @@ public class ResidentRowController extends BaseRowController<Resident> {
         String currentStatus = statusLabel.getText();
         switch (fromName(currentStatus)) {
             case VERIFIED:
+                createEditButton();
                 createSuspendButton();
-                addInvisibleButtons(1);
                 break;
             case SUSPENDED:
                 createRestoreButton();
@@ -168,6 +169,18 @@ public class ResidentRowController extends BaseRowController<Resident> {
             );
         });
         buttonContainer.getChildren().add(viewBtn);
+    }
+
+    private void createEditButton() {
+        Button edit = ButtonUtils.createButton("Edit", ButtonStyle.UPDATE, () -> {
+            modalUtils.customizeModalWithCallback(
+                    FXMLPath.EDIT_RESIDENT,
+                    EditResidentController.class,
+                    controller -> controller.setId(residentIdLabel.getText())
+            );
+        });
+        setButtonState(edit, allowedActions, RolePermission.Action.EDIT);
+        buttonContainer.getChildren().add(edit);
     }
 
     private void addInvisibleButtons(int count) {
