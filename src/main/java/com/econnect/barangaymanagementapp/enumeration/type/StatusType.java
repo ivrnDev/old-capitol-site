@@ -195,6 +195,30 @@ public class StatusType {
         }
     }
 
+    @Getter
+    public enum BorrowStatus {
+        PENDING("Pending"),
+        BORROWED("Borrowed"),
+        RETURNED("Returned"),
+        OVERDUE("Overdue"),
+        REJECTED("Rejected");
+
+        private String name;
+
+        BorrowStatus(String name) {
+            this.name = name;
+        }
+
+        public static BorrowStatus fromName(String name) {
+            for (BorrowStatus status : BorrowStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+    }
+
 
 }
 

@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.enumeration.database;
 
+import com.econnect.barangaymanagementapp.domain.Borrow;
 import com.econnect.barangaymanagementapp.domain.Inventory;
 
 public enum Firebase {
@@ -11,7 +12,8 @@ public enum Firebase {
     CEDULA("3-Sedula"),
     COMPLAINT("3-Complaints"),
     HEALTH_APPOINTMENT("6-Health-Appointments"),
-    INVENTORY("3-Inventory");
+    INVENTORY("3-Inventory"),
+    BORROW("3-Borrowings");
 
     private final String path;
 
