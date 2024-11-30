@@ -904,7 +904,7 @@ public class Validator {
         }));
     }
 
-    public static void createNumberFormatter(TextField[] textFields) {
+    public void createNumberFormatter(TextField[] textFields) {
         Arrays.stream(textFields).forEach(textField -> {
             textField.setTextFormatter(new TextFormatter<>(change -> {
                 String newText = change.getControlNewText();
