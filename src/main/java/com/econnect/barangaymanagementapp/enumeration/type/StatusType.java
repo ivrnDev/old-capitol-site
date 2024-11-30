@@ -219,6 +219,29 @@ public class StatusType {
         }
     }
 
+    @Getter
+    public enum EventAppointmentStatus {
+        PENDING("Pending"),
+        ONGOING("Ongoing"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected");
+
+        private String name;
+
+        EventAppointmentStatus(String name) {
+            this.name = name;
+        }
+
+        public static EventAppointmentStatus fromName(String name) {
+            for (EventAppointmentStatus status : EventAppointmentStatus.values()) {
+                if (status.getName().equalsIgnoreCase(name)) {
+                    return status;
+                }
+            }
+            return null;
+        }
+    }
+
 
 }
 

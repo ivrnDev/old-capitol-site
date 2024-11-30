@@ -52,6 +52,7 @@ public class DependencyInjector {
     private final HealthAppointmentRepository healthAppointmentRepository;
     private final InventoryRepository inventoryRepository;
     private final BorrowRepository borrowRepository;
+    private final EventRepository eventRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
@@ -65,6 +66,7 @@ public class DependencyInjector {
     private final HealthAppointmentService healthAppointmentService;
     private final InventoryService inventoryService;
     private final BorrowService borrowService;
+    private final EventService eventService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -97,6 +99,7 @@ public class DependencyInjector {
         this.healthAppointmentRepository = new HealthAppointmentRepository(this);
         this.inventoryRepository = new InventoryRepository(this);
         this.borrowRepository = new BorrowRepository(this);
+        this.eventRepository = new EventRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
@@ -113,5 +116,6 @@ public class DependencyInjector {
         this.healthAppointmentService = new HealthAppointmentService(this);
         this.inventoryService = new InventoryService(this);
         this.borrowService = new BorrowService(this);
+        this.eventService = new EventService(this);
     }
 }
