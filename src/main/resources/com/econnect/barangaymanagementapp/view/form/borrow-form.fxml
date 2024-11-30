@@ -62,7 +62,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                             </font>
                                         </Label>
-                                        <ComboBox fx:id="itemComboBox" prefHeight="25.0" prefWidth="258.0" promptText="Select an option" styleClass="text-field" />
+                                        <ComboBox fx:id="itemComboBox" prefHeight="35.0" prefWidth="258.0" promptText="Select an option" styleClass="text-field" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="10.0" layoutY="10.0" minHeight="70.0" spacing="10.0">
