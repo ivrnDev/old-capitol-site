@@ -183,7 +183,6 @@ public class BorrowController {
         new Thread(getItems).start();
     }
 
-
     private void clearInputFields() {
         borrowerNameInput.clear();
     }
@@ -255,7 +254,6 @@ public class BorrowController {
             });
         });
         validator.setupResidentIdInput(residentIdInput);
-        slider.valueProperty().addListener((_, _, newValue) -> quantityInput.setText(String.valueOf(newValue.intValue())));
         itemComboBox.setOnAction(_ -> {
             String item = itemComboBox.getValue();
             if (item != null) {
@@ -264,9 +262,18 @@ public class BorrowController {
                 if (inventory != null) {
                     Platform.runLater(() -> loadItemImage(Firestore.ITEM.getPath(), inventory.getItemImageUrl()));
                 }
+                
+                if (inventory != null) {
+                    double stocks = Double.parseDouble(inventory.getStocks());
+                    slider.setMax(stocks);
+                    slider.setBlockIncrement(stocks / 10);
+                    slider.setMajorTickUnit(stocks / 5);
+                    slider.valueProperty().addListener((_, _, newValue) -> quantityInput.setText(String.valueOf(newValue.intValue())));
+                }
             }
         });
         validator.setupComboBox(itemComboBox);
+
 
         LocalDate minDate = LocalDate.now().plusDays(1);
         LocalDate maxDate = LocalDate.now().plusMonths(6);
