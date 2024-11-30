@@ -48,7 +48,7 @@ public class HeaderController {
     }
 
     private void populateEmployeeDetails() {
-        headerTitle.setText(loggedEmployee.getDepartment().getName());
+        headerTitle.setText("BARANGAY OFFICE");
         roleType.setText(loggedEmployee.getRole().getName());
     }
 

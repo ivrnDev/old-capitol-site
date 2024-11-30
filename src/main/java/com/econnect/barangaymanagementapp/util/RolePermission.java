@@ -20,14 +20,11 @@ public class RolePermission {
                     DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS, HISTORY),
                     OFFICE_FRONT_DESK, List.of(DASHBOARD, RESIDENTS, SERVICES),
                     FINANCIAL_CLERK, List.of(DASHBOARD, HISTORY),
-                    EVENT_COORDINATOR, List.of(DASHBOARD)
-            ),
-            DepartmentType.HUMAN_RESOURCES, Map.of(
-                    HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES)
-            ),
-            DepartmentType.PUBLIC_UTILITIES_DEPARTMENT, Map.of(
-                    ADMIN, List.of(DASHBOARD, ANALYTICS, REQUESTS, INVENTORY)
+                    EVENT_COORDINATOR, List.of(DASHBOARD),
+                    HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES),
+                    UTILITY_HEAD, List.of(DASHBOARD, ANALYTICS, INVENTORY)
             )
+//
     );
 
     private static final Map<TableActions, Map<RoleType, List<Action>>> roleActionPermission = Map.of(
