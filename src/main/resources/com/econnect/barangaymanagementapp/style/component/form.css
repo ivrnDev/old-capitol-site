@@ -1,0 +1,86 @@
+/*.text-field {*/
+/*    -fx-border-color: rgba(0, 0, 0, 0.75);*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-radius: 5px;*/
+/*    -fx-background-radius: 5px;*/
+/*}*/
+
+
+.text-field {
+    -fx-padding: 6px 12px;
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-background-color: white;
+}
+
+.text-field:focused {
+    -fx-border-color: #2563eb; /* Blue border on focus (blue-500 equivalent) */
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+}
+
+.text-area {
+    -fx-padding: -1;
+    -fx-background-color: white;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+}
+
+.text-area .content {
+    -fx-padding: 6px 12px;
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-background-color: white;
+}
+
+.text-area:focused .content {
+    -fx-border-color: #2563eb;
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+}
+
+.error.text-area .content {
+    -fx-border-color: red;
+}
+
+
+/* FILE CHOOSER AND DATE*/
+.file-chooser {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #787878;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+
+.input-date.date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+}
+
+.input-date.date-picker .text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: none;
+}
+
+.input-date.date-picker .arrow-button {
+    -fx-background-color: #ffffff;
+
+}
+
+.input-date.date-picker .text-field:empty:focused {
+    -fx-cursor: default;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}

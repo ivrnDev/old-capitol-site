@@ -38,7 +38,7 @@ public class InventoryRepository extends BaseRepository<Inventory> {
 
     }
 
-    public List<Inventory> findAllInventorys() {
+    public List<Inventory> findAllInventory() {
         return findAll(apiKey, new TypeReference<>() {
         });
     }

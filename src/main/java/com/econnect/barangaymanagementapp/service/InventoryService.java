@@ -28,7 +28,11 @@ public class InventoryService {
     }
 
     public List<Inventory> findAllInventories() {
-        return inventoryRepository.findAllInventorys();
+        return inventoryRepository.findAllInventory();
+    }
+
+    public List<Inventory> findAllPublicInventories() {
+        return inventoryRepository.findInventoryByFilter(inventory -> inventory.getAvailability().equals("Public"));
     }
 
     public Optional<Inventory> findInventoryById(String id) {

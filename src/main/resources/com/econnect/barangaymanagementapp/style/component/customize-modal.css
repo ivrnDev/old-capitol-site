@@ -1,6 +1,6 @@
 .panel {
     -fx-border-color: #000000;
-    -fx-background-color: #F8FEFF;
+    -fx-background-color: #f3f2f2;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
 }
@@ -10,187 +10,183 @@
 }
 
 .scroll-pane .viewport {
-    -fx-background-color: #F8FEFF;
+    -fx-background-color: #f3f2f2;
 }
 
-.scroll-pane .content {
-    -fx-background-color: #F8FEFF;
-}
+/*!* Input Container*!*/
+/*.input-container {*/
+/*    -fx-border-color: #787878;*/
+/*}*/
 
-/* Input Container*/
-.input-container {
-    -fx-border-color: #787878;
-}
+/*.input-container-rounded {*/
+/*    -fx-border-radius: 10px;*/
+/*}*/
 
-.input-container-rounded {
-    -fx-border-radius: 10px;
-}
+/*.input-container-first {*/
+/*    -fx-border-radius: 10px 10px 0 0;*/
+/*}*/
 
-.input-container-first {
-    -fx-border-radius: 10px 10px 0 0;
-}
+/*.input-container-default {*/
+/*    -fx-border-radius: 10px;*/
+/*}*/
 
-.input-container-default {
-    -fx-border-radius: 10px;
-}
+/*.input-container-last {*/
+/*    -fx-border-radius: 0 0 10px 10px;*/
+/*}*/
 
-.input-container-last {
-    -fx-border-radius: 0 0 10px 10px;
-}
+/*!* Label *!*/
+/*.input-label {*/
+/*    -fx-background-color: #EEFCFF;*/
+/*}*/
 
-/* Label */
-.input-label {
-    -fx-background-color: #EEFCFF;
-}
+/*.input-label-rounded {*/
+/*    -fx-background-radius: 10px 0 0 10px;*/
+/*}*/
 
-.input-label-rounded {
-    -fx-background-radius: 10px 0 0 10px;
-}
+/*.input-label-first {*/
+/*    -fx-background-radius: 10px 0 0 0;*/
+/*}*/
 
-.input-label-first {
-    -fx-background-radius: 10px 0 0 0;
-}
+/*.input-label-default {*/
+/*    -fx-background-radius: 10px 0 0 10px;*/
+/*}*/
 
-.input-label-default {
-    -fx-background-radius: 10px 0 0 10px;
-}
+/*.input-label-last {*/
+/*    -fx-background-radius: 0 0 0 10px;*/
+/*}*/
 
-.input-label-last {
-    -fx-background-radius: 0 0 0 10px;
-}
+/*!* Text field*!*/
+/*.text-input {*/
+/*    -fx-border-color: none;*/
+/*    -fx-background-color: #ffffff;*/
+/*}*/
 
-/* Text field*/
-.text-input {
-    -fx-border-color: none;
-    -fx-background-color: #ffffff;
-}
+/*.text-input-first {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 0 10px 0 0;*/
+/*    -fx-background-radius: 0 10px 0 0;*/
+/*}*/
 
-.text-input-first {
-    -fx-border-width: 1px;
-    -fx-border-radius: 0 10px 0 0;
-    -fx-background-radius: 0 10px 0 0;
-}
+/*.text-input-default {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 0 10px 10px 0;*/
+/*    -fx-background-radius: 0 10px 10px 0;*/
+/*}*/
 
-.text-input-default {
-    -fx-border-width: 1px;
-    -fx-border-radius: 0 10px 10px 0;
-    -fx-background-radius: 0 10px 10px 0;
-}
+/*.text-input-rounded {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-.text-input-rounded {
-    -fx-border-width: 1px;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.text-input-semirounded {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 0 10px 10px 0;*/
+/*    -fx-background-radius: 0 10px 10px 0;*/
+/*}*/
 
-.text-input-semirounded {
-    -fx-border-width: 1px;
-    -fx-border-radius: 0 10px 10px 0;
-    -fx-background-radius: 0 10px 10px 0;
-}
-
-.text-input-inverted-semirounded {
-    -fx-border-width: 1px;
-    -fx-border-radius: 10px 0 0 10px;
-    -fx-background-radius: 10px 0 0 10px;
-}
+/*.text-input-inverted-semirounded {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 10px 0 0 10px;*/
+/*    -fx-background-radius: 10px 0 0 10px;*/
+/*}*/
 
 
-.text-input-last {
-    -fx-border-width: 1px;
-    -fx-border-radius: 0 0 10px 0;
-    -fx-background-radius: 0 0 10px 0;
-}
+/*.text-input-last {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-radius: 0 0 10px 0;*/
+/*    -fx-background-radius: 0 0 10px 0;*/
+/*}*/
 
-.text-area {
-    -fx-background-color: #ffffff;
-}
+/*.text-area {*/
+/*    -fx-background-color: #ffffff;*/
+/*}*/
 
-.text-area .content {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #787878;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.text-area .content {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-color: #787878;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-.error.text-area .content {
-    -fx-border-color: red;
-}
+/*.error.text-area .content {*/
+/*    -fx-border-color: red;*/
+/*}*/
 
-/* File Chooser*/
+/*!* File Chooser*!*/
 
-.file-chooser {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #787878;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.file-chooser {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-color: #787878;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-.file-date.date-picker {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #787878;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.file-date.date-picker {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-color: #787878;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-.file-date.date-picker .text-field {
-    -fx-background-color: #ffffff;
-    -fx-border-radius: 10px 0 0 10px;
-    -fx-background-radius: 10px 0 0 10px;
-}
+/*.file-date.date-picker .text-field {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-radius: 10px 0 0 10px;*/
+/*    -fx-background-radius: 10px 0 0 10px;*/
+/*}*/
 
-.file-date.date-picker .arrow-button {
-    -fx-background-color: #ffffff;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.file-date.date-picker .arrow-button {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-.file-date.date-picker .text-field:empty:focused {
-    -fx-cursor: default;
-    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
-}
+/*.file-date.date-picker .text-field:empty:focused {*/
+/*    -fx-cursor: default;*/
+/*    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);*/
+/*}*/
 
-.input-date.date-picker {
-    -fx-background-color: #ffffff;
-    -fx-border-color: transparent;
-}
+/*.input-date.date-picker {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-color: transparent;*/
+/*}*/
 
-.input-date.date-picker .text-field {
-    -fx-background-color: #ffffff;
-    -fx-border-color: none;
-}
+/*.input-date.date-picker .text-field {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-color: none;*/
+/*}*/
 
-.input-date.date-picker .arrow-button {
-    -fx-background-color: #ffffff;
+/*.input-date.date-picker .arrow-button {*/
+/*    -fx-background-color: #ffffff;*/
 
-}
+/*}*/
 
-.input-date.date-picker .text-field:empty:focused {
-    -fx-cursor: default;
-    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
-}
+/*.input-date.date-picker .text-field:empty:focused {*/
+/*    -fx-cursor: default;*/
+/*    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);*/
+/*}*/
 
-.input-date-rounded.date-picker .text-field {
-    -fx-background-color: #ffffff;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-}
+/*.input-date-rounded.date-picker .text-field {*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-border-radius: 10px;*/
+/*    -fx-background-radius: 10px;*/
+/*}*/
 
-/* Check Box */
-.check-box .box {
-    -fx-background-color: white;
-    -fx-border-color: #2c2b2b;
-    -fx-border-radius: 5px;
-    -fx-background-radius-radius: 5px;
-}
+/*!* Check Box *!*/
+/*.check-box .box {*/
+/*    -fx-background-color: white;*/
+/*    -fx-border-color: #2c2b2b;*/
+/*    -fx-border-radius: 5px;*/
+/*    -fx-background-radius-radius: 5px;*/
+/*}*/
 
-.radio-button .radio {
-    -fx-background-color: white;
-    -fx-border-color: black;
-    -fx-border-width: 1px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-}
+/*.radio-button .radio {*/
+/*    -fx-background-color: white;*/
+/*    -fx-border-color: black;*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-background-radius: 10px;*/
+/*    -fx-border-radius: 10px;*/
+/*}*/
 
 /*  Profile Container*/
 .profile-container {

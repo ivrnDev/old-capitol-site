@@ -22,9 +22,10 @@ import java.time.ZonedDateTime;
 public class Borrow extends BaseEntity {
     private String borrowerId;
     private String itemId;
-    private String count;
+    private String quantity;
     private String borrowedDate;
     private String returnedDate;
+    private String purpose;
     private String expectedReturnDate;
     private StatusType.BorrowStatus status;
     private String itemType;

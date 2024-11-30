@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.form.BorrowController">
+    <children>
+        <Text fill="#414141" layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BORROW TOOLS OR EQUIPMENTS">
+            <font>
+                <Font name="Arial Bold" size="25.0" />
+            </font>
+        </Text>
+        <ImageView fx:id="closeBtn" fitHeight="30.0" fitWidth="30.0" layoutX="1082.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="9.0">
+            <image>
+                <Image url="@../../icon/close.png" />
+            </image>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </ImageView>
+        <ScrollPane fitToWidth="true" layoutX="13.0" layoutY="57.0" prefHeight="524.0" prefWidth="956.0" styleClass="root-pane" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0">
+            <content>
+                <HBox spacing="30.0">
+                    <children>
+                        <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox fx:id="imageContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" styleClass="profile-container">
+                                    <children>
+                                        <ImageView fx:id="imagePreview" fitHeight="190.0" fitWidth="190.0" pickOnBounds="true">
+                                            <image>
+                                                <Image url="@../../icon/item.png" />
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets bottom="20.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <VBox minHeight="70.0" spacing="10.0">
+                                    <children>
+                                        <Label text="Item Name" textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="itemComboBox" prefHeight="25.0" prefWidth="258.0" promptText="Select an option" styleClass="text-field" />
+                                    </children>
+                                </VBox>
+                                <VBox layoutX="10.0" layoutY="10.0" minHeight="70.0" spacing="10.0">
+                                    <children>
+                                        <Label text="Quantity" textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="quantityInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
+                                            <font>
+                                                <Font name="Arial" size="14.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                            </cursor>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <Slider fx:id="slider" />
+                                <VBox layoutX="10.0" layoutY="90.0" minHeight="70.0" spacing="10.0">
+                                    <children>
+                                        <Label text="Returned Date" textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <DatePicker fx:id="returnedDatePicker" prefHeight="31.0" prefWidth="208.0" styleClass="input-date" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="516.0" prefWidth="387.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox minHeight="70.0" prefWidth="430.0" spacing="10.0">
+                                    <children>
+                                        <VBox minHeight="70.0" spacing="10.0">
+                                            <children>
+                                                <Label text="Resident ID" textOverrun="CLIP">
+                                                    <font>
+                                                        <Font name="Arial Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="residentIdInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
+                                                    <font>
+                                                        <Font name="Arial" size="14.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </VBox>
+                                        <VBox minHeight="70.0" spacing="10.0">
+                                            <children>
+                                                <Label text="Borrower's Name" textOverrun="CLIP">
+                                                    <font>
+                                                        <Font name="Arial Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="borrowerNameInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
+                                                    <font>
+                                                        <Font name="Arial" size="14.0" />
+                                                    </font>
+                                                    <cursor>
+                                                        <Cursor fx:constant="DEFAULT" />
+                                                    </cursor>
+                                                </TextField>
+                                            </children>
+                                        </VBox>
+                                        <Label text="Purpose" textOverrun="CLIP">
+                                            <font>
+                                                <Font name="Arial Bold" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <TextArea fx:id="purposeInput" prefHeight="100.0" prefWidth="430.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                    </padding>
+                </HBox>
+            </content>
+        </ScrollPane>
+        <HBox alignment="CENTER_RIGHT" layoutX="669.0" layoutY="581.0" prefHeight="36.0" prefWidth="277.0" spacing="25.0" stylesheets="@../../style/component/button.css" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="581.0">
+            <children>
+                <Button fx:id="cancelBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" text="Cancel">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets left="20.0" right="20.0" />
+                    </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <styleClass>
+                        <String fx:value="h-reject" />
+                        <String fx:value="drop-shadow" />
+                    </styleClass>
+                </Button>
+                <Button fx:id="confirmBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" text="Confirm">
+                    <font>
+                        <Font name="Arial" size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets left="20.0" right="20.0" />
+                    </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <styleClass>
+                        <String fx:value="h-accept" />
+                        <String fx:value="drop-shadow" />
+                    </styleClass>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@../../style/component/form.css" />
+        <URL value="@../../style/component/customize-modal.css" />
+    </stylesheets>
+</AnchorPane>

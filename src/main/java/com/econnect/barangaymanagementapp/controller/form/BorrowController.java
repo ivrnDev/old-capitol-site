@@ -1,17 +1,17 @@
 package com.econnect.barangaymanagementapp.controller.form;
 
-import com.econnect.barangaymanagementapp.domain.Cedula;
+import com.econnect.barangaymanagementapp.domain.Borrow;
+import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
 import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
-import com.econnect.barangaymanagementapp.service.CedulaService;
+import com.econnect.barangaymanagementapp.service.BorrowService;
 import com.econnect.barangaymanagementapp.service.ImageService;
+import com.econnect.barangaymanagementapp.service.InventoryService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
-import com.econnect.barangaymanagementapp.util.UploadImageUtils;
 import com.econnect.barangaymanagementapp.util.Validator;
-import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -19,10 +19,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,137 +29,95 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import okhttp3.Response;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 public class BorrowController {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private ImageView closeBtn, tinIdPreview;
+    private ImageView closeBtn, imagePreview;
     @FXML
     private Button cancelBtn, confirmBtn;
     @FXML
-    private TextField residentIdInput, nameInput, addressInput, sexInput, citizenshipInput, civilStatusInput, birthdateInput, heightInput, weightInput,
-            occupationInput, tinNumberInput, grossReceiptInput, totalEarningsInput;
+    private TextField residentIdInput, quantityInput, borrowerNameInput;
+    @FXML
+    private ComboBox<String> itemComboBox;
+    @FXML
+    private DatePicker returnedDatePicker;
     @FXML
     private TextArea purposeInput;
     @FXML
-    private HBox uploadTinId, viewTinId, tinIdPreviewContainer;
+    private HBox imageContainer;
     @FXML
-    private Label tinIdLabel;
+    private Slider slider;
 
     private Stage currentStage;
     private final ModalUtils modalUtils;
     private final Validator validator;
-    private final UploadImageUtils uploadImageUtils;
-    private final CedulaService cedulaService;
+    private final BorrowService borrowService;
     private final ResidentService residentService;
+    private final InventoryService inventoryService;
     private final ImageService imageService;
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private boolean residentExists = false;
-    private boolean hasTinID;
-    private Image tinIdImage;
+    private Image image;
 
     public BorrowController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
-        this.cedulaService = dependencyInjector.getCedulaService();
+        this.borrowService = dependencyInjector.getBorrowService();
         this.residentService = dependencyInjector.getResidentService();
+        this.inventoryService = dependencyInjector.getInventoryService();
         this.validator = dependencyInjector.getValidator();
-        this.uploadImageUtils = dependencyInjector.getUploadImageUtils();
         this.imageService = dependencyInjector.getImageService();
         Platform.runLater(() -> currentStage = (Stage) rootPane.getScene().getWindow());
     }
 
     public void initialize() {
         setupEventListener();
-        ImageUtils.setRoundedClip(tinIdPreview, 10, 10);
+        populateItemComboBox();
     }
 
     private void submitData() {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(rootPane.getWidth(), rootPane.getHeight());
         rootPane.getChildren().add(loadingIndicator);
 
-        CountDownLatch latch = new CountDownLatch(2);
-        boolean[] successFlags = {false, false};
-
-        Task<Response> addCedulaTask = new Task<>() {
+        Task<Response> addBorrowTask = new Task<>() {
             @Override
             protected Response call() {
-                Cedula cedula = createRequestsFromInput();
-                return cedulaService.createCedula(cedula);
+                Borrow borrow = createRequestsFromInput();
+                return borrowService.createBorrow(borrow);
             }
 
             @Override
             protected void succeeded() {
-                latch.countDown();
                 if (getValue().isSuccessful()) {
-                    successFlags[0] = true;
+                    closeWindow();
+                    modalUtils.showModal(Modal.SUCCESS, "Success", "Borrow request submitted successfully.");
                 } else {
-                    modalUtils.showModal(Modal.ERROR, "Failed", "Failed to submit Cedula request.");
+                    modalUtils.showModal(Modal.ERROR, "Failed", "Failed to submit Borrow request.");
                 }
             }
 
             @Override
             protected void failed() {
-                latch.countDown();
-                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while submitting Cedula request.");
+                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while submitting Borrow request.");
             }
         };
 
-        Task<Response> updateResidentTin = new Task<>() {
-            @Override
-            protected Response call() {
-                String tinIdPath = imageService.uploadImage(Firestore.TIN_ID, tinIdImage, residentIdInput.getText());
-                return residentService.updateResidentTin(residentIdInput.getText(), tinNumberInput.getText(), tinIdPath);
-            }
 
-            @Override
-            protected void succeeded() {
-                latch.countDown();
-                if (getValue().isSuccessful()) {
-                    successFlags[1] = true;
-                } else {
-                    modalUtils.showModal(Modal.ERROR, "Error", "Failed to update Tin ID.");
-                }
-            }
-
-            @Override
-            protected void failed() {
-                latch.countDown();
-                modalUtils.showModal(Modal.ERROR, "Error", "Failed to update Tin ID.");
-            }
-        };
-
-        new Thread(addCedulaTask).start();
-        new Thread(updateResidentTin).start();
-
-        new Thread(() -> {
-            try {
-                latch.await();
-                Platform.runLater(() -> {
-                    loadingIndicator.setVisible(false);
-                    rootPane.getChildren().remove(loadingIndicator);
-                    if (successFlags[0] && successFlags[1]) {
-                        closeWindow();
-                        modalUtils.showModal(Modal.SUCCESS, "Success", "Cedula request has been submitted successfully.");
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        new Thread(addBorrowTask).start();
     }
 
-    private Cedula createRequestsFromInput() {
-        return Cedula.builder()
+    private Borrow createRequestsFromInput() {
+        return Borrow.builder()
                 .id(residentIdInput.getText())
-                .grossReceipt(grossReceiptInput.getText())
-                .totalEarnings(totalEarningsInput.getText())
-                .height(heightInput.getText())
-                .weight(weightInput.getText())
+                .itemId(itemComboBox.getValue().split("-")[0].trim())
+                .quantity(quantityInput.getText())
+                .purpose(purposeInput.getText())
+                .returnedDate(DateFormatter.formatLocalDateToUsShortDate(returnedDatePicker.getValue()))
                 .build();
     }
 
@@ -173,7 +128,7 @@ public class BorrowController {
             return;
         }
 
-        Task<Optional<Resident>> residentTask = new Task<>() {
+        Task<Optional<Resident>> getResident = new Task<>() {
             @Override
             protected Optional<Resident> call() {
                 return residentService.findVerifiedResidentById(residentId);
@@ -189,21 +144,7 @@ public class BorrowController {
                     String lastName = residentInfo.getLastName();
                     String middleName = residentInfo.getMiddleName();
                     String fullName = lastName + ", " + firstName + " " + middleName;
-                    nameInput.setText(fullName);
-                    addressInput.setText(residentInfo.getAddress());
-                    birthdateInput.setText(residentInfo.getBirthdate().toString());
-                    occupationInput.setText(residentInfo.getOccupation());
-                    sexInput.setText(residentInfo.getSex().getName());
-                    citizenshipInput.setText(residentInfo.getCitizenship());
-                    civilStatusInput.setText(residentInfo.getCivilStatus().getName());
-                    tinNumberInput.setText(residentInfo.getTinIdNumber());
-                    tinNumberInput.setStyle(null);
-                    if (!residentInfo.getTinIdNumber().isEmpty()) {
-                        tinNumberInput.setEditable(false);
-                        tinNumberInput.setMouseTransparent(true);
-                        loadTinId(Firestore.TIN_ID.getPath(), residentInfo.getTinIdUrl());
-                        hideUploadTin();
-                    }
+                    borrowerNameInput.setText(fullName);
                 } else {
                     clearInputFields();
                 }
@@ -214,27 +155,44 @@ public class BorrowController {
                 System.out.println("Failed to fetch data: " + getException().getMessage());
             }
         };
-        new Thread(residentTask).start();
+
+
+        new Thread(getResident).start();
     }
 
+    private void populateItemComboBox() {
+        Task<List<Inventory>> getItems = new Task<>() {
+            @Override
+            protected List<Inventory> call() {
+                return inventoryService.findAllPublicInventories();
+            }
+
+            @Override
+            protected void succeeded() {
+                List<Inventory> items = getValue();
+                List<String> itemNames = items.stream().map(item -> item.getId() + "" + "-" + "" + item.getItemName()).collect(Collectors.toList());
+                itemComboBox.getItems().addAll(itemNames);
+            }
+
+            @Override
+            protected void failed() {
+                System.out.println("Failed to fetch data: " + getException().getMessage());
+            }
+        };
+
+        new Thread(getItems).start();
+    }
+
+
     private void clearInputFields() {
-        nameInput.clear();
-        addressInput.clear();
-        birthdateInput.clear();
-        occupationInput.clear();
-        sexInput.clear();
-        citizenshipInput.clear();
-        civilStatusInput.clear();
-        tinNumberInput.clear();
-        tinNumberInput.setEditable(true);
-        tinIdPreview.setImage(null);
-        tinIdImage = null;
-        uploadTinId.setManaged(true);
-        uploadTinId.setVisible(true);
-        viewTinId.setVisible(false);
+        borrowerNameInput.clear();
     }
 
     private void validateData() {
+        TextField[] textFields = {borrowerNameInput, quantityInput};
+        TextArea[] textAreas = {purposeInput};
+        ComboBox[] comboBoxes = {itemComboBox};
+        DatePicker[] datePickers = {returnedDatePicker};
 
         if (validator.validate(residentIdInput, Validator.VALIDATOR_TYPE.IS_EMPTY)) {
             residentIdInput.requestFocus();
@@ -250,44 +208,37 @@ public class BorrowController {
             return;
         }
 
-        if (validator.hasEmptyFields(List.of(grossReceiptInput, totalEarningsInput, heightInput, weightInput), List.of(purposeInput)))
-            return;
+        if (validator.hasEmptyFields(textFields, textAreas, datePickers, comboBoxes)) return;
 
-        if (validator.hasEmptyImages(new Image[]{tinIdImage}, new HBox[]{uploadTinId})) return;
 
         submitData();
     }
 
-    private void loadTinId(String directory, String link) {
-        viewTinId.setOnMouseClicked(_ -> {
-            if (tinIdImage != null) {
-                modalUtils.showImageView(tinIdImage, currentStage);
-            }
-        });
-        tinIdPreview.setVisible(false);
-        tinIdPreview.setManaged(false);
-        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(tinIdPreviewContainer.getWidth(), tinIdPreviewContainer.getHeight());
-        Platform.runLater(() -> tinIdPreviewContainer.getChildren().add(loadingIndicator));
+    private void loadItemImage(String directory, String link) {
+        imagePreview.setOnMouseClicked(_ -> modalUtils.showImageView(imagePreview.getImage(), currentStage));
+        imagePreview.setCursor(Cursor.HAND);
+        imagePreview.setVisible(false);
+        imagePreview.setManaged(false);
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(imageContainer.getWidth(), imageContainer.getHeight());
+        Platform.runLater(() -> imageContainer.getChildren().add(loadingIndicator));
+
         Runnable call = () -> {
-            tinIdImage = imageService.getImage(directory, link);
+            image = imageService.getImage(directory, link);
             Platform.runLater(() -> {
-                tinIdPreviewContainer.getChildren().remove(loadingIndicator);
-                tinIdPreview.setImage(tinIdImage);
-                viewTinId.setCursor(Cursor.HAND);
-                tinIdPreview.setVisible(true);
-                tinIdPreview.setManaged(true);
+                imageContainer.getChildren().remove(loadingIndicator);
+                imagePreview.setImage(image);
+                imagePreview.setVisible(true);
+                imagePreview.setManaged(true);
             });
         };
 
         Runnable onFailed = () -> {
             Platform.runLater(() -> {
-                tinIdPreviewContainer.getChildren().remove(loadingIndicator);
-
+                imageContainer.getChildren().remove(loadingIndicator);
+                imagePreview.setVisible(true);
+                imagePreview.setManaged(true);
             });
-            tinIdPreview.setVisible(true);
-            tinIdPreview.setManaged(true);
-
-            System.err.println("Error loading image");
+            System.err.println("Error loading profile image");
         };
         LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
     }
@@ -297,33 +248,29 @@ public class BorrowController {
         cancelBtn.setOnAction(_ -> closeWindowConfirmation());
         confirmBtn.setOnAction(_ -> validateData());
 
-        validator.createHeightFormatter(heightInput);
-        validator.createWeightFormatter(weightInput);
-        validator.setupResidentIdInput(residentIdInput);
         residentIdInput.setOnKeyPressed(_ -> {
             residentIdInput.textProperty().addListener((_, _, newValue) -> {
                 searchDelay.setOnFinished(_ -> populateInputFields(newValue));
                 searchDelay.playFromStart();
             });
         });
-        validator.createTinIdFormatter(tinNumberInput);
-        validator.setupCurrencyListener(grossReceiptInput, totalEarningsInput);
+        validator.setupResidentIdInput(residentIdInput);
+        slider.valueProperty().addListener((_, _, newValue) -> quantityInput.setText(String.valueOf(newValue.intValue())));
+        itemComboBox.setOnAction(_ -> {
+            String item = itemComboBox.getValue();
+            if (item != null) {
+                String itemId = item.split("-")[0].trim();
+                Inventory inventory = inventoryService.findInventoryById(itemId).orElse(null);
+                if (inventory != null) {
+                    Platform.runLater(() -> loadItemImage(Firestore.ITEM.getPath(), inventory.getItemImageUrl()));
+                }
+            }
+        });
+        validator.setupComboBox(itemComboBox);
 
-        uploadTinId.setOnMouseClicked(_ -> uploadImageUtils.loadSetupFile(currentStage, image -> {
-            tinIdImage = image;
-            tinIdPreview.setImage(image);
-            tinIdLabel.setText(DateFormatter.toTimeStamp(ZonedDateTime.now()) + ".jpg");
-            viewTinId.setVisible(true);
-            uploadTinId.setStyle(null);
-        }));
-
-        viewTinId.setOnMouseClicked(_ -> modalUtils.showImageView(tinIdPreview.getImage(), currentStage));
-    }
-
-    private void hideUploadTin() {
-        uploadTinId.setVisible(false);
-        uploadTinId.setManaged(false);
-        viewTinId.setVisible(true);
+        LocalDate minDate = LocalDate.now().plusDays(1);
+        LocalDate maxDate = LocalDate.now().plusMonths(6);
+        validator.setupDatePicker(minDate, maxDate, returnedDatePicker);
     }
 
     public void closeWindow() {
