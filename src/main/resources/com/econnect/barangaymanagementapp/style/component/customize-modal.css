@@ -44,6 +44,12 @@
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
+.input-date.date-picker:focused {
+    -fx-border-color: #2563eb;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 2px;
+}
+
 .text-field {
     -fx-padding: 6px 12px;
     -fx-text-fill: #111827;
