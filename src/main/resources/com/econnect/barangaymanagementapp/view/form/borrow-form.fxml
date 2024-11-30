@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -20,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.form.BorrowController">
+<AnchorPane fx:id="rootPane" minHeight="500.0" prefHeight="638.0" prefWidth="982.0" styleClass="panel" stylesheets="@../../style/component/customize-modal.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.econnect.barangaymanagementapp.controller.form.BorrowController">
     <children>
         <Text fill="#414141" layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BORROW TOOLS OR EQUIPMENTS">
             <font>
@@ -73,7 +72,7 @@
                                                 <Font name="Arial Bold" size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextField fx:id="quantityInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
+                                        <TextField fx:id="quantityInput" editable="false" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
                                             <font>
                                                 <Font name="Arial" size="14.0" />
                                             </font>
@@ -186,8 +185,4 @@
             </children>
         </HBox>
     </children>
-    <stylesheets>
-        <URL value="@../../style/component/form.css" />
-        <URL value="@../../style/component/customize-modal.css" />
-    </stylesheets>
 </AnchorPane>
