@@ -262,22 +262,37 @@ public class BorrowController {
                 if (inventory != null) {
                     Platform.runLater(() -> loadItemImage(Firestore.ITEM.getPath(), inventory.getItemImageUrl()));
                 }
-                
+
                 if (inventory != null) {
                     double stocks = Double.parseDouble(inventory.getStocks());
                     slider.setMax(stocks);
                     slider.setBlockIncrement(stocks / 10);
                     slider.setMajorTickUnit(stocks / 5);
                     slider.valueProperty().addListener((_, _, newValue) -> quantityInput.setText(String.valueOf(newValue.intValue())));
+                    quantityInput.setEditable(true);
+                    quantityInput.textProperty().addListener((observable, oldValue, newValue) -> {
+                        if (!newValue.isEmpty()) {
+                            try {
+                                double value = Double.parseDouble(newValue);
+                                if (value > stocks) {
+                                    quantityInput.setText(oldValue);
+                                } else {
+                                    slider.setValue(value);
+                                }
+                            } catch (NumberFormatException e) {
+                                quantityInput.setText(oldValue);
+                            }
+                        }
+                    });
                 }
             }
         });
         validator.setupComboBox(itemComboBox);
 
-
         LocalDate minDate = LocalDate.now().plusDays(1);
         LocalDate maxDate = LocalDate.now().plusMonths(6);
         validator.setupDatePicker(minDate, maxDate, returnedDatePicker);
+        validator.createNumberFormatter(new TextField[]{quantityInput});
     }
 
     public void closeWindow() {
