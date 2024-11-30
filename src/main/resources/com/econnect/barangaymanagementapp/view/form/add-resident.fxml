@@ -49,7 +49,7 @@
                                                     <children>
                                                         <Label text="Last Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -69,7 +69,7 @@
                                                         <String fx:value="input-label-first" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT" />
                                                     </cursor>
@@ -86,7 +86,7 @@
                                                     <children>
                                                         <Label text="First Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -115,7 +115,7 @@
                                                     <children>
                                                         <Label text="Middle Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -144,7 +144,7 @@
                                                     <children>
                                                         <Label text="Suffix" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -160,7 +160,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="suffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="suffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -176,7 +176,7 @@
                                                     <children>
                                                         <Label text="Birthdate" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -192,14 +192,10 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <DatePicker fx:id="birthdatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
+                                                <DatePicker fx:id="birthdatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" styleClass="input-date" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                    </styleClass>
                                                     <padding>
                                                         <Insets left="-1.0" />
                                                     </padding>
@@ -212,7 +208,7 @@
                                                     <children>
                                                         <Label text="Birthplace" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -241,7 +237,7 @@
                                                     <children>
                                                         <Label text="Citizenship" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -265,7 +261,7 @@
                                                     <children>
                                                         <Label text="Civil Status" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -281,7 +277,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -297,7 +293,7 @@
                                                     <children>
                                                         <Label text="Sex" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -317,7 +313,7 @@
                                                         <String fx:value="input-label-last" />
                                                     </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="sexComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="sexComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -341,7 +337,7 @@
                                                     <children>
                                                         <Label text="Mother Tounge" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -361,7 +357,7 @@
                                                         <String fx:value="input-label-first" />
                                                     </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="motherToungeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="motherToungeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -381,7 +377,7 @@
                                                     <children>
                                                         <Label text="Religion" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -397,7 +393,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="religionComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="religionComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -413,7 +409,7 @@
                                                     <children>
                                                         <Label text="Blood Type" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -429,7 +425,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="bloodTypeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="bloodTypeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -445,7 +441,7 @@
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -474,7 +470,7 @@
                                                     <children>
                                                         <Label text="Email Address" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -503,7 +499,7 @@
                                                     <children>
                                                         <Label text="House No./ Street" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -532,7 +528,7 @@
                                                     <children>
                                                         <Label text="Telephone" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -556,7 +552,7 @@
                                                     <children>
                                                         <Label text="Mobile Number" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                         <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -576,7 +572,7 @@
                                                         <String fx:value="input-label-last" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="mobileNumberInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="mobileNumberInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT" />
                                                     </cursor>
@@ -600,7 +596,7 @@
                                     <children>
                                         <Label text="Highest Educational Attainment" textOverrun="CLIP">
                                             <font>
-                                                <Font name="Arial" size="17.0" />
+                                                <Font name="Arial Bold" size="17.0" />
                                             </font>
                                         </Label>
                                         <HBox>
@@ -672,7 +668,7 @@
                                     <children>
                                         <Label prefHeight="20.0" text="Source of Income and Assistance " textOverrun="CLIP">
                                             <font>
-                                                <Font name="Arial" size="17.0" />
+                                                <Font name="Arial Bold" size="17.0" />
                                             </font>
                                         </Label>
                                         <HBox>
@@ -752,7 +748,7 @@
                                                     <children>
                                                         <Label text="Father First Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -772,7 +768,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="fatherFirstNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="fatherFirstNameInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -792,7 +788,7 @@
                                                     <children>
                                                         <Label text="Father Last Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -824,7 +820,7 @@
                                                     <children>
                                                         <Label text="Father Middle Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -856,7 +852,7 @@
                                                     <children>
                                                         <Label text="Father Suffix Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -872,7 +868,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="fatherSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="fatherSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -888,7 +884,7 @@
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -908,7 +904,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="fatherOccupationInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="fatherOccupationInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -932,7 +928,7 @@
                                                     <children>
                                                         <Label text="Mother First Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -952,7 +948,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="motherFirstNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="motherFirstNameInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -972,7 +968,7 @@
                                                     <children>
                                                         <Label text="Mother Last Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1004,7 +1000,7 @@
                                                     <children>
                                                         <Label text="Mother Middle Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1036,7 +1032,7 @@
                                                     <children>
                                                         <Label text="Mother Suffix Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1052,7 +1048,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="motherSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="motherSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -1068,7 +1064,7 @@
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1088,7 +1084,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="motherOccupationInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="motherOccupationInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -1116,7 +1112,7 @@
                                                     <children>
                                                         <Label text="Spouse First Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1136,7 +1132,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="spouseFirstNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="spouseFirstNameInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -1156,7 +1152,7 @@
                                                     <children>
                                                         <Label text="Spouse Last Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1188,7 +1184,7 @@
                                                     <children>
                                                         <Label text="Spouse Middle Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1220,7 +1216,7 @@
                                                     <children>
                                                         <Label text="Spouse Suffix Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1236,7 +1232,7 @@
                                                         <Insets left="20.0" />
                                                     </padding>
                                                 </HBox>
-                                                <ComboBox fx:id="spouseSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="spouseSuffixComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -1252,7 +1248,7 @@
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1272,7 +1268,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="spouseOccupationInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="spouseOccupationInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -1296,7 +1292,7 @@
                                                     <children>
                                                         <Label text="Emergency First Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1316,7 +1312,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="emergencyFirstNameInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="emergencyFirstNameInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -1336,7 +1332,7 @@
                                                     <children>
                                                         <Label text="Emergency Last Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1368,7 +1364,7 @@
                                                     <children>
                                                         <Label text="Emergency Middle Name" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1400,7 +1396,7 @@
                                                     <children>
                                                         <Label text="Mobile Number" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1432,7 +1428,7 @@
                                                     <children>
                                                         <Label text="Relationship" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1452,7 +1448,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="emergencyRelationshipInput" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="emergencyRelationshipInput" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -1480,7 +1476,7 @@
                                                     <children>
                                                         <Label text="Residency Status" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1500,7 +1496,7 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <ComboBox fx:id="residencyStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                                <ComboBox fx:id="residencyStatusComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -1524,7 +1520,7 @@
                                                     <children>
                                                         <Label text="Tin Number" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -1551,7 +1547,7 @@
                                                     <children>
                                                         <Label text="Valid ID Expiration" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0" />
+                                                                <Font name="Arial Bold" size="15.0" />
                                                             </font>
                                                         </Label>
                                           <Label text="*" textFill="RED" textOverrun="CLIP">
@@ -1571,15 +1567,10 @@
                                                         <String fx:value="input-label" />
                                                     </styleClass>
                                                 </HBox>
-                                                <DatePicker fx:id="validIdExpirationDatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" HBox.hgrow="ALWAYS">
+                                                <DatePicker fx:id="validIdExpirationDatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Type or Select Here" styleClass="input-date" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date" />
-                                                        <String fx:value="text-input" />
-                                                        <String fx:value="text-input-last" />
-                                                    </styleClass>
                                                     <padding>
                                                         <Insets left="-1.0" />
                                                     </padding>

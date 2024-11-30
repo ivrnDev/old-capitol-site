@@ -74,17 +74,22 @@
                                 <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                             </padding>
                         </VBox>
-                        <VBox HBox.hgrow="ALWAYS">
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                             <children>
                                 <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefWidth="269.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" spacing="2.0" HBox.hgrow="ALWAYS">
                                             <children>
                                                 <Label text="Item Name" textOverrun="CLIP">
                                                     <font>
-                                                        <Font name="Arial" size="15.0" />
+                                                        <Font name="Arial Bold" size="15.0" />
                                                     </font>
                                                 </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
                                             </children>
                                             <opaqueInsets>
                                                 <Insets />
@@ -113,13 +118,18 @@
                                 </HBox>
                                 <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                             <children>
                                                 <Label text="Item Type" textOverrun="CLIP">
                                                     <font>
-                                                        <Font name="Arial" size="15.0" />
+                                                        <Font name="Arial Bold" size="15.0" />
                                                     </font>
                                                 </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
                                             </children>
                                             <opaqueInsets>
                                                 <Insets />
@@ -128,7 +138,7 @@
                                                 <Insets left="20.0" />
                                             </padding>
                                         </HBox>
-                                        <ComboBox fx:id="itemTypeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" styleClass="text-input" HBox.hgrow="ALWAYS">
+                                        <ComboBox fx:id="itemTypeComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                             <cursor>
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
@@ -140,13 +150,18 @@
                                 </HBox>
                                 <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity" prefWidth="269.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" spacing="2.0" HBox.hgrow="ALWAYS">
                                             <children>
                                                 <Label text="Availability" textOverrun="CLIP">
                                                     <font>
-                                                        <Font name="Arial" size="15.0" />
+                                                        <Font name="Arial Bold" size="15.0" />
                                                     </font>
                                                 </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
                                             </children>
                                             <opaqueInsets>
                                                 <Insets />
@@ -159,17 +174,13 @@
                                     <String fx:value="input-label-last" />
                                  </styleClass>
                                         </HBox>
-                                        <ComboBox fx:id="availabilityComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="176.0" promptText="Choose Here" HBox.hgrow="ALWAYS">
+                                        <ComboBox fx:id="availabilityComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="176.0" promptText="Select an option" HBox.hgrow="ALWAYS">
                                             <cursor>
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
                                             <padding>
                                                 <Insets left="-1.0" />
                                             </padding>
-                                 <styleClass>
-                                    <String fx:value="text-input" />
-                                    <String fx:value="text-input-last" />
-                                 </styleClass>
                                         </ComboBox>
                                     </children>
                            <styleClass>
@@ -187,12 +198,17 @@
                                                 <Cursor fx:constant="DEFAULT" />
                                             </cursor>
                                         </TextField>
-                              <HBox alignment="CENTER" layoutX="11.0" layoutY="11.0" prefHeight="35.0" prefWidth="115.0" styleClass="input-label">
+                              <HBox alignment="CENTER" layoutX="11.0" layoutY="11.0" prefHeight="35.0" prefWidth="115.0" spacing="2.0" styleClass="input-label">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
                                  <children>
                                     <Label text="Stock Level" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
                                        <font>
                                           <Font name="Arial" size="15.0" />
                                        </font>
@@ -224,9 +240,14 @@
                         </HBox>
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity">
                            <children>
-                              <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                              <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" spacing="2.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <Label text="Stocks" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
                                        <font>
                                           <Font name="Arial" size="15.0" />
                                        </font>

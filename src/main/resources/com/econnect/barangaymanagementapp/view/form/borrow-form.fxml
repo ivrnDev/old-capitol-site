@@ -57,21 +57,39 @@
                                 </HBox>
                                 <VBox minHeight="70.0" spacing="10.0">
                                     <children>
-                                        <Label text="Item Name" textOverrun="CLIP">
-                                            <font>
-                                                <Font name="Arial Bold" size="16.0" />
-                                            </font>
-                                        </Label>
-                                        <ComboBox fx:id="itemComboBox" prefHeight="35.0" prefWidth="258.0" promptText="Select an option" styleClass="text-field" />
+                              <HBox spacing="2.0">
+                                 <children>
+                                              <Label text="Item Name" textOverrun="CLIP">
+                                                  <font>
+                                                      <Font name="Arial Bold" size="16.0" />
+                                                  </font>
+                                              </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                                        <ComboBox fx:id="itemComboBox" minHeight="-Infinity" prefHeight="35.0" prefWidth="258.0" promptText="Select an option" styleClass="text-field" />
                                     </children>
                                 </VBox>
                                 <VBox layoutX="10.0" layoutY="10.0" minHeight="70.0" spacing="10.0">
                                     <children>
-                                        <Label text="Quantity" textOverrun="CLIP">
-                                            <font>
-                                                <Font name="Arial Bold" size="16.0" />
-                                            </font>
-                                        </Label>
+                              <HBox spacing="2.0">
+                                 <children>
+                                              <Label text="Quantity" textOverrun="CLIP">
+                                                  <font>
+                                                      <Font name="Arial Bold" size="16.0" />
+                                                  </font>
+                                              </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
                                         <TextField fx:id="quantityInput" editable="false" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
                                             <font>
                                                 <Font name="Arial" size="14.0" />
@@ -85,11 +103,20 @@
                                 <Slider fx:id="slider" />
                                 <VBox layoutX="10.0" layoutY="90.0" minHeight="70.0" spacing="10.0">
                                     <children>
-                                        <Label text="Returned Date" textOverrun="CLIP">
-                                            <font>
-                                                <Font name="Arial Bold" size="16.0" />
-                                            </font>
-                                        </Label>
+                              <HBox spacing="2.0">
+                                 <children>
+                                              <Label text="Returned Date" textOverrun="CLIP">
+                                                  <font>
+                                                      <Font name="Arial Bold" size="16.0" />
+                                                  </font>
+                                              </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
                                         <DatePicker fx:id="returnedDatePicker" prefHeight="31.0" prefWidth="208.0" styleClass="input-date" />
                                     </children>
                                 </VBox>
@@ -101,11 +128,20 @@
                                     <children>
                                         <VBox minHeight="70.0" spacing="10.0">
                                             <children>
-                                                <Label text="Resident ID" textOverrun="CLIP">
-                                                    <font>
-                                                        <Font name="Arial Bold" size="16.0" />
-                                                    </font>
-                                                </Label>
+                                    <HBox spacing="2.0">
+                                       <children>
+                                                      <Label text="Resident ID" textOverrun="CLIP">
+                                                          <font>
+                                                              <Font name="Arial Bold" size="16.0" />
+                                                          </font>
+                                                      </Label>
+                                          <Label text="*" textFill="RED" textOverrun="CLIP">
+                                             <font>
+                                                <Font name="Arial" size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                                 <TextField fx:id="residentIdInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
                                                     <font>
                                                         <Font name="Arial" size="14.0" />
@@ -123,7 +159,7 @@
                                                         <Font name="Arial Bold" size="16.0" />
                                                     </font>
                                                 </Label>
-                                                <TextField fx:id="borrowerNameInput" prefHeight="35.0" prefWidth="318.0" styleClass="text-input-default">
+                                                <TextField fx:id="borrowerNameInput" mouseTransparent="true" prefHeight="35.0" prefWidth="318.0">
                                                     <font>
                                                         <Font name="Arial" size="14.0" />
                                                     </font>
@@ -133,11 +169,20 @@
                                                 </TextField>
                                             </children>
                                         </VBox>
-                                        <Label text="Purpose" textOverrun="CLIP">
-                                            <font>
-                                                <Font name="Arial Bold" size="16.0" />
-                                            </font>
-                                        </Label>
+                              <HBox spacing="2.0">
+                                 <children>
+                                              <Label text="Purpose" textOverrun="CLIP">
+                                                  <font>
+                                                      <Font name="Arial Bold" size="16.0" />
+                                                  </font>
+                                              </Label>
+                                    <Label text="*" textFill="RED" textOverrun="CLIP">
+                                       <font>
+                                          <Font name="Arial" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
                                         <TextArea fx:id="purposeInput" prefHeight="100.0" prefWidth="430.0" />
                                     </children>
                                 </VBox>

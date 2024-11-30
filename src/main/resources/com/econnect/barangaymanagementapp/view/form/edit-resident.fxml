@@ -25,7 +25,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.econnect.barangaymanagementapp.controller.form.EditResidentController">
     <children>
-        <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EDIT RESIDENT">
+        <Text fill="#414141" layoutX="33.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ADD RESIDENT">
             <font>
                 <Font name="Arial Bold" size="25.0"/>
             </font>
@@ -43,19 +43,24 @@
                     prefWidth="1117.0" styleClass="scroll-panel" stylesheets="@../../style/component/content.css"
                     AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="2.0">
             <content>
-                <VBox alignment="CENTER_LEFT" spacing="20.0" stylesheets="@../../style/component/customize-modal.css">
+                <VBox alignment="CENTER_LEFT" spacing="30.0" stylesheets="@../../style/component/customize-modal.css">
                     <children>
                         <HBox spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -73,11 +78,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="lastNameInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" styleClass="text-input-first"
                                                            HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -92,9 +93,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -108,10 +114,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="firstNameInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -122,9 +125,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -138,10 +146,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="middleNameInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -152,9 +157,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Suffix" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -168,9 +178,9 @@
                                                     </padding>
                                                 </HBox>
                                                 <ComboBox fx:id="suffixComboBox" maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -184,9 +194,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Birthdate" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -201,14 +216,11 @@
                                                 </HBox>
                                                 <DatePicker fx:id="birthdatePicker" maxWidth="1.7976931348623157E308"
                                                             prefHeight="35.0" prefWidth="176.0"
-                                                            promptText="Type or Select Here" HBox.hgrow="ALWAYS">
+                                                            promptText="Type or Select Here" styleClass="input-date"
+                                                            HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date"/>
-                                                        <String fx:value="text-input"/>
-                                                    </styleClass>
                                                     <padding>
                                                         <Insets left="-1.0"/>
                                                     </padding>
@@ -219,9 +231,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Birthplace" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -235,10 +252,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="birthplaceInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -249,11 +263,11 @@
                                               styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Citizenship" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0"/>
+                                                                <Font name="Arial Bold" size="15.0"/>
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -264,12 +278,9 @@
                                                         <Insets left="20.0"/>
                                                     </padding>
                                                 </HBox>
-                                                <TextField fx:id="citizenshipInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" styleClass="text-input"
-                                                           HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                <TextField fx:id="citizenshipInput" editable="false"
+                                                           mouseTransparent="true" prefHeight="35.0" prefWidth="176.0"
+                                                           styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -280,9 +291,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Civil Status" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -296,9 +312,9 @@
                                                     </padding>
                                                 </HBox>
                                                 <ComboBox fx:id="civilStatusComboBox" maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -311,9 +327,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Sex" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -331,19 +352,15 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <ComboBox fx:id="sexComboBox" maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
                                                     <padding>
                                                         <Insets left="-1.0"/>
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="text-input-last"/>
-                                                        <String fx:value="text-input"/>
-                                                    </styleClass>
                                                 </ComboBox>
                                             </children>
                                             <styleClass>
@@ -353,15 +370,21 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+                                      HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="47.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mother Tounge" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -380,19 +403,15 @@
                                                 </HBox>
                                                 <ComboBox fx:id="motherToungeComboBox"
                                                           maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
                                                     <padding>
                                                         <Insets left="-1.0"/>
                                                     </padding>
-                                                    <styleClass>
-                                                        <String fx:value="text-input"/>
-                                                        <String fx:value="text-input-first"/>
-                                                    </styleClass>
                                                 </ComboBox>
                                             </children>
                                             <styleClass>
@@ -404,9 +423,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Religion" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -420,9 +444,9 @@
                                                     </padding>
                                                 </HBox>
                                                 <ComboBox fx:id="religionComboBox" maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -436,9 +460,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Blood Type" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -452,9 +481,9 @@
                                                     </padding>
                                                 </HBox>
                                                 <ComboBox fx:id="bloodTypeComboBox" maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -468,9 +497,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -484,10 +518,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="occupationInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -498,9 +529,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Email Address" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -514,10 +550,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="emailInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -528,9 +561,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="House No./ Street" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -544,10 +582,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="addressInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -558,11 +593,11 @@
                                               styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Telephone (Optional)" textOverrun="CLIP">
+                                                        <Label text="Telephone" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0"/>
+                                                                <Font name="Arial Bold" size="15.0"/>
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -574,11 +609,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="telephoneInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" styleClass="text-input"
-                                                           HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
+                                                           styleClass="text-input" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -589,9 +620,14 @@
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mobile Number" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -609,11 +645,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="mobileNumberInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" styleClass="text-input-last"
                                                            HBox.hgrow="ALWAYS">
-                                                    <font>
-                                                        <Font name="Arial" size="12.0"/>
-                                                    </font>
                                                     <cursor>
                                                         <Cursor fx:constant="DEFAULT"/>
                                                     </cursor>
@@ -631,14 +663,15 @@
                                 <Insets/>
                             </VBox.margin>
                         </HBox>
-                        <HBox fx:id="checkBoxContainer" layoutX="40.0" layoutY="383.0" spacing="40.0">
+                        <HBox fx:id="checkBoxContainer" layoutX="40.0" layoutY="383.0" spacing="40.0"
+                              styleClass="border">
                             <children>
                                 <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="arrow-button"
                                       HBox.hgrow="ALWAYS">
                                     <children>
                                         <Label text="Highest Educational Attainment" textOverrun="CLIP">
                                             <font>
-                                                <Font name="Arial" size="17.0"/>
+                                                <Font name="Arial Bold" size="17.0"/>
                                             </font>
                                         </Label>
                                         <HBox>
@@ -729,7 +762,7 @@
                                         <Label prefHeight="20.0" text="Source of Income and Assistance "
                                                textOverrun="CLIP">
                                             <font>
-                                                <Font name="Arial" size="17.0"/>
+                                                <Font name="Arial Bold" size="17.0"/>
                                             </font>
                                         </Label>
                                         <HBox>
@@ -812,22 +845,23 @@
                                     </padding>
                                 </VBox>
                             </children>
-                            <styleClass>
-                                <String fx:value="input-container"/>
-                                <String fx:value="input-container-default"/>
-                            </styleClass>
                         </HBox>
                         <HBox layoutX="40.0" layoutY="10.0" spacing="40.0">
                             <children>
-                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Father First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -845,8 +879,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="fatherFirstNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -864,9 +897,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Father Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -880,7 +918,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="fatherLastNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -894,9 +932,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Father Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -910,7 +953,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="fatherMiddleNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -924,9 +967,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Father Suffix Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -941,9 +989,10 @@
                                                 </HBox>
                                                 <ComboBox fx:id="fatherSuffixComboBox"
                                                           maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" styleClass="text-input"
+                                                          HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -956,9 +1005,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -976,8 +1030,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="fatherOccupationInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -993,14 +1046,20 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+                                      HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mother First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1018,8 +1077,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="motherFirstNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1037,9 +1095,14 @@
                                               styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mother Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1053,7 +1116,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="motherLastNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1067,9 +1130,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mother Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1083,7 +1151,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="motherMiddleNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1097,9 +1165,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mother Suffix Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1114,9 +1187,10 @@
                                                 </HBox>
                                                 <ComboBox fx:id="motherSuffixComboBox"
                                                           maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" styleClass="text-input"
+                                                          HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -1129,9 +1203,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1149,8 +1228,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="motherOccupationInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1170,16 +1248,21 @@
                         </HBox>
                         <HBox layoutX="40.0" layoutY="10.0" spacing="40.0">
                             <children>
-                                <VBox fx:id="spouseInputContainer" prefHeight="200.0" prefWidth="100.0"
+                                <VBox fx:id="spouseInputContainer" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
                                       HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Spouse First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1197,8 +1280,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="spouseFirstNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1216,9 +1298,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Spouse Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1232,7 +1319,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="spouseLastNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1246,9 +1333,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Spouse Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1262,7 +1354,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="spouseMiddleNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1276,9 +1368,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Spouse Suffix Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1293,9 +1390,10 @@
                                                 </HBox>
                                                 <ComboBox fx:id="spouseSuffixComboBox"
                                                           maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          styleClass="text-input" HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" styleClass="text-input"
+                                                          HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -1308,9 +1406,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Occupation" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1328,8 +1431,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="spouseOccupationInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1345,15 +1447,21 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+                                      HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Emergency First Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1371,8 +1479,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="emergencyFirstNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1390,9 +1497,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Emergency Last Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1406,7 +1518,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="emergencyLastNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1420,9 +1532,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Emergency Middle Name" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1436,7 +1553,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="emergencyMiddleNameInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1450,9 +1567,14 @@
                                               prefWidth="269.0" styleClass="input-container">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      styleClass="input-label" HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Mobile Number" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1466,7 +1588,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="emergencyMobileNumberInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1479,9 +1601,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Relationship" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1499,8 +1626,7 @@
                                                     </styleClass>
                                                 </HBox>
                                                 <TextField fx:id="emergencyRelationshipInput" prefHeight="35.0"
-                                                           prefWidth="176.0" promptText="Type Here"
-                                                           styleClass="text-input-last" HBox.hgrow="ALWAYS">
+                                                           prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1520,15 +1646,21 @@
                         </HBox>
                         <HBox layoutX="40.0" layoutY="386.0" maxWidth="432.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                <VBox maxWidth="600.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0"
+                                      HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity"
                                               prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Residency Status" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1547,9 +1679,9 @@
                                                 </HBox>
                                                 <ComboBox fx:id="residencyStatusComboBox"
                                                           maxHeight="1.7976931348623157E308"
-                                                          maxWidth="1.7976931348623157E308" prefHeight="35.0"
-                                                          prefWidth="176.0" promptText="Choose Here"
-                                                          HBox.hgrow="ALWAYS">
+                                                          maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                                          prefHeight="35.0" prefWidth="176.0"
+                                                          promptText="Select an option" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
@@ -1573,9 +1705,9 @@
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
                                                       styleClass="input-label" HBox.hgrow="ALWAYS">
                                                     <children>
-                                                        <Label text="Tin Number (Optional)" textOverrun="CLIP">
+                                                        <Label text="Tin Number" textOverrun="CLIP">
                                                             <font>
-                                                                <Font name="Arial" size="15.0"/>
+                                                                <Font name="Arial Bold" size="15.0"/>
                                                             </font>
                                                         </Label>
                                                     </children>
@@ -1587,7 +1719,7 @@
                                                     </padding>
                                                 </HBox>
                                                 <TextField fx:id="tinIdNumberInput" prefHeight="35.0" prefWidth="176.0"
-                                                           promptText="Type Here" HBox.hgrow="ALWAYS">
+                                                           HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0"/>
                                                     </font>
@@ -1600,9 +1732,14 @@
                                         <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
                                             <children>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0"
-                                                      HBox.hgrow="ALWAYS">
+                                                      spacing="2.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Valid ID Expiration" textOverrun="CLIP">
+                                                            <font>
+                                                                <Font name="Arial Bold" size="15.0"/>
+                                                            </font>
+                                                        </Label>
+                                                        <Label text="*" textFill="RED" textOverrun="CLIP">
                                                             <font>
                                                                 <Font name="Arial" size="15.0"/>
                                                             </font>
@@ -1622,15 +1759,10 @@
                                                 <DatePicker fx:id="validIdExpirationDatePicker"
                                                             maxWidth="1.7976931348623157E308" prefHeight="35.0"
                                                             prefWidth="176.0" promptText="Type or Select Here"
-                                                            HBox.hgrow="ALWAYS">
+                                                            styleClass="input-date" HBox.hgrow="ALWAYS">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND"/>
                                                     </cursor>
-                                                    <styleClass>
-                                                        <String fx:value="input-date"/>
-                                                        <String fx:value="text-input"/>
-                                                        <String fx:value="text-input-last"/>
-                                                    </styleClass>
                                                     <padding>
                                                         <Insets left="-1.0"/>
                                                     </padding>
