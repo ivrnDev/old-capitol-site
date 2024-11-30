@@ -3,11 +3,11 @@
 }
 
 .root-pane.scroll-pane .viewport {
-    -fx-background-color: #EEFCFF;
+    -fx-background-color: #f1f0ef;
 }
 
 .root-pane {
-    -fx-background-color: #EEFCFF;
+    -fx-background-color: #f1f0ef;
 }
 
 .label-background {
