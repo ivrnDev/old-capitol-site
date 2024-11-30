@@ -71,6 +71,7 @@ public class AddItemController {
 
     public void initialize() {
         setupEventListeners();
+
     }
 
     private void addItem() {
@@ -162,9 +163,91 @@ public class AddItemController {
         validator.setupComboBox(List.of(availabilityComboBox, itemTypeComboBox));
         validator.createNumberFormatter(new TextField[]{stockInput, minStockInput, maxStockInput});
 
-        minSlider.valueProperty().addListener((observable, oldValue, newValue) -> minStockInput.setText(String.valueOf(newValue.intValue())));
-        maxSlider.valueProperty().addListener((observable, oldValue, newValue) -> maxStockInput.setText(String.valueOf(newValue.intValue())));
-        stockSlider.valueProperty().addListener((observable, oldValue, newValue) -> stockInput.setText(String.valueOf(newValue.intValue())));
+        stockInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    double maxStock = Double.parseDouble(maxStockInput.getText());
+                    double minStock = Double.parseDouble(minStockInput.getText());
+                    if (value > maxStock || value < minStock) {
+                        stockInput.setText(oldValue);
+                    } else {
+                        stockSlider.setValue(value);
+                    }
+                } catch (NumberFormatException e) {
+                    stockInput.setText(oldValue);
+                }
+            }
+        });
+
+        minStockInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    double maxStock = maxStockInput.getText().isEmpty() ? 0 : Double.parseDouble(maxStockInput.getText());
+                    if (value > maxStock) {
+                        minStockInput.setText(oldValue);
+                    } else {
+                        minSlider.setValue(value);
+                    }
+                } catch (NumberFormatException e) {
+                    minStockInput.setText(oldValue);
+                }
+            }
+        });
+
+        maxStockInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    double minStock = minStockInput.getText().isEmpty() ? 0 : Double.parseDouble(minStockInput.getText());
+                    if (value < minStock) {
+                        maxStockInput.setText(oldValue);
+                    } else {
+                        maxSlider.setValue(value);
+                    }
+                } catch (NumberFormatException e) {
+                    maxStockInput.setText(oldValue);
+                }
+            }
+        });
+
+        minSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            minStockInput.setText(String.valueOf(newValue.intValue()));
+            adjustStockSlider();
+        });
+
+        maxSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            maxStockInput.setText(String.valueOf(newValue.intValue()));
+            adjustStockSlider();
+        });
+
+        maxSlider.setMax(100000);
+        minSlider.setMax(100000);
+        maxSlider.setBlockIncrement(1);
+        maxSlider.setMajorTickUnit(1);
+        minSlider.setBlockIncrement(1);
+        minSlider.setMajorTickUnit(1);
+
+        stockSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            stockInput.setText(String.valueOf(newValue.intValue()));
+        });
+    }
+
+    private void adjustStockSlider() {
+        try {
+            double minStock = Double.parseDouble(minStockInput.getText());
+            double maxStock = Double.parseDouble(maxStockInput.getText());
+            System.out.println(maxStock);
+            System.out.println(minStock);
+            stockSlider.setMin(minStock);
+            stockSlider.setMax(maxStock);
+            stockSlider.setBlockIncrement(1);
+            stockSlider.setMajorTickUnit(1);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     public void closeWindow() {

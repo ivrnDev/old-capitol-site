@@ -266,8 +266,8 @@ public class BorrowController {
                 if (inventory != null) {
                     double stocks = Double.parseDouble(inventory.getStocks());
                     slider.setMax(stocks);
-                    slider.setBlockIncrement(stocks / 10);
-                    slider.setMajorTickUnit(stocks / 5);
+                    slider.setBlockIncrement(1);
+                    slider.setMajorTickUnit(1);
                     slider.valueProperty().addListener((_, _, newValue) -> quantityInput.setText(String.valueOf(newValue.intValue())));
                     quantityInput.setEditable(true);
                     quantityInput.textProperty().addListener((observable, oldValue, newValue) -> {
