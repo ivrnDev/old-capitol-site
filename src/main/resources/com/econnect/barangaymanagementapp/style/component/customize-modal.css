@@ -92,9 +92,43 @@
     -fx-border-width: 2px;
 }
 
+
 .error.text-area .content {
     -fx-border-color: red;
 }
+
+.combo-box {
+    -fx-padding: 2px;
+    -fx-text-fill: #111827;
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 1px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-background-color: white;
+}
+
+.combo-box:focused {
+    -fx-border-color: #2563eb; /* Blue border on focus */
+    -fx-border-width: 2px; /* Keep the border width consistent */
+    -fx-background-color: white; /* Ensure background remains white */
+}
+
+
+.combo-box .list-cell {
+    -fx-background-color: white; /* Set background color of list items */
+    -fx-text-fill: #111827; /* Text color */
+    -fx-padding: 6px 12px; /* Consistent padding for list items */
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #f3f4f6; /* Light gray background on hover */
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: white; /* Match background with ComboBox */
+    -fx-border-radius: 7px;
+}
+
 
 /*!* Input Container*!*/
 /*.input-container {*/
