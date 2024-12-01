@@ -1,9 +1,6 @@
 .table-header {
-    -fx-background-color: #ACCEF6;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 8);
-    -fx-border-color: #787878;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
+    -fx-background-color: #f1f0ef;
+    -fx-border-color: #d1d5db;
 }
 
 .scroll-pane {
@@ -17,10 +14,8 @@
 
 .table-row {
     -fx-background-color: #FFFFFF;
-    -fx-border-color: #787878;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 8);
+    -fx-border-color: #d1d5db;
+    -fx-border-width: 0px 1px 1px 1px;
 }
 
 .table-content {
@@ -28,24 +23,21 @@
     /*-fx-background-color: #EEFCFF;*/
 }
 
-.table-row.selected {
-    -fx-border-color: #ACCEF6;
-    -fx-border-width: 1px;
-    -fx-background-color: #f0f0f0
-}
+/*.table-row.selected {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-color: #ACCEF6;*/
+/*    -fx-background-color: #f0f0f0*/
+/*}*/
 
 .table-row:hover {
-    -fx-background-color: #f0f0f0
+    -fx-background-color: #f8f8f8
 }
 
 .no-data-row {
     -fx-alignment: center;
     -fx-padding: 10;
-    -fx-background-color: #f8d7da;
-    -fx-border-color: #f5c6cb;
-    -fx-border-width: 1;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #d1d5db;
 }
 
 

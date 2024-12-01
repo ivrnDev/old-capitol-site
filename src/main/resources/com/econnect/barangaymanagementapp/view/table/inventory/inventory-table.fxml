@@ -63,16 +63,12 @@
                 <Insets left="20.0" right="20.0" />
             </padding>
             <VBox.margin>
-                <Insets bottom="20.0" />
+                <Insets />
             </VBox.margin>
         </HBox>
         <ScrollPane fitToWidth="true">
             <content>
-                <VBox fx:id="tableContent" spacing="20.0" styleClass="table-content">
-                    <padding>
-                        <Insets bottom="20.0" />
-                    </padding>
-                </VBox>
+                <VBox fx:id="tableContent" styleClass="table-content" />
             </content>
             <VBox.margin>
                 <Insets />

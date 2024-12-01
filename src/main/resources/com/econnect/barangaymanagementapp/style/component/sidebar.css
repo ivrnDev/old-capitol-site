@@ -13,7 +13,7 @@
 }
 
 .nav-bar:hover {
-    -fx-background-color: rgba(172, 206, 246, 0.3);
+    -fx-background-color: #eceae8;
     -fx-translate-x: 2px;
 }
 
@@ -31,7 +31,11 @@
 }
 
 .nav-bar.active {
-    -fx-background-color: #ACCEF6;
+    -fx-background-color: #eceae8;
     -fx-translate-x: 2px;
+}
+
+.selected-text {
+    -fx-fill: #2563eb; /* Set your desired color here */
 }
 

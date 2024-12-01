@@ -72,6 +72,7 @@ public class SidebarController {
         navIcon.setFitHeight(35);
 
         if (item == navigationState.getActiveItem()) {
+            navText.getStyleClass().add("selected-text");
             navButton.getStyleClass().add("active");
             navIcon.setImage(loadIcon(item.getIconPathSelected()));
         } else {
