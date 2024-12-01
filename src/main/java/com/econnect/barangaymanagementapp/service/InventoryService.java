@@ -18,10 +18,6 @@ public class InventoryService {
     }
 
     public Response createInventory(Inventory inventory) {
-        int baseId = 1000;
-        int countOfInventoriess = findCountOfInventory();
-        Integer autoIncrementId = countOfInventoriess > 0 ? baseId + countOfInventoriess : baseId;
-        inventory.setId(autoIncrementId.toString());
         inventory.setCreatedAt(ZonedDateTime.now());
         inventory.setUpdatedAt(ZonedDateTime.now());
         return inventoryRepository.createInventory(inventory);
@@ -37,6 +33,12 @@ public class InventoryService {
 
     public Optional<Inventory> findInventoryById(String id) {
         return inventoryRepository.findInventoryById(id);
+    }
+
+    public int generateId() {
+        int baseId = 1000;
+        int countOfInventoriess = findCountOfInventory();
+        return countOfInventoriess > 0 ? baseId + countOfInventoriess : baseId;
     }
 
     private int findCountOfInventory() {
