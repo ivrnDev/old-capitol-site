@@ -4,9 +4,7 @@
 }
 
 .search-box {
-    -fx-border-radius: 20px;
-    -fx-border-width: 0.5px;
-    -fx-border-color: black;
-
+    -fx-border-radius: 5px;
+    -fx-border-color: #d1d5db;
 }
 
