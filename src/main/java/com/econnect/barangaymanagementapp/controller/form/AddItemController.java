@@ -12,9 +12,9 @@ import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.UploadImageUtils;
 import com.econnect.barangaymanagementapp.util.Validator;
+import com.econnect.barangaymanagementapp.util.resource.ImageUtils;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -26,7 +26,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
@@ -57,8 +56,6 @@ public class AddItemController {
     private final Validator validator;
     private final UploadImageUtils uploadImageUtils;
     private Image image;
-    private String profileLink;
-    private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public AddItemController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -71,7 +68,7 @@ public class AddItemController {
 
     public void initialize() {
         setupEventListeners();
-
+        ImageUtils.setRoundedClip(itemImage, 25, 25);
     }
 
     private void addItem() {
@@ -118,8 +115,10 @@ public class AddItemController {
     }
 
     private Void processInventoryCreation(Inventory inventory) {
-        String itemUrl = imageService.uploadImage(Firestore.ITEM, image, inventory.getId());
+        Integer id = inventoryService.generateId();
+        String itemUrl = imageService.uploadImage(Firestore.ITEM, image, id.toString());
         inventory.setItemImageUrl(itemUrl);
+        inventory.setId(id.toString());
         inventoryService.createInventory(inventory);
         return null;
     }

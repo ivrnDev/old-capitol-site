@@ -1,8 +1,6 @@
 package com.econnect.barangaymanagementapp.domain;
 
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
-import com.econnect.barangaymanagementapp.enumeration.type.Itemtype;
-import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -22,6 +20,7 @@ import java.time.ZonedDateTime;
 public class Borrow extends BaseEntity {
     private String borrowerId;
     private String itemId;
+    private String itemName;
     private String quantity;
     private String borrowedDate;
     private String returnedDate;

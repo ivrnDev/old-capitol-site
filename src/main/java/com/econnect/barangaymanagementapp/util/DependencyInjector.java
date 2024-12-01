@@ -1,9 +1,6 @@
 package com.econnect.barangaymanagementapp.util;
 
-import com.econnect.barangaymanagementapp.domain.Employee;
-import com.econnect.barangaymanagementapp.domain.Inventory;
-import com.econnect.barangaymanagementapp.domain.Request;
-import com.econnect.barangaymanagementapp.domain.Resident;
+import com.econnect.barangaymanagementapp.domain.*;
 import com.econnect.barangaymanagementapp.repository.*;
 import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.data.JsonConverter;
@@ -53,6 +50,7 @@ public class DependencyInjector {
     private final InventoryRepository inventoryRepository;
     private final BorrowRepository borrowRepository;
     private final EventRepository eventRepository;
+    private final EventItemsRepository eventItemsRepository;
 
     private final EmailService emailService;
     private final LoginService loginService;
@@ -67,6 +65,7 @@ public class DependencyInjector {
     private final InventoryService inventoryService;
     private final BorrowService borrowService;
     private final EventService eventService;
+    private final EventItemsService eventItemsService;
 
     public DependencyInjector(Stage stage) {
         this.stage = stage;
@@ -100,6 +99,7 @@ public class DependencyInjector {
         this.inventoryRepository = new InventoryRepository(this);
         this.borrowRepository = new BorrowRepository(this);
         this.eventRepository = new EventRepository(this);
+        this.eventItemsRepository = new EventItemsRepository(this);
 
         this.employeeService = new EmployeeService(this);
         this.residentService = new ResidentService(this);
@@ -117,5 +117,6 @@ public class DependencyInjector {
         this.inventoryService = new InventoryService(this);
         this.borrowService = new BorrowService(this);
         this.eventService = new EventService(this);
+        this.eventItemsService = new EventItemsService(this);
     }
 }

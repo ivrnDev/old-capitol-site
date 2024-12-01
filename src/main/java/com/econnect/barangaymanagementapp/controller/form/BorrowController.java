@@ -115,6 +115,7 @@ public class BorrowController {
         return Borrow.builder()
                 .id(residentIdInput.getText())
                 .itemId(itemComboBox.getValue().split("-")[0].trim())
+                .itemName(itemComboBox.getValue().split("-")[1].trim())
                 .quantity(quantityInput.getText())
                 .purpose(purposeInput.getText())
                 .returnedDate(DateFormatter.formatLocalDateToUsShortDate(returnedDatePicker.getValue()))

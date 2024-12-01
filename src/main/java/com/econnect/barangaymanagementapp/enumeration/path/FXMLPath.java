@@ -39,7 +39,7 @@ public enum FXMLPath {
     APPLY_WORK_FORM("view/form/apply-work-form.fxml"),
     ID_FORM("view/form/id-form.fxml"),
     CEDULA_FORM("view/form/cedula-form.fxml"),
-    EVENT_REQUEST_FORM("view/form/event-certificate-form.fxml"),
+    EVENT_REQUEST_FORM("view/form/event-form.fxml"),
     TOOL_AND_MATERIALS_FORM("view/form/borrow-form.fxml"),
     ASSISTANCE_FORM("view/form/assistance-form.fxml"),
     COMPLAINT_FORM("view/form/complaint-form.fxml"),
