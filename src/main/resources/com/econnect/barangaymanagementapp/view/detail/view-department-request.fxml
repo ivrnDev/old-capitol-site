@@ -80,7 +80,7 @@
                                                         <String fx:value="input-label-default" />
                                                     </styleClass>
                                                 </HBox>
-                                                <TextField fx:id="requestIdInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-default" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="requestIdInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-default" HBox.hgrow="ALWAYS">
                                                     <font>
                                                         <Font name="Arial" size="12.0" />
                                                     </font>
@@ -120,7 +120,7 @@
                                                                 <String fx:value="input-label" />
                                                             </styleClass>
                                                         </HBox>
-                                                        <TextField fx:id="nameInput" editable="false" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="nameInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -151,7 +151,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="emailInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="emailInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -178,7 +178,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="departmentInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="departmentInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -205,7 +205,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="typeInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="typeInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -232,7 +232,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="statusInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="statusInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -259,7 +259,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="dateInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="dateInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -286,7 +286,7 @@
                                                                 <Insets left="20.0" />
                                                             </padding>
                                                         </HBox>
-                                                        <TextField fx:id="timeInput" editable="false" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
+                                                        <TextField fx:id="timeInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" HBox.hgrow="ALWAYS">
                                                             <font>
                                                                 <Font name="Arial" size="12.0" />
                                                             </font>
@@ -305,7 +305,7 @@
                                                         <Font name="Arial" size="18.0" />
                                                     </font>
                                                 </Label>
-                                                <TextArea fx:id="commentInput" editable="false" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" prefWidth="518.0" styleClass="text-field" wrapText="true">
+                                                <TextArea fx:id="commentInput" editable="false" mouseTransparent="true" prefColumnCount="10" prefHeight="80.0" prefRowCount="4" prefWidth="518.0" styleClass="text-field" wrapText="true">
                                                     <font>
                                                         <Font name="Arial" size="15.0" />
                                                     </font>
