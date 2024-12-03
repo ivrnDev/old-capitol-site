@@ -145,6 +145,10 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;
+            case CANCELLED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
             case COMPLETED:
                 addInvisibleButtons(2);
                 break;
@@ -166,6 +170,10 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                 createCancelButton();
                 break;
             case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;
@@ -194,6 +202,10 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                 createCancelButton();
                 break;
             case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;
