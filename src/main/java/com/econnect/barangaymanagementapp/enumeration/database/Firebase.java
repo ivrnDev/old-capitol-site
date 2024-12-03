@@ -17,6 +17,7 @@ public enum Firebase {
     BORROW("3-Borrowings"),
     EVENT("3-Events"),
     EVENT_ITEMS("3-Event-Items"),
+    SUPPLY_REQUEST("6-SupplyRequests"),
     ;
 
     private final String path;

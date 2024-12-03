@@ -27,13 +27,10 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
@@ -94,7 +91,7 @@ public class PrintUtils {
         return imageView;
     }
 
-    public static void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
+    public static void printDocumentFile(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
         printPdf(pdfFile, callback, currentStage);
     }
 
@@ -152,7 +149,6 @@ public class PrintUtils {
         }
     }
 
-
     public static Image convertPdfToImage(File pdfFile, int pageIndex) throws IOException {
         try (PDDocument pdfDocument = Loader.loadPDF(pdfFile)) {
             PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
@@ -207,6 +203,39 @@ public class PrintUtils {
     }
 
     // DOCUMENTS
+    public static File convertWordDocumentToImage(String documentUrl, Consumer<Image> callback) throws Exception {
+        InputStream inputStream = new URL(documentUrl).openStream();
+        XWPFDocument document = new XWPFDocument(inputStream);
+
+        ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+        try (PDDocument pdfDocument = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
+            pdfDocument.addPage(page);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page)) {
+                for (XWPFParagraph paragraph : document.getParagraphs()) {
+                    contentStream.beginText();
+                    contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 12);
+                    contentStream.newLineAtOffset(50, 750);
+                    contentStream.showText(paragraph.getText());
+                    contentStream.endText();
+                }
+            }
+
+            pdfDocument.save(pdfOutputStream);
+        }
+
+        File pdfFile = File.createTempFile("document", ".pdf");
+        try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+            fos.write(pdfOutputStream.toByteArray());
+        }
+
+        Image image = PrintUtils.convertPdfToImage(pdfFile, 0);
+        callback.accept(image);
+
+        return pdfFile;
+    }
+
     public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
         XWPFDocument document = new XWPFDocument();
 

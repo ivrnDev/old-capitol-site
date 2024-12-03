@@ -16,6 +16,8 @@ public enum FXMLPath {
 
     RESIDENT_REQUEST_TABLE("view/table/request/resident-request-table.fxml"),
     RESIDENT_REQUEST_ROW("view/table/request/resident-request-row.fxml"),
+    DEPARTMENT_REQUEST_TABLE("view/table/request/department-request-table.fxml"),
+    DEPARTMENT_REQUEST_ROW("view/table/request/department-request-row.fxml"),
 
     INVENTORY_TABLE("view/table/inventory/inventory-table.fxml"),
     INVENTORY_ROW("view/table/inventory/inventory-row.fxml"),
@@ -26,6 +28,7 @@ public enum FXMLPath {
     VIEW_APPLICATION_EMPLOYEE("view/detail/view-application-employee.fxml"),
     VIEW_RESIDENT("view/detail/view-resident.fxml"),
     VIEW_DOCUMENT_REQUEST("view/detail/view-document-request.fxml"),
+    VIEW_DEPARTMENT_REQUEST("view/detail/view-department-request.fxml"),
     VIEW_ID_REQUEST("view/detail/view-id-request.fxml"),
     VIEW_BARANGAY_ID("view/detail/view-id.fxml"),
     PRINT_ID("view/detail/print-id.fxml"),

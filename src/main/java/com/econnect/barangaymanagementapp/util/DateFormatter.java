@@ -1,8 +1,6 @@
 package com.econnect.barangaymanagementapp.util;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -123,5 +121,8 @@ public class DateFormatter {
         return dateTime.format(formatter);
     }
 
-
+    public static ZonedDateTime convertTimestampToZonedDateTime(String timestamp) {
+        long epochMilli = Long.parseLong(timestamp);
+        return Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault());
+    }
 }
