@@ -1,14 +1,13 @@
 package com.econnect.barangaymanagementapp.controller;
 
+import com.econnect.barangaymanagementapp.controller.table.request.DepartmentRequestTableController;
 import com.econnect.barangaymanagementapp.controller.table.request.ResidentRequestTableController;
+import com.econnect.barangaymanagementapp.domain.DepartmentRequest;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.mapper.RequestMapper;
-import com.econnect.barangaymanagementapp.service.BarangayidService;
-import com.econnect.barangaymanagementapp.service.CedulaService;
-import com.econnect.barangaymanagementapp.service.CertificateService;
-import com.econnect.barangaymanagementapp.service.SearchService;
+import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEPARTMENT_REQUEST_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_REQUEST_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
@@ -57,14 +57,17 @@ public class RequestController {
     private final CertificateService certificateService;
     private final CedulaService cedulaService;
     private final BarangayidService barangayidService;
+    private final DepartmentRequestService departmentRequestService;
 
     private ResidentRequestTableController residentRequestTableController;
+    private DepartmentRequestTableController departmentRequestTableController;
 
     private final SearchService<Request> searchService;
     private final Employee loggedEmployee;
 
-    private StackPane loadingIndicator;
-    private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
+    private StackPane residentRequestLoadingIndicator;
+    private StackPane departmentRequestLoadingIndicator;
+    private final Map<RequestType, List<Request>> residentRequestCache = new ConcurrentHashMap<>();
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
     private boolean showDepartmentRequest;
     private boolean dataFetched = false;
@@ -80,13 +83,14 @@ public class RequestController {
         this.certificateService = dependencyInjector.getCertificateService();
         this.cedulaService = dependencyInjector.getCedulaService();
         this.barangayidService = dependencyInjector.getBarangayidService();
-
+        this.departmentRequestService = dependencyInjector.getDepartmentRequestService();
     }
 
     public void initialize() {
         resetLiveReload();
         setupListener();
         loadResidentRequestTable();
+        loadDepartmentRequestTable();
         fetchData();
         initializeSSEListener();
     }
@@ -102,12 +106,24 @@ public class RequestController {
         }
     }
 
-    private void fetchData() {
-        addResidentRequestLoadingIndicator();
-        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
-        populateResidentRequestRows(selectedType);
+    private void loadDepartmentRequestTable() {
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(DEPARTMENT_REQUEST_TABLE.getFxmlPath(), dependencyInjector);
+            Parent departmentRequestTable = loader.load();
+            departmentRequestTableController = loader.getController();
+            departmentRequestContent.getChildren().add(departmentRequestTable);
+        } catch (IOException e) {
+            System.err.println("Error loading department request table: " + e.getMessage());
+        }
     }
 
+    private void fetchData() {
+        addResidentRequestLoadingIndicator();
+        addDepartmentRequestLoadingIndicator();
+        RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
+        populateResidentRequestRows(selectedType);
+        populateDepartmentRequestRows();
+    }
 
     private void populateResidentRequestRows(RequestType type) {
 
@@ -116,9 +132,9 @@ public class RequestController {
             protected Void call() {
                 if (dataFetched) {
                     Platform.runLater(() -> {
-                        List<Request> cachedRequests = requestCache.get(type);
+                        List<Request> cachedRequests = residentRequestCache.get(type);
                         if (cachedRequests != null && !cachedRequests.isEmpty()) {
-                            updateRequestRow(cachedRequests);
+                            updateResidentRequestRow(cachedRequests);
                         } else {
                             residentRequestTableController.clearRow();
                             residentRequestTableController.showNoData();
@@ -150,10 +166,10 @@ public class RequestController {
                 allRequest.addAll(allRequestBarangayId);
                 allRequest.addAll(allCedula);
 
-                requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
-                requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
-                requestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
-                requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
+                residentRequestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
+                residentRequestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
+                residentRequestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
+                residentRequestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
 
                 dataFetched = true;
                 return null;
@@ -161,27 +177,52 @@ public class RequestController {
 
             @Override
             protected void succeeded() {
-                removeTableLoadingIndicator();
+                removeResidentRequestLoadingIndicator();
                 residentRequestComboBox.setDisable(false);
                 Platform.runLater(() -> {
-                    List<Request> requests = requestCache.get(type);
+                    List<Request> requests = residentRequestCache.get(type);
                     if (requests == null || requests.isEmpty()) {
                         residentRequestTableController.clearRow();
                         residentRequestTableController.showNoData();
                     } else {
-                        updateRequestRow(requests);
+                        updateResidentRequestRow(requests);
                     }
                 });
             }
 
             @Override
             protected void failed() {
-                removeTableLoadingIndicator();
+                removeResidentRequestLoadingIndicator();
                 System.out.println("Error loading requests: " + getException().getMessage());
             }
 
         };
         new Thread(task).start();
+    }
+
+    public void populateDepartmentRequestRows() {
+        Task<List<DepartmentRequest>> fetchDepartmentRequest = new Task<>() {
+            @Override
+            protected List<DepartmentRequest> call() {
+                return departmentRequestService.findAllDepartmentRequests();
+            }
+
+            @Override
+            protected void succeeded() {
+                List<DepartmentRequest> allDepartmentRequest = getValue();
+                removeDepartmentRequestLoadingIndicator();
+                updateDepartmentRequestRow(allDepartmentRequest);
+            }
+
+            @Override
+            protected void failed() {
+                removeDepartmentRequestLoadingIndicator();
+                System.err.println("Error loading department requests: " + getException().getMessage());
+            }
+
+        };
+
+        new Thread(fetchDepartmentRequest).start();
     }
 
     private void performResidentRequestSearch() {
@@ -190,9 +231,9 @@ public class RequestController {
 
         searchService.performSearch(
                 searchText,
-                requestCache.get(selectedType),
+                residentRequestCache.get(selectedType),
                 searchService.createRequestFilter(searchText),
-                (filteredRequest) -> updateRequestRow(filteredRequest));
+                (filteredRequest) -> updateResidentRequestRow(filteredRequest));
     }
 
 //    private void triggerPermission() {
@@ -222,9 +263,10 @@ public class RequestController {
     }
 
     private void initializeSSEListener() {
-        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
-        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
-        cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CEDULA, result)));
+        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(BARANGAY_ID, result)));
+        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(CERTIFICATES, result)));
+        cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(CEDULA, result)));
+        departmentRequestService.listenToUpdates(result -> Platform.runLater(this::populateDepartmentRequestRows));
     }
 
     private void resetLiveReload() {
@@ -232,15 +274,24 @@ public class RequestController {
     }
 
     public void addResidentRequestLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContent.getWidth(), residentRequestContent.getHeight());
-        residentRequestContent.getChildren().add(loadingIndicator);
+        residentRequestLoadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContent.getWidth(), residentRequestContent.getHeight());
+        residentRequestContent.getChildren().add(residentRequestLoadingIndicator);
     }
 
-    public void removeTableLoadingIndicator() {
-        residentRequestContent.getChildren().remove(loadingIndicator);
+    public void addDepartmentRequestLoadingIndicator() {
+        departmentRequestLoadingIndicator = LoadingIndicator.createLoadingIndicator(departmentRequestContent.getWidth(), departmentRequestContent.getHeight());
+        departmentRequestContent.getChildren().add(departmentRequestLoadingIndicator);
     }
 
-    private void updateRequestRow(List<Request> requests) {
+    public void removeResidentRequestLoadingIndicator() {
+        residentRequestContent.getChildren().remove(residentRequestLoadingIndicator);
+    }
+
+    public void removeDepartmentRequestLoadingIndicator() {
+        departmentRequestContent.getChildren().remove(departmentRequestLoadingIndicator);
+    }
+
+    private void updateResidentRequestRow(List<Request> requests) {
         residentRequestTableController.clearRow();
 
         if (requests.isEmpty()) {
@@ -250,7 +301,7 @@ public class RequestController {
         requests.forEach(request -> residentRequestTableController.addRow(request));
     }
 
-    public void updateRequestRow(RequestType requestType, String id) {
+    public void updateResidentRequestRow(RequestType requestType, String id) {
         Optional<Request> updatedRequest = Optional.empty();
 
         switch (requestType) {
@@ -266,13 +317,13 @@ public class RequestController {
         }
 
         updatedRequest.ifPresentOrElse(request -> {
-            requestCache.computeIfPresent(requestType, (key, cachedRequests) -> {
+            residentRequestCache.computeIfPresent(requestType, (key, cachedRequests) -> {
                 cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
                 cachedRequests.add(request);
                 return cachedRequests;
             });
 
-            requestCache.computeIfPresent(RequestType.ALL, (key, cachedRequests) -> {
+            residentRequestCache.computeIfPresent(RequestType.ALL, (key, cachedRequests) -> {
                 cachedRequests.removeIf(req -> req.getId().equals(id) && req.getRequestType().equals(requestType));
                 cachedRequests.add(request);
                 return cachedRequests;
@@ -282,5 +333,15 @@ public class RequestController {
                 residentRequestTableController.updateRow(request);
             }
         }, () -> residentRequestTableController.deleteRow(id, requestType));
+    }
+
+    private void updateDepartmentRequestRow(List<DepartmentRequest> requests) {
+        departmentRequestTableController.clearRow();
+
+        if (requests.isEmpty()) {
+            departmentRequestTableController.showNoData();
+            return;
+        }
+        requests.forEach(request -> departmentRequestTableController.addRow(request));
     }
 }

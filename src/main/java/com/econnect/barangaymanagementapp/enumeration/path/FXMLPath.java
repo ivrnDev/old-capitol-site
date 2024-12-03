@@ -16,6 +16,8 @@ public enum FXMLPath {
 
     RESIDENT_REQUEST_TABLE("view/table/request/resident-request-table.fxml"),
     RESIDENT_REQUEST_ROW("view/table/request/resident-request-row.fxml"),
+    DEPARTMENT_REQUEST_TABLE("view/table/request/department-request-table.fxml"),
+    DEPARTMENT_REQUEST_ROW("view/table/request/department-request-row.fxml"),
 
     INVENTORY_TABLE("view/table/inventory/inventory-table.fxml"),
     INVENTORY_ROW("view/table/inventory/inventory-row.fxml"),
