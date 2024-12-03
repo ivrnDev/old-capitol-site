@@ -31,7 +31,7 @@
                 </HBox>
                 <HBox alignment="CENTER" layoutX="240.0" layoutY="10.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Type" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Request Type" textAlignment="CENTER">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
@@ -49,7 +49,7 @@
                 </HBox>
                 <HBox alignment="CENTER" layoutX="661.0" layoutY="11.0" minWidth="90.0" prefWidth="125.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Date" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="120.0" minWidth="80.0" text="Type" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>

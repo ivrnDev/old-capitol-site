@@ -42,7 +42,7 @@ public class RequestRowController extends BaseRowController<Request> {
     @FXML
     private HBox tableRow, buttonContainer;
     @FXML
-    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
+    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, applicationTypeLabel, timeLabel;
 
     private final ModalUtils modalUtils;
     private final CertificateService certificateService;
@@ -81,8 +81,8 @@ public class RequestRowController extends BaseRowController<Request> {
         residentIdLabel.setText(request.getResidentId());
         requestTypeLabel.setText(request.getRequestType() != null ? request.getRequestType().getName() : "");
         statusLabel.setText(request.getStatus().getName());
-        dateLabel.setText(DateFormatter.formatDateToLongStyle(request.getCreatedAt()));
-        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()));
+        applicationTypeLabel.setText(request.getApplicationType().getName());
+        timeLabel.setText(DateFormatter.formatToDateTime(request.getCreatedAt()));
     }
 
     @Override

@@ -1,13 +1,19 @@
 package com.econnect.barangaymanagementapp.controller;
 
 import com.econnect.barangaymanagementapp.controller.table.request.RequestTableController;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Request;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.mapper.RequestMapper;
-import com.econnect.barangaymanagementapp.service.*;
+import com.econnect.barangaymanagementapp.service.BarangayidService;
+import com.econnect.barangaymanagementapp.service.CedulaService;
+import com.econnect.barangaymanagementapp.service.CertificateService;
+import com.econnect.barangaymanagementapp.service.SearchService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
+import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.animation.PauseTransition;
@@ -16,8 +22,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -33,69 +41,86 @@ public class RequestController {
     @FXML
     private VBox contentPane;
     @FXML
-    private VBox residentRequestContainer;
+    private VBox residentRequestContent, departmentRequestContent;
     @FXML
-    private TextField residentRequestSearchField;
+    private TextField residentRequestSearchField, departmentRequestSearchField;
+    @FXML
+    public Button addResidentBtn;
     @FXML
     private ComboBox<String> residentRequestComboBox;
+    @FXML
+    private AnchorPane applicationHeader;
 
     private final DependencyInjector dependencyInjector;
+    private final LiveReloadUtils liveReloadUtils;
     private final ModalUtils modalUtils;
     private final FXMLLoaderFactory fxmlLoaderFactory;
-    private RequestTableController requestTableController;
-    private final LiveReloadUtils liveReloadUtils;
-    private final SearchService<Request> searchService;
-    private final ResidentService residentService;
     private final CertificateService certificateService;
-    private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
-    private final ComplaintService complaintService;
+    private final BarangayidService barangayidService;
 
-    private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
+    private RequestTableController requestTableController;
+
+    private final SearchService<Request> searchService;
+    private final Employee loggedEmployee;
+
+    private List<Request> allRequests;
+    private List<Resident> allPendingResidents;
+    private boolean showDepartmentRequest;
     private StackPane loadingIndicator;
-
+    private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
 
     public RequestController(DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
-        this.residentService = dependencyInjector.getResidentService();
         this.modalUtils = dependencyInjector.getModalUtils();
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
-        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
         this.searchService = dependencyInjector.getRequestSearchService();
+        this.liveReloadUtils = dependencyInjector.getLiveReloadUtils();
+        this.loggedEmployee = UserSession.getInstance().getCurrentEmployee();
         this.certificateService = dependencyInjector.getCertificateService();
-        this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
-        this.complaintService = dependencyInjector.getComplaintService();
+        this.barangayidService = dependencyInjector.getBarangayidService();
+
     }
 
     public void initialize() {
         resetLiveReload();
-        initializeSSEListener();
-
         setupListener();
-        loadRequestTable();
+        loadResidentRequestTable();
         fetchData();
+        initializeSSEListener();
     }
 
-    private void loadRequestTable() {
+    private void loadResidentRequestTable() {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_TABLE.getFxmlPath(), dependencyInjector);
-            Parent requestTable = loader.load();
+            Parent residentRequestTable = loader.load();
             requestTableController = loader.getController();
-            residentRequestContainer.getChildren().add(requestTable);
+            residentRequestContent.getChildren().add(residentRequestTable);
         } catch (IOException e) {
-            System.err.println("Error loading request table: " + e.getMessage());
+            System.err.println("Error loading employee table: " + e.getMessage());
         }
     }
 
     private void fetchData() {
-        addTableLoadingIndicator();
+        addResidentRequestLoadingIndicator();
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
-        populateRows(selectedType);
+        populateResidentRequestRows(selectedType);
     }
 
-    private void populateRows(RequestType type) {
+//    private void loadResidentApplicationTable() {
+//        try {
+//            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_TABLE.getFxmlPath(), dependencyInjector);
+//            Parent residentTable = loader.load();
+//            residentApplicationTableController = loader.getController();
+//            residentApplicationContent.getChildren().add(residentTable);
+//        } catch (IOException e) {
+//            System.err.println("Error loading employee table: " + e.getMessage());
+//        }
+//    }
+
+    private void populateResidentRequestRows(RequestType type) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -156,7 +181,30 @@ public class RequestController {
         new Thread(task).start();
     }
 
-    private void performSearch() {
+//    public void populateResidentApplicationRows() {
+//        addResidentApplicationLoadingIndicator();
+//        Runnable call = () -> {
+//            allPendingResidents = residentService.findAllPendingResidents();
+//            Platform.runLater(() -> {
+//                removeResidentApplicationLoadingIndicator();
+//                if (allPendingResidents.isEmpty()) {
+//                    residentApplicationTableController.clearRow();
+//                    residentApplicationTableController.showNoData();
+//                } else {
+//                    updateResidentApplicationRow(allPendingResidents);
+//                }
+//            });
+//        };
+//
+//        Runnable onFailed = () -> {
+//            removeResidentApplicationLoadingIndicator();
+//            System.err.println("Error loading resident applications");
+//        };
+//
+//        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
+//    }
+
+    private void performResidentRequestSearch() {
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         String searchText = residentRequestSearchField.getText().trim().toLowerCase();
 
@@ -165,6 +213,51 @@ public class RequestController {
                 requestCache.get(selectedType),
                 searchService.createRequestFilter(searchText),
                 (filteredRequest) -> updateRequestRow(filteredRequest));
+    }
+
+//    private void triggerPermission() {
+//        List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
+//        if (!allowedActions.contains(RolePermission.Action.CREATE)) addResidentBtn.setDisable(true);
+//        if (!allowedActions.contains(RolePermission.Action.APPLICATION)) {
+//            showDepartmentRequest = false;
+//            applicationHeader.setManaged(false);
+//            applicationHeader.setVisible(false);
+//            residentApplicationContent.setVisible(false);
+//            residentApplicationContent.setManaged(false);
+//            residentListContent.setManaged(false);
+//            residentListContent.setVisible(true);
+//        }
+//    }
+
+    private void setupListener() {
+        residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDelay.setOnFinished(_ -> performResidentRequestSearch());
+            searchDelay.playFromStart();
+        });
+        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(RequestType::getName).toList());
+        residentRequestComboBox.setValue(RequestType.ALL.getName());
+        residentRequestComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            populateResidentRequestRows(fromName(newValue));
+        });
+    }
+
+    private void initializeSSEListener() {
+        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
+        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
+        cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CEDULA, result)));
+    }
+
+    private void resetLiveReload() {
+        liveReloadUtils.stopListeningToUpdates();
+    }
+
+    public void addResidentRequestLoadingIndicator() {
+        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContent.getWidth(), residentRequestContent.getHeight());
+        residentRequestContent.getChildren().add(loadingIndicator);
+    }
+
+    public void removeTableLoadingIndicator() {
+        residentRequestContent.getChildren().remove(loadingIndicator);
     }
 
     private void updateRequestRow(List<Request> requests) {
@@ -210,38 +303,4 @@ public class RequestController {
             }
         }, () -> requestTableController.deleteRow(id, requestType));
     }
-
-    private void setupListener() {
-        residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchDelay.setOnFinished(_ -> performSearch());
-            searchDelay.playFromStart();
-        });
-        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(RequestType::getName).toList());
-        residentRequestComboBox.setValue(RequestType.ALL.getName());
-        residentRequestComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            populateRows(fromName(newValue));
-        });
-    }
-
-    //Live Reload
-    private void initializeSSEListener() {
-        barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(BARANGAY_ID, result)));
-        certificateService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CERTIFICATES, result)));
-        cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateRequestRow(CEDULA, result)));
-    }
-
-    private void resetLiveReload() {
-        liveReloadUtils.stopListeningToUpdates();
-    }
-
-    //Loading Indicator
-    public void addTableLoadingIndicator() {
-        loadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContainer.getWidth(), residentRequestContainer.getHeight());
-        residentRequestContainer.getChildren().add(loadingIndicator);
-    }
-
-    public void removeTableLoadingIndicator() {
-        residentRequestContainer.getChildren().remove(loadingIndicator);
-    }
-
 }
