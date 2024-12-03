@@ -69,6 +69,10 @@ public class CertificateService {
         return (int) certificateRepository.findCertificateByFilter(request -> CertificateType.fromName(request.getRequest()).equals(certificateType) && request.getStatus().equals(StatusType.CertificateStatus.COMPLETED)).stream().count();
     }
 
+    private int countOfPrintedCertificate(CertificateType certificateType) {
+        return (int) certificateRepository.findCertificateByFilter(request -> CertificateType.fromName(request.getRequest()).equals(certificateType) && request.getStatus().equals(CertificateStatus.IN_PROGRESS)).stream().count();
+    }
+
     public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
         return certificateRepository.updateCertificateByStatus(requestId, status);
     }
@@ -81,13 +85,14 @@ public class CertificateService {
         }
     }
 
-    public File generateCertificate(String residentId, CertificateType certificateType, Consumer<Image> callback) {
+    public File generateCertificate(String residentId, Certificate certificate, Consumer<Image> callback) {
+        CertificateType certificateType = CertificateType.fromName(certificate.getRequest());
         Optional<Resident> resident = residentService.findResidentById(residentId);
         File[] generatedPdfFile = {null};
         resident.ifPresent(res -> {
             try {
-                String controlNumber = generateControlNumber(countOfCompletedCertificate(certificateType));
-                generatedPdfFile[0] = PrintUtils.generateCertificate(controlNumber, res, certificateType, callback);
+                String controlNumber = generateControlNumber(countOfPrintedCertificate(certificateType), certificateType);
+                generatedPdfFile[0] = PrintUtils.generateCertificate(controlNumber, res, certificate, callback);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -102,11 +107,17 @@ public class CertificateService {
         return String.format("%012d", otp);
     }
 
-    private String generateControlNumber(int increment) {
+    private String generateControlNumber(int increment, CertificateType certificateType) {
+        String formatCertificate = "";
+        switch (certificateType) {
+            case CERTIFICATE_OF_INDIGENCY -> formatCertificate = "COI";
+            case BARANGAY_CLEARANCE -> formatCertificate = "COC";
+            case CERTIFICATE_OF_RESIDENCY -> formatCertificate = "COR";
+        }
         int baseId = 1;
         int controlNumber = baseId + increment;
         int currentYear = ZonedDateTime.now().getYear();
-        return String.format("000001-%d-COI", currentYear);
+        return String.format("%06d-%d-" + formatCertificate, controlNumber, currentYear);
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {

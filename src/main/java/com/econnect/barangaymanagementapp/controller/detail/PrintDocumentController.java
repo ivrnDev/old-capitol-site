@@ -80,7 +80,7 @@ public class PrintDocumentController implements BaseViewController {
         Task<File> requestTask = new Task<>() {
             @Override
             protected File call() {
-                return certificateService.generateCertificate(residentIdInput.getText(), CertificateType.fromName(certificate.getRequest()), image -> {
+                return certificateService.generateCertificate(residentIdInput.getText(), certificate, image -> {
                     if (image != null) {
                         certificatePreview.setImage(image);
                         certificatePreview.setCursor(javafx.scene.Cursor.HAND);

@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.MainApplication;
+import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -96,13 +97,16 @@ public class PrintUtils {
         printPdf(pdfFile, callback, currentStage);
     }
 
-    public static File generateCertificate(String controlNumber, Resident resident, CertificateType certificateType, Consumer<Image> callback) {
+    public static File generateCertificate(String controlNumber, Resident resident, Certificate certificate, Consumer<Image> callback) {
+        CertificateType certificateType = CertificateType.fromName(certificate.getRequest());
         try {
             File generatedPDF = null;
             switch (certificateType) {
-                case BARANGAY_CLEARANCE -> generatedPDF = createBarangayClearance(controlNumber, resident);
-                case CERTIFICATE_OF_RESIDENCY -> generatedPDF = createCertificateOfResidency(controlNumber, resident);
-                case CERTIFICATE_OF_INDIGENCY -> generatedPDF = createCertificateOfIndigency(controlNumber, resident);
+                case BARANGAY_CLEARANCE -> generatedPDF = createBarangayClearance(controlNumber, resident, certificate);
+                case CERTIFICATE_OF_RESIDENCY ->
+                        generatedPDF = createCertificateOfResidency(controlNumber, resident, certificate);
+                case CERTIFICATE_OF_INDIGENCY ->
+                        generatedPDF = createCertificateOfIndigency(controlNumber, resident, certificate);
             }
             callback.accept(convertPdfToImage(generatedPDF, 0));
             return generatedPDF;
@@ -184,7 +188,7 @@ public class PrintUtils {
 
                 PDRectangle mediaBox = page.getMediaBox();
                 float centerX = (float) (mediaBox.getWidth() / 3.3);
-                float rightY = mediaBox.getHeight() - 140; // Adjust the value as needed
+                float rightY = mediaBox.getHeight() - 145; // Adjust the value as needed
 
                 contentStream.newLineAtOffset(centerX, rightY);
 
@@ -274,59 +278,13 @@ public class PrintUtils {
         return pdfFile;
     }
 
-//    public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
-//        XWPFDocument document = new XWPFDocument();
-//
-//        // Title
-//        XWPFParagraph title = document.createParagraph();
-//        XWPFRun titleRun = title.createRun();
-//        titleRun.setText("Certificate of Indigency");
-//        titleRun.setBold(true);
-//        titleRun.setFontSize(20);
-//        title.setAlignment(ParagraphAlignment.CENTER);
-//
-//        // Control Number and Date
-//        XWPFParagraph controlNumberParagraph = document.createParagraph();
-//        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
-//        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
-//        controlNumberRun.setFontSize(12);
-//        controlNumberRun.addBreak();
-//        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
-//        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
-//
-//        // Body Content
-//        XWPFParagraph body = document.createParagraph();
-//        XWPFRun bodyRun = body.createRun();
-//        bodyRun.setText("TO WHOM IT MAY CONCERN:");
-//        bodyRun.setFontSize(12);
-//        bodyRun.addBreak();
-//
-//        // Footer (Signature)
-//        XWPFParagraph signature = document.createParagraph();
-//        XWPFRun signatureRun = signature.createRun();
-//        signatureRun.addBreak();
-//        signatureRun.addBreak();
-//        signatureRun.setText("_________________________");
-//        signatureRun.addBreak();
-//        signatureRun.setText("[Name of Barangay Captain]");
-//        signatureRun.addBreak();
-//        signatureRun.setText("Barangay Captain");
-//        signature.setAlignment(ParagraphAlignment.CENTER);
-//
-//        // Generate PDF from the Word Document
-//        File pdfFile = createPdfFromDocument(document, controlNumber);
-//
-//        return pdfFile;
-//    }
-
-    public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
+    public static File createCertificateOfIndigency(String controlNumber, Resident resident, Certificate certificate) throws IOException {
         InputStream imageStream = MainApplication.class.getResourceAsStream("images/indigency.jpg");
         if (imageStream == null) {
             throw new FileNotFoundException("Image not found: /images/indigency.jpg");
         }
         XWPFDocument document = new XWPFDocument();
 
-        // Add Image
         XWPFParagraph imageParagraph = document.createParagraph();
         imageParagraph.setAlignment(ParagraphAlignment.CENTER);
         XWPFRun imageRun = imageParagraph.createRun();
@@ -344,7 +302,6 @@ public class PrintUtils {
             throw new RuntimeException("Error loading image", e);
         }
 
-        // Add Control Number and Date
         XWPFParagraph controlNumberParagraph = document.createParagraph();
         controlNumberParagraph.setAlignment(ParagraphAlignment.RIGHT);
         controlNumberParagraph.setVerticalAlignment(TextAlignment.CENTER);
@@ -354,7 +311,6 @@ public class PrintUtils {
         controlNumberRun.addBreak();
         controlNumberRun.setText("Date Issued: " + LocalDate.now());
 
-// Add Body Content
         XWPFParagraph body = document.createParagraph();
         body.setAlignment(ParagraphAlignment.RIGHT);
         body.setVerticalAlignment(TextAlignment.CENTER);
@@ -364,7 +320,7 @@ public class PrintUtils {
                 "       This is to certify that " + resident.getLastName() + ", " + resident.getFirstName() + " " + resident.getMiddleName() +
                 ", of legal age, " + resident.getCivilStatus() + ", and a resident of " + resident.getAddress() +
                 ", is a bonafide resident of Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.\n\n" +
-                "       This certification is issued upon the request of the above mentioned person for the purpose of [Specify Purpose, e.g., Employment, Loan Application, etc.].\n\n" +
+                "       This certification is issued upon the request of the above mentioned person for the purpose of " + certificate.getPurpose() + ".\n\n" +
                 "       This further certifies that the individual has no derogatory record or any pending case in this barangay as of the date of issuance.\n\n" +
                 "       Issued this " + LocalDate.now().getDayOfMonth() + " day of " + LocalDate.now().getMonth() +
                 ", " + LocalDate.now().getYear() + ", at Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.";
@@ -375,10 +331,31 @@ public class PrintUtils {
         return pdfFile;
     }
 
-    public static File createBarangayClearance(String controlNumber, Resident resident) throws IOException {
+    public static File createBarangayClearance(String controlNumber, Resident resident, Certificate certificate) throws IOException {
+
+        InputStream imageStream = MainApplication.class.getResourceAsStream("images/clearance.jpg");
+        if (imageStream == null) {
+            throw new FileNotFoundException("Image not found: /images/clearance.jpg");
+        }
         XWPFDocument document = new XWPFDocument();
 
-        // Title
+        XWPFParagraph imageParagraph = document.createParagraph();
+        imageParagraph.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun imageRun = imageParagraph.createRun();
+        try {
+            imageRun.addPicture(
+                    imageStream,
+                    XWPFDocument.PICTURE_TYPE_JPEG,
+                    "clearance.jpg",
+                    Units.toEMU(500), // Image width
+                    Units.toEMU(200)  // Image height
+            );
+        } catch (org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
+            throw new RuntimeException("Invalid image format", e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading image", e);
+        }
+
         XWPFParagraph title = document.createParagraph();
         XWPFRun titleRun = title.createRun();
         titleRun.setText("Barangay Clearance");
@@ -386,23 +363,31 @@ public class PrintUtils {
         titleRun.setFontSize(20);
         title.setAlignment(ParagraphAlignment.CENTER);
 
-        // Control Number and Date
         XWPFParagraph controlNumberParagraph = document.createParagraph();
+        controlNumberParagraph.setAlignment(ParagraphAlignment.RIGHT);
+        controlNumberParagraph.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun controlNumberRun = controlNumberParagraph.createRun();
-        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setText("Control Number: " + controlNumber);
         controlNumberRun.setFontSize(12);
         controlNumberRun.addBreak();
-        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
-        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+        controlNumberRun.setText("Date Issued: " + LocalDate.now());
 
         // Body Content
         XWPFParagraph body = document.createParagraph();
+        body.setAlignment(ParagraphAlignment.RIGHT);
+        body.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun bodyRun = body.createRun();
-        bodyRun.setText("TO WHOM IT MAY CONCERN:");
-        bodyRun.setFontSize(12);
-        bodyRun.addBreak();
 
-        // Footer (Signature)
+        String text = "TO WHOM IT MAY CONCERN:\n\n" +
+                "       This is to certify that " + resident.getLastName() + ", " + resident.getFirstName() + " " + resident.getMiddleName() +
+                ", of legal age, " + resident.getCivilStatus() + ", and a resident of " + resident.getAddress() +
+                ", is a bonafide resident of Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.\n\n" +
+                "       This certification is issued upon the request of the above mentioned person for the purpose of " + certificate.getPurpose() + ".\n\n" +
+                "       This further certifies that the individual has no derogatory record or any pending case in this barangay as of the date of issuance.\n\n" +
+                "       Issued this " + LocalDate.now().getDayOfMonth() + " day of " + LocalDate.now().getMonth() +
+                ", " + LocalDate.now().getYear() + ", at Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.";
+        bodyRun.setText(text);
+
         XWPFParagraph signature = document.createParagraph();
         XWPFRun signatureRun = signature.createRun();
         signatureRun.addBreak();
@@ -414,16 +399,35 @@ public class PrintUtils {
         signatureRun.setText("Barangay Captain");
         signature.setAlignment(ParagraphAlignment.CENTER);
 
-        // Generate PDF from the Word Document
         File pdfFile = createPdfFromDocument(document, controlNumber);
 
         return pdfFile;
     }
 
-    public static File createCertificateOfResidency(String controlNumber, Resident resident) throws IOException {
+    public static File createCertificateOfResidency(String controlNumber, Resident resident, Certificate certificate) throws IOException {
+        InputStream imageStream = MainApplication.class.getResourceAsStream("images/residency.jpg");
+        if (imageStream == null) {
+            throw new FileNotFoundException("Image not found: /images/residency.jpg");
+        }
         XWPFDocument document = new XWPFDocument();
 
-        // Title
+        XWPFParagraph imageParagraph = document.createParagraph();
+        imageParagraph.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun imageRun = imageParagraph.createRun();
+        try {
+            imageRun.addPicture(
+                    imageStream,
+                    XWPFDocument.PICTURE_TYPE_JPEG,
+                    "residency.jpg",
+                    Units.toEMU(500),
+                    Units.toEMU(200)
+            );
+        } catch (org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
+            throw new RuntimeException("Invalid image format", e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading image", e);
+        }
+
         XWPFParagraph title = document.createParagraph();
         XWPFRun titleRun = title.createRun();
         titleRun.setText("Certificate of Residency");
@@ -431,35 +435,30 @@ public class PrintUtils {
         titleRun.setFontSize(20);
         title.setAlignment(ParagraphAlignment.CENTER);
 
-        // Control Number and Date
         XWPFParagraph controlNumberParagraph = document.createParagraph();
+        controlNumberParagraph.setAlignment(ParagraphAlignment.RIGHT);
+        controlNumberParagraph.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun controlNumberRun = controlNumberParagraph.createRun();
-        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setText("Control Number: " + controlNumber);
         controlNumberRun.setFontSize(12);
         controlNumberRun.addBreak();
-        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
-        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+        controlNumberRun.setText("Date Issued: " + LocalDate.now());
 
-        // Body Content
         XWPFParagraph body = document.createParagraph();
+        body.setAlignment(ParagraphAlignment.RIGHT);
+        body.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun bodyRun = body.createRun();
-        bodyRun.setText("TO WHOM IT MAY CONCERN:");
-        bodyRun.setFontSize(12);
-        bodyRun.addBreak();
 
-        // Footer (Signature)
-        XWPFParagraph signature = document.createParagraph();
-        XWPFRun signatureRun = signature.createRun();
-        signatureRun.addBreak();
-        signatureRun.addBreak();
-        signatureRun.setText("_________________________");
-        signatureRun.addBreak();
-        signatureRun.setText("[Name of Barangay Captain]");
-        signatureRun.addBreak();
-        signatureRun.setText("Barangay Captain");
-        signature.setAlignment(ParagraphAlignment.CENTER);
+        String text = "TO WHOM IT MAY CONCERN:\n\n" +
+                "       This is to certify that " + resident.getLastName() + ", " + resident.getFirstName() + " " + resident.getMiddleName() +
+                ", of legal age, " + resident.getCivilStatus() + ", and a resident of " + resident.getAddress() +
+                ", is a bonafide resident of Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.\n\n" +
+                "       This certification is issued upon the request of the above mentioned person for the purpose of " + certificate.getPurpose() + ".\n\n" +
+                "       This further certifies that the individual has no derogatory record or any pending case in this barangay as of the date of issuance.\n\n" +
+                "       Issued this " + LocalDate.now().getDayOfMonth() + " day of " + LocalDate.now().getMonth() +
+                ", " + LocalDate.now().getYear() + ", at Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.";
+        bodyRun.setText(text);
 
-        // Generate PDF from the Word Document
         File pdfFile = createPdfFromDocument(document, controlNumber);
 
         return pdfFile;
