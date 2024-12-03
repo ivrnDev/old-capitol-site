@@ -18,7 +18,6 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
 public class Borrow extends BaseEntity {
-    private String borrowerId;
     private String itemId;
     private String itemName;
     private String quantity;

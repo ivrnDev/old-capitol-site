@@ -7,8 +7,7 @@ import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestMapper {
     public static Request toRequestObject(BarangayId request) {
-        int length = request.getId().length();
-        String residentId = request.getId().substring(0, length - 5);
+        String residentId = request.getId().substring(0, 12);
 
         return Request.builder()
                 .id(request.getId())
@@ -24,8 +23,7 @@ public class RequestMapper {
     }
 
     public static Request toRequestObject(Certificate request) {
-        int length = request.getId().length();
-        String residentId = request.getId().substring(0, length - 5);
+        String residentId = request.getId().substring(0, 12);
 
         return Request.builder()
                 .id(request.getId())
@@ -41,8 +39,7 @@ public class RequestMapper {
     }
 
     public static Request toRequestObject(Cedula cedula) {
-        int length = cedula.getId().length();
-        String residentId = cedula.getId().substring(0, length - 5);
+        String residentId = cedula.getId().substring(0, 12);
 
         return Request.builder()
                 .id(cedula.getId())
@@ -56,4 +53,37 @@ public class RequestMapper {
                 .referenceNumber(cedula.getReferenceNumber())
                 .build();
     }
+
+    public static Request toRequestObject(Event event) {
+        String residentId = event.getId().substring(0, 12);
+
+        return Request.builder()
+                .id(event.getId())
+                .residentId(residentId)
+                .requestType(EVENTS)
+                .request(EVENTS.getName())
+                .applicationType(event.getApplicationType())
+                .createdAt(event.getCreatedAt())
+                .updatedAt(event.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(event.getStatus().getName()))
+                .referenceNumber(event.getId())
+                .build();
+    }
+
+    public static Request toRequestObject(Borrow borrow) {
+        String residentId = borrow.getId().substring(0, 12);
+        return Request.builder()
+                .id(borrow.getId())
+                .residentId(residentId)
+                .requestType(BORROWS)
+                .request(BORROWS.getName())
+                .applicationType(borrow.getApplicationType())
+                .createdAt(borrow.getCreatedAt())
+                .updatedAt(borrow.getUpdatedAt())
+                .status(StatusType.RequestStatus.fromName(borrow.getStatus().getName()))
+                .referenceNumber(borrow.getId())
+                .build();
+    }
+
+
 }

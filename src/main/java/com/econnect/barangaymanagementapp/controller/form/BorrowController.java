@@ -189,7 +189,8 @@ public class BorrowController {
     }
 
     private void validateData() {
-        TextField[] textFields = {borrowerNameInput, quantityInput};
+        TextField[] textFields = {borrowerNameInput};
+        TextField[] numberFields = {quantityInput};
         TextArea[] textAreas = {purposeInput};
         ComboBox[] comboBoxes = {itemComboBox};
         DatePicker[] datePickers = {returnedDatePicker};
@@ -208,7 +209,7 @@ public class BorrowController {
             return;
         }
 
-        if (validator.hasEmptyFields(textFields, textAreas, datePickers, comboBoxes)) return;
+        if (validator.hasEmptyFields(textFields, textAreas, datePickers, comboBoxes, numberFields)) return;
 
 
         submitData();

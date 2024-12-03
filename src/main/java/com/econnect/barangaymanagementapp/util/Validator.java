@@ -172,7 +172,7 @@ public class Validator {
         return false;
     }
 
-    public boolean hasEmptyFields(TextField[] textFields, TextArea[] textAreas, DatePicker[] datePickers, ComboBox<String>[] comboBox) {
+    public boolean hasEmptyFields(TextField[] textFields, TextArea[] textAreas, DatePicker[] datePickers, ComboBox<String>[] comboBox, TextField[] numberFields) {
         Map<TextField, Boolean> hasErrorFields = new HashMap<>();
         Map<DatePicker, Boolean> hasErrorDate = new HashMap<>();
         Map<ComboBox, Boolean> hasErrorComboBox = new HashMap<>();
@@ -239,6 +239,24 @@ public class Validator {
             } else {
                 hasErrorComboBox.put(comboBox1, false);
                 comboBox1.setStyle("");
+            }
+        }
+
+        if (numberFields != null) {
+            for (TextField numberField : numberFields) {
+                if (numberField.getText().isEmpty()) {
+                    hasErrorFields.put(numberField, true);
+                    errorTitle = "Failed";
+                    errorMessage = "Please fill out all required fields";
+                    numberField.setStyle("-fx-border-color: red");
+                } else if (!numberField.getText().matches("\\d+")) {
+                    hasErrorFields.put(numberField, true);
+                    errorTitle = "Invalid";
+                    errorMessage = "Input must be a number";
+                } else {
+                    hasErrorFields.put(numberField, false);
+                    numberField.setStyle("");
+                }
             }
         }
 
