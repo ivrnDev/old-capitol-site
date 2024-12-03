@@ -25,5 +25,6 @@ public class DepartmentRequest extends BaseEntity {
     private String fileUrl;
     private String status;
     private String type;
+    private String comment;
     private String timestamp;
 }

@@ -33,6 +33,7 @@ import javafx.scene.layout.StackPane;
 import lombok.Getter;
 import okhttp3.Response;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus;
@@ -80,7 +81,8 @@ public class DepartmentRequestRowController extends BaseRowController<Department
         departmentLabel.setText("Health Department");
         statusLabel.setText(request.getStatus());
         typeLabel.setText(request.getType());
-        timestampLabel.setText(request.getTimestamp());
+        ZonedDateTime timestamp = DateFormatter.convertTimestampToZonedDateTime(request.getTimestamp());
+        timestampLabel.setText(DateFormatter.formatToDateTime(timestamp));
     }
 
     @Override
@@ -108,7 +110,7 @@ public class DepartmentRequestRowController extends BaseRowController<Department
     public void setupButtonContainer() {
         String currentStatus = statusLabel.getText();
         buttonContainer.getChildren().clear();
-        setupViewButton(currentStatus);
+        setupViewButton();
         setupButton(currentStatus);
     }
 
@@ -117,6 +119,14 @@ public class DepartmentRequestRowController extends BaseRowController<Department
             case PENDING:
                 createApproveButton();
                 createRejectButton();
+                break;
+            case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
+                createRestoreButton();
+                addInvisibleButtons(1);
                 break;
             default:
                 addInvisibleButtons(2);
@@ -175,11 +185,11 @@ public class DepartmentRequestRowController extends BaseRowController<Department
         }
     }
 
-    private void setupViewButton(String currentStatus) {
+    private void setupViewButton() {
         Button viewBtn = ButtonUtils.createButton("Details", ButtonStyle.VIEW, () -> {
             modalUtils.customizeModalWithCallback(
-                    FXMLPath.VIEW_DOCUMENT_REQUEST,
-                    ViewDocumentRequestController.class,
+                    FXMLPath.VIEW_DEPARTMENT_REQUEST,
+                    ViewDepartmentRequestController.class,
                     controller -> controller.setId(requestId)
             );
         });
