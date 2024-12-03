@@ -221,7 +221,7 @@ public class DepartmentRequestRowController extends BaseRowController<Department
 
                 Response response = getValue();
                 if (response.isSuccessful()) {
-                    modalUtils.showModal(Modal.SUCCESS, "Success", "Status has been updated successfully.");
+                    modalUtils.showModal(Modal.SUCCESS, "Success", "Request no. " + requestId + " has been approved successfully.");
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while updating the status.");
                 }
