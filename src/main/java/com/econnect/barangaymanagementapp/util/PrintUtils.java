@@ -1,7 +1,9 @@
 package com.econnect.barangaymanagementapp.util;
 
+import com.econnect.barangaymanagementapp.MainApplication;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import javafx.print.*;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -19,13 +21,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
@@ -101,7 +102,6 @@ public class PrintUtils {
             switch (certificateType) {
                 case BARANGAY_CLEARANCE -> generatedPDF = createBarangayClearance(controlNumber, resident);
                 case CERTIFICATE_OF_RESIDENCY -> generatedPDF = createCertificateOfResidency(controlNumber, resident);
-                case CEDULA -> generatedPDF = createCedulaDocument(controlNumber, resident);
                 case CERTIFICATE_OF_INDIGENCY -> generatedPDF = createCertificateOfIndigency(controlNumber, resident);
             }
             callback.accept(convertPdfToImage(generatedPDF, 0));
@@ -170,26 +170,64 @@ public class PrintUtils {
         pdfFile.deleteOnExit();
         try (PDDocument pdfDocument = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
-
             pdfDocument.addPage(page);
 
             try (PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page)) {
+                for (XWPFPictureData pictureData : document.getAllPictures()) {
+                    PDImageXObject pdImage = PDImageXObject.createFromByteArray(pdfDocument, pictureData.getData(), pictureData.getFileName());
+                    PDRectangle mediaBox = page.getMediaBox();
+                    contentStream.drawImage(pdImage, 0, 0, mediaBox.getWidth(), mediaBox.getHeight());
+                }
+
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
-                contentStream.newLineAtOffset(50, 750);
+
+                PDRectangle mediaBox = page.getMediaBox();
+                float centerX = (float) (mediaBox.getWidth() / 3.3);
+                float rightY = mediaBox.getHeight() - 140; // Adjust the value as needed
+
+                contentStream.newLineAtOffset(centerX, rightY);
+
+                float maxWidth = (float) (mediaBox.getWidth() / 1.5); // Set the maximum width for the lines
 
                 for (XWPFParagraph paragraph : document.getParagraphs()) {
                     for (XWPFRun run : paragraph.getRuns()) {
-                        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), run.getFontSize() != -1 ? run.getFontSize() : 12);
-                        if (run.isBold()) {
-                            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), run.getFontSize() != -1 ? run.getFontSize() : 12);
+                        // Set the font size
+                        int fontSize = run.getFontSize() != -1 ? run.getFontSize() : 12;
+                        PDType1Font font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
+
+                        // Check for bold and italic formatting
+                        if (run.isBold() && run.isItalic()) {
+                            font = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD_OBLIQUE);
+                        } else if (run.isBold()) {
+                            font = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+                        } else if (run.isItalic()) {
+                            font = new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE);
                         }
-                        if (run.isItalic()) {
-                            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), run.getFontSize() != -1 ? run.getFontSize() : 12);
-                        }
+
+                        contentStream.setFont(font, fontSize);
+
+                        // Split the text into lines and show each line
                         String[] lines = run.text().split("\n");
                         for (String line : lines) {
-                            contentStream.showText(line);
+                            float textWidth = font.getStringWidth(line) / 1000 * fontSize;
+                            if (textWidth > maxWidth) {
+                                // Split the line into multiple lines
+                                String[] words = line.split(" ");
+                                StringBuilder currentLine = new StringBuilder();
+                                for (String word : words) {
+                                    if (font.getStringWidth(currentLine + word) / 1000 * fontSize > maxWidth) {
+                                        contentStream.showText(currentLine.toString());
+                                        contentStream.newLineAtOffset(0, -15);
+                                        currentLine = new StringBuilder(word + " ");
+                                    } else {
+                                        currentLine.append(word).append(" ");
+                                    }
+                                }
+                                contentStream.showText(currentLine.toString().trim());
+                            } else {
+                                contentStream.showText(line);
+                            }
                             contentStream.newLineAtOffset(0, -15);
                         }
                     }
@@ -198,8 +236,8 @@ public class PrintUtils {
                 contentStream.endText();
             }
             pdfDocument.save(pdfFile);
+            return pdfFile;
         }
-        return pdfFile;
     }
 
     // DOCUMENTS
@@ -236,46 +274,102 @@ public class PrintUtils {
         return pdfFile;
     }
 
+//    public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
+//        XWPFDocument document = new XWPFDocument();
+//
+//        // Title
+//        XWPFParagraph title = document.createParagraph();
+//        XWPFRun titleRun = title.createRun();
+//        titleRun.setText("Certificate of Indigency");
+//        titleRun.setBold(true);
+//        titleRun.setFontSize(20);
+//        title.setAlignment(ParagraphAlignment.CENTER);
+//
+//        // Control Number and Date
+//        XWPFParagraph controlNumberParagraph = document.createParagraph();
+//        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
+//        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+//        controlNumberRun.setFontSize(12);
+//        controlNumberRun.addBreak();
+//        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
+//        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+//
+//        // Body Content
+//        XWPFParagraph body = document.createParagraph();
+//        XWPFRun bodyRun = body.createRun();
+//        bodyRun.setText("TO WHOM IT MAY CONCERN:");
+//        bodyRun.setFontSize(12);
+//        bodyRun.addBreak();
+//
+//        // Footer (Signature)
+//        XWPFParagraph signature = document.createParagraph();
+//        XWPFRun signatureRun = signature.createRun();
+//        signatureRun.addBreak();
+//        signatureRun.addBreak();
+//        signatureRun.setText("_________________________");
+//        signatureRun.addBreak();
+//        signatureRun.setText("[Name of Barangay Captain]");
+//        signatureRun.addBreak();
+//        signatureRun.setText("Barangay Captain");
+//        signature.setAlignment(ParagraphAlignment.CENTER);
+//
+//        // Generate PDF from the Word Document
+//        File pdfFile = createPdfFromDocument(document, controlNumber);
+//
+//        return pdfFile;
+//    }
+
     public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {
+        InputStream imageStream = MainApplication.class.getResourceAsStream("images/indigency.jpg");
+        if (imageStream == null) {
+            throw new FileNotFoundException("Image not found: /images/indigency.jpg");
+        }
         XWPFDocument document = new XWPFDocument();
 
-        // Title
-        XWPFParagraph title = document.createParagraph();
-        XWPFRun titleRun = title.createRun();
-        titleRun.setText("Certificate of Indigency");
-        titleRun.setBold(true);
-        titleRun.setFontSize(20);
-        title.setAlignment(ParagraphAlignment.CENTER);
+        // Add Image
+        XWPFParagraph imageParagraph = document.createParagraph();
+        imageParagraph.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun imageRun = imageParagraph.createRun();
+        try {
+            imageRun.addPicture(
+                    imageStream,
+                    XWPFDocument.PICTURE_TYPE_JPEG,
+                    "indigency.jpg",
+                    Units.toEMU(500), // Image width
+                    Units.toEMU(200)  // Image height
+            );
+        } catch (org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
+            throw new RuntimeException("Invalid image format", e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading image", e);
+        }
 
-        // Control Number and Date
+        // Add Control Number and Date
         XWPFParagraph controlNumberParagraph = document.createParagraph();
+        controlNumberParagraph.setAlignment(ParagraphAlignment.RIGHT);
+        controlNumberParagraph.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun controlNumberRun = controlNumberParagraph.createRun();
-        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
+        controlNumberRun.setText("Control Number: " + controlNumber);
         controlNumberRun.setFontSize(12);
         controlNumberRun.addBreak();
-        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
-        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
+        controlNumberRun.setText("Date Issued: " + LocalDate.now());
 
-        // Body Content
+// Add Body Content
         XWPFParagraph body = document.createParagraph();
+        body.setAlignment(ParagraphAlignment.RIGHT);
+        body.setVerticalAlignment(TextAlignment.CENTER);
         XWPFRun bodyRun = body.createRun();
-        bodyRun.setText("TO WHOM IT MAY CONCERN:");
-        bodyRun.setFontSize(12);
-        bodyRun.addBreak();
 
-        // Footer (Signature)
-        XWPFParagraph signature = document.createParagraph();
-        XWPFRun signatureRun = signature.createRun();
-        signatureRun.addBreak();
-        signatureRun.addBreak();
-        signatureRun.setText("_________________________");
-        signatureRun.addBreak();
-        signatureRun.setText("[Name of Barangay Captain]");
-        signatureRun.addBreak();
-        signatureRun.setText("Barangay Captain");
-        signature.setAlignment(ParagraphAlignment.CENTER);
+        String text = "TO WHOM IT MAY CONCERN:\n\n" +
+                "       This is to certify that " + resident.getLastName() + ", " + resident.getFirstName() + " " + resident.getMiddleName() +
+                ", of legal age, " + resident.getCivilStatus() + ", and a resident of " + resident.getAddress() +
+                ", is a bonafide resident of Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.\n\n" +
+                "       This certification is issued upon the request of the above mentioned person for the purpose of [Specify Purpose, e.g., Employment, Loan Application, etc.].\n\n" +
+                "       This further certifies that the individual has no derogatory record or any pending case in this barangay as of the date of issuance.\n\n" +
+                "       Issued this " + LocalDate.now().getDayOfMonth() + " day of " + LocalDate.now().getMonth() +
+                ", " + LocalDate.now().getYear() + ", at Barangay Old Capitol Site, Municipality of Quezon City, Province of Metro Manila.";
+        bodyRun.setText(text);
 
-        // Generate PDF from the Word Document
         File pdfFile = createPdfFromDocument(document, controlNumber);
 
         return pdfFile;
@@ -370,51 +464,4 @@ public class PrintUtils {
 
         return pdfFile;
     }
-
-    public static File createCedulaDocument(String controlNumber, Resident resident) throws IOException {
-        XWPFDocument document = new XWPFDocument();
-
-        // Title
-        XWPFParagraph title = document.createParagraph();
-        XWPFRun titleRun = title.createRun();
-        titleRun.setText("Cedula");
-        titleRun.setBold(true);
-        titleRun.setFontSize(20);
-        title.setAlignment(ParagraphAlignment.CENTER);
-
-        // Control Number and Date
-        XWPFParagraph controlNumberParagraph = document.createParagraph();
-        XWPFRun controlNumberRun = controlNumberParagraph.createRun();
-        controlNumberRun.setText(String.format("Control Number: %s", controlNumber));
-        controlNumberRun.setFontSize(12);
-        controlNumberRun.addBreak();
-        controlNumberRun.setText(String.format("Date Issued: %s", LocalDate.now()));
-        controlNumberParagraph.setAlignment(ParagraphAlignment.LEFT);
-
-        // Body Content
-        XWPFParagraph body = document.createParagraph();
-        XWPFRun bodyRun = body.createRun();
-        bodyRun.setText("TO WHOM IT MAY CONCERN:");
-        bodyRun.setFontSize(12);
-        bodyRun.addBreak();
-
-        // Footer (Signature)
-        XWPFParagraph signature = document.createParagraph();
-        XWPFRun signatureRun = signature.createRun();
-        signatureRun.addBreak();
-        signatureRun.addBreak();
-        signatureRun.setText("_________________________");
-        signatureRun.addBreak();
-        signatureRun.setText("[Name of Barangay Captain]");
-        signatureRun.addBreak();
-        signatureRun.setText("Barangay Captain");
-        signature.setAlignment(ParagraphAlignment.CENTER);
-
-        // Generate PDF from the Word Document
-        File pdfFile = createPdfFromDocument(document, controlNumber);
-
-        return pdfFile;
-    }
-
-
 }
