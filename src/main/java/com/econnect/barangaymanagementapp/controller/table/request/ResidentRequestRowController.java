@@ -38,11 +38,11 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Req
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.COMPLETED;
 
 
-public class RequestRowController extends BaseRowController<Request> {
+public class ResidentRequestRowController extends BaseRowController<Request> {
     @FXML
     private HBox tableRow, buttonContainer;
     @FXML
-    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, dateLabel, timeLabel;
+    private Label requestIdLabel, residentIdLabel, requestTypeLabel, statusLabel, applicationTypeLabel, timeLabel;
 
     private final ModalUtils modalUtils;
     private final CertificateService certificateService;
@@ -55,7 +55,7 @@ public class RequestRowController extends BaseRowController<Request> {
     @Getter
     private Request request;
 
-    public RequestRowController(DependencyInjector dependencyInjector) {
+    public ResidentRequestRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.modalUtils = dependencyInjector.getModalUtils();
         this.certificateService = dependencyInjector.getCertificateService();
@@ -81,8 +81,8 @@ public class RequestRowController extends BaseRowController<Request> {
         residentIdLabel.setText(request.getResidentId());
         requestTypeLabel.setText(request.getRequestType() != null ? request.getRequestType().getName() : "");
         statusLabel.setText(request.getStatus().getName());
-        dateLabel.setText(DateFormatter.formatDateToLongStyle(request.getCreatedAt()));
-        timeLabel.setText(DateFormatter.formatTimeTo12HourStyle(request.getCreatedAt()));
+        applicationTypeLabel.setText(request.getApplicationType().getName());
+        timeLabel.setText(DateFormatter.formatToDateTime(request.getCreatedAt()));
     }
 
     @Override
@@ -145,6 +145,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;
+            case CANCELLED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
             case COMPLETED:
                 addInvisibleButtons(2);
                 break;
@@ -166,6 +170,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 createCancelButton();
                 break;
             case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;
@@ -194,6 +202,10 @@ public class RequestRowController extends BaseRowController<Request> {
                 createCancelButton();
                 break;
             case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
                 createRestoreButton();
                 addInvisibleButtons(1);
                 break;

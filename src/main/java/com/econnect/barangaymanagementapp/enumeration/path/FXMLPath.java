@@ -14,8 +14,8 @@ public enum FXMLPath {
     RESIDENT_APPLICATION_TABLE("view/table/resident/resident-application-table.fxml"),
     RESIDENT_APPLICATION_ROW("view/table/resident/resident-application-row.fxml"),
 
-    REQUEST_TABLE("view/table/request/request-table.fxml"),
-    REQUEST_ROW("view/table/request/request-row.fxml"),
+    RESIDENT_REQUEST_TABLE("view/table/request/resident-request-table.fxml"),
+    RESIDENT_REQUEST_ROW("view/table/request/resident-request-row.fxml"),
 
     INVENTORY_TABLE("view/table/inventory/inventory-table.fxml"),
     INVENTORY_ROW("view/table/inventory/inventory-row.fxml"),

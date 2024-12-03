@@ -118,5 +118,10 @@ public class DateFormatter {
         return LocalDate.parse(inputDate, inputFormatter);
     }
 
+    public static String formatToDateTime(ZonedDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTime.format(formatter);
+    }
+
 
 }
