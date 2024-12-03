@@ -1,12 +1,11 @@
 package com.econnect.barangaymanagementapp.controller.detail;
 
 import com.econnect.barangaymanagementapp.controller.base.BaseViewController;
-import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.domain.DepartmentRequest;
-import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.service.DepartmentRequestService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -21,18 +20,15 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.Setter;
 
-import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ViewDepartmentRequestController implements BaseViewController {
     @FXML
-    private ImageView closeBtn, certificatePreview;
+    private ImageView closeBtn, documentPreview;
     @FXML
-    private ImageView profilePicture;
-    @FXML
-    private HBox certificatePreviewContainer;
+    private HBox documentPreviewContainer;
     @FXML
     private TextField requestIdInput, nameInput, emailInput, departmentInput, typeInput, statusInput, dateInput, timeInput;
     @FXML
@@ -45,10 +41,6 @@ public class ViewDepartmentRequestController implements BaseViewController {
     private Image documentImage;
     private Stage currentStage;
     private String requestId;
-    @Setter
-    private Consumer<Boolean> callback;
-    private DepartmentRequest request;
-    private File generatedPdfFile;
 
     public ViewDepartmentRequestController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -71,36 +63,33 @@ public class ViewDepartmentRequestController implements BaseViewController {
 //        });
 //    }
 
-//    private void generateCertificate() {
-//        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(certificatePreviewContainer.getWidth(), certificatePreviewContainer.getHeight());
-//        addLoadingIndicator(loadingIndicator);
-//        Task<File> requestTask = new Task<>() {
-//            @Override
-//            protected File call() {
-//                return certificateService.generateCertificate(residentIdInput.getText(), CertificateType.fromName(certificate.getRequest()), image -> {
-//                    if (image != null) {
-//                        certificatePreview.setImage(image);
-//                        certificatePreview.setCursor(javafx.scene.Cursor.HAND);
-//                        certificatePreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                removeLoadingIndicator(loadingIndicator);
-//                generatedPdfFile = getValue();
-//                printBtn.setDisable(false);
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                System.out.println("Failed to generate certificate: " + getException().getMessage());
-//                removeLoadingIndicator(loadingIndicator);
-//            }
-//        };
-//        new Thread(requestTask).start();
-//    }
+    private void displayAttachment(String fileUrl) {
+        StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(documentPreviewContainer.getWidth(), documentPreviewContainer.getHeight());
+        addLoadingIndicator(loadingIndicator);
+        Task<Image> requestTask = new Task<>() {
+            @Override
+            protected Image call() throws Exception {
+                return departmentRequestService.convertWordDocumentToImage(fileUrl);
+            }
+
+            @Override
+            protected void succeeded() {
+                removeLoadingIndicator(loadingIndicator);
+                Image image = getValue();
+                documentPreview.setImage(image);
+                documentPreview.setCursor(javafx.scene.Cursor.HAND);
+                documentPreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
+                printBtn.setDisable(false);
+            }
+
+            @Override
+            protected void failed() {
+                System.out.println("Failed to generate certificate: " + getException().getMessage());
+                removeLoadingIndicator(loadingIndicator);
+            }
+        };
+        new Thread(requestTask).start();
+    }
 
     private void fetchData() {
         Task<Optional<DepartmentRequest>> requestTask = new Task<>() {
@@ -113,9 +102,9 @@ public class ViewDepartmentRequestController implements BaseViewController {
             protected void succeeded() {
                 Optional<DepartmentRequest> fetchedRequest = getValue();
                 if (fetchedRequest.isPresent()) {
-                    request = fetchedRequest.get();
+                    DepartmentRequest request = fetchedRequest.get();
                     populateRequestData(request);
-//                    generateCertificate();
+                    displayAttachment(request.getFileURL());
                 }
             }
 
@@ -143,15 +132,15 @@ public class ViewDepartmentRequestController implements BaseViewController {
     }
 
     private void addLoadingIndicator(StackPane loadingIndicator) {
-        certificatePreview.setManaged(false);
-        certificatePreview.setVisible(false);
-        certificatePreviewContainer.getChildren().add(loadingIndicator);
+        documentPreview.setManaged(false);
+        documentPreview.setVisible(false);
+        documentPreviewContainer.getChildren().add(loadingIndicator);
     }
 
     private void removeLoadingIndicator(StackPane loadingIndicator) {
-        certificatePreview.setManaged(true);
-        certificatePreview.setVisible(true);
-        certificatePreviewContainer.getChildren().remove(loadingIndicator);
+        documentPreview.setManaged(true);
+        documentPreview.setVisible(true);
+        documentPreviewContainer.getChildren().remove(loadingIndicator);
     }
 
     private void closeView() {

@@ -3,6 +3,8 @@ package com.econnect.barangaymanagementapp.service;
 import com.econnect.barangaymanagementapp.domain.DepartmentRequest;
 import com.econnect.barangaymanagementapp.repository.DepartmentRequestRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.PrintUtils;
+import javafx.scene.image.Image;
 import okhttp3.Response;
 
 import java.util.List;
@@ -34,6 +36,10 @@ public class DepartmentRequestService {
 
     public Optional<DepartmentRequest> findCompletedDepartmentRequest(String id) {
         return departmentRequestRepository.findDepartmentRequestById(id).filter(request -> request.getStatus().equals("Completed"));
+    }
+
+    public Image convertWordDocumentToImage(String fileUrl) throws Exception {
+        return PrintUtils.convertWordDocumentToImage(fileUrl);
     }
 
     public Response updateDepartmentRequestByStatus(String requestId, String status) {

@@ -22,7 +22,7 @@ public class DepartmentRequest extends BaseEntity {
     private String name;
     private String email;
     private String description;
-    private String fileUrl;
+    private String fileURL;
     private String status;
     private String type;
     private String comment;
