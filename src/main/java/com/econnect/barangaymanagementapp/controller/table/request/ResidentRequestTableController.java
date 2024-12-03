@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_ROW;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_REQUEST_ROW;
 
 public class ResidentRequestTableController extends BaseTableController<Request> {
     @FXML
@@ -31,7 +31,7 @@ public class ResidentRequestTableController extends BaseTableController<Request>
     @Override
     public void addRow(Request requestData) {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_ROW.getFxmlPath(), dependencyInjector);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_REQUEST_ROW.getFxmlPath(), dependencyInjector);
             HBox residentRow = loader.load();
             ResidentRequestRowController residentRequestRowController = loader.getController();
             residentRow.setUserData(residentRequestRowController);

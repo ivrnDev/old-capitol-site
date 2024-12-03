@@ -3,7 +3,6 @@ package com.econnect.barangaymanagementapp.controller;
 import com.econnect.barangaymanagementapp.controller.table.request.ResidentRequestTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Request;
-import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.mapper.RequestMapper;
 import com.econnect.barangaymanagementapp.service.BarangayidService;
@@ -34,7 +33,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_TABLE;
+import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_REQUEST_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 
 public class RequestController {
@@ -94,7 +93,7 @@ public class RequestController {
 
     private void loadResidentRequestTable() {
         try {
-            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_TABLE.getFxmlPath(), dependencyInjector);
+            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_REQUEST_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentRequestTable = loader.load();
             residentRequestTableController = loader.getController();
             residentRequestContent.getChildren().add(residentRequestTable);
