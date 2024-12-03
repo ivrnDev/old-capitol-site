@@ -99,41 +99,6 @@
                                         </HBox>
                                         <VBox>
                                             <children>
-                                                <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0">
-                                                    <children>
-                                                        <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
-                                                            <children>
-                                                                <Label text="Control Number" textOverrun="CLIP">
-                                                                    <font>
-                                                                        <Font name="Arial" size="15.0" />
-                                                                    </font>
-                                                                </Label>
-                                                            </children>
-                                                            <opaqueInsets>
-                                                                <Insets />
-                                                            </opaqueInsets>
-                                                            <padding>
-                                                                <Insets left="20.0" />
-                                                            </padding>
-                                                            <styleClass>
-                                                                <String fx:value="input-label-first" />
-                                                                <String fx:value="input-label" />
-                                                            </styleClass>
-                                                        </HBox>
-                                                        <TextField fx:id="controlNumberInput" editable="false" mouseTransparent="true" prefHeight="35.0" prefWidth="176.0" styleClass="text-input-first" HBox.hgrow="ALWAYS">
-                                                            <font>
-                                                                <Font name="Arial" size="12.0" />
-                                                            </font>
-                                                            <cursor>
-                                                                <Cursor fx:constant="DEFAULT" />
-                                                            </cursor>
-                                                        </TextField>
-                                                    </children>
-                                                    <styleClass>
-                                                        <String fx:value="input-container" />
-                                                        <String fx:value="input-container-first" />
-                                                    </styleClass>
-                                                </HBox>
                                                 <HBox alignment="CENTER" minHeight="-Infinity" prefWidth="269.0" styleClass="input-container">
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" maxWidth="300.0" prefWidth="150.0" styleClass="input-label" HBox.hgrow="ALWAYS">

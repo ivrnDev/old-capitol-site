@@ -35,7 +35,7 @@ public class PrintDocumentController implements BaseViewController {
     @FXML
     private HBox certificatePreviewContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput, fullNameText;
+    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, fullNameText;
     @FXML
     private TextArea purposeInput;
     @FXML
@@ -80,7 +80,7 @@ public class PrintDocumentController implements BaseViewController {
         Task<File> requestTask = new Task<>() {
             @Override
             protected File call() {
-                return certificateService.generateCertificate(residentIdInput.getText(), CertificateType.fromName(certificate.getRequest()), image -> {
+                return certificateService.generateCertificate(residentIdInput.getText(), certificate, image -> {
                     if (image != null) {
                         certificatePreview.setImage(image);
                         certificatePreview.setCursor(javafx.scene.Cursor.HAND);
@@ -148,6 +148,7 @@ public class PrintDocumentController implements BaseViewController {
                 System.out.println("Failed to fetch data: " + getException().getMessage());
             }
         };
+
 
         new Thread(fetchResident).start();
         new Thread(requestTask).start();
