@@ -281,6 +281,8 @@ public class RequestController {
         barangayidService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(BARANGAY_ID, result)));
         certificateService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(CERTIFICATES, result)));
         cedulaService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(CEDULA, result)));
+        eventService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(EVENTS, result)));
+        borrowService.listenToUpdates(result -> Platform.runLater(() -> updateResidentRequestRow(BORROWS, result)));
         departmentRequestService.listenToUpdates(result -> Platform.runLater(this::populateDepartmentRequestRows));
     }
 
@@ -329,6 +331,11 @@ public class RequestController {
             case CEDULA:
                 updatedRequest = cedulaService.findCedulaById(id).map(RequestMapper::toRequestObject);
                 break;
+            case EVENTS:
+                updatedRequest = eventService.findEventById(id).map(RequestMapper::toRequestObject);
+                break;
+            case BORROWS:
+                updatedRequest = borrowService.findBorrowById(id).map(RequestMapper::toRequestObject);
         }
 
         updatedRequest.ifPresentOrElse(request -> {
