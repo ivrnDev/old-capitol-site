@@ -15,14 +15,14 @@ import java.io.IOException;
 
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.REQUEST_ROW;
 
-public class RequestTableController extends BaseTableController<Request> {
+public class ResidentRequestTableController extends BaseTableController<Request> {
     @FXML
     private VBox tableContent;
 
     private final FXMLLoaderFactory fxmlLoaderFactory;
     private final DependencyInjector dependencyInjector;
 
-    public RequestTableController(DependencyInjector dependencyInjector) {
+    public ResidentRequestTableController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.fxmlLoaderFactory = dependencyInjector.getFxmlLoaderFactory();
         this.dependencyInjector = dependencyInjector;
@@ -33,9 +33,9 @@ public class RequestTableController extends BaseTableController<Request> {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_ROW.getFxmlPath(), dependencyInjector);
             HBox residentRow = loader.load();
-            RequestRowController requestRowController = loader.getController();
-            residentRow.setUserData(requestRowController);
-            requestRowController.setData(requestData);
+            ResidentRequestRowController residentRequestRowController = loader.getController();
+            residentRow.setUserData(residentRequestRowController);
+            residentRequestRowController.setData(requestData);
             tableContent.getChildren().add(residentRow);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class RequestTableController extends BaseTableController<Request> {
         boolean rowExists = false;
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
-                RequestRowController rowController = (RequestRowController) residentRow.getUserData();
+                ResidentRequestRowController rowController = (ResidentRequestRowController) residentRow.getUserData();
                 if (rowController != null && rowController.getRequestId().equals(updatedRequest.getId()) && rowController.getRequest().getRequestType().equals(updatedRequest.getRequestType())) {
                     rowController.setData(updatedRequest);
                     rowExists = true;
@@ -65,7 +65,7 @@ public class RequestTableController extends BaseTableController<Request> {
     public void deleteRow(String requestId, RequestType requestType) {
         for (Node node : tableContent.getChildren()) {
             if (node instanceof HBox residentRow) {
-                RequestRowController rowController = (RequestRowController) residentRow.getUserData();
+                ResidentRequestRowController rowController = (ResidentRequestRowController) residentRow.getUserData();
 
                 if (rowController != null && rowController.getRequestId().equals(requestId) && rowController.getRequest().getRequestType().equals(requestType)) {
                     tableContent.getChildren().remove(residentRow);

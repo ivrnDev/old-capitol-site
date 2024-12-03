@@ -38,7 +38,7 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Req
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.RequestStatus.COMPLETED;
 
 
-public class RequestRowController extends BaseRowController<Request> {
+public class ResidentRequestRowController extends BaseRowController<Request> {
     @FXML
     private HBox tableRow, buttonContainer;
     @FXML
@@ -55,7 +55,7 @@ public class RequestRowController extends BaseRowController<Request> {
     @Getter
     private Request request;
 
-    public RequestRowController(DependencyInjector dependencyInjector) {
+    public ResidentRequestRowController(DependencyInjector dependencyInjector) {
         super(dependencyInjector);
         this.modalUtils = dependencyInjector.getModalUtils();
         this.certificateService = dependencyInjector.getCertificateService();

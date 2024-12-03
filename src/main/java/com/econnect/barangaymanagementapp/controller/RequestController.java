@@ -1,6 +1,6 @@
 package com.econnect.barangaymanagementapp.controller;
 
-import com.econnect.barangaymanagementapp.controller.table.request.RequestTableController;
+import com.econnect.barangaymanagementapp.controller.table.request.ResidentRequestTableController;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.domain.Resident;
@@ -59,7 +59,7 @@ public class RequestController {
     private final CedulaService cedulaService;
     private final BarangayidService barangayidService;
 
-    private RequestTableController requestTableController;
+    private ResidentRequestTableController residentRequestTableController;
 
     private final SearchService<Request> searchService;
     private final Employee loggedEmployee;
@@ -96,7 +96,7 @@ public class RequestController {
         try {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(REQUEST_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentRequestTable = loader.load();
-            requestTableController = loader.getController();
+            residentRequestTableController = loader.getController();
             residentRequestContent.getChildren().add(residentRequestTable);
         } catch (IOException e) {
             System.err.println("Error loading employee table: " + e.getMessage());
@@ -108,17 +108,6 @@ public class RequestController {
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
         populateResidentRequestRows(selectedType);
     }
-
-//    private void loadResidentApplicationTable() {
-//        try {
-//            FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_APPLICATION_TABLE.getFxmlPath(), dependencyInjector);
-//            Parent residentTable = loader.load();
-//            residentApplicationTableController = loader.getController();
-//            residentApplicationContent.getChildren().add(residentTable);
-//        } catch (IOException e) {
-//            System.err.println("Error loading employee table: " + e.getMessage());
-//        }
-//    }
 
     private void populateResidentRequestRows(RequestType type) {
         Task<Void> task = new Task<>() {
@@ -151,7 +140,6 @@ public class RequestController {
                 requestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
                 requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
                 requestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
-//                requestCache.computeIfAbsent(COMPLAINT, k -> new ArrayList<>()).addAll(allComplaint);
                 requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
                 return null;
             }
@@ -163,8 +151,8 @@ public class RequestController {
                 Platform.runLater(() -> {
                     List<Request> requests = requestCache.get(type);
                     if (requests == null || requests.isEmpty()) {
-                        requestTableController.clearRow();
-                        requestTableController.showNoData();
+                        residentRequestTableController.clearRow();
+                        residentRequestTableController.showNoData();
                     } else {
                         updateRequestRow(requests);
                     }
@@ -180,29 +168,6 @@ public class RequestController {
         };
         new Thread(task).start();
     }
-
-//    public void populateResidentApplicationRows() {
-//        addResidentApplicationLoadingIndicator();
-//        Runnable call = () -> {
-//            allPendingResidents = residentService.findAllPendingResidents();
-//            Platform.runLater(() -> {
-//                removeResidentApplicationLoadingIndicator();
-//                if (allPendingResidents.isEmpty()) {
-//                    residentApplicationTableController.clearRow();
-//                    residentApplicationTableController.showNoData();
-//                } else {
-//                    updateResidentApplicationRow(allPendingResidents);
-//                }
-//            });
-//        };
-//
-//        Runnable onFailed = () -> {
-//            removeResidentApplicationLoadingIndicator();
-//            System.err.println("Error loading resident applications");
-//        };
-//
-//        LoadingIndicator.executeWithLoadingIndicator(loadingIndicator, call, onFailed);
-//    }
 
     private void performResidentRequestSearch() {
         RequestType selectedType = RequestType.fromName(residentRequestComboBox.getValue());
@@ -261,13 +226,13 @@ public class RequestController {
     }
 
     private void updateRequestRow(List<Request> requests) {
-        requestTableController.clearRow();
+        residentRequestTableController.clearRow();
 
         if (requests.isEmpty()) {
-            requestTableController.showNoData();
+            residentRequestTableController.showNoData();
             return;
         }
-        requests.forEach(request -> requestTableController.addRow(request));
+        requests.forEach(request -> residentRequestTableController.addRow(request));
     }
 
     public void updateRequestRow(RequestType requestType, String id) {
@@ -299,8 +264,8 @@ public class RequestController {
             });
 
             if (request.getRequestType() == RequestType.fromName(residentRequestComboBox.getValue()) || residentRequestComboBox.getValue().equals(RequestType.ALL.getName())) {
-                requestTableController.updateRow(request);
+                residentRequestTableController.updateRow(request);
             }
-        }, () -> requestTableController.deleteRow(id, requestType));
+        }, () -> residentRequestTableController.deleteRow(id, requestType));
     }
 }

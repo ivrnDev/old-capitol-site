@@ -83,7 +83,9 @@ public class StatusType {
         IN_PROGRESS("In Progress"),
         RELEASING("Releasing"),
         COMPLETED("Completed"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
+
 
         private String name;
 
@@ -106,7 +108,9 @@ public class StatusType {
         PENDING("Pending"),
         RELEASING("Releasing"),
         COMPLETED("Completed"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
+
 
         private String name;
 
@@ -130,7 +134,8 @@ public class StatusType {
         IN_PROGRESS("In Progress"),
         RELEASING("Releasing"),
         COMPLETED("Completed"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
 
         private String name;
 
