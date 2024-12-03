@@ -7,12 +7,11 @@ import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.enumeration.path.FXMLPath;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.enumeration.ui.ButtonStyle;
-import com.econnect.barangaymanagementapp.service.BarangayidService;
-import com.econnect.barangaymanagementapp.service.CedulaService;
-import com.econnect.barangaymanagementapp.service.CertificateService;
+import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.RolePermission;
@@ -48,6 +47,8 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
     private final CertificateService certificateService;
     private final BarangayidService barangayidService;
     private final CedulaService cedulaService;
+    private final EventService eventService;
+    private final BorrowService borrowService;
     private RoleType roleType;
     private List<RolePermission.Action> allowedActions;
     @Getter
@@ -61,6 +62,8 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
         this.certificateService = dependencyInjector.getCertificateService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.cedulaService = dependencyInjector.getCedulaService();
+        this.eventService = dependencyInjector.getEventService();
+        this.borrowService = dependencyInjector.getBorrowService();
         this.roleType = UserSession.getInstance().getEmployeeRole();
     }
 
@@ -120,6 +123,12 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                 break;
             case CEDULA:
                 setupCedulaButton(currentStatus);
+                break;
+            case EVENTS:
+                setupEventButton(currentStatus);
+                break;
+            case BORROWS:
+                setupBorrowButton(currentStatus);
                 break;
             default:
                 addInvisibleButtons(2);
@@ -237,6 +246,82 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
         buttonContainer.getChildren().add(approve);
     }
 
+    private void setupEventButton(String currentStatus) {
+        switch (RequestStatus.fromName(currentStatus)) {
+            case PENDING:
+                createApproveButton();
+                createRejectButton();
+                break;
+            case IN_PROGRESS:
+                createWaitingButton();
+                createCancelButton();
+                break;
+            case WAITING:
+                createEventOnGoingButton();
+                createCancelButton();
+                break;
+            case ONGOING:
+                createCompletedButton();
+                addInvisibleButtons(1);
+                break;
+            case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case COMPLETED:
+                addInvisibleButtons(2);
+                break;
+            default:
+                createRejectButton();
+                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+                break;
+        }
+    }
+
+    private void setupBorrowButton(String currentStatus) {
+        switch (RequestStatus.fromName(currentStatus)) {
+            case PENDING:
+                createApproveButton();
+                createRejectButton();
+                break;
+            case IN_PROGRESS:
+                createReleaseButton();
+                createCancelButton();
+                break;
+            case RELEASING:
+                createBorrowedButton();
+                createCancelButton();
+                break;
+            case BORROWED:
+                createReturnedButton();
+                addInvisibleButtons(1);
+                break;
+            case OVERDUE:
+                createReturnedButton();
+                addInvisibleButtons(1);
+                break;
+            case RETURNED:
+                addInvisibleButtons(2);
+                break;
+            case REJECTED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            case CANCELLED:
+                createRestoreButton();
+                addInvisibleButtons(1);
+                break;
+            default:
+                createRejectButton();
+                buttonContainer.getChildren().add(ButtonUtils.createInvisibleButton());
+                break;
+        }
+    }
+
     private void createCertificateApproveButton() {
         Button approve = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.customizeModalWithCallback(
@@ -249,6 +334,46 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                         });
                     }
             );
+        });
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
+        buttonContainer.getChildren().add(approve);
+    }
+
+    private void createEventOnGoingButton() {
+        Button approve = ButtonUtils.createButton("On Going", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "On Going", "Would you like to mark event request no." + request.getReferenceNumber() + " as on going?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.ONGOING);
+            });
+        });
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
+        buttonContainer.getChildren().add(approve);
+    }
+
+    private void createWaitingButton() {
+        Button approve = ButtonUtils.createButton("Waiting", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Waiting", "Would you like to mark event request no." + request.getReferenceNumber() + " as waiting?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.WAITING);
+            });
+        });
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
+        buttonContainer.getChildren().add(approve);
+    }
+
+    private void createBorrowedButton() {
+        Button approve = ButtonUtils.createButton("Borrowed", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Borrowed", "Would you like to mark request no." + request.getReferenceNumber() + " as borrowed?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.BORROWED);
+            });
+        });
+        setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
+        buttonContainer.getChildren().add(approve);
+    }
+
+    private void createReturnedButton() {
+        Button approve = ButtonUtils.createButton("Returned", ButtonStyle.ACCEPT, () -> {
+            modalUtils.showModal(Modal.DEFAULT_APPROVE, "Returned", "Would you like to mark request no." + request.getReferenceNumber() + " as returned?", isConfirmed -> {
+                if (isConfirmed) updateRequestStatus(RequestStatus.RETURNED);
+            });
         });
         setButtonState(approve, allowedActions, RolePermission.Action.APPROVE);
         buttonContainer.getChildren().add(approve);
@@ -281,6 +406,14 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
             case CEDULA:
                 head = "Release";
                 message = "Would you like to release the cedula for request no." + request.getReferenceNumber() + "?";
+                break;
+            case EVENTS:
+                head = "Release";
+                message = "Would you like to release the event for request no." + request.getReferenceNumber() + "?";
+                break;
+            case BORROWS:
+                head = "Release";
+                message = "Would you like to release the borrowed item for request no." + request.getReferenceNumber() + "?";
                 break;
             default:
                 head = "Release";
@@ -317,6 +450,16 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
             case CEDULA:
                 head = "Mark as complete";
                 message = "Would you like to mark cedula request no." + request.getReferenceNumber() + " as completed?";
+                status = COMPLETED;
+                break;
+            case EVENTS:
+                head = "Mark as complete";
+                message = "Would you like to mark event request no." + request.getReferenceNumber() + " as completed?";
+                status = COMPLETED;
+                break;
+            case BORROWS:
+                head = "Mark as complete";
+                message = "Would you like to mark borrow request no." + request.getReferenceNumber() + " as completed?";
                 status = COMPLETED;
                 break;
             default:
@@ -411,6 +554,20 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                         controller -> controller.setId(requestId)
                 );
             });
+            case EVENTS -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.VIEW_ID_REQUEST,
+                        ViewIdRequestController.class,
+                        controller -> controller.setId(requestId)
+                );
+            });
+            case BORROWS -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
+                modalUtils.customizeModalWithCallback(
+                        FXMLPath.VIEW_ID_REQUEST,
+                        ViewIdRequestController.class,
+                        controller -> controller.setId(requestId)
+                );
+            });
         }
         buttonContainer.getChildren().add(viewBtn);
     }
@@ -434,6 +591,10 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                         return barangayidService.updateBarangayIdByStatus(requestId, BarangayIdStatus.fromName(status.getName()));
                     case CEDULA:
                         return cedulaService.updateCedulaByStatus(requestId, CedulaStatus.fromName(status.getName()));
+                    case EVENTS:
+                        return eventService.updateEventByStatus(requestId, StatusType.EventAppointmentStatus.fromName(status.getName()));
+                    case BORROWS:
+                        return borrowService.updateBorrowByStatus(requestId, StatusType.BorrowStatus.fromName(status.getName()));
                     default:
                 }
                 return null;

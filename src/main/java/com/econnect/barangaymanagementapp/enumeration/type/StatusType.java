@@ -58,7 +58,12 @@ public class StatusType {
         COMPLETED("Completed"),
         REJECTED("Rejected"),
         PROCESSING("Processing"),
-        CANCELLED("Cancelled");
+        CANCELLED("Cancelled"),
+        ONGOING("Ongoing"),
+        BORROWED("Borrowed"),
+        RETURNED("Returned"),
+        OVERDUE("Overdue"),
+        WAITING("Waiting");
 
         private String name;
 
@@ -203,10 +208,13 @@ public class StatusType {
     @Getter
     public enum BorrowStatus {
         PENDING("Pending"),
+        IN_PROGRESS("In Progress"),
+        RELEASING("Releasing"),
         BORROWED("Borrowed"),
         RETURNED("Returned"),
         OVERDUE("Overdue"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
 
         private String name;
 
@@ -227,9 +235,12 @@ public class StatusType {
     @Getter
     public enum EventAppointmentStatus {
         PENDING("Pending"),
+        IN_PROGRESS("In Progress"),
+        WAITING("Waiting"),
         ONGOING("Ongoing"),
         COMPLETED("Completed"),
-        REJECTED("Rejected");
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
 
         private String name;
 
