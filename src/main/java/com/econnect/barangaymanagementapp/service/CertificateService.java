@@ -75,7 +75,7 @@ public class CertificateService {
 
     public void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
         try {
-            PrintUtils.printCertificate(pdfFile, currentStage, callback);
+            PrintUtils.printDocumentFile(pdfFile, currentStage, callback);
         } catch (Exception e) {
             e.printStackTrace();
         }
