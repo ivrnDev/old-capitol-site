@@ -64,12 +64,12 @@ public class RequestController {
     private final SearchService<Request> searchService;
     private final Employee loggedEmployee;
 
-    private List<Request> allRequests;
-    private List<Resident> allPendingResidents;
-    private boolean showDepartmentRequest;
     private StackPane loadingIndicator;
     private final Map<RequestType, List<Request>> requestCache = new ConcurrentHashMap<>();
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
+    private boolean showDepartmentRequest;
+    private boolean dataFetched = false;
+
 
     public RequestController(DependencyInjector dependencyInjector) {
         this.dependencyInjector = dependencyInjector;
@@ -109,15 +109,21 @@ public class RequestController {
         populateResidentRequestRows(selectedType);
     }
 
+
     private void populateResidentRequestRows(RequestType type) {
+
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
-                List<Request> cachedRequests = requestCache.get(type);
-
-                if (cachedRequests != null && !cachedRequests.isEmpty()) {
+                if (dataFetched) {
                     Platform.runLater(() -> {
-                        updateRequestRow(cachedRequests);
+                        List<Request> cachedRequests = requestCache.get(type);
+                        if (cachedRequests != null && !cachedRequests.isEmpty()) {
+                            updateRequestRow(cachedRequests);
+                        } else {
+                            residentRequestTableController.clearRow();
+                            residentRequestTableController.showNoData();
+                        }
                     });
                     return null;
                 }
@@ -133,6 +139,14 @@ public class RequestController {
                         .map(RequestMapper::toRequestObject)
                         .toList();
 
+                if (allRequestCertificates.isEmpty() && allRequestBarangayId.isEmpty() && allCedula.isEmpty()) {
+                    Platform.runLater(() -> {
+                        residentRequestTableController.clearRow();
+                        residentRequestTableController.showNoData();
+                    });
+                    return null;
+                }
+
                 allRequest.addAll(allRequestCertificates);
                 allRequest.addAll(allRequestBarangayId);
                 allRequest.addAll(allCedula);
@@ -141,6 +155,8 @@ public class RequestController {
                 requestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
                 requestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
                 requestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
+
+                dataFetched = true;
                 return null;
             }
 
