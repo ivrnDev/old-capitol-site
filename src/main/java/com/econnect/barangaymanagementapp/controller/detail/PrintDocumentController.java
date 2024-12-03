@@ -35,7 +35,7 @@ public class PrintDocumentController implements BaseViewController {
     @FXML
     private HBox certificatePreviewContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput, fullNameText;
+    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, fullNameText;
     @FXML
     private TextArea purposeInput;
     @FXML
@@ -148,6 +148,7 @@ public class PrintDocumentController implements BaseViewController {
                 System.out.println("Failed to fetch data: " + getException().getMessage());
             }
         };
+
 
         new Thread(fetchResident).start();
         new Thread(requestTask).start();

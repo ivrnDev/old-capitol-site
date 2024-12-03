@@ -100,6 +100,11 @@ public class CertificateService {
         return generatedPdfFile[0];
     }
 
+    public String getControlNumber(CertificateType certificateType) {
+        int countOfPrintedCertificate = countOfPrintedCertificate(certificateType);
+        return generateControlNumber(countOfPrintedCertificate, certificateType);
+    }
+
     private String generateReferenceNumber() {
         int OTP_LENGTH = 12;
         SecureRandom random = new SecureRandom();
