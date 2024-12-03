@@ -27,12 +27,8 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
@@ -95,7 +91,7 @@ public class PrintUtils {
         return imageView;
     }
 
-    public static void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
+    public static void printDocumentFile(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
         printPdf(pdfFile, callback, currentStage);
     }
 
@@ -207,12 +203,10 @@ public class PrintUtils {
     }
 
     // DOCUMENTS
-    public static Image convertWordDocumentToImage(String documentUrl) throws Exception {
-        // Download the Word document
+    public static File convertWordDocumentToImage(String documentUrl, Consumer<Image> callback) throws Exception {
         InputStream inputStream = new URL(documentUrl).openStream();
         XWPFDocument document = new XWPFDocument(inputStream);
 
-        // Convert the Word document to PDF
         ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
         try (PDDocument pdfDocument = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -231,12 +225,15 @@ public class PrintUtils {
             pdfDocument.save(pdfOutputStream);
         }
 
-        // Convert the PDF to an image using the existing method
         File pdfFile = File.createTempFile("document", ".pdf");
         try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
             fos.write(pdfOutputStream.toByteArray());
         }
-        return PrintUtils.convertPdfToImage(pdfFile, 0);
+
+        Image image = PrintUtils.convertPdfToImage(pdfFile, 0);
+        callback.accept(image);
+
+        return pdfFile;
     }
 
     public static File createCertificateOfIndigency(String controlNumber, Resident resident) throws IOException {

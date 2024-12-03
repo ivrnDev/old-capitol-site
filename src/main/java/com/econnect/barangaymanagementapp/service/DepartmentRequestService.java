@@ -5,8 +5,10 @@ import com.econnect.barangaymanagementapp.repository.DepartmentRequestRepository
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.PrintUtils;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import okhttp3.Response;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -38,8 +40,12 @@ public class DepartmentRequestService {
         return departmentRequestRepository.findDepartmentRequestById(id).filter(request -> request.getStatus().equals("Completed"));
     }
 
-    public Image convertWordDocumentToImage(String fileUrl) throws Exception {
-        return PrintUtils.convertWordDocumentToImage(fileUrl);
+    public void printDocument(File fileUrl, Stage parentStage, Consumer<Boolean> callback) {
+        PrintUtils.printDocumentFile(fileUrl, parentStage, callback);
+    }
+
+    public File convertWordDocumentToImage(String fileUrl, Consumer<Image> callback) throws Exception {
+        return PrintUtils.convertWordDocumentToImage(fileUrl, callback);
     }
 
     public Response updateDepartmentRequestByStatus(String requestId, String status) {

@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.controller.detail;
 
 import com.econnect.barangaymanagementapp.controller.base.BaseViewController;
 import com.econnect.barangaymanagementapp.domain.DepartmentRequest;
+import com.econnect.barangaymanagementapp.enumeration.modal.Modal;
 import com.econnect.barangaymanagementapp.service.DepartmentRequestService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -20,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.Setter;
 
+import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -38,9 +40,10 @@ public class ViewDepartmentRequestController implements BaseViewController {
 
     private final ModalUtils modalUtils;
     private final DepartmentRequestService departmentRequestService;
-    private Image documentImage;
     private Stage currentStage;
     private String requestId;
+    private File file;
+    private Consumer<Boolean> callback;
 
     public ViewDepartmentRequestController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
@@ -50,7 +53,7 @@ public class ViewDepartmentRequestController implements BaseViewController {
 
     public void initialize() {
         closeBtn.setOnMouseClicked(_ -> closeView());
-//        printBtn.setOnMouseClicked(_ -> handlePrint());
+        printBtn.setOnMouseClicked(_ -> handlePrint());
         Platform.runLater(this::fetchData);
     }
 
@@ -66,19 +69,20 @@ public class ViewDepartmentRequestController implements BaseViewController {
     private void displayAttachment(String fileUrl) {
         StackPane loadingIndicator = LoadingIndicator.createLoadingIndicator(documentPreviewContainer.getWidth(), documentPreviewContainer.getHeight());
         addLoadingIndicator(loadingIndicator);
-        Task<Image> requestTask = new Task<>() {
+        Task<File> requestTask = new Task<>() {
             @Override
-            protected Image call() throws Exception {
-                return departmentRequestService.convertWordDocumentToImage(fileUrl);
+            protected File call() throws Exception {
+                return departmentRequestService.convertWordDocumentToImage(fileUrl, image -> {
+                    documentPreview.setImage(image);
+                    documentPreview.setCursor(javafx.scene.Cursor.HAND);
+                    documentPreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
+                });
             }
 
             @Override
             protected void succeeded() {
                 removeLoadingIndicator(loadingIndicator);
-                Image image = getValue();
-                documentPreview.setImage(image);
-                documentPreview.setCursor(javafx.scene.Cursor.HAND);
-                documentPreview.setOnMouseClicked(_ -> modalUtils.showImageView(image, currentStage));
+                file = getValue();
                 printBtn.setDisable(false);
             }
 
@@ -115,6 +119,14 @@ public class ViewDepartmentRequestController implements BaseViewController {
         };
 
         new Thread(requestTask).start();
+    }
+
+    private void handlePrint() {
+        departmentRequestService.printDocument(file, currentStage, success -> {
+            if (success) {
+                modalUtils.showModal(Modal.SUCCESS, "Print Success", "Document has been printed successfully.");
+            }
+        });
     }
 
     private void populateRequestData(DepartmentRequest request) {
