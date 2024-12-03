@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus.IN_PROGRESS;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus.PENDING;
 
 public class CertificateService {
@@ -74,12 +75,14 @@ public class CertificateService {
     }
 
     public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
+        if (status.equals(IN_PROGRESS)) addControlNumber(findCertificateById(requestId).get());
         return certificateRepository.updateCertificateByStatus(requestId, status);
     }
 
     public void printCertificate(File pdfFile, Stage currentStage, Consumer<Boolean> callback) {
         try {
             PrintUtils.printDocumentFile(pdfFile, currentStage, callback);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,6 +101,13 @@ public class CertificateService {
             }
         });
         return generatedPdfFile[0];
+    }
+
+    public Response addControlNumber(Certificate certificate) {
+        CertificateType certificateType = CertificateType.fromName(certificate.getRequest());
+        String controlNumber = getControlNumber(certificateType);
+        certificate.setControlNumber(controlNumber);
+        return certificateRepository.updateCertificate(certificate);
     }
 
     public String getControlNumber(CertificateType certificateType) {
