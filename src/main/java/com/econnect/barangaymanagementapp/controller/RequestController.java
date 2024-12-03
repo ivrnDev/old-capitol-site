@@ -58,6 +58,8 @@ public class RequestController {
     private final CedulaService cedulaService;
     private final BarangayidService barangayidService;
     private final DepartmentRequestService departmentRequestService;
+    private final EventService eventService;
+    private final BorrowService borrowService;
 
     private ResidentRequestTableController residentRequestTableController;
     private DepartmentRequestTableController departmentRequestTableController;
@@ -84,6 +86,8 @@ public class RequestController {
         this.cedulaService = dependencyInjector.getCedulaService();
         this.barangayidService = dependencyInjector.getBarangayidService();
         this.departmentRequestService = dependencyInjector.getDepartmentRequestService();
+        this.eventService = dependencyInjector.getEventService();
+        this.borrowService = dependencyInjector.getBorrowService();
     }
 
     public void initialize() {
@@ -153,8 +157,15 @@ public class RequestController {
                 List<Request> allCedula = cedulaService.findAllCedulas().stream()
                         .map(RequestMapper::toRequestObject)
                         .toList();
+                List<Request> allEvents = eventService.findAllEvents().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
+                List<Request> allBorrows = borrowService.findAllBorrows().stream()
+                        .map(RequestMapper::toRequestObject)
+                        .toList();
 
-                if (allRequestCertificates.isEmpty() && allRequestBarangayId.isEmpty() && allCedula.isEmpty()) {
+
+                if (allRequestCertificates.isEmpty() && allRequestBarangayId.isEmpty() && allCedula.isEmpty() && allEvents.isEmpty() && allBorrows.isEmpty()) {
                     Platform.runLater(() -> {
                         residentRequestTableController.clearRow();
                         residentRequestTableController.showNoData();
@@ -165,10 +176,14 @@ public class RequestController {
                 allRequest.addAll(allRequestCertificates);
                 allRequest.addAll(allRequestBarangayId);
                 allRequest.addAll(allCedula);
+                allRequest.addAll(allEvents);
+                allRequest.addAll(allBorrows);
 
                 residentRequestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
                 residentRequestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
                 residentRequestCache.computeIfAbsent(CEDULA, k -> new ArrayList<>()).addAll(allCedula);
+                residentRequestCache.computeIfAbsent(EVENTS, k -> new ArrayList<>()).addAll(allEvents);
+                residentRequestCache.computeIfAbsent(BORROWS, k -> new ArrayList<>()).addAll(allBorrows);
                 residentRequestCache.computeIfAbsent(RequestType.ALL, k -> new ArrayList<>()).addAll(allRequest);
 
                 dataFetched = true;

@@ -124,7 +124,6 @@ public class EventFormController {
     private Event createEventRequestFromInput() {
         return Event.builder()
                 .id(residentIdInput.getText())
-                .requestorId(residentIdInput.getText())
                 .eventType(typeComboBox.getValue())
                 .eventPlace(placeComboBox.getValue())
                 .eventTime(timeComboBox.getValue())

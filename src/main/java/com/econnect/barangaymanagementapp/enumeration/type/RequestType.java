@@ -9,7 +9,10 @@ public enum RequestType {
     ALL("All"),
     CERTIFICATES("Certificates"),
     BARANGAY_ID("Barangay ID"),
-    CEDULA("Cedula");
+    CEDULA("Cedula"),
+    EVENTS("Events"),
+    BORROWS("Borrows");
+
     //    EVENTS("Events"),
 //    COMPLAINT("Complaint");
 

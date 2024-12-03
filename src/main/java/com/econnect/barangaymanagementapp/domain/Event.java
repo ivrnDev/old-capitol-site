@@ -18,7 +18,6 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
 public class Event extends BaseEntity {
-    private String requestorId;
     private String eventDate;
     private String eventTime;
     private String eventType;
