@@ -137,7 +137,7 @@ public class DepartmentRequestRowController extends BaseRowController<Department
     private void createApproveButton() {
         Button approve = ButtonUtils.createButton("Approve", ButtonStyle.ACCEPT, () -> {
             modalUtils.showModal(Modal.DEFAULT_APPROVE, "Approve Request", "Would you like to approve request no." + request.getId() + "?", isConfirmed -> {
-                if (isConfirmed) updateRequestStatus(RequestStatus.IN_PROGRESS.getName());
+                if (isConfirmed) updateRequestStatus(RequestStatus.EVALUATION.getName());
             });
         });
 
