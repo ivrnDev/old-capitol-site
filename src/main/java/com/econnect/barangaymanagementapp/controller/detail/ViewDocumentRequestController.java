@@ -35,7 +35,7 @@ public class ViewDocumentRequestController implements BaseViewController {
     @FXML
     private HBox profileContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput;
+    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput;
     @FXML
     private TextArea purposeInput;
     @FXML
@@ -115,6 +115,7 @@ public class ViewDocumentRequestController implements BaseViewController {
         if (certificate == null) return;
         residentIdInput.setText(certificate.getId().substring(0, certificate.getId().length() - 5));
         requestInput.setText(certificate.getRequest());
+        controlNumberInput.setText(certificate.getControlNumber() != null ? certificate.getControlNumber() : "N/A");
         applicationTypeInput.setText(certificate.getApplicationType().getName());
         residentTypeInput.setText(certificate.getRequestorType());
         typeInput.setText("Certificate");
