@@ -563,8 +563,8 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
             });
             case BORROWS -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
                 modalUtils.customizeModalWithCallback(
-                        FXMLPath.VIEW_ID_REQUEST,
-                        ViewIdRequestController.class,
+                        FXMLPath.VIEW_BORROW,
+                        ViewBorrowController.class,
                         controller -> controller.setId(requestId)
                 );
             });

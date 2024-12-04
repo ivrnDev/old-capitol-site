@@ -32,6 +32,7 @@ public enum FXMLPath {
     VIEW_ID_REQUEST("view/detail/view-id-request.fxml"),
     VIEW_BARANGAY_ID("view/detail/view-id.fxml"),
     VIEW_CEDULA("view/detail/view-cedula.fxml"),
+    VIEW_BORROW("view/detail/view-borrow.fxml"),
     PRINT_ID("view/detail/print-id.fxml"),
     PRINT_DOCUMENT("view/detail/print-document.fxml"),
 
