@@ -10,6 +10,7 @@ import com.econnect.barangaymanagementapp.service.EventItemsService;
 import com.econnect.barangaymanagementapp.service.EventService;
 import com.econnect.barangaymanagementapp.service.InventoryService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.Validator;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
@@ -127,7 +128,7 @@ public class EventFormController {
                 .eventType(typeComboBox.getValue())
                 .eventPlace(placeComboBox.getValue())
                 .eventTime(timeComboBox.getValue())
-                .eventDate(eventDatePicker.getValue().toString())
+                .eventDate(DateFormatter.formatToUsShortDate(eventDatePicker.getValue()))
                 .purpose(purposeInput.getText())
                 .build();
     }
