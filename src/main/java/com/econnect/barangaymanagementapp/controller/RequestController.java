@@ -6,11 +6,13 @@ import com.econnect.barangaymanagementapp.domain.DepartmentRequest;
 import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Request;
 import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
+import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.mapper.RequestMapper;
 import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.FXMLLoaderFactory;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
+import com.econnect.barangaymanagementapp.util.RolePermission;
 import com.econnect.barangaymanagementapp.util.state.UserSession;
 import com.econnect.barangaymanagementapp.util.ui.LoadingIndicator;
 import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
@@ -35,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.DEPARTMENT_REQUEST_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.path.FXMLPath.RESIDENT_REQUEST_TABLE;
 import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
+import static com.econnect.barangaymanagementapp.util.RolePermission.TableActions.REQUEST_FILTER;
 
 public class RequestController {
     @FXML
@@ -44,11 +47,10 @@ public class RequestController {
     @FXML
     private TextField residentRequestSearchField, departmentRequestSearchField;
     @FXML
-    public Button addResidentBtn;
-    @FXML
     private ComboBox<String> residentRequestComboBox;
     @FXML
-    private AnchorPane applicationHeader;
+    private AnchorPane departmentRequestHeader;
+    private List<RolePermission.Action> allowedActions;
 
     private final DependencyInjector dependencyInjector;
     private final LiveReloadUtils liveReloadUtils;
@@ -71,7 +73,7 @@ public class RequestController {
     private StackPane departmentRequestLoadingIndicator;
     private final Map<RequestType, List<Request>> residentRequestCache = new ConcurrentHashMap<>();
     private final PauseTransition searchDelay = new PauseTransition(Duration.millis(300));
-    private boolean showDepartmentRequest;
+    private boolean showDepartmentRequest = true;
     private boolean dataFetched = false;
 
 
@@ -92,6 +94,7 @@ public class RequestController {
 
     public void initialize() {
         resetLiveReload();
+        triggerPermission();
         setupListener();
         loadResidentRequestTable();
         loadDepartmentRequestTable();
@@ -104,7 +107,11 @@ public class RequestController {
             FXMLLoader loader = fxmlLoaderFactory.createFXMLLoader(RESIDENT_REQUEST_TABLE.getFxmlPath(), dependencyInjector);
             Parent residentRequestTable = loader.load();
             residentRequestTableController = loader.getController();
-            residentRequestContent.getChildren().add(residentRequestTable);
+            if (showDepartmentRequest) {
+                residentRequestContent.getChildren().add(residentRequestTable);
+            } else {
+                contentPane.getChildren().add(residentRequestTable);
+            }
         } catch (IOException e) {
             System.err.println("Error loading employee table: " + e.getMessage());
         }
@@ -130,7 +137,6 @@ public class RequestController {
     }
 
     private void populateResidentRequestRows(RequestType type) {
-
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -173,11 +179,13 @@ public class RequestController {
                     return null;
                 }
 
-                allRequest.addAll(allRequestCertificates);
-                allRequest.addAll(allRequestBarangayId);
-                allRequest.addAll(allCedula);
-                allRequest.addAll(allEvents);
-                allRequest.addAll(allBorrows);
+                List<RequestType> allowedRequestTypes = RolePermission.getRequestTypeByRole(REQUEST_FILTER, loggedEmployee.getRole());
+
+                if (allowedRequestTypes.contains(CERTIFICATES)) allRequest.addAll(allRequestCertificates);
+                if (allowedRequestTypes.contains(BARANGAY_ID)) allRequest.addAll(allRequestBarangayId);
+                if (allowedRequestTypes.contains(CEDULA)) allRequest.addAll(allCedula);
+                if (allowedRequestTypes.contains(EVENTS)) allRequest.addAll(allEvents);
+                if (allowedRequestTypes.contains(BORROWS)) allRequest.addAll(allBorrows);
 
                 residentRequestCache.computeIfAbsent(CERTIFICATES, k -> new ArrayList<>()).addAll(allRequestCertificates);
                 residentRequestCache.computeIfAbsent(BARANGAY_ID, k -> new ArrayList<>()).addAll(allRequestBarangayId);
@@ -251,26 +259,27 @@ public class RequestController {
                 (filteredRequest) -> updateResidentRequestRow(filteredRequest));
     }
 
-//    private void triggerPermission() {
-//        List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.RESIDENT, loggedEmployee.getRole());
-//        if (!allowedActions.contains(RolePermission.Action.CREATE)) addResidentBtn.setDisable(true);
-//        if (!allowedActions.contains(RolePermission.Action.APPLICATION)) {
-//            showDepartmentRequest = false;
-//            applicationHeader.setManaged(false);
-//            applicationHeader.setVisible(false);
-//            residentApplicationContent.setVisible(false);
-//            residentApplicationContent.setManaged(false);
-//            residentListContent.setManaged(false);
-//            residentListContent.setVisible(true);
-//        }
-//    }
+    private void triggerPermission() {
+        List<RolePermission.Action> allowedActions = RolePermission.getActionByRole(RolePermission.TableActions.REQUEST, loggedEmployee.getRole());
+        if (!allowedActions.contains(RolePermission.Action.DEPARTMENT_REQUEST)) {
+            showDepartmentRequest = false;
+            departmentRequestHeader.setManaged(false);
+            departmentRequestHeader.setVisible(false);
+            departmentRequestContent.setVisible(false);
+            departmentRequestContent.setManaged(false);
+            residentRequestContent.setManaged(false);
+            residentRequestContent.setVisible(false);
+        }
+    }
 
     private void setupListener() {
         residentRequestSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchDelay.setOnFinished(_ -> performResidentRequestSearch());
             searchDelay.playFromStart();
         });
-        residentRequestComboBox.getItems().addAll(Arrays.stream(values()).map(RequestType::getName).toList());
+
+        residentRequestComboBox.getItems().addAll(
+                RolePermission.getRequestTypeByRole(REQUEST_FILTER, loggedEmployee.getRole()).stream().map(RequestType::getName).toList());
         residentRequestComboBox.setValue(RequestType.ALL.getName());
         residentRequestComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             populateResidentRequestRows(fromName(newValue));
@@ -292,7 +301,11 @@ public class RequestController {
 
     public void addResidentRequestLoadingIndicator() {
         residentRequestLoadingIndicator = LoadingIndicator.createLoadingIndicator(residentRequestContent.getWidth(), residentRequestContent.getHeight());
-        residentRequestContent.getChildren().add(residentRequestLoadingIndicator);
+        if (showDepartmentRequest) {
+            residentRequestContent.getChildren().add(residentRequestLoadingIndicator);
+        } else {
+            contentPane.getChildren().add(residentRequestLoadingIndicator);
+        }
     }
 
     public void addDepartmentRequestLoadingIndicator() {
@@ -301,7 +314,11 @@ public class RequestController {
     }
 
     public void removeResidentRequestLoadingIndicator() {
-        residentRequestContent.getChildren().remove(residentRequestLoadingIndicator);
+        if (showDepartmentRequest) {
+            residentRequestContent.getChildren().remove(residentRequestLoadingIndicator);
+        } else {
+            contentPane.getChildren().remove(residentRequestLoadingIndicator);
+        }
     }
 
     public void removeDepartmentRequestLoadingIndicator() {

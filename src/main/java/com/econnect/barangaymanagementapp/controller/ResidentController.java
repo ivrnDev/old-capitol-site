@@ -225,7 +225,11 @@ public class ResidentController {
     }
 
     public void removeResidentLoadingIndicator() {
-        residentListContent.getChildren().remove(loadingIndicator);
+        if (showApplication) {
+            residentListContent.getChildren().remove(loadingIndicator);
+        } else {
+            contentPane.getChildren().remove(loadingIndicator);
+        }
     }
 
     public void removeResidentApplicationLoadingIndicator() {
@@ -246,7 +250,7 @@ public class ResidentController {
             residentApplicationContent.setVisible(false);
             residentApplicationContent.setManaged(false);
             residentListContent.setManaged(false);
-            residentListContent.setVisible(true);
+            residentListContent.setVisible(false);
         }
     }
 
