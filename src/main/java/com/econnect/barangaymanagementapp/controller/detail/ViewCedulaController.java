@@ -35,7 +35,7 @@ public class ViewCedulaController implements BaseViewController {
     @FXML
     private HBox profileContainer;
     @FXML
-    private TextField residentIdInput, tinNumberInput, totalEarningsInput, totalGrossInput, heightInput, weightInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput;
+    private TextField residentIdInput, tinNumberInput, totalEarningsInput, totalGrossInput, heightInput, weightInput, statusInput, referenceNumberInput, dateInput, timeInput;
     @FXML
     private TextArea purposeInput;
     @FXML
@@ -114,7 +114,6 @@ public class ViewCedulaController implements BaseViewController {
     private void populateRequestData(Cedula cedula) {
         if (cedula == null) return;
         residentIdInput.setText(cedula.getId().substring(0, cedula.getId().length() - 5));
-        typeInput.setText("Cedula");
         purposeInput.setText(cedula.getPurpose());
         heightInput.setText(cedula.getHeight());
         weightInput.setText(cedula.getWeight());
@@ -132,6 +131,7 @@ public class ViewCedulaController implements BaseViewController {
         fullNameText.setText(fullName);
         emailText.setText(resident.getEmail());
         mobileNumberText.setText(resident.getMobileNumber());
+        tinNumberInput.setText(resident.getTinIdNumber());
     }
 
     private void loadProfileImage(String directory, String link) {

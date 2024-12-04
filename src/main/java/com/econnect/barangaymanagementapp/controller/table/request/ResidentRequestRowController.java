@@ -549,8 +549,8 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
 
             case CEDULA -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
                 modalUtils.customizeModalWithCallback(
-                        FXMLPath.VIEW_ID_REQUEST,
-                        ViewIdRequestController.class,
+                        FXMLPath.VIEW_CEDULA,
+                        ViewCedulaController.class,
                         controller -> controller.setId(requestId)
                 );
             });
