@@ -25,7 +25,6 @@ public class InventoryRepository extends BaseRepository<Inventory> {
 
     public Response updateInventory(Inventory inventory) {
         return create(apiKey + "/" + inventory.getId(), inventory);
-
     }
 
     public Boolean deleteInventoryById(String id) {

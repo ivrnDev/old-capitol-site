@@ -23,6 +23,11 @@ public class InventoryService {
         return inventoryRepository.createInventory(inventory);
     }
 
+    public Response updateInventory(Inventory inventory) {
+        inventory.setUpdatedAt(ZonedDateTime.now());
+        return inventoryRepository.updateInventory(inventory);
+    }
+
     public List<Inventory> findAllInventories() {
         return inventoryRepository.findAllInventory();
     }

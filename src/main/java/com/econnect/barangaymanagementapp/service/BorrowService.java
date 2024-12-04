@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Borrow;
+import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BorrowStatus;
 import com.econnect.barangaymanagementapp.repository.BorrowRepository;
@@ -17,9 +18,11 @@ import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.Bor
 
 public class BorrowService {
     private final BorrowRepository borrowRepository;
+    private final InventoryService inventoryService;
 
     public BorrowService(DependencyInjector dependencyInjector) {
         this.borrowRepository = dependencyInjector.getBorrowRepository();
+        this.inventoryService = dependencyInjector.getInventoryService();
     }
 
     public Response createBorrow(Borrow borrow) {
@@ -55,15 +58,34 @@ public class BorrowService {
         return borrowRepository.findBorrowById(id).filter(request -> request.getStatus().equals(BorrowStatus.RETURNED));
     }
 
-    public Response updateBorrowByStatus(String requestId, BorrowStatus status) {
-        return borrowRepository.updateBorrowByStatus(requestId, status);
-    }
+    public Response updateBorrowByStatus(String requestId, String itemId, BorrowStatus status) {
+        if (status.equals(BorrowStatus.IN_PROGRESS)) {
+            Optional<Borrow> getBorrow = this.findBorrowById(requestId);
+            Borrow borrow = getBorrow.orElseThrow(() -> new RuntimeException("Borrow not found"));
 
-    private String generateReferenceNumber() {
-        int OTP_LENGTH = 12;
-        SecureRandom random = new SecureRandom();
-        long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));
-        return String.format("%012d", otp);
+            Optional<Inventory> item = inventoryService.findInventoryById(itemId);
+            item.ifPresentOrElse(inventory -> {
+                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) - Integer.parseInt(borrow.getQuantity())));
+                inventoryService.updateInventory(inventory);
+            }, () -> {
+                throw new RuntimeException("Item not found");
+            });
+        }
+
+        if (status.equals(BorrowStatus.RETURNED) || status.equals(BorrowStatus.CANCELLED)) {
+            Optional<Borrow> getBorrow = this.findBorrowById(requestId);
+            Borrow borrow = getBorrow.orElseThrow(() -> new RuntimeException("Borrow not found"));
+
+            Optional<Inventory> item = inventoryService.findInventoryById(itemId);
+            item.ifPresentOrElse(inventory -> {
+                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) + Integer.parseInt(borrow.getQuantity())));
+                inventoryService.updateInventory(inventory);
+            }, () -> {
+                throw new RuntimeException("Item not found");
+            });
+        }
+
+        return borrowRepository.updateBorrowByStatus(requestId, status);
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
