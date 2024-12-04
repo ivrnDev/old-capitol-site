@@ -1,10 +1,9 @@
 .card-variant-2 {
     -fx-background-radius: 20;
     -fx-border-radius: 20;
-    -fx-background-color: #FDFFFF;
-    -fx-border-color: #787878;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #ccc;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
 }
 
 .card-variant-2:hover {
