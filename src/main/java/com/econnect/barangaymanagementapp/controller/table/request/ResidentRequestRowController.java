@@ -609,7 +609,7 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                 });
 
                 Response response = getValue();
-                if (response.isSuccessful()) {
+                if (response != null && response.isSuccessful()) {
                     modalUtils.showModal(Modal.SUCCESS, "Success", "Status has been updated successfully.");
                 } else {
                     modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while updating the status.");
@@ -623,7 +623,11 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                     node.setVisible(true);
                     node.setManaged(true);
                 });
-                modalUtils.showModal(Modal.ERROR, "Error", "An error occurred while updating the status.");
+                Throwable exception = getException();
+                exception.printStackTrace(); // Log the exceptio
+                modalUtils.showModal(Modal.ERROR, "Error", exception.getMessage());
+
+
             }
         };
         new Thread(task).start();

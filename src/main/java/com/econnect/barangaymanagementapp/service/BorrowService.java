@@ -6,6 +6,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.BorrowStatus;
 import com.econnect.barangaymanagementapp.repository.BorrowRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import okhttp3.Request;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
@@ -64,10 +65,15 @@ public class BorrowService {
             Borrow borrow = getBorrow.orElseThrow(() -> new RuntimeException("Borrow not found"));
 
             Optional<Inventory> item = inventoryService.findInventoryById(itemId);
-            item.ifPresentOrElse(inventory -> {
-                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) - Integer.parseInt(borrow.getQuantity())));
+            return item.map(inventory -> {
+                int newStock = Integer.parseInt(inventory.getStocks()) - Integer.parseInt(borrow.getQuantity());
+                if (newStock < 0) {
+                    throw new IllegalArgumentException("Insufficient stocks for item");
+                }
+                inventory.setStocks(String.valueOf(newStock));
                 inventoryService.updateInventory(inventory);
-            }, () -> {
+                return borrowRepository.updateBorrowByStatus(requestId, status);
+            }).orElseGet(() -> {
                 throw new RuntimeException("Item not found");
             });
         }
@@ -78,7 +84,8 @@ public class BorrowService {
 
             Optional<Inventory> item = inventoryService.findInventoryById(itemId);
             item.ifPresentOrElse(inventory -> {
-                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) + Integer.parseInt(borrow.getQuantity())));
+                int newStock = Integer.parseInt(inventory.getStocks()) + Integer.parseInt(borrow.getQuantity());
+                inventory.setStocks(String.valueOf(newStock));
                 inventoryService.updateInventory(inventory);
             }, () -> {
                 throw new RuntimeException("Item not found");
