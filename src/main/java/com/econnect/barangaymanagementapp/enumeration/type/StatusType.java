@@ -63,7 +63,8 @@ public class StatusType {
         BORROWED("Borrowed"),
         RETURNED("Returned"),
         OVERDUE("Overdue"),
-        WAITING("Waiting");
+        WAITING("Waiting"),
+        EVALUATION("Evaluation");
 
         private String name;
 
