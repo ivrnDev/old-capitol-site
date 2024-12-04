@@ -77,6 +77,7 @@ public class RequestMapper {
                 .id(borrow.getId())
                 .residentId(residentId)
                 .requestType(BORROWS)
+                .itemId(borrow.getItemId())
                 .request(BORROWS.getName())
                 .applicationType(borrow.getApplicationType())
                 .createdAt(borrow.getCreatedAt())
