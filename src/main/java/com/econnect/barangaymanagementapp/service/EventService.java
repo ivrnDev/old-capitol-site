@@ -2,6 +2,7 @@ package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Event;
 import com.econnect.barangaymanagementapp.domain.EventItems;
+import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppointmentStatus;
 import com.econnect.barangaymanagementapp.repository.EventItemsRepository;
@@ -15,16 +16,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppointmentStatus.COMPLETED;
-import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppointmentStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppointmentStatus.*;
 
 public class EventService {
     private final EventRepository eventRepository;
     private final EventItemsService eventItemsService;
+    private final InventoryService inventoryService;
 
     public EventService(DependencyInjector dependencyInjector) {
         this.eventRepository = dependencyInjector.getEventRepository();
         this.eventItemsService = new EventItemsService(dependencyInjector);
+        this.inventoryService = new InventoryService(dependencyInjector);
     }
 
     public Response createEvent(Event event, List<EventItems> eventItems) {
@@ -71,6 +73,30 @@ public class EventService {
     }
 
     public Response updateEventByStatus(String requestId, EventAppointmentStatus status) {
+        if (status.equals(IN_PROGRESS)) {
+            List<EventItems> items = eventItemsService.findAllEventItemsByEventId(requestId);
+            items.forEach(item -> {
+                Inventory inventory = inventoryService.findInventoryById(item.getItemId()).get();
+                int newStock = Integer.parseInt(inventory.getStocks()) - Integer.parseInt(item.getQuantity());
+                if (newStock < 0) {
+                    throw new IllegalArgumentException("Insufficient stocks for item");
+                }
+                inventory.setStocks(String.valueOf(newStock));
+                inventory.setUpdatedAt(ZonedDateTime.now());
+                inventoryService.updateInventory(inventory);
+            });
+        }
+
+        if (status.equals(COMPLETED) || status.equals(CANCELLED)) {
+            List<EventItems> items = eventItemsService.findAllEventItemsByEventId(requestId);
+            items.forEach(item -> {
+                Inventory inventory = inventoryService.findInventoryById(item.getItemId()).get();
+                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) + Integer.parseInt(item.getQuantity())));
+                inventory.setUpdatedAt(ZonedDateTime.now());
+                inventoryService.updateInventory(inventory);
+            });
+        }
+
         return eventRepository.updateEventByStatus(requestId, status);
     }
 
