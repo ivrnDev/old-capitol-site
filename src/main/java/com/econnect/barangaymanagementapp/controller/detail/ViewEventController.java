@@ -2,8 +2,10 @@ package com.econnect.barangaymanagementapp.controller.detail;
 
 import com.econnect.barangaymanagementapp.controller.base.BaseViewController;
 import com.econnect.barangaymanagementapp.domain.Event;
+import com.econnect.barangaymanagementapp.domain.EventItems;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
+import com.econnect.barangaymanagementapp.service.EventItemsService;
 import com.econnect.barangaymanagementapp.service.EventService;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
@@ -15,15 +17,20 @@ import com.econnect.barangaymanagementapp.util.ui.ModalUtils;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ViewEventController implements BaseViewController {
@@ -37,10 +44,13 @@ public class ViewEventController implements BaseViewController {
     private TextField residentIdInput, fullNameInput, emailInput, contactNumberInput, typeInput, eventPlaceInput, eventDateInput, eventTimeInput, dateInput, timeInput;
     @FXML
     private TextArea purposeInput;
+    @FXML
+    private VBox itemContainer;
 
     private final ModalUtils modalUtils;
     private final ResidentService residentService;
     private final EventService eventService;
+    private final EventItemsService eventItemsService;
     private final ImageService imageService;
     private Image profilePictureImage;
     private Stage currentStage;
@@ -51,6 +61,7 @@ public class ViewEventController implements BaseViewController {
         this.residentService = dependencyInjector.getResidentService();
         this.eventService = dependencyInjector.getEventService();
         this.imageService = dependencyInjector.getImageService();
+        this.eventItemsService = dependencyInjector.getEventItemsService();
         Platform.runLater(() -> currentStage = (Stage) closeBtn.getScene().getWindow());
     }
 
@@ -73,6 +84,7 @@ public class ViewEventController implements BaseViewController {
                 if (eventValue.isPresent()) {
                     Event event = eventValue.get();
                     populateRequestData(event);
+                    eventItemsService.findAllEventItemsByEventId(event.getId()).forEach(item -> addItemRow(item.getItemName(), item.getQuantity()));
                 }
             }
 
@@ -157,6 +169,24 @@ public class ViewEventController implements BaseViewController {
 
     private void setupViewImage() {
         Platform.runLater(() -> ImageUtils.setRoundedClip(profilePicture, 25, 25));
+    }
+
+    private void addItemRow(String itemName, String quantity) {
+        HBox itemRow = new HBox(30);
+        itemRow.setAlignment(Pos.CENTER);
+        itemRow.setMinHeight(30.0);
+        itemRow.getStyleClass().add("border");
+
+        Label itemLabel = new Label(itemName);
+        itemLabel.setTextOverrun(OverrunStyle.CLIP);
+        itemLabel.setFont(new Font("Arial", 15.0));
+
+        Label quantityLabel = new Label("x" + quantity);
+        quantityLabel.setTextOverrun(OverrunStyle.CLIP);
+        quantityLabel.setFont(new Font("Arial", 15.0));
+
+        itemRow.getChildren().addAll(itemLabel, quantityLabel);
+        itemContainer.getChildren().add(itemRow);
     }
 
     @FXML

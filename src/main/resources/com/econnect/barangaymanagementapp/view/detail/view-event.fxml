@@ -50,7 +50,19 @@
                                                 </ImageView>
                                             </children>
                                         </HBox>
-                                        <VBox alignment="CENTER" layoutX="28.0" layoutY="255.0" prefHeight="87.0" prefWidth="287.0" spacing="12.0" />
+                              <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="21.0" layoutY="284.0" prefHeight="186.0" prefWidth="292.0">
+                                 <content>
+                                              <VBox fx:id="itemContainer" alignment="TOP_CENTER" spacing="7.0" />
+                                 </content>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </ScrollPane>
+                              <Label layoutX="29.0" layoutY="255.0" text="Borrowed Items" textOverrun="CLIP">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Label>
                                     </children>
                                 </AnchorPane>
                                 <VBox prefWidth="518.0" spacing="30.0" HBox.hgrow="ALWAYS">
