@@ -250,7 +250,7 @@ public class ResidentController {
             residentApplicationContent.setVisible(false);
             residentApplicationContent.setManaged(false);
             residentListContent.setManaged(false);
-            residentListContent.setVisible(true);
+            residentListContent.setVisible(false);
         }
     }
 
