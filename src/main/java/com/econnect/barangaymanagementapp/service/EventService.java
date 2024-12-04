@@ -77,7 +77,11 @@ public class EventService {
             List<EventItems> items = eventItemsService.findAllEventItemsByEventId(requestId);
             items.forEach(item -> {
                 Inventory inventory = inventoryService.findInventoryById(item.getItemId()).get();
-                inventory.setStocks(String.valueOf(Integer.parseInt(inventory.getStocks()) - Integer.parseInt(item.getQuantity())));
+                int newStock = Integer.parseInt(inventory.getStocks()) - Integer.parseInt(item.getQuantity());
+                if (newStock < 0) {
+                    throw new IllegalArgumentException("Insufficient stocks for item");
+                }
+                inventory.setStocks(String.valueOf(newStock));
                 inventory.setUpdatedAt(ZonedDateTime.now());
                 inventoryService.updateInventory(inventory);
             });
