@@ -556,8 +556,8 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
             });
             case EVENTS -> viewBtn = ButtonUtils.createButton("View", ButtonStyle.VIEW, () -> {
                 modalUtils.customizeModalWithCallback(
-                        FXMLPath.VIEW_ID_REQUEST,
-                        ViewIdRequestController.class,
+                        FXMLPath.VIEW_EVENT,
+                        ViewEventController.class,
                         controller -> controller.setId(requestId)
                 );
             });

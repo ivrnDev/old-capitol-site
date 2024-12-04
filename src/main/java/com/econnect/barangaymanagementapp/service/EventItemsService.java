@@ -30,6 +30,10 @@ public class EventItemsService {
     public List<EventItems> findAllEventItems() {
         return eventItemsRepository.findAllEventItems();
     }
+    
+    public List<EventItems> findAllEventItemsByEventId(String eventId) {
+        return eventItemsRepository.findEventItemsByFilter(request -> request.getEventId().equals(eventId));
+    }
 
     public Optional<EventItems> findEventItemsById(String id) {
         return eventItemsRepository.findEventItemsById(id);
