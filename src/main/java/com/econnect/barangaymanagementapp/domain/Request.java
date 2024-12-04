@@ -26,6 +26,7 @@ public class Request extends BaseEntity {
     private ApplicationType applicationType;
     private String request;
     private RequestType requestType;
+    private String itemId;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

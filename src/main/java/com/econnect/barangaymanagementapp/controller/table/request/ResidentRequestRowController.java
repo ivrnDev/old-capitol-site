@@ -594,7 +594,7 @@ public class ResidentRequestRowController extends BaseRowController<Request> {
                     case EVENTS:
                         return eventService.updateEventByStatus(requestId, StatusType.EventAppointmentStatus.fromName(status.getName()));
                     case BORROWS:
-                        return borrowService.updateBorrowByStatus(requestId, StatusType.BorrowStatus.fromName(status.getName()));
+                        return borrowService.updateBorrowByStatus(requestId, request.getItemId(), StatusType.BorrowStatus.fromName(status.getName()));
                     default:
                 }
                 return null;
