@@ -5,7 +5,6 @@ public enum NavigationType {
     ANALYTICS("Analytics", "icon/sidebar/analytics.png", "icon/sidebar/selected/analytics-selected.png"),
     EMPLOYEES("Employees", "icon/sidebar/employees.png", "icon/sidebar/selected/employees-selected.png"),
     RESIDENTS("Residents", "icon/sidebar/resident.png", "icon/sidebar/selected/resident-selected.png"),
-    HISTORY("History", "icon/sidebar/history.png", "icon/sidebar/selected/history-selected.png"),
     SERVICES("Services", "icon/sidebar/services.png", "icon/sidebar/selected/services-selected.png"),
     APPLICATIONS("Applications", "icon/sidebar/applications.png", "icon/sidebar/selected/applications-selected.png"),
     REQUESTS("Request", "icon/sidebar/request.png", "icon/sidebar/selected/request-selected.png"),

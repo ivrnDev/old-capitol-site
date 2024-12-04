@@ -2,43 +2,56 @@ package com.econnect.barangaymanagementapp.util;
 
 import com.econnect.barangaymanagementapp.enumeration.type.DepartmentType;
 import com.econnect.barangaymanagementapp.enumeration.type.NavigationType;
+import com.econnect.barangaymanagementapp.enumeration.type.RequestType;
 import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.NavigationType.*;
+import static com.econnect.barangaymanagementapp.enumeration.type.RequestType.*;
 import static com.econnect.barangaymanagementapp.enumeration.type.RoleType.*;
 import static com.econnect.barangaymanagementapp.util.RolePermission.Action.*;
 
 public class RolePermission {
     private static final Map<DepartmentType, Map<RoleType, List<NavigationType>>> roleNavigationPermissions = Map.of(
             DepartmentType.BARANGAY_OFFICE, Map.of(
-                    ADMIN, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES, HISTORY),
-                    SECRETARY, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES, HISTORY),
-                    ADMINISTRATIVE_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS, HISTORY),
-                    DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS, HISTORY),
+                    ADMIN, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
+                    SECRETARY, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
+                    ADMINISTRATIVE_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
+                    DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
                     OFFICE_FRONT_DESK, List.of(DASHBOARD, RESIDENTS, SERVICES),
-                    FINANCIAL_CLERK, List.of(DASHBOARD, HISTORY),
+                    FINANCIAL_CLERK, List.of(DASHBOARD),
                     EVENT_COORDINATOR, List.of(DASHBOARD),
                     HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES),
-                    UTILITY_HEAD, List.of(DASHBOARD, ANALYTICS, INVENTORY)
+                    UTILITY_HEAD, List.of(DASHBOARD, ANALYTICS, INVENTORY, REQUESTS)
             )
 //
     );
 
     private static final Map<TableActions, Map<RoleType, List<Action>>> roleActionPermission = Map.of(
             TableActions.REQUEST, Map.of(
-                    ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
-                    SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
-                    ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE),
-                    DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE)
+                    ADMIN, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE, DEPARTMENT_REQUEST),
+                    SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE, DEPARTMENT_REQUEST),
+                    ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE, DEPARTMENT_REQUEST),
+                    DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE),
+                    UTILITY_HEAD, List.of(APPROVE, REJECT, RELEASE, COMPLETE, DEPARTMENT_REQUEST)
             ),
             TableActions.RESIDENT, Map.of(
                     ADMIN, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION, EDIT),
                     SECRETARY, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION, EDIT),
                     ADMINISTRATIVE_CLERK, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION),
                     DOCUMENT_CLERK, List.of()
+            )
+    );
+
+    private static final Map<TableActions, Map<RoleType, List<RequestType>>> requestTypePermission = Map.of(
+            TableActions.REQUEST_FILTER, Map.of(
+                    ADMIN, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS),
+                    SECRETARY, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS),
+                    ADMINISTRATIVE_CLERK, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS),
+                    DOCUMENT_CLERK, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA),
+                    UTILITY_HEAD, List.of(ALL, BORROWS, EVENTS)
             )
     );
 
@@ -49,6 +62,10 @@ public class RolePermission {
 
     public static List<Action> getActionByRole(TableActions tableActions, RoleType roleType) {
         return roleActionPermission.get(tableActions).get(roleType);
+    }
+
+    public static List<RequestType> getRequestTypeByRole(TableActions tableActions, RoleType roleType) {
+        return requestTypePermission.get(tableActions).get(roleType);
     }
 
     public enum Action {
@@ -63,7 +80,8 @@ public class RolePermission {
         VERIFY,
         CREATE,
         APPLICATION,
-        EDIT
+        EDIT,
+        DEPARTMENT_REQUEST
     }
 
     public enum TableActions {
@@ -71,7 +89,8 @@ public class RolePermission {
         RESIDENT,
         REQUEST,
         INVENTORY,
-        UTILS_REQUEST
+        UTILS_REQUEST,
+        REQUEST_FILTER
     }
 }
 
