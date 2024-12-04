@@ -118,6 +118,7 @@ public class SearchService<T> {
 
     public Predicate<Request> createRequestFilter(String searchText) {
         return request -> request.getId().toLowerCase().contains(searchText)
+                || request.getControlNumber() != null && request.getControlNumber().toLowerCase().contains(searchText)
                 || request.getReferenceNumber().toLowerCase().contains(searchText)
                 || request.getApplicationType().getName().toLowerCase().contains(searchText)
                 || request.getRequestType().getName().toLowerCase().contains(searchText)

@@ -28,6 +28,7 @@ public class RequestMapper {
         return Request.builder()
                 .id(request.getId())
                 .residentId(residentId)
+                .controlNumber(request.getControlNumber())
                 .request(request.getRequest())
                 .requestType(CERTIFICATES)
                 .applicationType(request.getApplicationType())

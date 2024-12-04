@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class Request extends BaseEntity {
     private String residentId;
+    private String controlNumber;
     private StatusType.RequestStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;

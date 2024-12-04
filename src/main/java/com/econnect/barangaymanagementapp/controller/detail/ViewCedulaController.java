@@ -1,10 +1,10 @@
 package com.econnect.barangaymanagementapp.controller.detail;
 
 import com.econnect.barangaymanagementapp.controller.base.BaseViewController;
-import com.econnect.barangaymanagementapp.domain.Certificate;
+import com.econnect.barangaymanagementapp.domain.Cedula;
 import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.database.Firestore;
-import com.econnect.barangaymanagementapp.service.CertificateService;
+import com.econnect.barangaymanagementapp.service.CedulaService;
 import com.econnect.barangaymanagementapp.service.ImageService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DateFormatter;
@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class ViewDocumentRequestController implements BaseViewController {
+public class ViewCedulaController implements BaseViewController {
     @FXML
     private ImageView closeBtn;
     @FXML
@@ -35,7 +35,7 @@ public class ViewDocumentRequestController implements BaseViewController {
     @FXML
     private HBox profileContainer;
     @FXML
-    private TextField residentIdInput, requestInput, applicationTypeInput, residentTypeInput, typeInput, statusInput, referenceNumberInput, dateInput, timeInput, controlNumberInput;
+    private TextField residentIdInput, tinNumberInput, totalEarningsInput, totalGrossInput, heightInput, weightInput, statusInput, referenceNumberInput, dateInput, timeInput;
     @FXML
     private TextArea purposeInput;
     @FXML
@@ -43,16 +43,16 @@ public class ViewDocumentRequestController implements BaseViewController {
 
     private final ModalUtils modalUtils;
     private final ResidentService residentService;
-    private final CertificateService certificateService;
+    private final CedulaService cedulaService;
     private final ImageService imageService;
     private Image profilePictureImage;
     private Stage currentStage;
-    private String certificateId;
+    private String cedulaId;
 
-    public ViewDocumentRequestController(DependencyInjector dependencyInjector) {
+    public ViewCedulaController(DependencyInjector dependencyInjector) {
         this.modalUtils = dependencyInjector.getModalUtils();
         this.residentService = dependencyInjector.getResidentService();
-        this.certificateService = dependencyInjector.getCertificateService();
+        this.cedulaService = dependencyInjector.getCedulaService();
         this.imageService = dependencyInjector.getImageService();
         Platform.runLater(() -> currentStage = (Stage) closeBtn.getScene().getWindow());
     }
@@ -64,18 +64,18 @@ public class ViewDocumentRequestController implements BaseViewController {
     }
 
     private void fetchData() {
-        Task<Optional<Certificate>> requestTask = new Task<>() {
+        Task<Optional<Cedula>> requestTask = new Task<>() {
             @Override
-            protected Optional<Certificate> call() {
-                return certificateService.findCertificateById(certificateId);
+            protected Optional<Cedula> call() {
+                return cedulaService.findCedulaById(cedulaId);
             }
 
             @Override
             protected void succeeded() {
-                Optional<Certificate> certificateValue = getValue();
-                if (certificateValue.isPresent()) {
-                    Certificate certificate = certificateValue.get();
-                    populateRequestData(certificate);
+                Optional<Cedula> cedulaValue = getValue();
+                if (cedulaValue.isPresent()) {
+                    Cedula cedula = cedulaValue.get();
+                    populateRequestData(cedula);
                 }
             }
 
@@ -88,7 +88,7 @@ public class ViewDocumentRequestController implements BaseViewController {
         Task<Optional<Resident>> fetchResident = new Task<>() {
             @Override
             protected Optional<Resident> call() {
-                return residentService.findResidentById(certificateId.substring(0, certificateId.length() - 5));
+                return residentService.findResidentById(cedulaId.substring(0, cedulaId.length() - 5));
             }
 
             @Override
@@ -111,19 +111,18 @@ public class ViewDocumentRequestController implements BaseViewController {
         new Thread(requestTask).start();
     }
 
-    private void populateRequestData(Certificate certificate) {
-        if (certificate == null) return;
-        residentIdInput.setText(certificate.getId().substring(0, certificate.getId().length() - 5));
-        requestInput.setText(certificate.getRequest());
-        controlNumberInput.setText(certificate.getControlNumber() != null ? certificate.getControlNumber() : "N/A");
-        applicationTypeInput.setText(certificate.getApplicationType().getName());
-        residentTypeInput.setText(certificate.getRequestorType());
-        typeInput.setText("Certificate");
-        purposeInput.setText(certificate.getPurpose());
-        statusInput.setText(certificate.getStatus().getName());
-        referenceNumberInput.setText(certificate.getReferenceNumber());
-        dateInput.setText(DateFormatter.formatDateToLongStyle(certificate.getCreatedAt()));
-        timeInput.setText(DateFormatter.formatTimeTo12HourStyle(certificate.getCreatedAt()));
+    private void populateRequestData(Cedula cedula) {
+        if (cedula == null) return;
+        residentIdInput.setText(cedula.getId().substring(0, cedula.getId().length() - 5));
+        purposeInput.setText(cedula.getPurpose());
+        heightInput.setText(cedula.getHeight());
+        weightInput.setText(cedula.getWeight());
+        totalGrossInput.setText(cedula.getGrossReceipt());
+        totalEarningsInput.setText(cedula.getTotalEarnings());
+        statusInput.setText(cedula.getStatus().getName());
+        referenceNumberInput.setText(cedula.getReferenceNumber());
+        dateInput.setText(DateFormatter.formatDateToLongStyle(cedula.getCreatedAt()));
+        timeInput.setText(DateFormatter.formatTimeTo12HourStyle(cedula.getCreatedAt()));
     }
 
     private void populateResidentData(Resident resident) {
@@ -132,6 +131,7 @@ public class ViewDocumentRequestController implements BaseViewController {
         fullNameText.setText(fullName);
         emailText.setText(resident.getEmail());
         mobileNumberText.setText(resident.getMobileNumber());
+        tinNumberInput.setText(resident.getTinIdNumber());
     }
 
     private void loadProfileImage(String directory, String link) {
@@ -172,6 +172,6 @@ public class ViewDocumentRequestController implements BaseViewController {
 
     @Override
     public void setId(String id) {
-        this.certificateId = id;
+        this.cedulaId = id;
     }
 }
