@@ -27,6 +27,7 @@ public class Cedula extends BaseEntity {
     private String referenceNumber;
     private String expirationDate;
     private ApplicationType applicationType;
+    private String purpose;
     private RequestType requestType; // Not included in serialization
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

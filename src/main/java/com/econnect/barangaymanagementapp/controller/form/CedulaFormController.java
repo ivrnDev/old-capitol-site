@@ -161,6 +161,7 @@ public class CedulaFormController {
                 .id(residentIdInput.getText())
                 .grossReceipt(grossReceiptInput.getText())
                 .totalEarnings(totalEarningsInput.getText())
+                .purpose(purposeInput.getText())
                 .height(heightInput.getText())
                 .weight(weightInput.getText())
                 .build();
