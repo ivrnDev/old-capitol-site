@@ -11,7 +11,7 @@ public enum DepartmentType {
     BARANGAY_OFFICE(
             "Barangay Office",
             "view/dashboard.fxml",
-            List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, FINANCIAL_CLERK, EVENT_COORDINATOR, WEB_ADMINISTRATOR, HR_MANAGER, UTILITY_HEAD)),
+            List.of(SECRETARY, ADMINISTRATIVE_CLERK, OFFICE_FRONT_DESK, DOCUMENT_CLERK, WEB_ADMINISTRATOR, HR_MANAGER, UTILITY_HEAD)),
     HEALTH_DEPARTMENT(
             "Health Department",
             "",

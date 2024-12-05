@@ -20,13 +20,10 @@ public class RolePermission {
                     SECRETARY, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
                     ADMINISTRATIVE_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
                     DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
-                    OFFICE_FRONT_DESK, List.of(DASHBOARD, RESIDENTS, SERVICES),
-                    FINANCIAL_CLERK, List.of(DASHBOARD),
-                    EVENT_COORDINATOR, List.of(DASHBOARD),
+                    OFFICE_FRONT_DESK, List.of(DASHBOARD, REQUESTS, RESIDENTS, SERVICES),
                     HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES),
                     UTILITY_HEAD, List.of(DASHBOARD, ANALYTICS, INVENTORY, REQUESTS)
             )
-//
     );
 
     private static final Map<TableActions, Map<RoleType, List<Action>>> roleActionPermission = Map.of(
@@ -35,13 +32,15 @@ public class RolePermission {
                     SECRETARY, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE, DEPARTMENT_REQUEST),
                     ADMINISTRATIVE_CLERK, List.of(APPROVE, REJECT, CANCEL, RELEASE, COMPLETE, RESTORE, DEPARTMENT_REQUEST),
                     DOCUMENT_CLERK, List.of(APPROVE, REJECT, COMPLETE),
-                    UTILITY_HEAD, List.of(APPROVE, REJECT, RELEASE, COMPLETE, DEPARTMENT_REQUEST)
+                    UTILITY_HEAD, List.of(APPROVE, REJECT, RELEASE, COMPLETE, DEPARTMENT_REQUEST),
+                    OFFICE_FRONT_DESK, List.of()
             ),
             TableActions.RESIDENT, Map.of(
                     ADMIN, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION, EDIT),
                     SECRETARY, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION, EDIT),
                     ADMINISTRATIVE_CLERK, List.of(VERIFY, SUSPEND, RESTORE, DELETE, REJECT, CREATE, APPLICATION),
-                    DOCUMENT_CLERK, List.of()
+                    DOCUMENT_CLERK, List.of(),
+                    OFFICE_FRONT_DESK, List.of()
             )
     );
 
@@ -51,7 +50,8 @@ public class RolePermission {
                     SECRETARY, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS),
                     ADMINISTRATIVE_CLERK, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS),
                     DOCUMENT_CLERK, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA),
-                    UTILITY_HEAD, List.of(ALL, BORROWS, EVENTS)
+                    UTILITY_HEAD, List.of(ALL, BORROWS, EVENTS),
+                    OFFICE_FRONT_DESK, List.of(ALL, CERTIFICATES, BARANGAY_ID, CEDULA, BORROWS, EVENTS)
             )
     );
 
