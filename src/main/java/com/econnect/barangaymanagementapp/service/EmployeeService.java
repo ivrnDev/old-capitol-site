@@ -142,6 +142,27 @@ public class EmployeeService {
         return 100000 + random.nextInt(900000);
     }
 
+    //Analytics
+    public int getPendingApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(PENDING)).size();
+    }
+
+    public int getProcessingApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(UNDER_REVIEW)).size();
+    }
+
+    public int getActiveEmployees() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(ACTIVE)).size();
+    }
+
+    public int getTerminatedEmployees() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(TERMINATED)).size();
+    }
+
+    public int getTotalApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> APPLICANTS_STATUSES.contains(employee.getStatus())).size();
+    }
+
     //Update Listener
     public void enableLiveReload(Consumer<String> handleDataUpdate) {
         employeeRepository.enableLiveReload(handleDataUpdate);

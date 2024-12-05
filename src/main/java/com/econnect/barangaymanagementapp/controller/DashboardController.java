@@ -1,5 +1,6 @@
 package com.econnect.barangaymanagementapp.controller;
 
+import com.econnect.barangaymanagementapp.service.EmployeeService;
 import com.econnect.barangaymanagementapp.service.ResidentService;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import javafx.application.Platform;
@@ -17,9 +18,11 @@ public class DashboardController {
     private Text totalEmployee, totalApplicants, pendingApplicants, processingApplicants;
 
     private final ResidentService residentService;
+    private final EmployeeService employeeService;
 
     public DashboardController(DependencyInjector dependencyInjector) {
         this.residentService = dependencyInjector.getResidentService();
+        this.employeeService = dependencyInjector.getEmployeeService();
     }
 
     public void initialize() {
@@ -35,6 +38,10 @@ public class DashboardController {
                     pendingResident.setText(String.valueOf(residentService.getPendingResident()));
                     suspendedResident.setText(String.valueOf(residentService.getSuspendedResident()));
                     rejectedResident.setText(String.valueOf(residentService.getRejectedResident()));
+                    totalEmployee.setText(String.valueOf(employeeService.getActiveEmployees()));
+                    totalApplicants.setText(String.valueOf(employeeService.getPendingApplicants()));
+                    pendingApplicants.setText(String.valueOf(employeeService.getPendingApplicants()));
+                    processingApplicants.setText(String.valueOf(employeeService.getProcessingApplicants()));
                 });
                 return null;
             }
