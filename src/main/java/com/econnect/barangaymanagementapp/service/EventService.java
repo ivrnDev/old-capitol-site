@@ -3,15 +3,15 @@ package com.econnect.barangaymanagementapp.service;
 import com.econnect.barangaymanagementapp.domain.Event;
 import com.econnect.barangaymanagementapp.domain.EventItems;
 import com.econnect.barangaymanagementapp.domain.Inventory;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppointmentStatus;
-import com.econnect.barangaymanagementapp.repository.EventItemsRepository;
 import com.econnect.barangaymanagementapp.repository.EventRepository;
+import com.econnect.barangaymanagementapp.util.DateFormatter;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.StatusUtils;
 import okhttp3.Response;
 
-import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,11 +23,15 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventItemsService eventItemsService;
     private final InventoryService inventoryService;
+    private final EmailService emailService;
+    private final ResidentService residentService;
 
     public EventService(DependencyInjector dependencyInjector) {
         this.eventRepository = dependencyInjector.getEventRepository();
         this.eventItemsService = new EventItemsService(dependencyInjector);
         this.inventoryService = new InventoryService(dependencyInjector);
+        this.emailService = dependencyInjector.getEmailService();
+        this.residentService = dependencyInjector.getResidentService();
     }
 
     public Response createEvent(Event event, List<EventItems> eventItems) {
@@ -74,6 +78,7 @@ public class EventService {
     }
 
     public Response updateEventByStatus(String requestId, EventAppointmentStatus status) {
+        Event event = findEventById(requestId).get();
         if (status.equals(IN_PROGRESS)) {
             List<EventItems> items = eventItemsService.findAllEventItemsByEventId(requestId);
             items.forEach(item -> {
@@ -86,6 +91,11 @@ public class EventService {
                 inventory.setUpdatedAt(ZonedDateTime.now());
                 inventoryService.updateInventory(inventory);
             });
+        }
+
+        if (status.equals(WAITING) && event.getApplicationType().equals(ApplicationType.ONLINE)) {
+            Resident resident = residentService.findResidentById(event.getId().substring(0, 12)).get();
+            sendReleaseEmail(resident, event);
         }
 
         if (status.equals(COMPLETED) || status.equals(CANCELLED)) {
@@ -130,5 +140,26 @@ public class EventService {
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         eventRepository.enableLiveReload(handleDataUpdate);
+    }
+
+    private void sendReleaseEmail(Resident resident, Event event) {
+        emailService.sendEmailAsync(resident.getEmail(), "Your Requested Event has been Accepted", String.format("""
+                        Dear %s,
+
+                        We are pleased to inform you that your request for an event "%s" scheduled on %s at %s has been accepted and is now preparing .
+                                                    
+                        Please visit the barangay hall at Old Capitol Site to collect your event items. Our office hours are from 8:00 AM to 5:00 PM, Monday to Friday.
+                                                    
+                        If you have any questions or need further assistance, feel free to reach out to our office.
+                                                        
+                        Best regards,
+                        Old Capitol Site
+                        """,
+                resident.getFirstName(),
+                event.getEventType(),
+                DateFormatter.formatToLongDate(event.getEventDate()),
+                event.getEventTime()
+
+        ));
     }
 }

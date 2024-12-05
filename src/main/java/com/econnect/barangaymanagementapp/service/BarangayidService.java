@@ -1,6 +1,8 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.BarangayId;
+import com.econnect.barangaymanagementapp.domain.Certificate;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.repository.BarangayIdRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -14,12 +16,17 @@ import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus.PENDING;
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.BarangayIdStatus.RELEASING;
 
 public class BarangayidService {
     private final BarangayIdRepository barangayIdRepository;
+    private final EmailService emailService;
+    private final ResidentService residentService;
 
     public BarangayidService(DependencyInjector dependencyInjector) {
         this.barangayIdRepository = dependencyInjector.getBarangayIdRepository();
+        this.emailService = dependencyInjector.getEmailService();
+        this.residentService = dependencyInjector.getResidentService();
     }
 
     public Response createBarangayId(BarangayId request) {
@@ -57,6 +64,12 @@ public class BarangayidService {
     }
 
     public Response updateBarangayIdByStatus(String requestId, BarangayIdStatus status) {
+        BarangayId barangayId = findBarangayIdById(requestId).get();
+
+        if (status.equals(RELEASING) && barangayId.getApplicationType().equals(ApplicationType.ONLINE)) {
+            Resident resident = residentService.findResidentById(barangayId.getId().substring(0, 12)).orElseThrow();
+            sendReleaseEmail(resident, barangayId);
+        }
         return barangayIdRepository.updateBarangayIdByStatus(requestId, status);
     }
 
@@ -90,5 +103,23 @@ public class BarangayidService {
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         barangayIdRepository.enableLiveReload(handleDataUpdate);
+    }
+
+    private void sendReleaseEmail(Resident resident, BarangayId barangayId) {
+        emailService.sendEmailAsync(resident.getEmail(), "Your Barangay ID is Ready for Pickup", String.format("""
+                        Dear %s,
+
+                        We are pleased to inform you that your barangay id with reference number %s has been processed and is now ready for pickup.
+                                                    
+                        Please visit the barangay hall at Old Capitol Site to collect your barangayId. Our office hours are from 8:00 AM to 5:00 PM, Monday to Friday.
+                                                    
+                        If you have any questions or need further assistance, feel free to reach out to our office.
+                                                        
+                        Best regards,
+                        Old Capitol Site
+                        """,
+                resident.getFirstName(),
+                barangayId.getReferenceNumber()
+        ));
     }
 }

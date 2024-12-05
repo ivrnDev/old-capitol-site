@@ -1,10 +1,9 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Certificate;
+import com.econnect.barangaymanagementapp.domain.Employee;
 import com.econnect.barangaymanagementapp.domain.Resident;
-import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
-import com.econnect.barangaymanagementapp.enumeration.type.CertificateType;
-import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
+import com.econnect.barangaymanagementapp.enumeration.type.*;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus;
 import com.econnect.barangaymanagementapp.repository.CertificateRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
@@ -28,10 +27,12 @@ import static com.econnect.barangaymanagementapp.util.StatusUtils.TOTAL_PROCESSI
 public class CertificateService {
     private final CertificateRepository certificateRepository;
     private final ResidentService residentService;
+    private final EmailService emailService;
 
     public CertificateService(DependencyInjector dependencyInjector) {
         this.certificateRepository = dependencyInjector.getCertificateRepository();
         this.residentService = dependencyInjector.getResidentService();
+        this.emailService = dependencyInjector.getEmailService();
     }
 
     public Response createCertificate(Certificate certificate) {
@@ -77,7 +78,16 @@ public class CertificateService {
     }
 
     public Response updateCertificateByStatus(String requestId, StatusType.CertificateStatus status) {
-        if (status.equals(IN_PROGRESS)) addControlNumber(findCertificateById(requestId).get());
+        var certificate = findCertificateById(requestId);
+
+        if (status.equals(IN_PROGRESS)) addControlNumber(certificate.get());
+
+        if (status.equals(CertificateStatus.RELEASING) && certificate.get().getApplicationType().equals(ApplicationType.ONLINE)) {
+            certificate.ifPresent(request -> {
+                Optional<Resident> resident = residentService.findResidentById(request.getId().substring(0, 12));
+                resident.ifPresent(res -> sendReleaseEmail(res, request));
+            });
+        }
         return certificateRepository.updateCertificateByStatus(requestId, status);
     }
 
@@ -161,5 +171,24 @@ public class CertificateService {
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         certificateRepository.enableLiveReload(handleDataUpdate);
+    }
+
+    private void sendReleaseEmail(Resident resident, Certificate certificate) {
+        emailService.sendEmailAsync(resident.getEmail(), "Your Certificate is Ready for Pickup", String.format("""
+                        Dear %s,
+
+                        We are pleased to inform you that your certificate request %s with reference number %s has been processed and is now ready for pickup.
+                                                    
+                        Please visit the barangay hall at Old Capitol Site to collect your certificate. Our office hours are from 8:00 AM to 5:00 PM, Monday to Friday.
+                                                    
+                        If you have any questions or need further assistance, feel free to reach out to our office.
+                                                        
+                        Best regards,
+                        Old Capitol Site
+                        """,
+                resident.getFirstName(),
+                certificate.getRequest(),
+                certificate.getReferenceNumber()
+        ));
     }
 }

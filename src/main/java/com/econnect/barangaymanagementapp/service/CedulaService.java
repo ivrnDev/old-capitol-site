@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Cedula;
+import com.econnect.barangaymanagementapp.domain.Resident;
 import com.econnect.barangaymanagementapp.enumeration.type.ApplicationType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus;
 import com.econnect.barangaymanagementapp.repository.CedulaRepository;
@@ -14,14 +15,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.RELEASING;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.COMPLETED;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.PENDING;
 
 public class CedulaService {
     private final CedulaRepository cedulaRepository;
+    private final EmailService emailService;
+    private final ResidentService residentService;
 
     public CedulaService(DependencyInjector dependencyInjector) {
         this.cedulaRepository = dependencyInjector.getCedulaRepository();
+        this.emailService = dependencyInjector.getEmailService();
+        this.residentService = dependencyInjector.getResidentService();
     }
 
     public Response createCedula(Cedula cedula) {
@@ -59,6 +65,13 @@ public class CedulaService {
     }
 
     public Response updateCedulaByStatus(String requestId, CedulaStatus status) {
+        Cedula cedula = cedulaRepository.findCedulaById(requestId).get();
+        System.out.println(cedula.getApplicationType());
+        if (status.equals(RELEASING) && cedula.getApplicationType().equals(ApplicationType.ONLINE)) {
+            System.out.println(status);
+            Resident resident = residentService.findResidentById(requestId.substring(0, 12)).orElseThrow();
+            sendReleaseEmail(resident, cedula);
+        }
         return cedulaRepository.updateCedulaByStatus(requestId, status);
     }
 
@@ -97,5 +110,23 @@ public class CedulaService {
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         cedulaRepository.enableLiveReload(handleDataUpdate);
+    }
+
+    private void sendReleaseEmail(Resident resident, Cedula cedula) {
+        emailService.sendEmailAsync(resident.getEmail(), "Your Cedula is Ready for Pickup", String.format("""
+                        Dear %s,
+
+                        We are pleased to inform you that your cedula with reference number %s has been processed and is now ready for pickup.
+                                                    
+                        Please visit the barangay hall at Old Capitol Site to collect your cedula. Our office hours are from 8:00 AM to 5:00 PM, Monday to Friday.
+                                                    
+                        If you have any questions or need further assistance, feel free to reach out to our office.
+                                                        
+                        Best regards,
+                        Old Capitol Site
+                        """,
+                resident.getFirstName(),
+                cedula.getReferenceNumber()
+        ));
     }
 }
