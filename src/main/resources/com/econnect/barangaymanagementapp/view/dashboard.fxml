@@ -265,7 +265,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="410.0" spacing="20.0" styleClass="card-variant-2" GridPane.rowIndex="2">
                            <children>
-                              <Text fx:id="totalRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Requests" wrappingWidth="180.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Requests" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
