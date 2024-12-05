@@ -8,11 +8,13 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.COMPLETED;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CedulaStatus.PENDING;
 
 public class CedulaService {
@@ -66,6 +68,29 @@ public class CedulaService {
         long otp = random.nextLong((long) Math.pow(10, OTP_LENGTH));
         return String.format("%012d", otp);
     }
+
+    //Analytics
+    public int totalCedulas() {
+        return cedulaRepository.findAllCedulas().size();
+    }
+
+    public int totalCedulaRequests() {
+        return cedulaRepository.findCedulaByFilter(request -> !request.getStatus().equals(COMPLETED)).size();
+    }
+
+
+    public int totalPendingCedulas() {
+        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING)).size();
+    }
+
+    public int todayCedulaRequests() {
+        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING) && request.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
+    }
+
+    public int totalProcessingCedulas() {
+        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(CedulaStatus.IN_PROGRESS)).size();
+    }
+
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         cedulaRepository.enableLiveReload(handleDataUpdate);

@@ -15,6 +15,7 @@ import okhttp3.Response;
 
 import java.io.File;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus.IN_PROGRESS;
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.CertificateStatus.PENDING;
+import static com.econnect.barangaymanagementapp.util.StatusUtils.TOTAL_PROCESSING_CERTIFICATES;
 
 public class CertificateService {
     private final CertificateRepository certificateRepository;
@@ -133,6 +135,24 @@ public class CertificateService {
         int controlNumber = baseId + increment;
         int currentYear = ZonedDateTime.now().getYear();
         return String.format("%06d-%d-" + formatCertificate, controlNumber, currentYear);
+    }
+
+    //Analytics
+
+    public int getTotalCertificates() {
+        return certificateRepository.findAllCertificates().size();
+    }
+
+    public int todayCertificateRequests() {
+        return certificateRepository.findCertificateByFilter(request -> request.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
+    }
+
+    public int totalProcessingCertificates() {
+        return certificateRepository.findCertificateByFilter(request -> TOTAL_PROCESSING_CERTIFICATES.contains(request.getStatus())).size();
+    }
+
+    public int totalPendingCertificates() {
+        return certificateRepository.findCertificateByFilter(request -> request.getStatus().equals(PENDING)).size();
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
