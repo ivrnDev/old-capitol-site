@@ -7,9 +7,12 @@ import com.econnect.barangaymanagementapp.enumeration.type.RoleType;
 import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.EmployeeRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.StatusUtils;
 import com.econnect.barangaymanagementapp.util.data.PasswordUtils;
 import okhttp3.Response;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -17,13 +20,12 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.EmployeeStatus.*;
+import static com.econnect.barangaymanagementapp.util.StatusUtils.*;
 
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmailService emailService;
-    private final Set<StatusType.EmployeeStatus> INACTIVE_STATUSES = Set.of(TERMINATED, RESIGNED, REJECTED, PENDING, EVALUATION);
-    private final Set<StatusType.EmployeeStatus> APPLICANTS_STATUSES = Set.of(PENDING, UNDER_REVIEW, EVALUATION);
     private String password;
 
     public EmployeeService(DependencyInjector dependencyInjector) {
@@ -140,6 +142,34 @@ public class EmployeeService {
     private int generate6DigitPin() {
         Random random = new Random();
         return 100000 + random.nextInt(900000);
+    }
+
+    //Analytics
+    public int getPendingApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(PENDING)).size();
+    }
+
+    public int getTodayPendingApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee ->
+                TODAY_APPLICANTS_EMPLOYEES.contains(employee.getStatus()) &&
+                        employee.getCreatedAt().toLocalDate().equals(LocalDate.now())
+        ).size();
+    }
+
+    public int getProcessingApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> PROCESSING_APPLICANTS.contains(employee.getStatus())).size();
+    }
+
+    public int getActiveEmployees() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(ACTIVE)).size();
+    }
+
+    public int getTerminatedEmployees() {
+        return employeeRepository.findEmployeeByFilter(employee -> employee.getStatus().equals(TERMINATED)).size();
+    }
+
+    public int getTotalApplicants() {
+        return employeeRepository.findEmployeeByFilter(employee -> APPLICANTS_STATUSES.contains(employee.getStatus())).size();
     }
 
     //Update Listener
