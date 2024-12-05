@@ -26,6 +26,7 @@ public class InventoryService {
 
     public Response updateInventory(Inventory inventory) {
         inventory.setUpdatedAt(ZonedDateTime.now());
+        System.out.println(inventory);
         return inventoryRepository.updateInventory(inventory);
     }
 

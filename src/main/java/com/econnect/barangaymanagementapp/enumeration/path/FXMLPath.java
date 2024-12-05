@@ -41,6 +41,7 @@ public enum FXMLPath {
     ADD_RESIDENT("view/form/add-resident.fxml"),
     EDIT_RESIDENT("view/form/edit-resident.fxml"),
     ADD_ITEM("view/form/add-item.fxml"),
+    EDIT_ITEM("view/form/edit-item.fxml"),
     CERTIFICATE_FORM("view/form/certificate-form.fxml"),
     APPLY_WORK_FORM("view/form/apply-work-form.fxml"),
     ID_FORM("view/form/id-form.fxml"),
