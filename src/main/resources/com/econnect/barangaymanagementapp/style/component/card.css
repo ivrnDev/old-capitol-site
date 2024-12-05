@@ -4,6 +4,7 @@
     -fx-background-color: #FFFFFF;
     -fx-border-color: #ccc;
     -fx-cursor: hand;
+    -fx-text-fill: #2563eb;
 }
 
 .card-variant-2:hover {
