@@ -16,4 +16,6 @@ public class StatusUtils {
     public static final Set<EmployeeStatus> TODAY_APPLICANTS_EMPLOYEES = Set.of(EmployeeStatus.UNDER_REVIEW, EmployeeStatus.PENDING);
 
     public static final Set<CertificateStatus> TOTAL_PROCESSING_CERTIFICATES = Set.of(CertificateStatus.IN_PROGRESS, CertificateStatus.RELEASING);
+    public static final Set<EventAppointmentStatus> PROCESSING_EVENTS = Set.of(EventAppointmentStatus.IN_PROGRESS, EventAppointmentStatus.WAITING);
+
 }

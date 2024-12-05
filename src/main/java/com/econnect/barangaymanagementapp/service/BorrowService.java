@@ -95,6 +95,27 @@ public class BorrowService {
         return borrowRepository.updateBorrowByStatus(requestId, status);
     }
 
+    //Analytics
+    public int totalBorrows() {
+        return borrowRepository.findAllBorrows().size();
+    }
+
+    public int totalBorrowRequests() {
+        return borrowRepository.findBorrowByFilter(request -> !request.getStatus().equals(BorrowStatus.RETURNED)).size();
+    }
+
+    public int totalPendingBorrows() {
+        return borrowRepository.findBorrowByFilter(request -> request.getStatus().equals(PENDING)).size();
+    }
+
+    public int todayTotalBorrowRequests() {
+        return borrowRepository.findBorrowByFilter(request -> request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).size();
+    }
+
+    public int totalCompletedBorrowRequests() {
+        return borrowRepository.findBorrowByFilter(request -> request.getStatus().equals(BorrowStatus.RETURNED)).size();
+    }
+
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         borrowRepository.enableLiveReload(handleDataUpdate);
     }

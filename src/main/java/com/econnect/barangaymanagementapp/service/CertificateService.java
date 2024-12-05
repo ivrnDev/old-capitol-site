@@ -143,7 +143,7 @@ public class CertificateService {
         return certificateRepository.findAllCertificates().size();
     }
 
-    public int todayCertificateRequests() {
+    public int todayTotalCertificateRequests() {
         return certificateRepository.findCertificateByFilter(request -> request.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
     }
 
@@ -153,6 +153,10 @@ public class CertificateService {
 
     public int totalPendingCertificates() {
         return certificateRepository.findCertificateByFilter(request -> request.getStatus().equals(PENDING)).size();
+    }
+
+    public int getAllCompletedCertificates() {
+        return certificateRepository.findCertificateByFilter(request -> request.getStatus().equals(StatusType.CertificateStatus.COMPLETED)).size();
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {

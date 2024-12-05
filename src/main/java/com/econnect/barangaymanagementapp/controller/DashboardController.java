@@ -1,7 +1,5 @@
 package com.econnect.barangaymanagementapp.controller;
 
-import com.econnect.barangaymanagementapp.domain.Cedula;
-import com.econnect.barangaymanagementapp.domain.Certificate;
 import com.econnect.barangaymanagementapp.service.*;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.econnect.barangaymanagementapp.util.LiveReloadUtils;
@@ -60,23 +58,33 @@ public class DashboardController {
                 int pendingApplicantCount = employeeService.getPendingApplicants();
                 int processingApplicantCount = employeeService.getProcessingApplicants();
 
-                int totalCertificateRequests = certificateService.getTotalCertificates();
-                int todayCertificateRequests = certificateService.todayCertificateRequests();
-                int totalProcessingCertificates = certificateService.totalProcessingCertificates();
+                int totalCertificates = certificateService.getTotalCertificates();
+                int totalCompletedCertificates = certificateService.getAllCompletedCertificates();
+                int todayTotalCertificateRequests = certificateService.todayTotalCertificateRequests();
                 int totalPendingCertificates = certificateService.totalPendingCertificates();
 
-                int totalBarangayIdRequests = barangayidService.totalBarangayId();
-                int todayBarangayIdRequests = barangayidService.todayBarangayIdRequests();
+                int totalBarangayId = barangayidService.totalBarangayId();
+                int totalCompletedBarangayId = barangayidService.totalCompletdBarangayId();
+                int todayTotalBarangayIdRequests = barangayidService.todayTotalBarangayIdRequests();
                 int totalPendingBarangayIdRequests = barangayidService.totalPendingBarangayIdRequests();
-                int totalProcessingBarangayIdRequests = barangayidService.totalProcessingBarangayIdRequests();
 
                 int totalCedula = cedulaService.totalCedulas();
-                int totalCedulaRequests = cedulaService.totalCedulaRequests();
-                int todayCedulaRequests = cedulaService.todayCedulaRequests();
+                int totalCompletdCedula = cedulaService.totalCompletdCedula();
+                int todayTotalCedulaRequests = cedulaService.todayTotalCedulaRequests();
                 int totalPendingCedulaRequests = cedulaService.totalPendingCedulas();
-                int totalProcessingCedulaRequests = cedulaService.totalProcessingCedulas();
 
+                int totalEvents = eventService.totalEvents();
+                int totalCompletedEvents = eventService.totalCompletedEvents();
+                int todayTotalEvents = eventService.todayTotalEventRequests();
+                int totalPendingEvents = eventService.totalPendingEvents();
 
+                int todayTotalBorrows = borrowService.todayTotalBorrowRequests();
+                int totalCompletedBorrows = borrowService.totalCompletedBorrowRequests();
+
+                int totalRequestsCount = totalCertificates + totalBarangayId + totalCedula + totalEvents + todayTotalBorrows;
+                int totalCompletedRequests = totalCompletedCertificates + totalCompletedBarangayId + totalCompletdCedula + totalCompletedEvents + totalCompletedBorrows;
+                int todayRequestsCount = todayTotalCertificateRequests + todayTotalBarangayIdRequests + todayTotalCedulaRequests + todayTotalEvents + todayTotalBorrows;
+                int totalPendingRequests = totalPendingCertificates + totalPendingBarangayIdRequests + totalPendingCedulaRequests + totalPendingEvents;
                 Platform.runLater(() -> {
                     totalResident.setText(String.valueOf(verifiedResidentCount));
                     todayResidentApplications.setText(String.valueOf(todayPendingResidentCount));
@@ -87,6 +95,11 @@ public class DashboardController {
                     todayEmployeeApplicants.setText(String.valueOf(todayPendingApplicantCount));
                     pendingApplicants.setText(String.valueOf(pendingApplicantCount));
                     processingApplicants.setText(String.valueOf(processingApplicantCount));
+
+                    totalRequests.setText(String.valueOf(totalRequestsCount));
+                    completedRequests.setText(String.valueOf(totalCompletedRequests));
+                    todayRequests.setText(String.valueOf(todayRequestsCount));
+                    pendingRequests.setText(String.valueOf(totalPendingRequests));
                 });
                 return null;
             }
