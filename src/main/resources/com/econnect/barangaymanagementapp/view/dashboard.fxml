@@ -270,7 +270,7 @@
                                     <Font name="Arial" size="16.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="processingApplicants11" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                              <Text fx:id="totalRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                  <font>
                                     <Font name="Arial Bold" size="24.0" />
                                  </font>

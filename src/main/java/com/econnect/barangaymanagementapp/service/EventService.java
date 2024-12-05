@@ -8,6 +8,7 @@ import com.econnect.barangaymanagementapp.enumeration.type.StatusType.EventAppoi
 import com.econnect.barangaymanagementapp.repository.EventItemsRepository;
 import com.econnect.barangaymanagementapp.repository.EventRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
+import com.econnect.barangaymanagementapp.util.StatusUtils;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
@@ -102,6 +103,28 @@ public class EventService {
 
     private void addItems(EventItems eventItems) {
         eventItemsService.createEventItems(eventItems);
+    }
+
+    // Analytics
+    public int totalEvents() {
+        return eventRepository.findAllEvents().size();
+    }
+
+    public int totalPendingEvents() {
+        return eventRepository.findEventByFilter(request -> request.getStatus().equals(PENDING)).size();
+    }
+
+    public int todayTotalEventRequests() {
+        return eventRepository.findEventByFilter(request -> request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).size();
+    }
+
+    public int todayProcessingEvents() {
+        return eventRepository.findEventByFilter(request -> StatusUtils.PROCESSING_EVENTS.contains(request.getStatus())
+                && request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).size();
+    }
+
+    public int totalCompletedEvents() {
+        return eventRepository.findEventByFilter(request -> request.getStatus().equals(COMPLETED)).size();
     }
 
 

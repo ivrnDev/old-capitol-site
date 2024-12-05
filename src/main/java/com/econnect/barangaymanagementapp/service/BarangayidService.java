@@ -68,21 +68,24 @@ public class BarangayidService {
     }
 
     // Analytics
-
     public int totalBarangayId() {
         return findAllBarangayIds().size();
     }
 
-    public int todayBarangayIdRequests() {
-        return (int) findAllBarangayIds().stream().filter(request -> request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).count();
+    public int todayTotalBarangayIdRequests() {
+        return barangayIdRepository.findBarangayIdByFilter(request -> request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).size();
     }
 
     public int totalPendingBarangayIdRequests() {
         return findAllPendingBarangayIds().size();
     }
-    
+
     public int totalProcessingBarangayIdRequests() {
-        return (int) findAllBarangayIds().stream().filter(request -> request.getStatus().equals(BarangayIdStatus.RELEASING)).count();
+        return barangayIdRepository.findBarangayIdByFilter(request -> request.getStatus().equals(BarangayIdStatus.RELEASING)).size();
+    }
+
+    public int totalCompletdBarangayId() {
+        return barangayIdRepository.findBarangayIdByFilter(request -> request.getStatus().equals(BarangayIdStatus.COMPLETED)).size();
     }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {

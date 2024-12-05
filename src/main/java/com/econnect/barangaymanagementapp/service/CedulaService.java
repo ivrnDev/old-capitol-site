@@ -83,14 +83,17 @@ public class CedulaService {
         return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING)).size();
     }
 
-    public int todayCedulaRequests() {
-        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(PENDING) && request.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
+    public int todayTotalCedulaRequests() {
+        return cedulaRepository.findCedulaByFilter(request -> request.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
     }
 
     public int totalProcessingCedulas() {
         return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(CedulaStatus.IN_PROGRESS)).size();
     }
 
+    public int totalCompletdCedula() {
+        return cedulaRepository.findCedulaByFilter(request -> request.getStatus().equals(COMPLETED)).size();
+    }
 
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         cedulaRepository.enableLiveReload(handleDataUpdate);
