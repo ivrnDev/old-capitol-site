@@ -237,8 +237,6 @@ public class AddItemController {
         try {
             double minStock = Double.parseDouble(minStockInput.getText());
             double maxStock = Double.parseDouble(maxStockInput.getText());
-            System.out.println(maxStock);
-            System.out.println(minStock);
             stockSlider.setMin(minStock);
             stockSlider.setMax(maxStock);
             stockSlider.setBlockIncrement(1);
