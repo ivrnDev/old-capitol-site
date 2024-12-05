@@ -16,13 +16,13 @@ import static com.econnect.barangaymanagementapp.util.RolePermission.Action.*;
 public class RolePermission {
     private static final Map<DepartmentType, Map<RoleType, List<NavigationType>>> roleNavigationPermissions = Map.of(
             DepartmentType.BARANGAY_OFFICE, Map.of(
-                    ADMIN, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
-                    SECRETARY, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
-                    ADMINISTRATIVE_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
-                    DOCUMENT_CLERK, List.of(DASHBOARD, ANALYTICS, REQUESTS, RESIDENTS),
+                    ADMIN, List.of(DASHBOARD, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
+                    SECRETARY, List.of(DASHBOARD, APPLICATIONS, EMPLOYEES, INVENTORY, REQUESTS, RESIDENTS, SERVICES),
+                    ADMINISTRATIVE_CLERK, List.of(DASHBOARD, REQUESTS, RESIDENTS),
+                    DOCUMENT_CLERK, List.of(DASHBOARD, REQUESTS, RESIDENTS),
                     OFFICE_FRONT_DESK, List.of(DASHBOARD, REQUESTS, RESIDENTS, SERVICES),
-                    HR_MANAGER, List.of(DASHBOARD, ANALYTICS, APPLICATIONS, EMPLOYEES),
-                    UTILITY_HEAD, List.of(DASHBOARD, ANALYTICS, INVENTORY, REQUESTS)
+                    HR_MANAGER, List.of(DASHBOARD, APPLICATIONS, EMPLOYEES),
+                    UTILITY_HEAD, List.of(DASHBOARD, INVENTORY, REQUESTS)
             )
     );
 
