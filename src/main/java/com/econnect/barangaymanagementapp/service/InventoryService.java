@@ -1,6 +1,7 @@
 package com.econnect.barangaymanagementapp.service;
 
 import com.econnect.barangaymanagementapp.domain.Inventory;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.repository.InventoryRepository;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
@@ -26,6 +27,10 @@ public class InventoryService {
     public Response updateInventory(Inventory inventory) {
         inventory.setUpdatedAt(ZonedDateTime.now());
         return inventoryRepository.updateInventory(inventory);
+    }
+
+    public Response updateStatus(String id, StatusType.InventoryStatus status) {
+        return inventoryRepository.updateInventoryByStatus(id, status);
     }
 
     public List<Inventory> findAllInventories() {

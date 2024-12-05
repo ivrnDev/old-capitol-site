@@ -3,6 +3,7 @@ package com.econnect.barangaymanagementapp.repository;
 import com.econnect.barangaymanagementapp.config.Config;
 import com.econnect.barangaymanagementapp.domain.Inventory;
 import com.econnect.barangaymanagementapp.enumeration.database.Firebase;
+import com.econnect.barangaymanagementapp.enumeration.type.StatusType;
 import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.Response;
@@ -47,10 +48,10 @@ public class InventoryRepository extends BaseRepository<Inventory> {
         }, predicate);
     }
 
-//    public Response updateInventoryByStatus(String requestId, StatusType.InventoryStatus status) {
-//        return updateBy(apiKey, requestId, new TypeReference<>() {
-//        }, request -> request.setStatus(status));
-//    }
+    public Response updateInventoryByStatus(String requestId, StatusType.InventoryStatus status) {
+        return updateBy(apiKey, requestId, new TypeReference<>() {
+        }, request -> request.setStatus(status.getName()));
+    }
 
     public void enableLiveReload(Consumer<String> handleDataUpdates) {
         enableLiveReload(apiKey, handleDataUpdates, "INVENTORY:");
