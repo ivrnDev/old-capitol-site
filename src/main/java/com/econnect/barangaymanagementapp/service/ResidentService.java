@@ -48,6 +48,10 @@ public class ResidentService {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(PENDING));
     }
 
+    public List<Resident> findAllRejectedResidents() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(StatusType.ResidentStatus.REJECTED));
+    }
+
     public Optional<Resident> findResidentById(String id) {
         return residentRepository.findResidentById(id);
     }
@@ -142,6 +146,24 @@ public class ResidentService {
         int otp = random.nextInt((int) Math.pow(10, OTP_LENGTH));
         return String.format("00%05d-%d", otp, Year.now().getValue());
     }
+
+    //Analytics
+    public int getPendingResident() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(PENDING)).size();
+    }
+
+    public int getSuspendedResident() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(StatusType.ResidentStatus.SUSPENDED)).size();
+    }
+
+    public int getRejectedResident() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(StatusType.ResidentStatus.REJECTED)).size();
+    }
+    
+    public int getVerifiedResident() {
+        return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(VERIFIED)).size();
+    }
+
 
     //Update Listener
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
