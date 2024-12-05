@@ -67,6 +67,24 @@ public class BarangayidService {
         return String.format("%012d", otp);
     }
 
+    // Analytics
+
+    public int totalBarangayId() {
+        return findAllBarangayIds().size();
+    }
+
+    public int todayBarangayIdRequests() {
+        return (int) findAllBarangayIds().stream().filter(request -> request.getCreatedAt().toLocalDate().equals(ZonedDateTime.now().toLocalDate())).count();
+    }
+
+    public int totalPendingBarangayIdRequests() {
+        return findAllPendingBarangayIds().size();
+    }
+    
+    public int totalProcessingBarangayIdRequests() {
+        return (int) findAllBarangayIds().stream().filter(request -> request.getStatus().equals(BarangayIdStatus.RELEASING)).count();
+    }
+
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
         barangayIdRepository.enableLiveReload(handleDataUpdate);
     }

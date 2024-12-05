@@ -9,10 +9,10 @@ import com.econnect.barangaymanagementapp.util.DependencyInjector;
 import okhttp3.Response;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static com.econnect.barangaymanagementapp.enumeration.type.StatusType.ResidentStatus.PENDING;
@@ -152,6 +152,11 @@ public class ResidentService {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(PENDING)).size();
     }
 
+    public int getTodayApplicants() {
+        return residentRepository.findResidentByFilter(resident ->
+                resident.getStatus().equals(PENDING) && resident.getCreatedAt().toLocalDate().equals(LocalDate.now())).size();
+    }
+
     public int getSuspendedResident() {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(StatusType.ResidentStatus.SUSPENDED)).size();
     }
@@ -159,7 +164,7 @@ public class ResidentService {
     public int getRejectedResident() {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(StatusType.ResidentStatus.REJECTED)).size();
     }
-    
+
     public int getVerifiedResident() {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(VERIFIED)).size();
     }

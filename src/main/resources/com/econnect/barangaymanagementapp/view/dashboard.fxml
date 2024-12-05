@@ -35,6 +35,7 @@
                         <rowConstraints>
                             <RowConstraints maxHeight="-Infinity" minHeight="200.0" valignment="TOP" />
                             <RowConstraints maxHeight="-Infinity" minHeight="200.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="200.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                      <children>
                         <VBox alignment="CENTER_LEFT" spacing="20.0" styleClass="card-variant-2">
@@ -42,7 +43,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </GridPane.margin>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Residents" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Residents" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -64,17 +65,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="30.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pending Residents" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Today Applications" wrappingWidth="170.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="pendingResident" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                              <Text fx:id="todayResidentApplications" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                  <font>
                                     <Font name="Arial Bold" size="24.0" />
                                  </font>
                               </Text>
-                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of pending residents" wrappingWidth="170.0">
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of pending residents today" wrappingWidth="170.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -89,7 +90,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="301.0" layoutY="30.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Suspended Residents" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Suspended Residents" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -114,7 +115,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="551.0" layoutY="10.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="3">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rejected Residents" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rejected Residents" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -139,7 +140,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="30.0" spacing="20.0" styleClass="card-variant-2" GridPane.rowIndex="1">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Employee" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Employee" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -164,17 +165,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="220.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Applicants" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Today Applicants" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="totalApplicants" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                              <Text fx:id="todayEmployeeApplicants" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                  <font>
                                     <Font name="Arial Bold" size="24.0" />
                                  </font>
                               </Text>
-                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of applicants" wrappingWidth="170.0">
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of applicants today" wrappingWidth="170.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -189,7 +190,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="265.0" layoutY="220.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pending Applicants" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Pending Applicants" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -214,7 +215,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" layoutX="519.0" layoutY="220.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Processing Applicants" wrappingWidth="170.0">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Processing Applicants" wrappingWidth="180.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
@@ -225,6 +226,106 @@
                                  </font>
                               </Text>
                               <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of processing applicants" wrappingWidth="170.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="781.0" layoutY="228.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Today Requests" wrappingWidth="180.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="todayRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="Arial Bold" size="24.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of requests today" wrappingWidth="170.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="410.0" spacing="20.0" styleClass="card-variant-2" GridPane.rowIndex="2">
+                           <children>
+                              <Text fx:id="totalRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Requests" wrappingWidth="180.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="processingApplicants11" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="Arial Bold" size="24.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of requests" wrappingWidth="170.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="260.0" layoutY="410.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Pending Requests" wrappingWidth="180.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="pendingRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="Arial Bold" size="24.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total number of pending requests" wrappingWidth="170.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <GridPane.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </GridPane.margin>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="510.0" layoutY="410.0" spacing="20.0" styleClass="card-variant-2" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Completed Requests" wrappingWidth="180.0">
+                                 <font>
+                                    <Font name="Arial" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="completedRequests" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="Arial Bold" size="24.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#2563eb" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Number of completed requests" wrappingWidth="170.0">
                                  <font>
                                     <Font name="Arial" size="16.0" />
                                  </font>
