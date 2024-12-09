@@ -33,6 +33,25 @@ public class ResidentService {
     }
 
     public Response createResident(Resident resident) {
+        emailService.sendEmailAsync(resident.getEmail(), "Congratulations! You are now verified", String.format("""
+                        Dear %s,
+
+                        We are delighted to welcome you as an official resident of Old Capitol Site! Your application has been reviewed and verified, and we are excited to have you join our community.
+
+                        As a resident, you are now entitled to various services and privileges offered within our locality. We look forward to your active participation in building a vibrant and supportive community.
+
+                        If you have any questions or need assistance, please don't hesitate to reach out to us at our office or through email.
+
+                        You may now visit and login in our website at https://old-capitol-site-69.netlify.app/ to access various services.
+
+                        Your Resident ID is: %s
+
+                        Best regards,
+                        Old Capitol Site Administration
+                        """,
+                resident.getFirstName(),
+                resident.getId()
+        ));
         return residentRepository.createResident(resident);
     }
 
@@ -168,7 +187,6 @@ public class ResidentService {
     public int getVerifiedResident() {
         return residentRepository.findResidentByFilter(resident -> resident.getStatus().equals(VERIFIED)).size();
     }
-
 
     //Update Listener
     public void listenToUpdates(Consumer<String> handleDataUpdate) {
