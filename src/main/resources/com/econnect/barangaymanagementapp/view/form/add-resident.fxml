@@ -592,7 +592,7 @@
                         </HBox>
                         <HBox fx:id="checkBoxContainer" layoutX="40.0" layoutY="383.0" spacing="40.0" styleClass="border">
                             <children>
-                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="arrow-button" HBox.hgrow="ALWAYS">
+                                <VBox prefHeight="438.0" prefWidth="152.0" spacing="20.0" styleClass="arrow-button" HBox.hgrow="ALWAYS">
                                     <children>
                                         <Label text="Highest Educational Attainment" textOverrun="CLIP">
                                             <font>
