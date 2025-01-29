@@ -1,0 +1,13 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: connectodo-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/bms?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: bms
+    password: bms
+  devtools:
+    livereload:
+      enabled: true
