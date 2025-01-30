@@ -1,11 +1,9 @@
 package com.ivnrdev.connectodo.Enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class EmployeeEnums {
 
-    @AllArgsConstructor
     @Getter
     public enum RoleType {
         NONE("None"),
@@ -33,17 +31,24 @@ public class EmployeeEnums {
         LUPON_MEMBERS("Lupon Members");
 
         private final String name;
+
+        RoleType(String name) {
+            this.name = name;
+        }
     }
 
-    @AllArgsConstructor
     @Getter
     public enum ApplicationType {
         WALK_IN("Walk-In"),
         ONLINE("Online");
+
         private final String name;
+
+        ApplicationType(String name) {
+            this.name = name;
+        }
     }
 
-    @AllArgsConstructor
     @Getter
     public enum EmployeeStatus {
         PENDING("Pending"),
@@ -55,9 +60,13 @@ public class EmployeeEnums {
         TERMINATED("Terminated");
 
         private final String name;
+
+        EmployeeStatus(String name) {
+            this.name = name;
+        }
+
     }
 
-    @AllArgsConstructor
     @Getter
     public enum EmploymentType {
         FULL_TIME("Full Time"),
@@ -66,5 +75,9 @@ public class EmployeeEnums {
         TERMINATED("Terminated");
 
         private final String name;
+
+        EmploymentType(String name) {
+            this.name = name;
+        }
     }
 }

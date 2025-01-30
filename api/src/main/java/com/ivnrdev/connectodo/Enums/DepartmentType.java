@@ -1,9 +1,7 @@
 package com.ivnrdev.connectodo.Enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum DepartmentType {
     NONE("None"),
@@ -12,4 +10,8 @@ public enum DepartmentType {
     LUPON("Lupon");
 
     private final String name;
+
+    DepartmentType(String name) {
+        this.name = name;
+    }
 }

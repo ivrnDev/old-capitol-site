@@ -1,29 +1,34 @@
 package com.ivnrdev.connectodo.Enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class ResidentEnums {
 
-    @AllArgsConstructor
     @Getter
     public enum ResidencyStatus {
         RENTER("Renter"),
         OWNER("Owner"),
         SHARER("Sharer");
+
         private final String name;
+
+        ResidencyStatus(String name) {
+            this.name = name;
+        }
     }
 
-    @AllArgsConstructor
     @Getter
     public enum ResidentStatus {
         ACTIVE("Active"),
         INACTIVE("Inactive");
 
         private final String name;
+
+        ResidentStatus(String name) {
+            this.name = name;
+        }
     }
 
-    @AllArgsConstructor
     @Getter
     public enum BloodType {
         UNKNOWN("Unknown"),
@@ -37,15 +42,22 @@ public class ResidentEnums {
         O_NEGATIVE("O-");
 
         private final String name;
+
+        BloodType(String name) {
+            this.name = name;
+        }
     }
 
-    @AllArgsConstructor
     @Getter
     public enum CivilStatus {
         SINGLE("Singe"),
         MARRIED("Married");
 
         private final String name;
+
+        CivilStatus(String name) {
+            this.name = name;
+        }
     }
 
 }
