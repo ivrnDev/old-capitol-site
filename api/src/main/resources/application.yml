@@ -4,10 +4,14 @@ spring:
   application:
     name: connectodo-api
   datasource:
-    url: jdbc:mysql://localhost:3306/bms?useSSL=false
+    url: jdbc:mysql://localhost:3306/bms
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: bms
     password: bms
+  sql:
+    init:
+      mode: never
   devtools:
     livereload:
       enabled: true
+
