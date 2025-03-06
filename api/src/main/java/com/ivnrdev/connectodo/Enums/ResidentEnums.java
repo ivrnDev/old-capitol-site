@@ -29,7 +29,6 @@ public class ResidentEnums {
         }
     }
 
-    @Getter
     public enum BloodType {
         UNKNOWN("Unknown"),
         A_POSITIVE("A+"),
@@ -46,11 +45,15 @@ public class ResidentEnums {
         BloodType(String name) {
             this.name = name;
         }
+
+        public String getName() {
+            return name;
+        }
     }
 
     @Getter
     public enum CivilStatus {
-        SINGLE("Singe"),
+        SINGLE("Single"),
         MARRIED("Married");
 
         private final String name;
