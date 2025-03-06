@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barangay Capitol Site</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Krub:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/design.css" />
+
+    <style>
+      .navindicator {
+        border-left: 4px solid #b6c5d4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="/assets/images/logo2.png" />
+      Barangay Office
+    </div>
+
+    <div class="container">
+      <div class="sidebar">
+        <ul>
+          <li>
+            <a href="dashboard.html"
+              ><img src="../assets/icons/dash-dashboard.png" />Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><img src="../assets/icons/dash-applications.png" />Application</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><img src="../assets/icons/dash-employees.png" />Employees</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><img src="../assets/icons/dash-inventory.png" />Inventory</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><img src="../assets/icons/dash-request.png" />Request</a
+            >
+          </li>
+          <li>
+            <a href="#"
+              ><img src="../assets/icons/dash-residents.png" />Residents</a
+            >
+          </li>
+          <div class="navindicator">
+            <li>
+              <a href="services.html"
+                ><img src="../assets/icons/dash-service.png" />Services</a
+              >
+            </li>
+          </div>
+        </ul>
+
+        <div class="logout-button">
+          <a href="#"><img src="../assets/icons/dash-logout.png" />Log Out</a>
+        </div>
+      </div>
+
+      <div class="content">
+        <h1>Services</h1>
+
+        <div class="services-grid">
+          <div class="service-icon" id="healthAppointment">
+            <img src="../assets/icons/service_health.png" /> Health Appointment
+          </div>
+          <div class="service-icon" id="barangayCertificate">
+            <img src="../assets/icons/service_certificates.png" /> Barangay
+            Certificates
+          </div>
+          <div class="service-icon">
+            <img src="../assets/icons/service_id.png" /> Barangay ID
+          </div>
+          <div class="service-icon">
+            <img src="../assets/icons/service_cedula.png" /> Cedula
+          </div>
+          <div class="service-icon">
+            <img src="../assets/icons/service_tools.png" /> Tools and Materials
+          </div>
+          <div class="service-icon">
+            <img src="../assets/icons/service_events.png" /> Events
+          </div>
+          <div class="service-icon">
+            <img src="../assets/icons/service_apply.png" /> Apply For Work
+          </div>
+          <div class="service-icon" id="addResident">
+            <img src="../assets/icons/services_residents.png" /> Resident
+            Application
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Barangay Certificate -->
+    <div id="barangayCertificateModal" class="modal">
+      <div class="modal-content">
+        <div class="close" id="closeBarangayCertificateModal">&times;</div>
+
+        <h2>Certificate Form</h2>
+
+        <div class="modal-scroll">
+          <form>
+            <div class="parent-container">
+              <div class="left-container">
+                <div class="image"><input type="image" /></div>
+                <div class="file"><input type="file" /></div>
+              </div>
+
+              <div class="right-container">
+                <div class="right-label">
+                  <label for="residentID">Resident ID</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="Email">Email</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="contact">Contact Number</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="birthday">Birthdate</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="occupation">Occupation</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+
+                <div class="form-group">
+                  <label for="sex"> Sex</label>
+                  <input type="text" name="textbox_name" id="textbox_id" />
+                </div>
+              </div>
+            </div>
+
+            <div class="request-container">
+              Please specify request:
+              <br />
+              <br />
+              <div class="request-container-content">
+                <div class="checkbox-group">
+                  <label><input type="checkbox" />Barangay Clearance</label>
+                  <label
+                    ><input type="checkbox" />Certificate of Indigency</label
+                  >
+                  <label
+                    ><input type="checkbox" />Certificate of Residency</label
+                  >
+                </div>
+
+                <div class="radio-group">
+                  <label><input type="radio" value="default" />Default</label>
+                  <label><input type="radio" value="student" />Student</label>
+                  <label><input type="radio" value="senior" />Senior</label>
+                  <label
+                    ><input type="radio" value="pwd" />Person With
+                    Disability</label
+                  >
+                  <label
+                    ><input type="radio" value="ftjs" />First Time Job
+                    Seeker</label
+                  >
+                  <label><input type="radio" value="sp" />Solo Parent</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="cancel"
+                onclick="closeBarangayCertificateModalFunc()"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="confirm">Confirm</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Health Services Form -->
+    <div id="healthServicesModal" class="modal">
+      <div class="modal-content">
+        <div class="close" id="closeModal">&times;</div>
+        <h2>Health Appointment Form</h2>
+
+        <div class="modal-scroll">
+          <form>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="residentId">Resident ID</label>
+                <input type="text" id="residentId" name="residentId" />
+              </div>
+              <div class="form-group"></div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" />
+              </div>
+              <div class="form-group">
+                <label for="healthServices">Health Services</label>
+                <select id="healthServices" name="healthServices">
+                  <option value="">Select an option</option>
+                  <option value="checkup">General Checkup</option>
+                  <option value="vaccination">Vaccination</option>
+                  <option value="dental">Dental Services</option>
+                  <option value="prenatal">Prenatal Care</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" />
+              </div>
+              <div class="form-group">
+                <label for="healthProvider">Health Provider</label>
+                <select id="healthProvider" name="healthProvider">
+                  <option value="">Select an option</option>
+                  <option value="doctor">Doctor</option>
+                  <option value="nurse">Nurse</option>
+                  <option value="dentist">Dentist</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="middleName">Middle Name</label>
+                <input type="text" id="middleName" name="middleName" />
+              </div>
+              <div class="form-group">
+                <label for="appointmentTime">Appointment Time</label>
+                <input
+                  type="time"
+                  id="appointmentTime"
+                  name="appointmentTime"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" />
+              </div>
+              <div class="form-group">
+                <label for="appointmentDate">Appointment Date</label>
+                <input
+                  type="date"
+                  id="appointmentDate"
+                  name="appointmentDate"
+                />
+              </div>
+            </div>
+
+            <div class="remarks-container">
+              <div class="form-group form-group-special">
+                <div>
+                  <label for="sex">Sex</label>
+                  <select id="sex" name="sex">
+                    <option value="">Select an option</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" id="address" name="address" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="remarks">Remarks</label>
+                <textarea id="remarks" name="remarks" rows="4"></textarea>
+              </div>
+            </div>
+          </form>
+
+          <div class="form-actions">
+            <button type="button" class="cancel" onclick="closeModalFunc()">
+              Cancel
+            </button>
+            <button type="submit" class="confirm">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Add Resident Form -->
+    <div id="addResidentModal" class="modal">
+      <div class="modal-content">
+        <div class="close" id="closeResidentModal">&times;</div>
+        <h2>Add Resident Form</h2>
+
+        <div class="modal-scroll">
+          <!-- Resident Section -->
+          <form>
+            <h3>Personal Information</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required />
+              </div>
+
+              <div class="form-group">
+                <label for="motherToungue">Mother Tongue</label>
+                <select id="motherToungue" name="motherTongue">
+                  <option value="">Select an option</option>
+                  <option value="jr">Tagalog</option>
+                  <option value="sr">English</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required />
+              </div>
+              <div class="form-group">
+                <label for="religion">Religion</label>
+                <select id="religion" name="religion">
+                  <option value="">Select an option</option>
+                  <option value="catholic">Catholic</option>
+                  <option value="muslim">Muslim</option>
+                  <option value="protestant">Protestant</option>
+                  <option value="iglesia">Iglesia ni Cristo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="middleName">Middle Name</label>
+                <input type="text" id="middleName" name="middleName" required />
+              </div>
+              <div class="form-group">
+                <label for="bloodType">Blood Type</label>
+                <select id="bloodType" name="bloodType">
+                  <option value="">Select an option</option>
+                  <option value="O">O</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="AB">AB</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="suffix">Suffix</label>
+                <select id="suffix" name="suffix">
+                  <option value="">Select an option</option>
+                  <option value="jr">Jr.</option>
+                  <option value="sr">Sr.</option>
+                  <option value="ii">II</option>
+                  <option value="iii">III</option>
+                  <option value="iv">IV</option>
+                  <option value="v">V</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" id="occupation" name="occupation" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="birthplace">Birthplace</label>
+                <input type="text" id="birthplace" name="birthplace" required />
+              </div>
+              <div class="form-group">
+                <label for="emailAddress">Email Address</label>
+                <input
+                  type="text"
+                  id="emailAddress"
+                  name="emailAddress"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="birthdate">Birthdate</label>
+                <input type="date" id="birthdate" name="birthdate" required />
+              </div>
+              <div class="form-group">
+                <label for="houseStreet">House No./ Street</label>
+                <input
+                  type="text"
+                  id="houseStreet"
+                  name="houseStreet"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="citizenship">Citizenship</label>
+                <input
+                  type="text"
+                  id="citizenship"
+                  name="citizenship"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="telephone">Telephone</label>
+                <input type="text" id="telephone" name="telephone" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="civilstatus">Civil Status</label>
+                <select id="civilstatus" name="civilstatus">
+                  <option value="">Select Option</option>
+                  <option value="single">Single</option>
+                  <option value="married">Married</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="mobileNumber">Mobile Number</label>
+                <input
+                  type="text"
+                  id="mobileNumber"
+                  name="mobileNumber"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sex">Sex*</label>
+                <input type="text" id="sex" name="sex" required />
+              </div>
+              <div class="form-group"></div>
+            </div>
+
+            <br /><br />
+
+            <!-- Education Section -->
+
+            <div class="form-educ">
+              <div class="form-row">
+                <!-- Radio Buttons (Highest Education) -->
+                <div class="form-group">
+                  <label>Highest Educational Attainment</label>
+                  <br />
+                  <div class="radio-group">
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="notAttended"
+                      />
+                      Not Attended School</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="elementaryLevel"
+                      />
+                      Elementary Level</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="elementaryGraduate"
+                      />
+                      Elementary Graduate</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="highschoolLevel"
+                      />
+                      Highschool Level</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="highschoolGraduate"
+                      />
+                      Highschool Graduate</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="collegeLevel"
+                      />
+                      College Level</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="collegeGraduate"
+                      />
+                      College Graduate</label
+                    >
+                    <label
+                      ><input
+                        type="radio"
+                        name="highestEducation"
+                        value="postGraduate"
+                      />
+                      Post Graduate</label
+                    >
+                  </div>
+                </div>
+
+                <!-- Checkboxes (Source of Income) -->
+                <div class="form-group">
+                  <label>Source of Income and Assistance</label>
+                  <br />
+                  <div class="checkbox-group">
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="ownEarnings"
+                      />
+                      Own earnings, salary, wages</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="insurance"
+                      />
+                      Insurance</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="ownPension"
+                      />
+                      Own Pension</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="rental"
+                      />
+                      Rental/Sharecorp</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="stocksOrDividents"
+                      />
+                      Stocks or Dividents</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="savings"
+                      />
+                      Savings</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="dependent"
+                      />
+                      Dependent on Children/Relatives</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="spouseSalary"
+                      />
+                      Spouse's Salary</label
+                    >
+                    <label
+                      ><input
+                        type="checkbox"
+                        name="sourceOfIncome"
+                        value="spousePension"
+                      />
+                      Spouse's Pension</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br /><br />
+
+            <!-- Guardian Section -->
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fatherFirstName">Father First Name</label>
+                <input
+                  type="text"
+                  id="fatherFirstName"
+                  name="fatherFirstName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="motherFirstName">Mother First Name</label>
+                <input
+                  type="text"
+                  id="motherFirstName"
+                  name="motherFirstName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fatherLastName">Father Last Name</label>
+                <input
+                  type="text"
+                  id="fatherLastName"
+                  name="fatherLastName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="motherLastName">Mother Last Name</label>
+                <input
+                  type="text"
+                  id="motherLastName"
+                  name="motherLastName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fatherMiddleName">Father Middle Name</label>
+                <input
+                  type="text"
+                  id="fatherMiddleName"
+                  name="fatherMiddleName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="motherMiddleName">Mother Middle Name</label>
+                <input
+                  type="text"
+                  id="motherMiddleName"
+                  name="motherMiddleName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fatherSuffix">Father Suffix Name</label>
+                <select id="fatherSuffix" name="fatherSuffix">
+                  <option value="">Select an option</option>
+                  <option value="jr">Jr.</option>
+                  <option value="sr">Sr.</option>
+                  <option value="ii">II</option>
+                  <option value="iii">III</option>
+                  <option value="iv">IV</option>
+                  <option value="v">V</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="motherSuffix">Mother Suffix Name</label>
+                <select id="motherSuffix" name="motherSuffix">
+                  <option value="">Select an option</option>
+                  <option value="jr">Jr.</option>
+                  <option value="sr">Sr.</option>
+                  <option value="ii">II</option>
+                  <option value="iii">III</option>
+                  <option value="iv">IV</option>
+                  <option value="v">V</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fatherOccupation">Occupation*</label>
+                <input
+                  type="text"
+                  id="fatherOccupation"
+                  name="fatherOccupation"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="motherOccupation">Occupation*</label>
+                <input
+                  type="text"
+                  id="motherOccupation"
+                  name="motherOccupation"
+                  required
+                />
+              </div>
+            </div>
+
+            <br />
+            <br />
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="spouseFirstName">Spouse First Name</label>
+                <input
+                  type="text"
+                  id="spouseFirstName"
+                  name="spouseFirstName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="emergencyFirstName">Emergency First Name*</label>
+                <input
+                  type="text"
+                  id="emergencyFirstName"
+                  name="emergencyFirstName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="spouseLastName">Spouse Last Name</label>
+                <input
+                  type="text"
+                  id="spouseLastName"
+                  name="spouseLastName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="emergencyLastName">Emergency Last Name</label>
+                <input
+                  type="text"
+                  id="emergencyLastName"
+                  name="emergencyLastName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="spouseMiddleName">Spouse Middle Name*</label>
+                <input
+                  type="text"
+                  id="spouseMiddleName"
+                  name="spouseMiddleName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="emergencyMiddleName">Emergency Middle Name</label>
+                <input
+                  type="text"
+                  id="emergencyMiddleName"
+                  name="emergencyMiddleName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="spouseSuffix">Spouse Suffix Name</label>
+                <select id="spouseSuffix" name="spouseSuffix">
+                  <option value="">Select an option</option>
+                  <option value="jr">Jr.</option>
+                  <option value="sr">Sr.</option>
+                  <option value="ii">II</option>
+                  <option value="iii">III</option>
+                  <option value="iv">IV</option>
+                  <option value="v">V</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="emergencySuffix">Emergency Suffix Name</label>
+                <select id="emergencySuffix" name="emergencySuffix">
+                  <option value="">Select an option</option>
+                  <option value="jr">Jr.</option>
+                  <option value="sr">Sr.</option>
+                  <option value="ii">II</option>
+                  <option value="iii">III</option>
+                  <option value="iv">IV</option>
+                  <option value="v">V</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="occupation">Occupation*</label>
+                <input type="text" id="occupation" name="occupation" required />
+              </div>
+              <div class="form-group">
+                <label for="occupation">Occupation*</label>
+                <input type="text" id="occupation" name="occupation" required />
+              </div>
+            </div>
+          </form>
+          <br />
+
+          <!-- BUTTON CANCEL AND CONFIRM -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="cancel"
+              onclick="closeResidentModalFunc()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="confirm">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../scripts/services.js"></script>
+  </body>
+</html>

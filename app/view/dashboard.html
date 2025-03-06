@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Capitol Site</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Krub:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/design.css">
+    <style>
+        .navindicator {
+        border-left: 4px solid #b6c5d4;
+    }
+</style>
+
+</head>
+<body>
+    <div class="header">
+        <img src="/assets/images/logo2.png">   
+        Barangay Office                 
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <div class="navindicator">
+                <li><a href="dashboard.html"><img src="../assets/icons/dash-dashboard.png">Dashboard</a></li>
+                </div>
+                <li><a href="#"><img src="../assets/icons/dash-applications.png">Application</a></li>
+                <li><a href="#"><img src="../assets/icons/dash-employees.png">Employees</a></li>
+                <li><a href="#"><img src="../assets/icons/dash-inventory.png">Inventory</a></li>
+                <li><a href="#"><img src="../assets/icons/dash-request.png">Request</a></li>
+                <li><a href="#"><img src="../assets/icons/dash-residents.png">Residents</a></li>
+                <li><a href="services.html"><img src="../assets/icons/dash-service.png">Services</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Dashboard</h1>
+
+            <div class="services-grid" id="servicesGrid" style="display: none;">
+                <div class="service-icon" id="healthAppointment"> <img src ="../assets/images/dashboard2.png"> Health Appointment</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Barangay Certificates</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Barangay ID</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Cedula</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Tools and Materials</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Events</div>
+                <div class="service-icon"><img src ="../assets/images/dashboard2.png">Apply For Work</div>
+                <div class="service-icon" id="addResident"> <img src ="../assets/images/dashboard2.png">Resident Application</div>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <script>
+        // HEALTH MODAL
+        // const servicesLink = document.getElementById('servicesLink');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const healthServicesModal = document.getElementById('healthServicesModal');
+        const closeModal = document.getElementById('closeModal');
+        const healthAppointment = document.getElementById('healthAppointment');
+
+        // servicesLink.addEventListener('click', function(event) {
+        //     event.preventDefault();
+        //     servicesGrid.style.display = 'grid';
+        // });
+
+        healthAppointment.addEventListener('click', function() {
+            healthServicesModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', function() {
+            healthServicesModal.style.display = 'none';
+        });
+
+        function closeModalFunc() {
+            healthServicesModal.style.display = 'none';
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target === healthServicesModal) {
+                healthServicesModal.style.display = 'none';
+            }
+        });
+
+
+
+        // JADD RESIDENT MODAL
+        const addResidentModal = document.getElementById('addResidentModal');
+        const closeResidentModal = document.getElementById('closeResidentModal');
+        const addResidentButton = document.getElementById('addResident');
+
+        // OPEN RESIDNT MODAL
+        addResidentButton.addEventListener('click', function() {
+            addResidentModal.style.display = 'flex';
+        });
+
+        // CLOSE RESIDENT MODAL
+        closeResidentModal.addEventListener('click', function() {
+            addResidentModal.style.display = 'none';
+        });
+
+        // OUTSIDE CLICK
+        window.addEventListener('click', function(event) {
+            if (event.target === addResidentModal) {
+                addResidentModal.style.display = 'none';
+            }
+        });
+
+        // CLOSE MODAL FUNC
+        function closeResidentModalFunc() {
+            addResidentModal.style.display = 'none';
+        }
+
+        // VALIDATION (BUTTON)
+        const form = addResidentModal.querySelector("form");
+        const confirmButton = addResidentModal.querySelector(".confirm");
+        const cancelButton = addResidentModal.querySelector(".cancel");
+
+        // Form Submission with Validation
+        confirmButton.addEventListener("click", function(event) {
+            event.preventDefault(); // PPREVENT SUBMIT
+
+            let isValid = true;
+            const requiredFields = form.querySelectorAll("[required]");
+
+            // Loop through all required fields and check if they're filled out
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add("error"); // Highlight empty fields
+                    isValid = false;
+                } else {
+                    field.classList.remove("error"); // Remove highlight if valid
+                }
+            });
+
+            // If all fields are valid, show success message and close modal
+            if (isValid) {
+                alert("Form submitted successfully!"); 
+                closeResidentModalFunc(); // Close modal after successful submission
+            } else {
+                alert("Please fill out all required fields.");
+            }
+        });
+
+        // Close modal when clicking the cancel button
+        cancelButton.addEventListener('click', function() {
+            closeResidentModalFunc();
+        });
+
+
+
+    </script>
+
+</body>
+</html>
