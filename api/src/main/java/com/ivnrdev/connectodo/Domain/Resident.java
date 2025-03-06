@@ -4,20 +4,18 @@ import com.ivnrdev.connectodo.Enums.ResidentEnums.BloodType;
 import com.ivnrdev.connectodo.Enums.ResidentEnums.CivilStatus;
 import com.ivnrdev.connectodo.Enums.ResidentEnums.ResidencyStatus;
 import com.ivnrdev.connectodo.Enums.ResidentEnums.ResidentStatus;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Table("Residents")
+@Table("residents")
 public class Resident {
     @Id
     private Long id;
@@ -32,7 +30,6 @@ public class Resident {
     private String address;
     private String sex;
     private String birthdate;
-    private String age;
     private String birthplace;
     private String citizenship;
     private String occupation;
@@ -74,6 +71,10 @@ public class Resident {
     private String validIdExpiration;
     private String tinIdUrl;
     private String tinIdNumber;
+
+    @CreatedDate
     private LocalDateTime createdAt;
+    
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 }

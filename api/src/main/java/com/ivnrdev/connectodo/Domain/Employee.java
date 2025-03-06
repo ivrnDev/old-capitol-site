@@ -2,10 +2,10 @@ package com.ivnrdev.connectodo.Domain;
 
 
 import com.ivnrdev.connectodo.Enums.DepartmentType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
@@ -13,9 +13,11 @@ import static com.ivnrdev.connectodo.Enums.EmployeeEnums.*;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Table("employees")
 public class Employee {
+    @Id
+    private Long id;
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -33,6 +35,7 @@ public class Employee {
     private String nbiClearanceUrl;
     private String nbiClearanceExpiration;
     private ApplicationType applicationType;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
