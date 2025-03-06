@@ -1,7 +1,8 @@
-CREATE DATABASE IF NOT EXISTS BMS;
-USE BMS;
+# CREATE DATABASE IF NOT EXISTS bms;
 
-CREATE TABLE Employees
+USE bms;
+
+CREATE TABLE IF NOT EXISTS employees
 (
     id                     BIGINT AUTO_INCREMENT PRIMARY KEY,
     firstName              VARCHAR(255)                                                                                   NOT NULL,
@@ -47,7 +48,7 @@ CREATE TABLE Employees
     updatedAt              DATETIME                                                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Residents
+CREATE TABLE IF NOT EXISTS residents
 (
     id                    BIGINT AUTO_INCREMENT PRIMARY KEY,
     firstName             VARCHAR(255)                                         NOT NULL,
@@ -66,14 +67,14 @@ CREATE TABLE Residents
     civilStatus           ENUM ('SINGLE', 'MARRIED')                           NOT NULL,
     motherTounge          VARCHAR(100),
     bloodType             ENUM (
-        'A+',
-        'A-',
-        'B+',
-        'B-',
-        'AB+',
-        'AB-',
-        'O+',
-        'O-',
+        'A_POSITIVE',
+        'A_NEGATIVE',
+        'B_POSITIVE',
+        'B_NEGATIVE',
+        'AB_POSITIVE',
+        'AB_NEGATIVE',
+        'O_POSITIVE',
+        'O_NEGATIVE',
         'UNKNOWN'
         )                                                                      NOT NULL,
     religion              VARCHAR(100),
@@ -116,5 +117,5 @@ CREATE TABLE Residents
     updatedAt             DATETIME                                             NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_employees_email ON Employees (email);
-CREATE INDEX idx_residents_email ON Residents (email);
+-- CREATE INDEX idx_employees_email ON employees (email);
+-- CREATE INDEX idx_residents_email ON residents (email);
