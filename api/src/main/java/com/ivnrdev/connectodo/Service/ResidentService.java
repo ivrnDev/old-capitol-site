@@ -29,6 +29,16 @@ public class ResidentService {
                 .collect(Collectors.toList());
     }
 
+    public Resident getResidentById(Long id) {
+        Optional<Resident> data = residentRepository.findById(id);
+
+        if (data.isEmpty()) {
+            throw new RuntimeException("Resident not found");
+        }
+
+        return data.get();
+    }
+
     public Resident updateResidentById(Long id, Resident updatedResident) {
         Optional<Resident> data = residentRepository.findById(id);
 
