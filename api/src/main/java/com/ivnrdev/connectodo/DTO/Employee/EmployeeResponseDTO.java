@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Data
 public class EmployeeResponseDTO {
     private Long id;
+    private Long residentId;
+    
     private String firstName;
     private String lastName;
     private String middleName;

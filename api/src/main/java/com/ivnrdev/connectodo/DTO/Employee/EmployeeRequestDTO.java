@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 public class EmployeeRequestDTO {
+    private Long residentId;
     private String firstName;
     private String lastName;
     private String middleName;

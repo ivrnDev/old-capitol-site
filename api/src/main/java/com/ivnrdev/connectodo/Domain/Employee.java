@@ -19,6 +19,7 @@ import static com.ivnrdev.connectodo.Enums.EmployeeEnums.*;
 public class Employee {
     @Id
     private Long id;
+    private Long residentId;
 
     private String firstName;
     private String lastName;

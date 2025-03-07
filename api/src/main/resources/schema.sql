@@ -2,52 +2,6 @@
 
 USE bms;
 
-CREATE TABLE IF NOT EXISTS employees
-(
-    id                     BIGINT AUTO_INCREMENT PRIMARY KEY,
-    firstName              VARCHAR(255)                                                                                   NOT NULL,
-    lastName               VARCHAR(255)                                                                                   NOT NULL,
-    middleName             VARCHAR(255),
-    email                  VARCHAR(255)                                                                                   NOT NULL UNIQUE,
-    contactNumber          VARCHAR(15)                                                                                    NOT NULL,
-    address                VARCHAR(255)                                                                                   NOT NULL,
-    role                   ENUM (
-        -- Administrative Department
-        'ADMIN',
-        'HR_MANAGER',
-        'ADMINISTRATIVE_CLERK',
-        'OFFICE_FRONT_DESK',
-        'EVENT_COORDINATOR',
-        'DOCUMENT_CLERK',
-        'SECRETARY',
-
-        -- Web Department
-        'WEB_ADMINISTRATOR',
-
-        -- Health Department
-        'GENERAL_DOCTOR',
-        'DENTAL',
-        'MIDWIFE',
-        'DNS',
-        'BHW',
-        'HEALTH_COMMITTEE_HEAD',
-        -- Lupon Department
-        'LUPON_MEMBERS'
-        )                                                                                                                 NOT NULL,
-    status                 ENUM ('PENDING', 'UNDER_REVIEW', 'EVALUATION', 'ACTIVE', 'RESIGNED', 'REJECTED', 'TERMINATED') NOT NULL,
-    department             ENUM ('OFFICE', 'HEALTH', 'LUPON', 'WEB_ADMIN')                                                NOT NULL,
-    employment             ENUM ('FULL_TIME', 'VOLUNTEER')                                                                NOT NULL,
-    username               VARCHAR(255)                                                                                   NOT NULL UNIQUE,
-    password               VARCHAR(255)                                                                                   NOT NULL,
-    profileUrl             VARCHAR(255)                                                                                   NOT NULL,
-    resumeUrl              VARCHAR(255)                                                                                   NOT NULL,
-    nbiClearanceUrl        VARCHAR(255)                                                                                   NOT NULL,
-    nbiClearanceExpiration DATE                                                                                           NOT NULL,
-    applicationType        ENUM ('WALK_IN', 'ONLINE')                                                                     NOT NULL,
-    createdAt              DATETIME                                                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updatedAt              DATETIME                                                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS residents
 (
     id                    BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -117,5 +71,53 @@ CREATE TABLE IF NOT EXISTS residents
     updatedAt             DATETIME                                             NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- CREATE INDEX idx_employees_email ON employees (email);
--- CREATE INDEX idx_residents_email ON residents (email);
+CREATE TABLE IF NOT EXISTS employees
+(
+    id                     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    residentId             BIGINT                                                                                         NOT NULL UNIQUE,
+    firstName              VARCHAR(255)                                                                                   NOT NULL,
+    lastName               VARCHAR(255)                                                                                   NOT NULL,
+    middleName             VARCHAR(255),
+    email                  VARCHAR(255)                                                                                   NOT NULL UNIQUE,
+    contactNumber          VARCHAR(15)                                                                                    NOT NULL,
+    address                VARCHAR(255)                                                                                   NOT NULL,
+    role                   ENUM (
+        -- Administrative Department
+        'ADMIN',
+        'HR_MANAGER',
+        'ADMINISTRATIVE_CLERK',
+        'OFFICE_FRONT_DESK',
+        'EVENT_COORDINATOR',
+        'DOCUMENT_CLERK',
+        'SECRETARY',
+
+        -- Web Department
+        'WEB_ADMINISTRATOR',
+
+        -- Health Department
+        'GENERAL_DOCTOR',
+        'DENTAL',
+        'MIDWIFE',
+        'DNS',
+        'BHW',
+        'HEALTH_COMMITTEE_HEAD',
+        -- Lupon Department
+        'LUPON_MEMBERS'
+        )                                                                                                                 NOT NULL,
+    status                 ENUM ('PENDING', 'UNDER_REVIEW', 'EVALUATION', 'ACTIVE', 'RESIGNED', 'REJECTED', 'TERMINATED') NOT NULL,
+    department             ENUM ('OFFICE', 'HEALTH', 'LUPON', 'WEB_ADMIN')                                                NOT NULL,
+    employment             ENUM ('FULL_TIME', 'VOLUNTEER')                                                                NOT NULL,
+    username               VARCHAR(255)                                                                                   NOT NULL UNIQUE,
+    password               VARCHAR(255)                                                                                   NOT NULL,
+    profileUrl             VARCHAR(255)                                                                                   NOT NULL,
+    resumeUrl              VARCHAR(255)                                                                                   NOT NULL,
+    nbiClearanceUrl        VARCHAR(255)                                                                                   NOT NULL,
+    nbiClearanceExpiration DATE                                                                                           NOT NULL,
+    applicationType        ENUM ('WALK_IN', 'ONLINE')                                                                     NOT NULL,
+    createdAt              DATETIME                                                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt              DATETIME                                                                                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (residentId) REFERENCES residents (id)
+);
+
+CREATE INDEX idx_employees_email ON employees (email);
+CREATE INDEX idx_residents_email ON residents (email);

@@ -11,6 +11,7 @@ public class EmployeeMapper implements Mapper<Employee, EmployeeRequestDTO, Empl
     @Override
     public Employee toEntity(EmployeeRequestDTO request) {
         return Employee.builder()
+                .residentId(request.getResidentId())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .middleName(request.getMiddleName())
@@ -37,6 +38,7 @@ public class EmployeeMapper implements Mapper<Employee, EmployeeRequestDTO, Empl
     public EmployeeResponseDTO toRes(Employee employee) {
         return EmployeeResponseDTO.builder()
                 .id(employee.getId())
+                .residentId(employee.getResidentId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .middleName(employee.getMiddleName())
