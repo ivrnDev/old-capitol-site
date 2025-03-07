@@ -37,4 +37,13 @@ public class ResidentController {
                 BaseResponse.success(residents, "Residents fetched successfully")
         );
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BaseResponse<ResidentResponseDTO>> updateResident(@PathVariable Long id, @RequestBody ResidentRequestDTO resident) {
+        Resident updatedResident = residentService.updateResidentById(id, residentMapper.toEntity(resident));
+        ResidentResponseDTO residentResponseDTO = residentMapper.toRes(updatedResident);
+        return ResponseEntity.ok(
+                BaseResponse.success(residentResponseDTO, "Resident updated successfully")
+        );
+    }
 }
