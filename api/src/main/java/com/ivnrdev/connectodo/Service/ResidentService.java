@@ -42,6 +42,19 @@ public class ResidentService {
         return residentRepository.save(existingResident);
     }
 
+    public Resident deleteResidentById(Long id) {
+        Optional<Resident> data = residentRepository.findById(id);
+
+        if (data.isEmpty()) {
+            throw new RuntimeException("Resident not found");
+        }
+
+        Resident existingResident = data.get();
+        residentRepository.delete(existingResident);
+        return existingResident;
+    }
+
+
     private String[] getNullPropertyNames(Resident source) {
         return Arrays.stream(Resident.class.getDeclaredFields())
                 .filter(field -> {

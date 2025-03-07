@@ -46,4 +46,13 @@ public class ResidentController {
                 BaseResponse.success(residentResponseDTO, "Resident updated successfully")
         );
     }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponse<ResidentResponseDTO>> deleteResident(@PathVariable Long id) {
+        Resident deletedResident = residentService.deleteResidentById(id);
+        ResidentResponseDTO residentResponseDTO = residentMapper.toRes(deletedResident);
+        return ResponseEntity.ok(
+                BaseResponse.success(residentResponseDTO, "Resident deleted successfully")
+        );
+    }
 }
