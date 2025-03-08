@@ -37,4 +37,31 @@ public class ResidentController {
                 BaseResponse.success(residents, "Residents fetched successfully")
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<ResidentResponseDTO>> getResidentById(@PathVariable Long id) {
+        Resident resident = residentService.getResidentById(id);
+        ResidentResponseDTO residentResponseDTO = residentMapper.toRes(resident);
+        return ResponseEntity.ok(
+                BaseResponse.success(residentResponseDTO, "Resident fetched successfully")
+        );
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BaseResponse<ResidentResponseDTO>> updateResident(@PathVariable Long id, @RequestBody ResidentRequestDTO resident) {
+        Resident updatedResident = residentService.updateResidentById(id, residentMapper.toEntity(resident));
+        ResidentResponseDTO residentResponseDTO = residentMapper.toRes(updatedResident);
+        return ResponseEntity.ok(
+                BaseResponse.success(residentResponseDTO, "Resident updated successfully")
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponse<ResidentResponseDTO>> deleteResident(@PathVariable Long id) {
+        Resident deletedResident = residentService.deleteResidentById(id);
+        ResidentResponseDTO residentResponseDTO = residentMapper.toRes(deletedResident);
+        return ResponseEntity.ok(
+                BaseResponse.success(residentResponseDTO, "Resident deleted successfully")
+        );
+    }
 }
