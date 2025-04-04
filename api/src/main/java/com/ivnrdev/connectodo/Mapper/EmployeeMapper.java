@@ -30,8 +30,6 @@ public class EmployeeMapper implements Mapper<Employee, EmployeeRequestDTO, Empl
                 .nbiClearanceExpiration(request.getNbiClearanceExpiration())
                 .applicationType(request.getApplicationType())
                 .build();
-
-
     }
 
     @Override
@@ -58,5 +56,4 @@ public class EmployeeMapper implements Mapper<Employee, EmployeeRequestDTO, Empl
                 .updatedAt(employee.getUpdatedAt())
                 .build();
     }
-
 }

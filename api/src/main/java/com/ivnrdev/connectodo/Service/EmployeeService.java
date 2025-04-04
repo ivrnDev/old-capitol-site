@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -30,41 +29,24 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeById(Long id) {
-        Optional<Employee> data = employeeRepository.findById(id);
-
-        if (data.isEmpty()) {
-            throw new RuntimeException("Employee not found");
-        }
-
-        return data.get();
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 
-    public Employee updateEmployeeById(Long id, Employee updatedemployee) {
-        Optional<Employee> data = employeeRepository.findById(id);
+    public Employee updateEmployeeById(Long id, Employee updatedEmployee) {
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        if (data.isEmpty()) {
-
-            throw new RuntimeException("Employee not found");
-        }
-
-        Employee existingEmployee = data.get();
-
-        BeanUtils.copyProperties(updatedemployee, existingEmployee, getNullPropertyNames(updatedemployee));
+        BeanUtils.copyProperties(updatedEmployee, existingEmployee, getNullPropertyNames(updatedEmployee));
         return employeeRepository.save(existingEmployee);
     }
 
     public Employee deleteEmployeeById(Long id) {
-        Optional<Employee> data = employeeRepository.findById(id);
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        if (data.isEmpty()) {
-            throw new RuntimeException("Employee not found");
-        }
-
-        Employee existingEmployee = data.get();
         employeeRepository.delete(existingEmployee);
         return existingEmployee;
     }
-
 
     private String[] getNullPropertyNames(Employee source) {
         return Arrays.stream(Employee.class.getDeclaredFields())

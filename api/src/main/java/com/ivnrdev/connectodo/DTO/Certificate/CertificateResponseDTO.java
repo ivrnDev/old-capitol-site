@@ -1,28 +1,25 @@
-package com.ivnrdev.connectodo.Domain;
+package com.ivnrdev.connectodo.DTO.Certificate;
 
 import com.ivnrdev.connectodo.Enums.ApplicationType;
 import com.ivnrdev.connectodo.Enums.RequestType;
+import com.ivnrdev.connectodo.Enums.StatusType;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.ZonedDateTime;
 
-import static com.ivnrdev.connectodo.Enums.StatusType.CertificateStatus;
-
 @Data
 @Builder
-@Table("certificates")
-public class Certificate {
+public class CertificateResponseDTO {
     private Long id;
     private Long residentId;
     private String requestorType;
     private String controlNumber;
     private String request;
     private String purpose;
-    private CertificateStatus status;
+    private StatusType.CertificateStatus status;
     private String referenceNumber;
     private ApplicationType applicationType;
     private RequestType requestType;
