@@ -58,8 +58,8 @@ public class CertificateController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse<CertificateResponseDTO>> deleteCertificate(@PathVariable Long id) {
-        Certificate deletedEployee = certificateService.deleteCertificateById(id);
-        CertificateResponseDTO certificateResponseDTO = certificateMapper.toRes(deletedEployee);
+        Certificate deletedCertificate = certificateService.deleteCertificateById(id);
+        CertificateResponseDTO certificateResponseDTO = certificateMapper.toRes(deletedCertificate);
         return ResponseEntity.ok(
                 BaseResponse.success(certificateResponseDTO, "Certificate deleted successfully")
         );
