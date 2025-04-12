@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/cedula")
+@RequestMapping("/api/cedulas")
 @RequiredArgsConstructor
 public class CedulaController {
     private final CedulaService cedulaService;

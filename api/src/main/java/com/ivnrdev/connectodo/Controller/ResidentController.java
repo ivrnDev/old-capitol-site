@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/resident")
+@RequestMapping("/api/residents")
 @RequiredArgsConstructor
 public class ResidentController {
     private final ResidentService residentService;

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/eventItem")
+@RequestMapping("/api/event_items")
 @RequiredArgsConstructor
 public class EventItemsController {
     private final EventItemsService eventItemsService;

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/certificate")
+@RequestMapping("/api/certificates")
 @RequiredArgsConstructor
 public class CertificateController {
     private final CertificateService certificateService;
